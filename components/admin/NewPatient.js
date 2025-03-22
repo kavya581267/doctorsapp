@@ -6,6 +6,7 @@ import { useNavigation } from "@react-navigation/native";
 import styles from "../styles/newPatientStyle";
 
 
+
 export default function NewPatient() {
     const navigation = useNavigation();
     const [gender, setGender] = useState();
@@ -15,7 +16,10 @@ export default function NewPatient() {
     const [dob, setDob] = useState();
     const [age, setAge] = useState();
     const [phone, setPhone] = useState();
+
     const [error,setError] = useState("");
+  
+    
     const allFieldsFilled = name && surname && dob && age && gender && phone && smoking;
 
     const addNewPatient = async () => {
@@ -53,7 +57,7 @@ export default function NewPatient() {
         if(!/^\d*$/.test(text)){
            setError("only numeric values are allowed");
         }
-        else if(text.length<10 && text.length>0){
+        else if(text.length!==10){
             setError("enter 10 digits");
         }else{
             setError("");
@@ -97,7 +101,9 @@ export default function NewPatient() {
 
                         <View style={styles.marginbtm}>
                             <Text style={styles.inputText}>Age</Text>
-                            <TextInput value={age} keyboardType="phone-pad" onChangeText={setAge} style={styles.inputStyle}></TextInput>
+                            <TextInput value={age} keyboardType="phone-pad" onChangeText={setAge} style={styles.inputStyle}>
+                               
+                            </TextInput>
                         </View>
 
 

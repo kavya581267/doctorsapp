@@ -12,6 +12,9 @@ export default StyleSheet.create({
        fontWeight:"700",
        lineHeight:48
     },
+    png:{
+    tintColor:COLORS.primary
+    },
     subHeading:{
        fontSize:16,
        lineHeight:26,

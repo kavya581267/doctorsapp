@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, TextInput, TouchableOpacity, SafeAreaView } from "react-native";
+import { View, Text, TextInput, TouchableOpacity, SafeAreaView, Image } from "react-native";
 import styles from "../styles/signInStyle";
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import Feather from '@expo/vector-icons/Feather';
@@ -15,6 +15,7 @@ export default function SignIn() {
         <SafeAreaView >
             <View style={{ padding: 24 }}>
                 <View style={styles.header}>
+                   <Image style={styles.png} source={require("../../assets/launchscreen.png")} />
                     <Text style={styles.heading}>Access Account</Text>
                     <Text style={styles.subHeading}>Securely log in to manage your healthcare tasks</Text>
                 </View>
