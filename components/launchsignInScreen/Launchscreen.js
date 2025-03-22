@@ -9,17 +9,19 @@ export default function LaunchScreen() {
     const navigation=useNavigation();
     return (
         <View style={styles.container}>
-            <Image style={styles.png} source={require("../../assets/launchscreen.png")} />
-            <Text style={styles.text}>CureSync</Text>
-            <Text style={styles.subText}>Join us for seamless Health Management and Support</Text>
-
-            <TouchableOpacity style={styles.buttonLogIn} onPress={()=>navigation.navigate("SignIn")}>
-                <Text style={styles.logTxt}>Log In</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity style={styles.buttonSign}>
-                <Text style={styles.signTxt}>Sign Up</Text>
-            </TouchableOpacity>
+            <View style={styles.topSec}>
+                <Image style={styles.png} source={require("../../assets/launchscreen.png")} />
+                <Text style={styles.text}>CureSync</Text>
+                <Text style={styles.subText}>Join us for seamless Health Management and Support</Text>
+            </View>x
+            <View style={styles.bottomSec}>
+                <TouchableOpacity style={styles.buttonLogIn}>
+                    <Text style={styles.logTxt}>Log In</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.buttonSign}>
+                    <Text style={styles.signTxt}>Sign Up</Text>
+                </TouchableOpacity>
+            </View>
         </View>
     );
 }
