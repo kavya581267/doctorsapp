@@ -1,0 +1,88 @@
+import { StyleSheet } from "react-native";
+import { COLORS } from "../constants/colors";
+
+export default StyleSheet.create({
+    header: {
+        paddingVertical: 15,
+        backgroundColor: COLORS.primary,
+        flexDirection: "row",
+        paddingHorizontal: 16,
+        justifyContent: "space-between",
+        alignItems: "center"
+    },
+    textStyle: {
+        color: COLORS.white,
+        fontSize: 18,
+        fontWeight: "400",
+        textAlign: "center",
+    },
+    patientContainer: {
+        flex: 1,
+        borderWidth: 2,
+        borderColor: COLORS.primary,
+        borderRadius: 10,
+        margin: 20
+    },
+    marginbtm: {
+        marginBottom: 13
+    },
+    inputText: {
+        fontSize: 14,
+        marginBottom: 3,
+        fontWeight: "700"
+    },
+    inputStyle: {
+        height: 44,
+        borderWidth: 1,
+        borderColor: COLORS.grey,
+        borderRadius: 12,
+        fontSize: 20,
+        fontWeight: "400",
+        backgroundColor: "#fff",
+        paddingLeft: 10,
+
+    },
+    error:{
+      color:"red",
+      marginLeft:5
+    },
+    radioContainer: {
+        flexDirection: "row",
+        justifyContent: "space-between"
+    },
+    radioButton: {
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+        borderWidth: 1,
+        borderColor:COLORS.grey,
+        borderRadius: 12,
+        backgroundColor: "#fff",
+    },
+    radioText: {
+        fontSize: 16,
+       color:COLORS.primary
+    },
+    selected: {
+       backgroundColor:COLORS.primary
+    },
+    selectedText: {
+        color: "#fff",
+        fontWeight: "bold",
+    },
+    nextButton: {
+        backgroundColor: "#1A9F7F",
+        padding: 15,
+        borderRadius: 10,
+        alignItems: "center",
+        marginHorizontal: "5%",
+        marginBottom: 10,
+    },
+    saveButtonText: {
+        color: "white",
+        fontSize: 18,
+        fontWeight: "bold",
+    },
+    disabledButton: {
+        backgroundColor: "#ccc",
+    }
+})
