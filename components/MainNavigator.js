@@ -7,7 +7,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { AuthContext } from './auth/AuthContext';
 import NewPatient from '../components/admin/NewPatient'
 import Appointments from '../components/admin/Appointments'
-
+import DoctorList from '../components/admin/DoctorList'
 
 export default function MainNavigator() {
     const { user} = useContext(AuthContext);
@@ -18,11 +18,12 @@ export default function MainNavigator() {
             <Stack.Navigator screenOptions={{ headerShown: false }}>
                 {
                     user ? <Stack.Screen name='Mainscreen' component={Mainscreen}></Stack.Screen> :
-                        <Stack.Screen name="LaunchScreen" component={LaunchScreen}></Stack.Screen>
+                           <Stack.Screen name="LaunchScreen" component={LaunchScreen}></Stack.Screen>
                 }
                 <Stack.Screen name='SignIn' component={SignIn}></Stack.Screen>
                 <Stack.Screen name="NewPatient" component={NewPatient}></Stack.Screen>
                 <Stack.Screen name="Appointments" component={Appointments}></Stack.Screen>
+                <Stack.Screen name='DoctorList' component={DoctorList}/>
             </Stack.Navigator>
         </NavigationContainer>
     );

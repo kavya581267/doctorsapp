@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, TouchableWithoutFeedback, Keyboard, KeyboardAvoidingView, Platform, SafeAreaView, Alert } from "react-native";
+import { View, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, Keyboard, KeyboardAvoidingView, Platform, SafeAreaView, Alert } from "react-native";
 import AntDesign from '@expo/vector-icons/AntDesign';
 import Fontisto from '@expo/vector-icons/Fontisto';
 import { useNavigation } from "@react-navigation/native";
@@ -77,9 +77,7 @@ export default function NewPatient() {
                         <Text style={styles.textStyle}>Add New Patient</Text>
                     </View>
 
-                    <View>
-                        <Fontisto name="save-1" size={24} color="white" />
-                    </View>
+                   
                 </View>
 
                 <View style={styles.patientContainer}>
