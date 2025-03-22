@@ -35,7 +35,7 @@ export default StyleSheet.create({
         borderWidth: 1,
         borderColor: COLORS.grey,
         borderRadius: 12,
-        fontSize: 20,
+        fontSize: 14,
         fontWeight: "400",
         backgroundColor: "#fff",
         paddingLeft: 10,
