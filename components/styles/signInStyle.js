@@ -21,6 +21,9 @@ export default StyleSheet.create({
         height:40,       
         fontSize:16,  
     },
+    form:{
+        marginTop:50
+    },
     inputContainer:{
        flexDirection:"row",
        alignItems:"center",
