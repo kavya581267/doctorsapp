@@ -6,17 +6,21 @@ import styles from "../styles/launchStyles"; // Import styles
 export default function LaunchScreen() {
     return (
         <View style={styles.container}>
-            <Image style={styles.png} source={require("../../assets/launchscreen.png")} />
-            <Text style={styles.text}>CureSync</Text>
-            <Text style={styles.subText}>Join us for seamless Health Management and Support</Text>
+            <View style={styles.topSec}>
+                <Image style={styles.png} source={require("../../assets/launchscreen.png")} />
+                <Text style={styles.text}>CureSync</Text>
+                <Text style={styles.subText}>Join us for seamless Health Management and Support</Text>
+            </View>
 
-            <TouchableOpacity style={styles.buttonLogIn}>
-                <Text style={styles.logTxt}>Log In</Text>
-            </TouchableOpacity>
 
-            <TouchableOpacity style={styles.buttonSign}>
-                <Text style={styles.signTxt}>Sign Up</Text>
-            </TouchableOpacity>
+            <View style={styles.bottomSec}>
+                <TouchableOpacity style={styles.buttonLogIn}>
+                    <Text style={styles.logTxt}>Log In</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.buttonSign}>
+                    <Text style={styles.signTxt}>Sign Up</Text>
+                </TouchableOpacity>
+            </View>
         </View>
     );
 }
