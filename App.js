@@ -1,33 +1,11 @@
-
-import { SafeAreaView, StyleSheet, View } from 'react-native';
-import LaunchScreen from './components/launchsignInScreen/Launchscreen';
-import SignIn from './components/launchsignInScreen/SignIn';
-import { createStackNavigator } from '@react-navigation/stack';
-import { NavigationContainer } from '@react-navigation/native';
-import NewPatient from './components/admin/NewPatient';
-import Mainscreen from './components/admin/Mainscreen';
-
+import { AuthProvider } from './components/auth/AuthContext';
+import MainNavigator from './components/MainNavigator';
 
 export default function App() {
-
-  const stack = createStackNavigator();
   return (
-
-    <NavigationContainer>
-      <stack.Navigator screenOptions={{ headerShown: false }}>
-        <stack.Screen name="LaunchScreen" component={LaunchScreen}></stack.Screen>
-        <stack.Screen name='SignIn' component={SignIn}></stack.Screen>
-        <stack.Screen name='Mainscreen' component={Mainscreen}></stack.Screen>
-      </stack.Navigator>
-    </NavigationContainer>
-
-
+    <AuthProvider>
+       <MainNavigator/>
+    </AuthProvider>
 
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-});
