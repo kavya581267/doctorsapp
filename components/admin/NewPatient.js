@@ -24,7 +24,8 @@ export default function NewPatient() {
     const allFieldsFilled = name && surname && dob && age && gender && phone && smoking;
 
     const addNewPatient = async () => {
-        const response = await fetch("http://192.168.0.3:8080/patients", {
+      
+        const response = await fetch("http://192.168.0.4:8080/patients", {
             method: "post",
             headers: {
                 "content-type": "application/json"
@@ -39,7 +40,6 @@ export default function NewPatient() {
                 "smokingStatus": smoking
             })
         });
-
         const json = await response.json()
         console.log(json)
         console.log(response.status);
@@ -47,7 +47,7 @@ export default function NewPatient() {
 
         if (response.status === 200) {
             console.log("Patient added successfully")
-            navigation.navigate("PatientDetails", { surname, name, age, phone });
+            navigation.navigate("Mainscreen");
         } else {
             console.log("error adding List");
         }
@@ -151,7 +151,7 @@ export default function NewPatient() {
                 <TouchableOpacity style={[styles.nextButton, !allFieldsFilled && styles.disabledButton]}
                     onPress={allFieldsFilled ? addNewPatient : null}
                     disabled={!allFieldsFilled}>
-                    <Text style={styles.saveButtonText}>Save & Continue</Text>
+                    <Text style={styles.saveButtonText}>Save</Text>
                 </TouchableOpacity>
             </View>
 
