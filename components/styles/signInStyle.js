@@ -23,6 +23,7 @@ export default StyleSheet.create({
     input:{
         height:40,       
         fontSize:16,  
+        width:"100%"
     },
     form:{
         marginTop:50
