@@ -3,9 +3,10 @@ import { View, Text, TextInput, TouchableOpacity, SafeAreaView, Image } from "re
 import styles from "../styles/signInStyle";
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import Feather from '@expo/vector-icons/Feather';
+import { useNavigation } from "@react-navigation/native";
 
 export default function SignIn() {
-
+  const navigation = useNavigation();
     const [form, setForm] = React.useState({
         userName: "",
         password: ""
@@ -44,7 +45,7 @@ export default function SignIn() {
 
 
                 <View>
-                    <TouchableOpacity style={styles.btn_gap} onPress={() => {
+                    <TouchableOpacity style={styles.btn_gap} onPress={() => {navigation.navigate("Mainscreen")
 
                     }}>
                         <View style={styles.btn}>

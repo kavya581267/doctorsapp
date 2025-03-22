@@ -57,7 +57,7 @@ export default function NewPatient() {
         if(!/^\d*$/.test(text)){
            setError("only numeric values are allowed");
         }
-        else if(text.length!==10){
+        else if(text.length0){
             setError("enter 10 digits");
         }else{
             setError("");

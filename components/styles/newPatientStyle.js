@@ -21,7 +21,7 @@ export default StyleSheet.create({
         borderWidth: 2,
         borderColor: COLORS.primary,
         borderRadius: 10,
-        margin: 20
+        margin: 15
     },
     marginbtm: {
         marginBottom: 13
@@ -70,12 +70,12 @@ export default StyleSheet.create({
         fontWeight: "bold",
     },
     nextButton: {
-        backgroundColor: "#1A9F7F",
+        backgroundColor: COLORS.primary,
         padding: 15,
         borderRadius: 10,
         alignItems: "center",
         marginHorizontal: "5%",
-        marginBottom: 10,
+        marginBottom: 20,
     },
     saveButtonText: {
         color: "white",

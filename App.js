@@ -17,6 +17,7 @@ export default function App() {
       <stack.Navigator screenOptions={{ headerShown: false }}>
         <stack.Screen name="LaunchScreen" component={LaunchScreen}></stack.Screen>
         <stack.Screen name='SignIn' component={SignIn}></stack.Screen>
+        <stack.Screen name='Mainscreen' component={Mainscreen}></stack.Screen>
       </stack.Navigator>
     </NavigationContainer>
 
