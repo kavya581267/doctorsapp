@@ -42,8 +42,10 @@ export default function SignIn() {
                 <View>
                     <TouchableOpacity style={styles.btn_gap} onPress={async () => {
                         const isLogin = await login(form.userName, form.password);
+                        console.log(isLogin)
                         if(isLogin){
-                            navigation.navigate("Mainscreen")
+                            //navigation.navigate("Mainscreen")
+                            navigation.replace('Mainscreen');
                         }else{
                             navigation.navigate("LaunchScreen")
                         }
