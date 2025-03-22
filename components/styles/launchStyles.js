@@ -6,25 +6,17 @@ export default StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: COLORS.primary,
+        justifyContent:"center",
+        alignItems:"center",
     },
-    png: {
-        position: "absolute",
-        top: 304,
-        left: 150,
-    },
+   
     text: {
-        position: "absolute",
-        top: 404,
-        left: 100,
         fontSize: 40,
         fontWeight: "700",
         lineHeight: 56,
         color: COLORS.white,
     },
-    subText: {
-        position: "absolute",
-        top: 472,
-        left: 45,
+    subText: {   
         color: COLORS.white,
         width: 300,
         fontSize: 16,
@@ -32,28 +24,24 @@ export default StyleSheet.create({
         lineHeight: 26,
         textAlign: "center",
     },
-    buttonLogIn: {
-        position: "absolute",
-        top: 688,
-        left: 20,
-        width: 350,
+    buttonLogIn: {   
+        width: "90%",
         height: 52,
         backgroundColor: COLORS.secondary,
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
         borderRadius: 3,
+        marginBottom:15,
+        marginTop:"30%"
     },
     logTxt: {
         fontSize: 18,
         fontWeight: "400",
         color: COLORS.primary,
     },
-    buttonSign: {
-        position: "absolute",
-        top: 756,
-        left: 20,
-        width: 350,
+    buttonSign: {   
+        width: "90%",
         height: 52,
         display: "flex",
         alignItems: "center",
