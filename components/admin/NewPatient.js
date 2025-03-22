@@ -3,6 +3,7 @@ import { View,Text,StyleSheet,TextInput, TouchableOpacity, TouchableWithoutFeedb
 import AntDesign from '@expo/vector-icons/AntDesign';
 import Fontisto from '@expo/vector-icons/Fontisto';
 import { useNavigation } from "@react-navigation/native";
+import { patientService } from "../service/patientService";
 
 
 export default function NewPatient(){
@@ -16,24 +17,19 @@ export default function NewPatient(){
     const [phone,setPhone] = useState();
     const allFieldsFilled = name && surname && dob && age && gender && phone && smoking;
 
+    
     const addNewPatient = async () =>{
-     const response = await fetch("http://192.168.0.3:8080/patients",{
-            method:"post",
-            headers:{
-               "content-type" :"application/json"
-            },
-            body: JSON.stringify({
-                "name": name,
-                "surName": surname,
-                "dob": dob,
-                "age": age,
-                "gender": gender,
-                "phone": phone,
-                "smokingStatus": smoking
-              })
-        });
 
-       const json=  await response.json()
+       
+     const response =  await patientService.addPatient({
+        "name": name,
+        "surName": surname,
+        "dob": dob,
+        "age": age,
+        "gender": gender,
+        "phone": phone,
+        "smokingStatus": smoking
+      });
         console.log(json)
         console.log(response.status);
 
