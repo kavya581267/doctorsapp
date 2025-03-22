@@ -10,8 +10,8 @@ import styles from "../styles/newPatientStyle";
 
 export default function NewPatient() {
     const navigation = useNavigation();
-    const [gender, setGender] = useState();
-    const [smoking, setSmoking] = useState();
+    const [gender, setGender] = useState("Male");
+    const [smoking, setSmoking] = useState("Never");
     const [name, setName] = useState("");
     const [surname, setSurname] = useState("");
     const [dob, setDob] = useState();
