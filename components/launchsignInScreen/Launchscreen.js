@@ -1,12 +1,12 @@
 import React from "react";
-import { StyleSheet, View ,Text, TouchableOpacity} from "react-native";
+import { StyleSheet, View ,Text, TouchableOpacity, Image} from "react-native";
 
 
 
 export default function LaunchScreen(){
     return(
         <View style={styles.container}>
-            
+             <Image style={styles.png} source={require("../../assets/launchscreen.png")}/>
              <Text style={styles.text}>CureSync</Text>
              <Text style={styles.subText}>Join us for seamless Health Management and Support</Text>
              <TouchableOpacity style={styles.buttonLogIn}>
@@ -24,6 +24,15 @@ const styles = StyleSheet.create({
        flex:1,
        backgroundColor:"#6A81D5",
     },
+    png:{
+      position: "absolute",
+      top: 304, 
+      left: 150,
+      fontSize:40,
+      fontWeight:"700",
+      lineHeight:56,
+      color:"#FFFFFF",
+     },
    text:{
     position: "absolute",
     top: 404, 
