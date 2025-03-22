@@ -1,5 +1,5 @@
 
-import { SafeAreaView, StyleSheet,View } from 'react-native';
+import { StyleSheet } from 'react-native';
 import LaunchScreen from './components/launchsignInScreen/Launchscreen';
 import SignIn from './components/launchsignInScreen/SignIn';
 import { createStackNavigator } from '@react-navigation/stack';

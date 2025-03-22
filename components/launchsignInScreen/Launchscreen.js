@@ -13,9 +13,9 @@ export default function LaunchScreen() {
                 <Image style={styles.png} source={require("../../assets/launchscreen.png")} />
                 <Text style={styles.text}>CureSync</Text>
                 <Text style={styles.subText}>Join us for seamless Health Management and Support</Text>
-            </View>x
+            </View>
             <View style={styles.bottomSec}>
-                <TouchableOpacity style={styles.buttonLogIn}>
+                <TouchableOpacity style={styles.buttonLogIn} onPress={()=>navigation.navigate("SignIn")}>
                     <Text style={styles.logTxt}>Log In</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.buttonSign}>
