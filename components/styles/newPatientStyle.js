@@ -3,24 +3,23 @@ import { COLORS } from "../constants/colors";
 
 export default StyleSheet.create({
     header: {
-        paddingVertical: 15,
-        backgroundColor: COLORS.primary,
+        paddingVertical: 15, 
         flexDirection: "row",
         paddingHorizontal: 16,
         justifyContent: "space-between",
         alignItems: "center"
     },
-    textStyle: {
-        color: COLORS.white,
+    headerName:{
+      flex:1
+    },
+    textStyle: {  
         fontSize: 18,
-        fontWeight: "400",
+        lineHeight:28,
+        fontWeight: "700",
         textAlign: "center",
     },
     patientContainer: {
         flex: 1,
-        borderWidth: 2,
-        borderColor: COLORS.primary,
-        borderRadius: 10,
         margin: 15
     },
     marginbtm: {

@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { View, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, Keyboard, KeyboardAvoidingView, Platform, SafeAreaView, Alert } from "react-native";
 import AntDesign from '@expo/vector-icons/AntDesign';
-import Fontisto from '@expo/vector-icons/Fontisto';
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { useNavigation } from "@react-navigation/native";
 import styles from "../styles/newPatientStyle";
+
 
 
 
@@ -17,9 +18,9 @@ export default function NewPatient() {
     const [age, setAge] = useState();
     const [phone, setPhone] = useState();
 
-    const [error,setError] = useState("");
-  
-    
+    const [error, setError] = useState("");
+
+
     const allFieldsFilled = name && surname && dob && age && gender && phone && smoking;
 
     const addNewPatient = async () => {
@@ -53,13 +54,13 @@ export default function NewPatient() {
     }
 
 
-    const handlePhone =(text)=>{
-        if(!/^\d*$/.test(text)){
-           setError("only numeric values are allowed");
+    const handlePhone = (text) => {
+        if (!/^\d*$/.test(text)) {
+            setError("only numeric values are allowed");
         }
-        else if(text.length0){
+        else if (text.length0) {
             setError("enter 10 digits");
-        }else{
+        } else {
             setError("");
         }
         setPhone(text);
@@ -71,13 +72,16 @@ export default function NewPatient() {
             <View style={{ flex: 1, paddingTop: 40 }}>
                 <View style={styles.header}>
                     <View>
-                        <AntDesign name="leftcircle" size={24} color="white" onPress={() => navigation.navigate("Mainscreen")} />
+                        <AntDesign name="arrowleft" size={24} color="black" onPress={() => navigation.navigate("Mainscreen")} />
                     </View>
-                    <View>
+                    <View style={styles.headerName}>
                         <Text style={styles.textStyle}>Add New Patient</Text>
                     </View>
+                    <View >
+                        <MaterialCommunityIcons name="face-man-profile" size={26} color="black" />
+                    </View>
 
-                   
+
                 </View>
 
                 <View style={styles.patientContainer}>
@@ -100,7 +104,7 @@ export default function NewPatient() {
                         <View style={styles.marginbtm}>
                             <Text style={styles.inputText}>Age</Text>
                             <TextInput value={age} keyboardType="phone-pad" onChangeText={setAge} style={styles.inputStyle}>
-                               
+
                             </TextInput>
                         </View>
 
@@ -157,4 +161,3 @@ export default function NewPatient() {
 }
 
 
-    
