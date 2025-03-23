@@ -7,7 +7,8 @@ import { StyleSheet, View, Text, TouchableOpacity, SafeAreaView } from "react-na
 
 import { MaterialIcons } from "@expo/vector-icons";
 import SettingsScreen from "./SettingsScreen";
-
+import NewPatient from "./NewPatient";
+import Appointments from "./Appointments";
 
 
 const Tab = createBottomTabNavigator();
@@ -35,8 +36,14 @@ export default function Mainscreen() {
             <Tab.Screen name="Home" component={HomeScreen}
                 options={{ tabBarIcon: ({ color }) => <MaterialIcons name="home" size={24} color={color} /> }}>
             </Tab.Screen>
+            <Tab.Screen name="Patients" component={NewPatient}
+                 options={{tabBarIcon:({color})=> <MaterialIcons name="group" size={24} color={color} />}}></Tab.Screen>
+                 <Tab.Screen name="Appointments" component={Appointments}
+                 options={{tabBarIcon:({color})=> <MaterialIcons name="event" size={24} color={color} />}}></Tab.Screen>
             <Tab.Screen name="Settings" component={SettingsScreen}
-                options={{ tabBarIcon: ({ color }) => <MaterialIcons name="settings" size={24} color={color} /> }}></Tab.Screen>
+                options={{ tabBarIcon: ({ color }) => <MaterialIcons name="settings" size={24} color={color} /> }}>
+            </Tab.Screen>
+            
         </Tab.Navigator>
     )
 }
@@ -44,7 +51,7 @@ export default function Mainscreen() {
 function HomeScreen() {
     const navigation = useNavigation();
     return (
-       
+
         <View style={styles.container}>
             <View style={styles.header}>
                 <Text>Welcom Admin</Text>
@@ -62,7 +69,7 @@ function HomeScreen() {
                 </TouchableOpacity>
             </View>
         </View>
-      
+
     )
 }
 
