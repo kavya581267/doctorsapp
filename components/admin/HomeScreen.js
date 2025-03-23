@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import styles from "../styles/homeScreenStyle"
-import { View, Text, SafeAreaView ,TextInput} from "react-native";
+import { View, Text, SafeAreaView ,TextInput,Image, TouchableOpacity} from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
 
 export default function HomeScreen() {
-
+    const navigation = useNavigation();
     const [searchText,setSearchText]=useState("");
     return (
         <SafeAreaView>
@@ -25,8 +26,20 @@ export default function HomeScreen() {
                     <TextInput style={styles.searchInput} value={searchText} onChangeText={setSearchText} placeholder="Search patient or appointments..."></TextInput>
                 </View>
 
-
-                <View></View>
+               
+                <View style={styles.contentContainer}>
+                    <View style={styles.leftContainer}>
+                        <Text style={styles.leftHead}>Add Patient</Text>
+                        <Text style={styles.leftDescription}>Quickly add new patients to the system.</Text>
+                        <TouchableOpacity style={styles.leftButton} onPress={()=>navigation.navigate("NewPatient")}>
+                            <Text style={styles.leftButtonText}>Add Now</Text>
+                        </TouchableOpacity>
+                    </View>
+                    <View>
+                        <Image style={styles.png} source={require("../../assets/addPatient.png")} />
+                    </View>
+                </View>
+               
 
                 <View></View>
             </View>

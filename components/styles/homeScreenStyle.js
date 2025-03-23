@@ -34,8 +34,43 @@ export default StyleSheet.create({
        borderRadius:6,
        height:40,
        alignItems:"center",  
+       marginBottom:20
     },
     searchInput:{
        width:"100%"
-    }
+    },
+    png:{
+        width:112,
+        height:106,
+        borderRadius:6
+    },
+    contentContainer:{
+        flexDirection:"row",
+         borderWidth:1,
+         padding:10,
+         borderRadius:6,
+         borderColor:COLORS.grey
+    },
+    leftContainer:{
+        marginRight:5
+    },
+    leftHead:{
+        fontSize:14,
+        lineHeight:22,
+        fontWeight:"700"
+    },
+    leftDescription:{
+        fontSize:12,
+        lineHeight:20,
+        fontWeight:"400"
+    },
+    leftButton:{  
+        borderRadius:4,
+        alignItems:"center",
+        backgroundColor:COLORS.primary,    
+    },
+    leftButtonText:{
+      color:COLORS.white,
+      paddingVertical:5,
+    },
 })
