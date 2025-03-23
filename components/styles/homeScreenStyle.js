@@ -8,7 +8,8 @@ export default StyleSheet.create({
     headerContainer:{
         flexDirection:"row",
         justifyContent:"space-between",
-        alignItems:"center"
+        alignItems:"center",
+        marginBottom:20
     },
     headerText:{
         fontSize:18,
@@ -21,5 +22,20 @@ export default StyleSheet.create({
     },
     margin:{
        marginLeft:15
+    },
+    iconMargin:{
+       marginRight:8,
+       marginLeft:8
+    },
+    searchContainer:{
+        flexDirection:"row",
+        borderWidth:1,
+        borderColor:"#CCC",
+       borderRadius:6,
+       height:40,
+       alignItems:"center",  
+    },
+    searchInput:{
+       width:"100%"
     }
 })
