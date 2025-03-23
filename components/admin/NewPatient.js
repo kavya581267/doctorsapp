@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, Keyboard, KeyboardAvoidingView, Platform, SafeAreaView, Alert } from "react-native";
+import { View, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, Keyboard, KeyboardAvoidingView, Platform, SafeAreaView, Alert, ScrollView } from "react-native";
 import AntDesign from '@expo/vector-icons/AntDesign';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { useNavigation } from "@react-navigation/native";
@@ -84,7 +84,7 @@ export default function NewPatient() {
 
                 </View>
 
-                <View style={styles.patientContainer}>
+                <ScrollView style={styles.patientContainer}>
                     <View style={{ margin: 10 }}>
                         <View style={styles.marginbtm}>
                             <Text style={styles.inputText}>Name</Text>
@@ -146,7 +146,7 @@ export default function NewPatient() {
                             </View>
                         </View>
                     </View>
-                </View>
+                </ScrollView>
 
                 <TouchableOpacity style={[styles.nextButton, !allFieldsFilled && styles.disabledButton]}
                     onPress={allFieldsFilled ? addNewPatient : null}
