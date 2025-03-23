@@ -14,7 +14,6 @@ import LoadingScreen from './LoadingScreen';
 export default function MainNavigator() {
     const { user, loading } = useContext(AuthContext);
     const Stack = createStackNavigator();
-    console.log("MainNavigator",user)
     if (loading) {
         return <LoadingScreen/>
     }

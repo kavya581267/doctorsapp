@@ -29,12 +29,14 @@ export default StyleSheet.create({
          borderWidth:1,
          borderColor:"#CCC",
         borderRadius:6,
-        height:40,
         alignItems:"center",  
-        marginBottom:20
+        marginBottom:20,
+        backgroundColor:"#cccccc40"
      },
      searchInput:{
-        width:"100%"
+        backgroundColor:"#cccccc40",
+        height:40,
+        flex: 1
      },
    
 })
