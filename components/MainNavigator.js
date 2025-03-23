@@ -10,9 +10,8 @@ import Appointments from '../components/admin/Appointments'
 import DoctorList from '../components/admin/DoctorList'
 
 export default function MainNavigator() {
-    const { user, logout } = useContext(AuthContext);
+    const { user } = useContext(AuthContext);
     const Stack = createStackNavigator();
-    console.log("User state in MainNavigator:", user);
     return (
         <NavigationContainer>
             <Stack.Navigator initialRouteName={user ? "Mainscreen" : "LaunchScreen"} screenOptions={{ headerShown: false }}>
