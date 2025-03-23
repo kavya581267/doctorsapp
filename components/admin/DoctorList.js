@@ -2,15 +2,14 @@ import React, { useState } from "react";
 import { View, TouchableOpacity, Text, SafeAreaView } from "react-native";
 import { Dropdown } from "react-native-element-dropdown";
 
-import { useNavigation, useRoute } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 import Header from "./Header";
 import styles from "../styles/doctorListStyle";
 
 
 export default function DoctorList() {
   const navigation = useNavigation();
-  const route = useRoute();
-  const { surname, name, age, phone } = route.params || {};
+
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedDoctor, setSelectedDoctor] = useState("");
   const [selectedName,setSelectedName] = useState("");
@@ -95,12 +94,10 @@ export default function DoctorList() {
 
           {selectedDoctor && <Text style={styles.selectedText}>Selected Doctor: {selectedDoctor}</Text>}
         </View>
-        <TouchableOpacity style={styles.saveButton} onPress={() => navigation.navigate("BookAppointment", { surname, name, age, phone, selectedCategory, selectedDoctor })}>
+        <TouchableOpacity style={styles.saveButton} onPress={() => navigation.navigate("BookAppointment")}>
           <Text style={styles.saveButtonText}>Confirm Booking</Text>
         </TouchableOpacity>
       </View>
-
-
     </SafeAreaView>
   )
 }

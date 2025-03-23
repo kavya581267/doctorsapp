@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, Alert } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, Alert, SafeAreaView } from "react-native";
 import { Calendar } from "react-native-calendars";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import AntDesign from '@expo/vector-icons/AntDesign';
@@ -11,11 +11,11 @@ export default function BookAppointment() {
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedTime, setSelectedTime] = useState("");
   const [isTimePickerVisible, setTimePickerVisible] = useState(false);
-  const navigation=useNavigation();
- 
+  const navigation = useNavigation();
+
   const handleDateSelect = (day) => {
     setSelectedDate(day.dateString);
-    setSelectedTime(null); 
+    setSelectedTime(null);
   };
 
 
@@ -30,75 +30,75 @@ export default function BookAppointment() {
   };
 
   return (
-  
-    <View style={styles.container}>
+    <SafeAreaView>
+      <View style={styles.container}>
         <View style={styles.header}>
-            <View style={{flex:1}}>
-                <AntDesign name="leftcircle" size={24} color="white" onPress={()=>navigation.navigate("DoctorList")}/> 
-            </View>
+          <View>
+            <AntDesign name="arrowleft" size={24} color="black" onPress={() => navigation.navigate("Mainscreen")} />
+          </View>
         </View>
-        
+
+        <View style={{ paddingLeft: 15 }}>
+          <Text style={styles.heading}>Select an Appointment Date and Time</Text>
+        </View>
+
         <View style={styles.contentContainer}>
-           <Text style={styles.heading}>Select an Appointment Date</Text>
-           <Calendar onDayPress={handleDateSelect}
-           markedDates={{
-               [selectedDate]: { selected: true, selectedColor: "blue" },
-             }}
-             theme={{
-          selectedDayBackgroundColor: "blue",
-          todayTextColor: "red",
-          arrowColor: "blue",
-        }}
-      />
 
-      {selectedDate && (
-        <>
-          <Text style={styles.selectedText}>Selected Date: {selectedDate}</Text>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => setTimePickerVisible(true)}
-          >
-            <Text style={styles.buttonText}>
-              {selectedTime ? `Change Time (${selectedTime})` : "Select Time"}
-            </Text>
-          </TouchableOpacity>
-        </>
-      )}
+          <Calendar minDate={new Date().toISOString().split("T")[0]} onDayPress={handleDateSelect}
+            markedDates={{
+              [selectedDate]: { selected: true, selectedColor: "blue" },
+            }}
+            theme={{
+              selectedDayBackgroundColor: "#6A81D5",
+              todayTextColor: "red",
+              arrowColor: "#6A81D5",
+            }}
+          />
 
-      <DateTimePickerModal
-        isVisible={isTimePickerVisible}
-        mode="time"
-        onConfirm={handleTimeConfirm}
-        onCancel={() => setTimePickerVisible(false)}
-      />
+          {selectedDate && (
+            <>
+              <Text style={styles.selectedText}>Selected Date: {selectedDate}</Text>
+              <TouchableOpacity
+                style={styles.button}
+                onPress={() => setTimePickerVisible(true)}
+              >
+                <Text style={styles.buttonText}>
+                  {selectedTime ? `Change Time (${selectedTime})` : "Select Time"}
+                </Text>
+              </TouchableOpacity>
+            </>
+          )}
 
-      {selectedTime && (
-        <Text style={styles.selectedText}>Selected Time: {selectedTime}</Text>
-      )}
+          <DateTimePickerModal
+            isVisible={isTimePickerVisible}
+            mode="time"
+            onConfirm={handleTimeConfirm}
+            onCancel={() => setTimePickerVisible(false)}
+          />
+
+          {selectedTime && (
+            <Text style={styles.selectedText}>Selected Time: {selectedTime}</Text>
+          )}
         </View>
-       
-    </View>
+
+      </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    backgroundColor: "#f8f9fa",
-  },
-  header:{
-    paddingVertical:15,
-    backgroundColor:"#1A9F7F",
-    flexDirection:"row",
+
+  header: {
+    paddingVertical: 15,
     paddingHorizontal: 16,
-   
-   },
-   contentContainer:{
-     padding:20
-   },
+  },
+
+  contentContainer: {
+    padding: 15
+  },
   heading: {
-    fontSize: 20,
-    fontWeight: "bold",
-    textAlign: "center",
+    fontSize: 16,
+    fontWeight: "600",
     marginBottom: 10,
   },
   selectedText: {
@@ -108,7 +108,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   button: {
-    backgroundColor: "blue",
+    backgroundColor: "#6A81D5",
     padding: 12,
     borderRadius: 8,
     marginTop: 15,
@@ -116,6 +116,8 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: "white",
-    fontSize: 16,
+    fontSize: 18,
+    fontWeight:"bold"
   },
+
 });
