@@ -9,7 +9,7 @@ export default StyleSheet.create({
         flexDirection:"row",
         justifyContent:"space-between",
         alignItems:"center",
-        marginBottom:20
+        marginBottom:30
     },
     headerText:{
         fontSize:18,
@@ -34,7 +34,7 @@ export default StyleSheet.create({
        borderRadius:6,
        height:40,
        alignItems:"center",  
-       marginBottom:20
+       marginBottom:40
     },
     searchInput:{
        width:"100%"
