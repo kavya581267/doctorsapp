@@ -46,6 +46,8 @@ export default StyleSheet.create({
     },
     contentContainer:{
         flexDirection:"row",
+        justifyContent:"space-between",
+        alignItems:"center",
          borderWidth:1,
          padding:10,
          borderRadius:6,
@@ -62,15 +64,21 @@ export default StyleSheet.create({
     leftDescription:{
         fontSize:12,
         lineHeight:20,
-        fontWeight:"400"
+        fontWeight:"400",
+        width: "90%",
+        marginTop:"5",
     },
     leftButton:{  
         borderRadius:4,
+        borderWidth: 1,
         alignItems:"center",
-        backgroundColor:COLORS.primary,    
+        backgroundColor:COLORS.secondary, 
+        borderColor: COLORS.primary, 
+        marginTop:"15",
+        width:"50%"
     },
     leftButtonText:{
-      color:COLORS.white,
+      color:"black",
       paddingVertical:5,
     },
 })
