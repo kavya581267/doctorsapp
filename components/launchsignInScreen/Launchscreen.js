@@ -1,12 +1,19 @@
 // src/screens/LaunchScreen.js
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import { View, Text, TouchableOpacity, Image } from "react-native";
 import styles from "../styles/launchStyles"; // Import styles
 import { useNavigation } from "@react-navigation/native";
+import { AuthContext } from "../auth/AuthContext";
 
 
 export default function LaunchScreen() {
-    const navigation=useNavigation();
+    const navigation = useNavigation();
+    const { user } = useContext(AuthContext)
+    console.log("LaunchScreen", user)
+    useEffect(() => {
+        console.log(user)
+        
+    }, []);
     return (
         <View style={styles.container}>
             <View style={styles.topSec}>
@@ -15,7 +22,7 @@ export default function LaunchScreen() {
                 <Text style={styles.subText}>Join us for seamless Health Management and Support</Text>
             </View>
             <View style={styles.bottomSec}>
-                <TouchableOpacity style={styles.buttonLogIn} onPress={()=>navigation.navigate("SignIn")}>
+                <TouchableOpacity style={styles.buttonLogIn} onPress={() => navigation.navigate("SignIn")}>
                     <Text style={styles.logTxt}>Log In</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.buttonSign}>
