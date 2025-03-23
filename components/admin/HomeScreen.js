@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import styles from "../styles/homeScreenStyle"
-import { View, Text, SafeAreaView, TextInput, Image, TouchableOpacity } from "react-native";
+import { View, Text, SafeAreaView, TextInput, Image, TouchableOpacity, ScrollView } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
+import AppointmentList from "../appointments/AppointmentList";
 
 export default function HomeScreen() {
     const navigation = useNavigation();
@@ -70,6 +71,7 @@ export default function HomeScreen() {
                 <View >
                         <Text style={styles.headerText}>Current Appointments</Text>
                 </View>
+                <AppointmentList/>
 
             </View>
         </SafeAreaView>
