@@ -47,7 +47,7 @@ export default function DoctorList() {
   return (
     <SafeAreaView>
       <View style={styles.container}>
-        <Header />
+        <Header nav="Mainscreen"/>
         
         <View>
           <Text style={styles.text}>Book Appointment</Text>

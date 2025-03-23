@@ -34,7 +34,7 @@ export default function BookAppointment() {
       <View style={styles.container}>
         <View style={styles.header}>
           <View>
-            <AntDesign name="arrowleft" size={24} color="black" onPress={() => navigation.navigate("Mainscreen")} />
+            <AntDesign name="arrowleft" size={24} color="black" onPress={() => navigation.navigate("DoctorList")} />
           </View>
         </View>
 
