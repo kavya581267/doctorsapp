@@ -1,5 +1,6 @@
 import React from "react";
 import { View, Text, FlatList, StyleSheet } from "react-native";
+import { COLORS } from "../constants/colors";
 
 const appointments = [
   {
@@ -50,11 +51,6 @@ const styles = StyleSheet.create({
   container: {
     paddingTop: 5
   },
-  header: {
-    fontSize: 18,
-    fontWeight: "bold",
-    marginBottom: 10,
-  },
   appointmentItem: {
     paddingVertical: 10,
     borderBottomWidth: 1,
@@ -62,12 +58,12 @@ const styles = StyleSheet.create({
   },
   time: {
     fontSize: 16,
-    fontWeight: "bold",
-    color: "#4B9F98",
+    fontWeight: "900",
+    color: COLORS.primary,
   },
   name: {
     fontSize: 16,
-    fontWeight: "500",
+    fontWeight: "400",
     marginTop: 3
   },
   type: {

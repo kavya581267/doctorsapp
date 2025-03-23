@@ -31,7 +31,7 @@ export default StyleSheet.create({
         borderRadius:6,
         height:40,
         alignItems:"center",  
-        marginBottom:40
+        marginBottom:20
      },
      searchInput:{
         width:"100%"

@@ -47,4 +47,9 @@ export default StyleSheet.create({
       color:"black",
       paddingVertical:5,
     },
+    headerText:{
+        fontSize:18,
+        lineHeight:28,
+        fontWeight:"700"
+    },
 })

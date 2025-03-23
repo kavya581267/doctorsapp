@@ -5,6 +5,7 @@ import { useNavigation } from "@react-navigation/native";
 import Header from "./Header";
 import AppointmentList from "../appointments/AppointmentList";
 
+
 export default function HomeScreen() {
     const navigation = useNavigation();
     return (
