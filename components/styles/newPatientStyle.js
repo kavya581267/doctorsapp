@@ -15,7 +15,7 @@ export default StyleSheet.create({
     textStyle: {  
         fontSize: 18,
         lineHeight:28,
-        fontWeight: "700",
+        fontWeight: "500",
         textAlign: "center",
     },
     patientContainer: {
@@ -23,12 +23,12 @@ export default StyleSheet.create({
         margin: 15
     },
     marginbtm: {
-        marginBottom: 13
+        marginBottom: 23
     },
     inputText: {
         fontSize: 14,
-        marginBottom: 3,
-        fontWeight: "700"
+        marginBottom: 8,
+        fontWeight: "500"
     },
     inputStyle: {
         height: 44,
