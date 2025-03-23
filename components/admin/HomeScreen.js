@@ -11,7 +11,7 @@ export default function HomeScreen() {
     return (
         <SafeAreaView>
             <View style={styles.container}>
-                <Header/>
+                <Header />
                 <View>
                     <View style={styles.contentContainer}>
                         <View style={styles.leftContainer}>
@@ -25,7 +25,9 @@ export default function HomeScreen() {
                             <Image style={styles.png} source={require("../../assets/addPatient.png")} />
                         </View>
                     </View>
-                    <View style={{ marginVertical: 10 }} /> 
+
+                    <View style={{ marginVertical: 10 }} />
+
                     <View style={styles.contentContainer}>
                         <View style={styles.leftContainer}>
                             <Text style={styles.leftHead}>Book Appointment</Text>
@@ -38,7 +40,8 @@ export default function HomeScreen() {
                             <Image style={styles.png} source={require("../../assets/bookapp.png")} />
                         </View>
                     </View>
-                    <View style={{ marginVertical: 10 }} /> 
+                    
+                    <View style={{ marginVertical: 10 }} />
                     <View style={styles.contentContainer}>
                         <View style={styles.leftContainer}>
                             <Text style={styles.leftHead}>View Appointments</Text>
@@ -52,11 +55,11 @@ export default function HomeScreen() {
                         </View>
                     </View>
                 </View>
-                <View style={{ marginVertical: 10 }} /> 
+                <View style={{ marginVertical: 10 }} />
                 <View >
-                        <Text style={styles.headerText}>Current Appointments</Text>
+                    <Text style={styles.headerText}>Current Appointments</Text>
                 </View>
-                <AppointmentList/>
+                <AppointmentList />
 
             </View>
         </SafeAreaView>
