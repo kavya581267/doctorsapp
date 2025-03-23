@@ -27,8 +27,6 @@ export default function HomeScreen() {
                 </View>
 
                 <View>
-
-
                     <View style={styles.contentContainer}>
                         <View style={styles.leftContainer}>
                             <Text style={styles.leftHead}>Add Patient</Text>
@@ -68,6 +66,11 @@ export default function HomeScreen() {
                         </View>
                     </View>
                 </View>
+                <View style={{ marginVertical: 10 }} /> 
+                <View >
+                        <Text style={styles.headerText}>Current Appointments</Text>
+                </View>
+
             </View>
         </SafeAreaView>
     )
