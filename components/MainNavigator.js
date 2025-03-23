@@ -10,6 +10,8 @@ import Appointments from '../components/admin/Appointments'
 import DoctorList from '../components/admin/DoctorList'
 import BookAppointment from './admin/BookAppointment';
 import LoadingScreen from './LoadingScreen';
+import PatientsList from './admin/PatientsList';
+import HomeScreen from './admin/HomeScreen';
 
 export default function MainNavigator() {
     const { user, loading } = useContext(AuthContext);
@@ -27,6 +29,8 @@ export default function MainNavigator() {
                 <Stack.Screen name="Appointments" component={Appointments}></Stack.Screen>
                 <Stack.Screen name='DoctorList' component={DoctorList} />
                 <Stack.Screen name='BookAppointment' component={BookAppointment} />
+                <Stack.Screen name='PatientsList' component={PatientsList}/>
+               
             </Stack.Navigator>
         </NavigationContainer>
     );
