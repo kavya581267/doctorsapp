@@ -8,6 +8,7 @@ import { AuthContext } from './auth/AuthContext';
 import NewPatient from '../components/admin/NewPatient'
 import Appointments from '../components/admin/Appointments'
 import DoctorList from '../components/admin/DoctorList'
+import BookAppointment from './admin/BookAppointment';
 
 export default function MainNavigator() {
     const { user } = useContext(AuthContext);
@@ -21,6 +22,7 @@ export default function MainNavigator() {
                 <Stack.Screen name="NewPatient" component={NewPatient}></Stack.Screen>
                 <Stack.Screen name="Appointments" component={Appointments}></Stack.Screen>
                 <Stack.Screen name='DoctorList' component={DoctorList} />
+                <Stack.Screen name='BookAppointment' component={BookAppointment}/>
             </Stack.Navigator>
         </NavigationContainer>
     );

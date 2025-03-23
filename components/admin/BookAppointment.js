@@ -3,12 +3,11 @@ import { View, Text, StyleSheet, TouchableOpacity, Alert } from "react-native";
 import { Calendar } from "react-native-calendars";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import AntDesign from '@expo/vector-icons/AntDesign';
-import { useNavigation, useRoute } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
+import DoctorList from "../admin/DoctorList";
 
 
 export default function BookAppointment() {
-    const route=useRoute();
-    const {surname,name,age,phone,category,doctor} = route.params || {};
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedTime, setSelectedTime] = useState("");
   const [isTimePickerVisible, setTimePickerVisible] = useState(false);
@@ -39,19 +38,6 @@ export default function BookAppointment() {
             </View>
         </View>
         
-        <View>
-            <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-                   <View style={{ flexDirection: "row" }}>
-                        <Text style={{ marginRight: 5 }}>Name:  {surname}</Text>
-                        <Text>{name}</Text>
-                    </View>
-        
-                    <Text>Age:  {age}</Text>
-            </View>   
-            <Text>{phone}</Text> 
-           
-        </View>
-
         <View style={styles.contentContainer}>
            <Text style={styles.heading}>Select an Appointment Date</Text>
            <Calendar onDayPress={handleDateSelect}
