@@ -1,18 +1,16 @@
 import React, { useState } from "react";
-import styles from "../styles/homeScreenStyle"
+import styles from "../styles/homeScreenStyle";
 import { View, Text, SafeAreaView, Image, TouchableOpacity } from "react-native";
-
 import { useNavigation } from "@react-navigation/native";
 import Header from "./Header";
+import AppointmentList from "../appointments/AppointmentList";
 
 export default function HomeScreen() {
     const navigation = useNavigation();
-    const [searchText, setSearchText] = useState("");
     return (
         <SafeAreaView>
             <View style={styles.container}>
                 <Header/>
-
                 <View>
                     <View style={styles.contentContainer}>
                         <View style={styles.leftContainer}>
@@ -57,6 +55,7 @@ export default function HomeScreen() {
                 <View >
                         <Text style={styles.headerText}>Current Appointments</Text>
                 </View>
+                <AppointmentList/>
 
             </View>
         </SafeAreaView>
