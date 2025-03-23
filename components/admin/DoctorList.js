@@ -1,18 +1,24 @@
 import React, { useState } from "react";
-import { View, StyleSheet, TouchableOpacity, Text, SafeAreaView } from "react-native";
+import { View, TouchableOpacity, Text, SafeAreaView } from "react-native";
 import { Dropdown } from "react-native-element-dropdown";
 
-import { useNavigation, useRoute } from "@react-navigation/native";
-import AntDesign from '@expo/vector-icons/AntDesign';
+import { useNavigation } from "@react-navigation/native";
 import Header from "./Header";
+import styles from "../styles/doctorListStyle";
 
 
 export default function DoctorList() {
   const navigation = useNavigation();
-  const route = useRoute();
-  const { surname, name, age, phone } = route.params || {};
+
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedDoctor, setSelectedDoctor] = useState("");
+  const [selectedName,setSelectedName] = useState("");
+
+  const patientLabel = ["Kavya singampalli", "Srikanth Bathi", "Hrithi", "Saritha"];
+  const patientName = patientLabel.map((name) => ({
+    label: name,
+    value: name
+  }));
 
   const categoryLabel = ["Cardiologist", "Dermatologist", "Dentist", "Neurologist"];
   const categories = categoryLabel.map((category) => ({
@@ -47,14 +53,14 @@ export default function DoctorList() {
           <Text style={styles.text}>Book Appointment</Text>
           <Dropdown
             style={styles.dropdown}
-            data={categories}
+            data={patientName}
             labelField="label"
             valueField="value"
             placeholder="Select Patient"
-            value={selectedCategory}
+            value={selectedName}
             onChange={(item) => {
-              setSelectedCategory(item.value);
-              setSelectedDoctor(null);
+              setSelectedName(item.value);
+              setSelectedCategory(null);
             }}>
           </Dropdown>
 
@@ -64,7 +70,7 @@ export default function DoctorList() {
             data={categories}
             labelField="label"
             valueField="value"
-            placeholder="Select Category"
+            placeholder="Select Specialization"
             value={selectedCategory}
             onChange={(item) => {
               setSelectedCategory(item.value);
@@ -88,54 +94,11 @@ export default function DoctorList() {
 
           {selectedDoctor && <Text style={styles.selectedText}>Selected Doctor: {selectedDoctor}</Text>}
         </View>
-        <TouchableOpacity style={styles.saveButton} onPress={() => navigation.navigate("BookAppointment", { surname, name, age, phone, selectedCategory, selectedDoctor })}>
+        <TouchableOpacity style={styles.saveButton} onPress={() => navigation.navigate("BookAppointment")}>
           <Text style={styles.saveButtonText}>Confirm Booking</Text>
         </TouchableOpacity>
       </View>
-
-
     </SafeAreaView>
   )
 }
 
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: "#f8f9fa",
-    padding: 15,
-  },
-   text:{
-     fontSize:20,
-     lineHeight:30,
-     fontWeight:"700",
-     marginBottom:15
-   },
-  
-  dropdown: {
-    height: 44,
-    borderColor: "#ccc",
-    borderWidth: 1,
-    borderRadius: 6,
-    paddingHorizontal: 10,
-    backgroundColor: "white",
-    marginBottom: 10,
-   
-  },
-  selectedText: {
-    fontSize: 18,
-    color: "green",
-    marginTop: 10,
-  },
-  saveButton: {
-    backgroundColor: "#1A9F7F",
-    padding: 15,
-    borderRadius: 10,
-    alignItems: "center",
-    marginHorizontal: "5%",
-    marginBottom: 10,
-  },
-  saveButtonText: {
-    color: "white",
-    fontSize: 18,
-    fontWeight: "bold",
-  },
-})
