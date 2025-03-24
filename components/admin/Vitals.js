@@ -54,8 +54,8 @@ export default function Vitals() {
                     </TouchableOpacity>
                 </View>
                 <View>
-                    <TouchableOpacity style={styles.Btn} onPress={() => setShowVitals(false)}>
-                        <Text style={styles.btnText}>Update</Text>
+                    <TouchableOpacity style={styles.Btnupdate} onPress={() => setShowVitals(false)}>
+                        <Text style={styles.updatebtnText}>Update</Text>
                     </TouchableOpacity>
                 </View>
 
