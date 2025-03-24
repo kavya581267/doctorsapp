@@ -102,7 +102,7 @@ const CalendarScreen = () => {
                                 search
                             />
                             <View style={{ marginVertical: 10 }} />
-                            
+
                             {availableTimeSlots.map((time) => (
                                 <TouchableOpacity key={time} style={[
                                     styles.timeSlot,
@@ -115,6 +115,7 @@ const CalendarScreen = () => {
                             ))}
 
                             <Button title="Confirm Booking" onPress={bookAppointment} />
+                            <View style={{marginVertical:10}}/>
                             <Button title="Cancel" onPress={() => setModalVisible(false)} />
                         </ScrollView>
                     </View>

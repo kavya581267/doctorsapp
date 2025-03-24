@@ -57,11 +57,6 @@ export default function HomeScreen() {
                     </View>
                 </View>
                 <View style={{ marginVertical: 10 }} />
-                <View >
-                    <Text style={styles.headerText}>Current Appointments</Text>
-                </View>
-                <AppointmentList />
-               
             </View>
         </SafeAreaView>
     )
