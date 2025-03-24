@@ -3,18 +3,20 @@ import { View, Text, TextInput } from "react-native";
 import styles from "../styles/headerStyle";
 import { MaterialIcons } from "@expo/vector-icons";
 import AntDesign from '@expo/vector-icons/AntDesign';
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 
-export default function Header({ nav , heading}) {
+export default function Header({ nav , heading, tab}) {
     const navigation = useNavigation();
     const [searchText, setSearchText] = useState("");
+    const route = useRoute();
     console.log(nav);
+
     return (
         <View>
             <View style={styles.headerContainer}>
                 {
                     nav ? <View>
-                        <AntDesign name="arrowleft" size={24} color="black" onPress={() => navigation.navigate(nav)} />
+                        <AntDesign name="arrowleft" size={24} color="black" onPress={() => navigation.navigate(nav, {tab})} />
                     </View> : null
                 }
                 {

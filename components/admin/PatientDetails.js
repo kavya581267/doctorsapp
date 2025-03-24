@@ -15,7 +15,7 @@ export default function PatientDetails() {
 
         <SafeAreaView>
             <View style={{ padding: 15 }}>
-                <Header nav="PatientsList" heading="Patient Management" />
+                <Header nav="Mainscreen" heading="Patient Management" tab="Patients" />
                 <View>
                     <View style={styles.containerHead}>
                         <View>
