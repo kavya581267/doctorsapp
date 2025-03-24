@@ -11,7 +11,8 @@ export default StyleSheet.create({
     headerText:{
         fontSize:18,
         lineHeight:28,
-        fontWeight:"700"
+        fontWeight:"700",
+        
     },
     headerLeft:{   
        flexDirection:"row",

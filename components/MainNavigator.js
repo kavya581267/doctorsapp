@@ -12,6 +12,7 @@ import BookAppointment from './admin/BookAppointment';
 import LoadingScreen from './LoadingScreen';
 import PatientsList from './admin/PatientsList';
 import HomeScreen from './admin/HomeScreen';
+import PatientDetails from './admin/PatientDetails';
 
 export default function MainNavigator() {
     const { user, loading } = useContext(AuthContext);
@@ -30,7 +31,7 @@ export default function MainNavigator() {
                 <Stack.Screen name='DoctorList' component={DoctorList} />
                 <Stack.Screen name='BookAppointment' component={BookAppointment} />
                 <Stack.Screen name='PatientsList' component={PatientsList}/>
-               
+               <Stack.Screen name='PatientDetails' component={PatientDetails}/>
             </Stack.Navigator>
         </NavigationContainer>
     );

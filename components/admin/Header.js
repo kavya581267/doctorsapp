@@ -5,7 +5,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { useNavigation } from "@react-navigation/native";
 
-export default function Header({ nav }) {
+export default function Header({ nav , heading}) {
     const navigation = useNavigation();
     const [searchText, setSearchText] = useState("");
     console.log(nav);
@@ -17,9 +17,12 @@ export default function Header({ nav }) {
                         <AntDesign name="arrowleft" size={24} color="black" onPress={() => navigation.navigate(nav)} />
                     </View> : null
                 }
-                <View >
-                    <Text style={styles.headerText}>Admin Home</Text>
-                </View>
+                {
+                    nav ?  <View >
+                    <Text style={styles.headerText}>{heading}</Text>
+                </View> : null
+                }
+               
                 <View style={styles.headerLeft}>
                     <MaterialIcons name="notifications" size={26} color="grey"></MaterialIcons>
                     <MaterialIcons style={styles.margin} name="person" size={26} color="grey"></MaterialIcons>

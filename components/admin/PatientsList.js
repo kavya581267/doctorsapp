@@ -5,6 +5,7 @@ import { SafeAreaView } from "react-native";
 import Header from "./Header";
 import styles from "../styles/patientsListStyle";
 import Octicons from '@expo/vector-icons/Octicons';
+import { useNavigation } from "@react-navigation/native";
 
 
 const patients = [
@@ -12,6 +13,7 @@ const patients = [
         id: "1",
         name: "John Doe",
         age: 72,
+        contact:9014446847,
         conditions: "Hypertension, Arthritis",
         image: "https://www.w3schools.com/w3images/avatar2.png", // Replace with actual image URL
     },
@@ -19,6 +21,7 @@ const patients = [
         id: "2",
         name: "Emily Clark",
         age: 55,
+        contact:9014446847,
         conditions: "Diabetes, Asthma",
         image: "https://www.w3schools.com/w3images/avatar2.png",
     },
@@ -26,6 +29,7 @@ const patients = [
         id: "3",
         name: "David Lee",
         age: 28,
+        contact:9014446847,
         conditions: "Fractured Arm",
         image: "https://www.w3schools.com/w3images/avatar2.png",
     },
@@ -33,6 +37,7 @@ const patients = [
         id: "4",
         name: "Margaret Smith",
         age: 65,
+        contact:9014446847,
         conditions: "High Cholesterol, Osteoporosis",
         image: "https://www.w3schools.com/w3images/avatar2.png",
     },
@@ -40,6 +45,7 @@ const patients = [
         id: "3",
         name: "David Lee",
         age: 28,
+        contact:9014446847,
         conditions: "Fractured Arm",
         image: "https://www.w3schools.com/w3images/avatar2.png",
     },
@@ -47,6 +53,7 @@ const patients = [
         id: "4",
         name: "Margaret Smith",
         age: 65,
+        contact:9014446847,
         conditions: "High Cholesterol, Osteoporosis",
         image: "https://www.w3schools.com/w3images/avatar2.png",
     },
@@ -54,6 +61,7 @@ const patients = [
         id: "4",
         name: "Margaret Smith",
         age: 65,
+        contact:9014446847,
         conditions: "High Cholesterol, Osteoporosis",
         image: "https://www.w3schools.com/w3images/avatar2.png",
     },
@@ -61,6 +69,7 @@ const patients = [
         id: "3",
         name: "David Lee",
         age: 28,
+        contact:9014446847,
         conditions: "Fractured Arm",
         image: "https://www.w3schools.com/w3images/avatar2.png",
     },
@@ -68,6 +77,7 @@ const patients = [
         id: "4",
         name: "Margaret Smith",
         age: 65,
+        contact:9014446847,
         conditions: "High Cholesterol, Osteoporosis",
         image: "https://www.w3schools.com/w3images/avatar2.png",
     },
@@ -75,6 +85,7 @@ const patients = [
 
 const PatientsList = () => {
     const [search, setSearch] = useState("");
+    const navigation = useNavigation();
     const filterPatient = patients.filter(patient => patient.name.toLowerCase().includes(search.toLowerCase));
 
     return (
@@ -91,7 +102,7 @@ const PatientsList = () => {
                                         <Text style={styles.name}>{patient.name}</Text>
                                         <Text style={styles.age}>Age: {patient.age}</Text>
                                         <Text style={styles.cond}>{patient.conditions}</Text>
-                                        <TouchableOpacity style={styles.leftButton} onPress={() => navigation.navigate("NewPatient")}>
+                                        <TouchableOpacity style={styles.leftButton} onPress={() => navigation.navigate("PatientDetails",{patient})}>
                                             <Text style={styles.leftButtonText}>View Details</Text>
                                         </TouchableOpacity>
                                     </View>
