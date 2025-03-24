@@ -2,24 +2,19 @@ import { StyleSheet } from "react-native";
 import { COLORS } from "../constants/colors";
 
 export default StyleSheet.create({
-    container: {
-        flex: 1,
-        alignItems: "center", 
-    },
     moreButton: {
         backgroundColor: COLORS.primary,
         padding:10,
         borderRadius: 6,
-        width: "40%",
         alignItems: "center",
-        position: "absolute",
+        justifyContent:"center",
+        height:50
        
     },
     moreButtonText: {
         color: "white",
-        fontSize: 18,
-        fontWeight: "bold"
-       
+        fontSize: 15,
+        fontWeight: "bold",
     },
     modalContainer: {
         flex: 1,

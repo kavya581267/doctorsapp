@@ -52,14 +52,27 @@ export default function PatientDetails() {
                     </View>
                 </View>
                 <View style={styles.bottomContainer}>
-                    <View >
+
+                    <View style={{width:"40%"}}>
                         <ActionSheetMore PatientDetails={{ surname, name, age, phone }} />
                     </View>
-                    <View>
-                        <TouchableOpacity style={styles.noteButton} onPress={()=>navigation.navigate("InitialNote")}>
+
+                    <View style={{width:"40%"}}>
+                        <TouchableOpacity style={styles.noteButton} onPress={() => navigation.navigate("InitialNote")}>
                             <Text style={styles.noteBtnStyle}>Initial Note</Text>
                         </TouchableOpacity>
                     </View>
+                  
+                   {/* 
+                   <View >
+                        <ActionSheetMore PatientDetails={{ surname, name, age, phone }} />
+                    </View>
+                    <View>
+                        <TouchableOpacity style={styles.noteButton} onPress={() => navigation.navigate("InitialNote")}>
+                            <Text style={styles.noteBtnStyle}>Initial Note</Text>
+                        </TouchableOpacity>
+                    </View>
+                   */} 
                 </View>
             </View>
         </SafeAreaView>
