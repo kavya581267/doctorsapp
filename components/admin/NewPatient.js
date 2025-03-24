@@ -8,7 +8,9 @@ import styles from "../styles/newPatientStyle";
 
 
 
-export default function NewPatient() {
+export default function NewPatient({patients}) {
+    const route =useRoute();
+   
     const navigation = useNavigation();
     const [gender, setGender] = useState("Male");
     const [smoking, setSmoking] = useState("Never");
@@ -17,9 +19,7 @@ export default function NewPatient() {
     const [dob, setDob] = useState();
     const [age, setAge] = useState();
     const [phone, setPhone] = useState();
-
     const [error, setError] = useState("");
-
 
 
     const allFieldsFilled = name && surname && dob && age && gender && phone && smoking;
@@ -66,6 +66,19 @@ export default function NewPatient() {
         }
         setPhone(text);
     }
+    useEffect(() => {
+        if (route.params?.patient) {
+            const { name, surname, dob, age, gender, phone, smokingStatus } = route.params.patient;
+            console.log(phone);
+            setName(name || "");
+            setSurname(surname || "");
+            setDob(dob || "");
+            setAge(age ? age.toString() : ""); // Convert to string
+            setGender(gender || "Male");
+            setPhone(phone ? phone.toString() : "");
+            setSmoking(smokingStatus || "Never");
+        }
+    }, [route.params?.patient]);
 
     
 

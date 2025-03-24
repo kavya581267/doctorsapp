@@ -30,7 +30,7 @@ export default function PatientDetails() {
                     <View style={styles.innerContainer}>
                         <View style={styles.spaceAlign}>
                             <Text style={styles.textfont}>Personal Information</Text>
-                            <TouchableOpacity onPress={()=>navigation.navigate("NewPatient")}>
+                            <TouchableOpacity onPress={()=>navigation.navigate("NewPatient",{patient})}>
                                 <Text style={styles.viewColor}>Edit</Text>
                             </TouchableOpacity>
                         </View>

@@ -13,7 +13,7 @@ const patients = [
         id: "1",
         name: "John Doe",
         age: 72,
-        contact:9014446847,
+        phone:9014446847,
         conditions: "Hypertension, Arthritis",
         image: "https://www.w3schools.com/w3images/avatar2.png", // Replace with actual image URL
     },
@@ -21,7 +21,7 @@ const patients = [
         id: "2",
         name: "Emily Clark",
         age: 55,
-        contact:9014446847,
+        phone:9014446847,
         conditions: "Diabetes, Asthma",
         image: "https://www.w3schools.com/w3images/avatar2.png",
     },
@@ -29,7 +29,7 @@ const patients = [
         id: "3",
         name: "David Lee",
         age: 28,
-        contact:9014446847,
+        phone:9014446847,
         conditions: "Fractured Arm",
         image: "https://www.w3schools.com/w3images/avatar2.png",
     },
@@ -37,7 +37,7 @@ const patients = [
         id: "4",
         name: "Margaret Smith",
         age: 65,
-        contact:9014446847,
+        phone:9014446847,
         conditions: "High Cholesterol, Osteoporosis",
         image: "https://www.w3schools.com/w3images/avatar2.png",
     },
@@ -45,7 +45,7 @@ const patients = [
         id: "3",
         name: "David Lee",
         age: 28,
-        contact:9014446847,
+        phone:9014446847,
         conditions: "Fractured Arm",
         image: "https://www.w3schools.com/w3images/avatar2.png",
     },
@@ -53,7 +53,7 @@ const patients = [
         id: "4",
         name: "Margaret Smith",
         age: 65,
-        contact:9014446847,
+        phone:9014446847,
         conditions: "High Cholesterol, Osteoporosis",
         image: "https://www.w3schools.com/w3images/avatar2.png",
     },
@@ -61,7 +61,7 @@ const patients = [
         id: "4",
         name: "Margaret Smith",
         age: 65,
-        contact:9014446847,
+        phone:9014446847,
         conditions: "High Cholesterol, Osteoporosis",
         image: "https://www.w3schools.com/w3images/avatar2.png",
     },
@@ -69,7 +69,7 @@ const patients = [
         id: "3",
         name: "David Lee",
         age: 28,
-        contact:9014446847,
+        phone:9014446847,
         conditions: "Fractured Arm",
         image: "https://www.w3schools.com/w3images/avatar2.png",
     },
@@ -77,7 +77,7 @@ const patients = [
         id: "4",
         name: "Margaret Smith",
         age: 65,
-        contact:9014446847,
+        phone:9014446847,
         conditions: "High Cholesterol, Osteoporosis",
         image: "https://www.w3schools.com/w3images/avatar2.png",
     },
@@ -91,7 +91,7 @@ const PatientsList = () => {
     return (
         <SafeAreaView>
             <View style={{ padding: 15 }}>
-                <Header nav="Mainscreen" heading="Patients List"/>
+                <Header nav="Maincreen" heading="Patients List"/>
                 <ScrollView contentContainerStyle={{ flexGrow: 1 }} keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>
                 {
                     patients.map((patient, key) =>
