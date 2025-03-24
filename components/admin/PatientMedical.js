@@ -16,7 +16,7 @@ export default function PatientDetails() {
     return (
         <SafeAreaView>
             <View style={{ padding: 10 }}>
-                <Header heading="Medical Details" />
+                <Header heading="Medical Details" nav="PatientDetails"n/>
                 <View style={styles.patientContainer}>
                     <View>
                         <View>
@@ -30,10 +30,7 @@ export default function PatientDetails() {
                             </View>
                             <Text>Mobile:  {phone}</Text>
                         </View>
-
-
                         <View style={styles.divider} />
-
                         <View style={styles.vitalsContainer}>
                             <View>
                                 <Text style={styles.vitalsStyle}>Vitals:</Text>
@@ -62,17 +59,6 @@ export default function PatientDetails() {
                             <Text style={styles.noteBtnStyle}>Initial Note</Text>
                         </TouchableOpacity>
                     </View>
-                  
-                   {/* 
-                   <View >
-                        <ActionSheetMore PatientDetails={{ surname, name, age, phone }} />
-                    </View>
-                    <View>
-                        <TouchableOpacity style={styles.noteButton} onPress={() => navigation.navigate("InitialNote")}>
-                            <Text style={styles.noteBtnStyle}>Initial Note</Text>
-                        </TouchableOpacity>
-                    </View>
-                   */} 
                 </View>
             </View>
         </SafeAreaView>

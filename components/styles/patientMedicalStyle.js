@@ -6,7 +6,7 @@ export default StyleSheet.create({
         borderWidth: 2,
         borderColor: COLORS.grey,
         borderRadius: 10,
-        height: "75%",
+        height: "80%",
         padding: 20,
         marginBottom: 10,
         justifyContent: "space-between",
