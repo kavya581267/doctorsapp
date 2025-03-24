@@ -5,6 +5,8 @@ import { MaterialIcons } from "@expo/vector-icons";
 import SettingsScreen from "./SettingsScreen";
 import Appointments from "./Appointments";
 import PatientsList from "./PatientsList";
+import { COLORS } from "../constants/colors";
+import { useNavigation, useRoute } from "@react-navigation/native";
 
 
 
@@ -12,22 +14,29 @@ const Tab = createBottomTabNavigator();
 
 
 export default function Mainscreen() {
+
+    const route= useRoute()
+    const tab = route?.params?.tab;
+    const initialTab = tab || "Home";
+    console.log(initialTab, "tab:", tab);
+
     return (
         
-        <Tab.Navigator screenOptions={{
+        <Tab.Navigator initialRouteName={initialTab} screenOptions={{
             headerShown: false,
-            tabBarActiveTintColor: '#6A81D5',
+            tabBarActiveTintColor: COLORS.primary,
             tabBarInactiveTintColor: "grey",
+            
 
             tabBarStyle: {
                 backgroundColor: 'white',
-                borderRadius: 20,
+                borderRadius: 5,
                 height: 60,
 
                 bottom: 10,
                 elevation: 5,
                 shadowOpacity: 0.2,
-                shadowRadius: 10
+                shadowRadius: 5
             }
         }}>
             <Tab.Screen name="Home" component={HomeScreen}
