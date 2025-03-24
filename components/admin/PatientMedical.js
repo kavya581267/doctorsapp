@@ -16,7 +16,7 @@ export default function PatientDetails() {
     return (
         <SafeAreaView>
             <View style={{ padding: 10 }}>
-                <Header heading="Medical Details"/>
+                <Header heading="Medical Details" />
                 <View style={styles.patientContainer}>
                     <View>
                         <View>
@@ -45,17 +45,22 @@ export default function PatientDetails() {
                             </View>
                         </View>
                         {
-                            showVitals && (                              
-                                    <Vitals></Vitals>
+                            showVitals && (
+                                <Vitals></Vitals>
                             )
                         }
                     </View>
                 </View>
-
-                <View>
-                    <ActionSheetMore PatientDetails={{ surname, name, age, phone }} />
+                <View style={styles.bottomContainer}>
+                    <View >
+                        <ActionSheetMore PatientDetails={{ surname, name, age, phone }} />
+                    </View>
+                    <View>
+                        <TouchableOpacity style={styles.noteButton} onPress={()=>navigation.navigate("InitialNote")}>
+                            <Text style={styles.noteBtnStyle}>Initial Note</Text>
+                        </TouchableOpacity>
+                    </View>
                 </View>
-
             </View>
         </SafeAreaView>
     )

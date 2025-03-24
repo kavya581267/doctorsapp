@@ -24,4 +24,21 @@ export default StyleSheet.create({
         flexDirection: "row",
         justifyContent: "space-between"
     },
+    noteButton:{
+        backgroundColor: COLORS.primary,
+        padding:10,
+        borderRadius: 6,
+       // width: "40%",
+        alignItems: "center",
+        position: "absolute",
+    },
+    noteBtnStyle:{
+        color: "white",
+        fontSize: 18,
+        fontWeight: "bold"
+    },
+    bottomContainer:{
+       
+        justifyContent:"space-between"
+    }
 })

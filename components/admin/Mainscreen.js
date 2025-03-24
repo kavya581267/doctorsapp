@@ -16,7 +16,7 @@ export default function Mainscreen() {
         
         <Tab.Navigator screenOptions={{
             headerShown: false,
-            tabBarActiveTintColor: '#1A9F7F',
+            tabBarActiveTintColor: '#6A81D5',
             tabBarInactiveTintColor: "grey",
 
             tabBarStyle: {

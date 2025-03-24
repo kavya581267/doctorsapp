@@ -13,7 +13,7 @@ export default StyleSheet.create({
         width: "40%",
         alignItems: "center",
         position: "absolute",
-     
+       
     },
     moreButtonText: {
         color: "white",

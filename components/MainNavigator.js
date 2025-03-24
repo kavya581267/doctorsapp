@@ -14,6 +14,7 @@ import PatientsList from './admin/PatientsList';
 import HomeScreen from './admin/HomeScreen';
 import PatientDetails from './admin/PatientDetails';
 import PatientMedical from "./admin/PatientMedical";
+import InitialNote from "./physician/InitialNote"
 
 export default function MainNavigator() {
     const { user, loading } = useContext(AuthContext);
@@ -34,6 +35,7 @@ export default function MainNavigator() {
                 <Stack.Screen name='PatientsList' component={PatientsList}/>
                <Stack.Screen name='PatientDetails' component={PatientDetails}/>
                <Stack.Screen name='PatientMedical' component={PatientMedical}/>
+               <Stack.Screen name='InitialNote' component={InitialNote}/>
             </Stack.Navigator>
         </NavigationContainer>
     );

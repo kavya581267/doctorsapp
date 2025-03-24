@@ -12,17 +12,23 @@ export default function ActionSheetMore({PatientDetails}) {
     const showActionSheet = () => {
         ActionSheetIOS.showActionSheetWithOptions(
             {
-                options: ["Record Lab Results", "Patient Readings","Home","Cancel"],
-                cancelButtonIndex: 3,
+                options: ["Medications","Past Notes","Record Lab Results", "Patient Readings","Home","Cancel"],
+                cancelButtonIndex: 5,
             },
             (buttonIndex) => {
                 
                  if (buttonIndex===0){
-                    console.log("Record lab results selected")
+                    console.log("Medications selected")
                 } else if (buttonIndex === 1) {
-                    console.log("Patient Readings selected");
+                    console.log("Past Notes selected")
                 }else if(buttonIndex===2){
+                    console.log("Record lab results selected")
+                }else if (buttonIndex===3){
+                    console.log("Patient Readings selected");
+                }else if(buttonIndex===4){
                     navigation.navigate("Mainscreen")
+                }else if(buttonIndex===5){
+                    
                 }
             }
         );
@@ -53,7 +59,12 @@ export default function ActionSheetMore({PatientDetails}) {
                 >
                     <View style={styles.modalContainer}>
                         <View style={styles.modalContent}>
-                            
+                        <TouchableOpacity style={styles.modalOption} onPress={() => console.log("Medications selected")}>
+                                <Text style={styles.modalText}>Record Lab Results</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={styles.modalOption} onPress={() => console.log("Past Notes selected")}>
+                                <Text style={styles.modalText}>Record Lab Results</Text>
+                            </TouchableOpacity>
                             <TouchableOpacity style={styles.modalOption} onPress={() => console.log("Record Lab Results selected")}>
                                 <Text style={styles.modalText}>Record Lab Results</Text>
                             </TouchableOpacity>
