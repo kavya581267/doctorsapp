@@ -2,6 +2,7 @@ import { useNavigation } from "@react-navigation/native";
 import React, { useState } from "react";
 import { View, Text, TouchableOpacity, StyleSheet, ActionSheetIOS, Modal,Platform} from "react-native";
 import PatientDetails from "./PatientDetails";
+import styles from "../styles/actionSheetMoreStyle";
 
 
 export default function ActionSheetMore({PatientDetails}) {
@@ -11,21 +12,16 @@ export default function ActionSheetMore({PatientDetails}) {
     const showActionSheet = () => {
         ActionSheetIOS.showActionSheetWithOptions(
             {
-                options: ["Book Appointment","Record Lab Results", "Patient Readings","Home","Cancel"],
-                cancelButtonIndex: 4,
+                options: ["Record Lab Results", "Patient Readings","Home","Cancel"],
+                cancelButtonIndex: 3,
             },
             (buttonIndex) => {
-                if (buttonIndex === 0) {
-                    navigation.navigate("DoctorList",{surname:PatientDetails.surname,
-                        name:PatientDetails.name,
-                        age:PatientDetails.age,
-                        phone:PatientDetails.phone})
-                }
-                else if (buttonIndex===1){
+                
+                 if (buttonIndex===0){
                     console.log("Record lab results selected")
-                } else if (buttonIndex === 2) {
+                } else if (buttonIndex === 1) {
                     console.log("Patient Readings selected");
-                }else if(buttonIndex===3){
+                }else if(buttonIndex===2){
                     navigation.navigate("Mainscreen")
                 }
             }
@@ -57,9 +53,7 @@ export default function ActionSheetMore({PatientDetails}) {
                 >
                     <View style={styles.modalContainer}>
                         <View style={styles.modalContent}>
-                            <TouchableOpacity style={styles.modalOption} onPress={() => console.log("Patient Readings selected")}>
-                                <Text style={styles.modalText}>BookAppointment</Text>
-                            </TouchableOpacity>
+                            
                             <TouchableOpacity style={styles.modalOption} onPress={() => console.log("Record Lab Results selected")}>
                                 <Text style={styles.modalText}>Record Lab Results</Text>
                             </TouchableOpacity>
@@ -81,44 +75,4 @@ export default function ActionSheetMore({PatientDetails}) {
     );
 }
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        alignItems: "center", 
-    },
-    moreButton: {
-        backgroundColor: "#1A9F7F",
-        padding:15,
-        borderRadius: 20,
-        width: 80,
-        alignItems: "center",
-        position: "absolute",
-     
-    },
-    moreButtonText: {
-        color: "white",
-        fontSize: 16,
-        fontWeight: "bold"
-       
-    },
-    modalContainer: {
-        flex: 1,
-        justifyContent: "flex-end",
-        backgroundColor: "rgba(0,0,0,0.5)",
-    },
-    modalContent: {
-        backgroundColor: "white",
-        padding: 20,
-        borderTopLeftRadius: 20,
-        borderTopRightRadius: 20,
-    },
-    modalOption: {
-        paddingVertical: 15,
-        borderBottomWidth: 1,
-        borderBottomColor: "#ddd",
-    },
-    modalText: {
-        fontSize: 18,
-        textAlign: "center",
-    },
-});
+
