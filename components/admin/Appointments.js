@@ -3,12 +3,13 @@ import React, { useState } from "react";
 import { View, TextInput, StyleSheet, TouchableOpacity, Text, SafeAreaView } from "react-native";
 import AntDesign from '@expo/vector-icons/AntDesign';
 import AppointmentList from "../appointments/AppointmentList";
+import CalendarScreen from "./CalandarScreen";
 
 export default function Appointments() {
     const [searchText, setSearchText] = useState("");
     return (
         <SafeAreaView style={{flex:1, padding:15}}>
-            <AppointmentList />
+            <CalendarScreen/>
         </SafeAreaView>
 
     );
