@@ -1,6 +1,7 @@
 import React from "react";
 import { View, Text, FlatList, StyleSheet } from "react-native";
 import { COLORS } from "../constants/colors";
+import Header from "../admin/Header";
 
 const appointments = [
   {
@@ -19,31 +20,37 @@ const appointments = [
 
 const AppointmentList = () => {
   return (
-    <FlatList
-      data={appointments}
-      keyExtractor={(item, index) => index.toString()}
-      ListEmptyComponent={() => (
-        <View style={styles.emptyContainer}>
-          <Text style={styles.emptyText}>No Appointments Available</Text>
-        </View>
-      )}
-      renderItem={({ item }) => (
-        <View style={styles.appointmentItem}>
-          <Text style={styles.time}>{item.time}</Text>
-          <Text style={styles.name}>{item.name}</Text>
-          <Text style={styles.type}>{item.type}</Text>
-          <Text
-            style={[
-              styles.status,
-              item.status === "Completed" ? styles.completed : styles.inProgress,
-            ]}
-          >
-            {item.status}
-          </Text>
-        </View>
-      )}
-      contentContainerStyle={styles.container} // Ensures padding applies correctly
-    />
+    <View style={{ padding: 10 }}>
+      <View>
+        <Header />
+      </View>
+
+      <FlatList
+        data={appointments}
+        keyExtractor={(item, index) => index.toString()}
+        ListEmptyComponent={() => (
+          <View style={styles.emptyContainer}>
+            <Text style={styles.emptyText}>No Appointments Available</Text>
+          </View>
+        )}
+        renderItem={({ item }) => (
+          <View style={styles.appointmentItem}>
+            <Text style={styles.time}>{item.time}</Text>
+            <Text style={styles.name}>{item.name}</Text>
+            <Text style={styles.type}>{item.type}</Text>
+            <Text
+              style={[
+                styles.status,
+                item.status === "Completed" ? styles.completed : styles.inProgress,
+              ]}
+            >
+              {item.status}
+            </Text>
+          </View>
+        )}
+        contentContainerStyle={styles.container} // Ensures padding applies correctly
+      />
+    </View>
   );
 };
 
