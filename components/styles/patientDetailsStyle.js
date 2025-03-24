@@ -38,9 +38,12 @@ export default StyleSheet.create({
     },
     btnText:{
         color: "black",
-        paddingVertical: 15,
+        paddingVertical: 10,
         fontWeight:"400",
         fontSize:16,
         lineHeight:26
+    },
+    viewColor:{
+        color:COLORS.primary
     }
 })

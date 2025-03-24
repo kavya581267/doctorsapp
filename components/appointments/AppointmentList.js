@@ -22,7 +22,7 @@ const AppointmentList = () => {
   return (
     <View style={{ padding: 10 }}>
       <View>
-        <Header />
+        <Header heading="Today Appointments"/>
       </View>
 
       <FlatList

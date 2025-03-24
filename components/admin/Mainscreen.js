@@ -3,9 +3,9 @@ import React from "react";
 import HomeScreen from "./HomeScreen";
 import { MaterialIcons } from "@expo/vector-icons";
 import SettingsScreen from "./SettingsScreen";
-import NewPatient from "./NewPatient";
 import Appointments from "./Appointments";
 import PatientsList from "./PatientsList";
+
 
 
 const Tab = createBottomTabNavigator();
@@ -13,7 +13,7 @@ const Tab = createBottomTabNavigator();
 
 export default function Mainscreen() {
     return (
-
+        
         <Tab.Navigator screenOptions={{
             headerShown: false,
             tabBarActiveTintColor: '#1A9F7F',
@@ -34,14 +34,15 @@ export default function Mainscreen() {
                 options={{ tabBarIcon: ({ color }) => <MaterialIcons name="home" size={24} color={color} /> }}>
             </Tab.Screen>
             <Tab.Screen name="Patients" component={PatientsList}
-                 options={{tabBarIcon:({color})=> <MaterialIcons name="group" size={24} color={color} />}}></Tab.Screen>
-                 <Tab.Screen name="Appointments" component={Appointments}
-                 options={{tabBarIcon:({color})=> <MaterialIcons name="event" size={24} color={color} />}}></Tab.Screen>
+                options={{ tabBarIcon: ({ color }) => <MaterialIcons name="group" size={24} color={color} /> }}></Tab.Screen>
+            <Tab.Screen name="Appointments" component={Appointments}
+                options={{ tabBarIcon: ({ color }) => <MaterialIcons name="event" size={24} color={color} /> }}></Tab.Screen>
             <Tab.Screen name="Settings" component={SettingsScreen}
                 options={{ tabBarIcon: ({ color }) => <MaterialIcons name="settings" size={24} color={color} /> }}>
             </Tab.Screen>
-            
+
         </Tab.Navigator>
+        
     )
 }
 

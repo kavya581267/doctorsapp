@@ -91,7 +91,7 @@ const PatientsList = () => {
     return (
         <SafeAreaView>
             <View style={{ padding: 15 }}>
-                <Header />
+                <Header nav="Mainscreen" heading="Patients List"/>
                 <ScrollView contentContainerStyle={{ flexGrow: 1 }} keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>
                 {
                     patients.map((patient, key) =>

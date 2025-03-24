@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, Keyboard, KeyboardAvoidingView, Platform, SafeAreaView, Alert, ScrollView } from "react-native";
 import AntDesign from '@expo/vector-icons/AntDesign';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import styles from "../styles/newPatientStyle";
 
 
@@ -19,6 +19,7 @@ export default function NewPatient() {
     const [phone, setPhone] = useState();
 
     const [error, setError] = useState("");
+
 
 
     const allFieldsFilled = name && surname && dob && age && gender && phone && smoking;
@@ -65,6 +66,8 @@ export default function NewPatient() {
         }
         setPhone(text);
     }
+
+    
 
     return (
 

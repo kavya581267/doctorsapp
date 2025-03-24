@@ -6,12 +6,13 @@ import Header from "./Header";
 import AppointmentList from "../appointments/AppointmentList";
 
 
+
 export default function HomeScreen() {
     const navigation = useNavigation();
     return (
         <SafeAreaView>
             <View style={styles.container}>
-                <Header />
+                <Header heading="Admin Home"/>
                 <View>
                     <View style={styles.contentContainer}>
                         <View style={styles.leftContainer}>
@@ -60,7 +61,7 @@ export default function HomeScreen() {
                     <Text style={styles.headerText}>Current Appointments</Text>
                 </View>
                 <AppointmentList />
-
+               
             </View>
         </SafeAreaView>
     )

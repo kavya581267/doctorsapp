@@ -18,7 +18,7 @@ export default function Header({ nav , heading}) {
                     </View> : null
                 }
                 {
-                    nav ?  <View >
+                    heading ?  <View >
                     <Text style={styles.headerText}>{heading}</Text>
                 </View> : null
                 }

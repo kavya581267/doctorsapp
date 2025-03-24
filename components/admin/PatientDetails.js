@@ -1,15 +1,16 @@
 import React from "react";
 import { SafeAreaView, Touchable, TouchableOpacity, View } from "react-native";
 import Header from "./Header";
-import { useRoute } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { Text } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import styles from "../styles/patientDetailsStyle";
 
 export default function PatientDetails() {
+    const navigation=useNavigation();
     const route = useRoute();
     const { patient } = route.params;
-    console.log(patient.name);
+   
     return (
 
         <SafeAreaView>
@@ -29,8 +30,8 @@ export default function PatientDetails() {
                     <View style={styles.innerContainer}>
                         <View style={styles.spaceAlign}>
                             <Text style={styles.textfont}>Personal Information</Text>
-                            <TouchableOpacity>
-                                <Text>Edit</Text>
+                            <TouchableOpacity onPress={()=>navigation.navigate("NewPatient")}>
+                                <Text style={styles.viewColor}>Edit</Text>
                             </TouchableOpacity>
                         </View>
                         <View style={styles.spaceAlign}>
@@ -52,7 +53,7 @@ export default function PatientDetails() {
                         <View style={styles.spaceAlign}>
                             <Text style={styles.textfont}>Medical</Text>
                             <TouchableOpacity>
-                                <Text>View Details</Text>
+                                <Text style={styles.viewColor}>View Details</Text>
                             </TouchableOpacity>
                         </View>
 
