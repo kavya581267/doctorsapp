@@ -1,24 +1,65 @@
 import React, { useState } from "react";
-import { View, Text, TextInput } from "react-native";
+import { View, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, ScrollView, Keyboard } from "react-native";
 import styles from "../styles/presentingComplaintsStyle";
-import { MaterialIcons } from "@expo/vector-icons";
+import Icon from "react-native-vector-icons/Ionicons";
 
 export default function PresentingComplaints() {
+  const [searchText, setSearchText] = useState("");
 
-    const [search, setSearch] = useState("");
-    const [selectedComplaint, setSelectedComplaints] = useState([]);
+  const [finalComplaint, setFinalComplaint] = useState([]);
 
-    const complaintsList = ["Fever", "Cough", "Headache", "Chest Pain", "Shortness of Breath"];
-    return (
-        <View>
-            <Text>Presenting Complaints</Text>
-            <View>
-                <View style={styles.searchContainer}>
-                    <MaterialIcons style={styles.iconMargin} name="search" size={24} color="grey"></MaterialIcons>
-                    <TextInput style={styles.searchInput} value={search} onChangeText={setSearch} placeholder="Search patient or appointments..."></TextInput>
+  const addComplaint = (complaint) => {
+    
+    if (!finalComplaint.includes(complaint)) {
+      setFinalComplaint([...finalComplaint, complaint]);
+    }
+   
+    setSearchText("")
+  };
+
+  
+
+  const complaintsList = ["Fever", "Cough", "Headache", "Chest Pain", "Shortness of Breath"];
+
+  return (
+    
+    <View style={styles.section}>
+      <Text style={styles.sectionTitle}>Presenting Complaints</Text>
+
+      <View style={styles.inputContainer}>
+        <Icon name="search" size={18} color="gray" style={styles.icon} />
+        <TextInput
+          placeholder="Search Complaints"
+          style={styles.input}
+          value={searchText}
+          onChangeText={setSearchText}
+        />
+      </View>
+
+      {searchText.length > 0 && (
+                <View style={styles.dropdown}>
+                    {complaintsList
+                        .filter((c) => c.toLowerCase().includes(searchText.toLowerCase()))
+                        .map((item, index) => (
+                            <TouchableOpacity
+                                key={index}
+                                style={styles.dropdownItem}
+                                onPress={() => addComplaint(item)}
+                            >
+                                <Text style={styles.dropdownText}>{item}</Text>
+                            </TouchableOpacity>
+                        ))}
                 </View>
-            </View>
+            )}
 
-        </View>
-    )
+      <ScrollView contentContainerStyle={styles.complaintsBox}>
+        {finalComplaint.map((item, index) => (
+          <View key={index} style={styles.selectedChip}>
+            <Text style={styles.selectedText}>{item}</Text>
+          </View>
+        ))}
+      </ScrollView>
+    </View>
+  
+  );
 }
