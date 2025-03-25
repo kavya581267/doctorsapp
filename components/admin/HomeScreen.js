@@ -57,6 +57,7 @@ export default function HomeScreen() {
                     </View>
                 </View>
                 <View style={{ marginVertical: 10 }} />
+<<<<<<< HEAD
                 <View style={styles.contentContainer}>
                         <View style={styles.leftContainer}>
                             <Text style={styles.leftHead}>Track Patients</Text>
@@ -70,6 +71,8 @@ export default function HomeScreen() {
                         </View>
                     </View>
                 <View style={{ marginVertical: 10 }} />
+=======
+>>>>>>> 7eb5e663a16cb9bb219affb4d9b280ae7bb298ad
             </View>
         </SafeAreaView>
     )

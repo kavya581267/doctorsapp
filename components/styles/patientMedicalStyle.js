@@ -28,17 +28,18 @@ export default StyleSheet.create({
         backgroundColor: COLORS.primary,
         padding:10,
         borderRadius: 6,
-       // width: "40%",
-        alignItems: "center",
-        position: "absolute",
+        alignItems:"center",
+        justifyContent:"center",
+        height:50
     },
     noteBtnStyle:{
         color: "white",
-        fontSize: 18,
+        fontSize: 15,
         fontWeight: "bold"
     },
     bottomContainer:{
-       
-        justifyContent:"space-between"
+        flex:1,
+        flexDirection:"row",
+        justifyContent:"space-around"
     }
 })

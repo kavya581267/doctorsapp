@@ -27,15 +27,34 @@ export default StyleSheet.create({
         flex: 2
     },
     Btn:{
-        backgroundColor:COLORS.primary,
-      
         padding: 10,
         borderRadius: 5,
         alignItems: "center",
         marginTop: 10,
+        borderWidth: 1,
+        alignItems: "center",
+        backgroundColor: COLORS.secondary,
+        borderColor: COLORS.red
       
       },
       btnText:{
-        color:COLORS.secondary
+        color:COLORS.red,
+        fontWeight:"bold"
+      },
+
+      Btnupdate:{
+        padding: 10,
+        borderRadius: 5,
+        alignItems: "center",
+        marginTop: 10,
+        borderWidth: 1,
+        alignItems: "center",
+        backgroundColor: COLORS.secondary,
+        borderColor: COLORS.primary
+      
+      },
+      updatebtnText:{
+        color:COLORS.primary,
+        fontWeight:"bold"
       }
 })
