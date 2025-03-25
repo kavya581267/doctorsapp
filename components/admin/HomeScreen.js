@@ -57,6 +57,19 @@ export default function HomeScreen() {
                     </View>
                 </View>
                 <View style={{ marginVertical: 10 }} />
+                <View style={styles.contentContainer}>
+                        <View style={styles.leftContainer}>
+                            <Text style={styles.leftHead}>Track Patients</Text>
+                            <Text style={styles.leftDescription}>Track all the available patients..</Text>
+                            <TouchableOpacity style={styles.leftButton} onPress={() => navigation.navigate("NewPatient")}>
+                                <Text style={styles.leftButtonText}>Track Now</Text>
+                            </TouchableOpacity>
+                        </View>
+                        <View>
+                            <Image style={styles.png} source={require("../../assets/trackapp.png")} />
+                        </View>
+                    </View>
+                <View style={{ marginVertical: 10 }} />
             </View>
         </SafeAreaView>
     )
