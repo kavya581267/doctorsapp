@@ -3,12 +3,13 @@ import { COLORS } from "../constants/colors";
 
 export default StyleSheet.create({
     section: {
-        padding: 16
+        padding: 10
     },
     sectionTitle: {
-        fontSize: 18,
-        fontWeight: "bold",
-        marginBottom: 10
+      fontSize: 16,
+      fontWeight: 'bold',
+      marginBottom: 5,
+      
     },
     inputContainer: {
         flexDirection: "row",
@@ -61,8 +62,8 @@ export default StyleSheet.create({
         borderWidth: 1,
         borderColor: COLORS.grey,
         borderRadius: 8,
-        minHeight: 50,
-        marginTop: 20,
+        minHeight: 60,
+        marginTop: 4,
         padding: 10,
         flexDirection: "row",
         flexWrap: "wrap",

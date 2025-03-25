@@ -3,30 +3,28 @@ import { View, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, Scro
 import styles from "../styles/presentingComplaintsStyle";
 import Icon from "react-native-vector-icons/Ionicons";
 
-export default function PresentingComplaints() {
+export default function PresentingComplaints({title,itemList}) {
   const [searchText, setSearchText] = useState("");
 
-  const [finalComplaint, setFinalComplaint] = useState([]);
+  const [selectedItems, setSelectedItems] = useState([]);
 
-  const addComplaint = (complaint) => {
+  const addItem = (item) => {
     
-    if (!finalComplaint.includes(complaint)) {
-      setFinalComplaint([...finalComplaint, complaint]);
+    if (!selectedItems.includes(item)) {
+        setSelectedItems([...selectedItems, item]);
     }
    
     setSearchText("")
   };
 
-  const removeComplaint = (complaint) => {
-    setFinalComplaint(finalComplaint.filter((item) => item !== complaint));
+  const removeComplaint = (item) => {
+    setSelectedItems(selectedItems.filter((selected) => selected !== item));
   };
-
-  const complaintsList = ["Fever", "Cough", "Headache", "Chest Pain", "Shortness of Breath"];
 
   return (
     
     <View style={styles.section}>
-      <Text style={styles.sectionTitle}>Presenting Complaints</Text>
+      <Text style={styles.sectionTitle}>{title}</Text>
 
       <View style={styles.inputContainer}>
         <Icon name="search" size={18} color="gray" style={styles.icon} />
@@ -40,13 +38,13 @@ export default function PresentingComplaints() {
 
       {searchText.length > 0 && (
                 <View style={styles.dropdown}>
-                    {complaintsList
-                        .filter((c) => c.toLowerCase().includes(searchText.toLowerCase()))
+                    {itemList
+                        .filter((item) => item.toLowerCase().includes(searchText.toLowerCase()))
                         .map((item, index) => (
                             <TouchableOpacity
                                 key={index}
                                 style={styles.dropdownItem}
-                                onPress={() => addComplaint(item)}
+                                onPress={() => addItem(item)}
                             >
                                 <Text style={styles.dropdownText}>{item}</Text>
                             </TouchableOpacity>
@@ -55,7 +53,7 @@ export default function PresentingComplaints() {
             )}
 
       <ScrollView contentContainerStyle={styles.complaintsBox}>
-        {finalComplaint.map((item, index) => (
+        {selectedItems.map((item, index) => (
           <View key={index} style={styles.selectedChip}>
             <Text style={styles.selectedText}>{item}</Text>
             <TouchableOpacity onPress={() => removeComplaint(item)}>
