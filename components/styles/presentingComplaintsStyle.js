@@ -74,9 +74,13 @@ export default StyleSheet.create({
         borderRadius: 15,
         marginRight: 5,
         marginBottom: 5,
+        flexDirection:"row"
     },
     selectedText: {
         color: "white",
         fontSize: 14,
     },
+    removeIcon:{
+      marginLeft: 5,
+    }
 });

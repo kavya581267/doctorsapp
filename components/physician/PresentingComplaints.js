@@ -17,7 +17,9 @@ export default function PresentingComplaints() {
     setSearchText("")
   };
 
-  
+  const removeComplaint = (complaint) => {
+    setFinalComplaint(finalComplaint.filter((item) => item !== complaint));
+  };
 
   const complaintsList = ["Fever", "Cough", "Headache", "Chest Pain", "Shortness of Breath"];
 
@@ -56,6 +58,9 @@ export default function PresentingComplaints() {
         {finalComplaint.map((item, index) => (
           <View key={index} style={styles.selectedChip}>
             <Text style={styles.selectedText}>{item}</Text>
+            <TouchableOpacity onPress={() => removeComplaint(item)}>
+              <Icon name="close-circle" size={18} color="white" style={styles.removeIcon} />
+            </TouchableOpacity>
           </View>
         ))}
       </ScrollView>
