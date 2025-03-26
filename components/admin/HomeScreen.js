@@ -48,8 +48,8 @@ export default function HomeScreen() {
                 <View style={{ alignItems: "center", flexDirection: "column" }}>
                     {
                         properties.map((config, key) =>
-                            <>
-                                <View style={styles.contentContainer}>
+                            <React.Fragment key={key}>
+                                <View key={key} style={styles.contentContainer}>
                                     <View style={styles.leftContainer}>
                                         <Text style={styles.leftHead}>{config.heading}</Text>
                                         <Text style={styles.leftDescription}>{config.desc}</Text>
@@ -59,7 +59,7 @@ export default function HomeScreen() {
                                         <Image style={styles.png} source={config.imgPath} /></View>
                                 </View>
                                 <Spacer/>
-                            </>
+                                </React.Fragment>
                         )
                     }
 
