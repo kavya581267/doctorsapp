@@ -9,8 +9,14 @@ import styles from "../styles/patientDetailsStyle";
 export default function PatientDetails() {
     const navigation=useNavigation();
     const route = useRoute();
-    const { patient } = route.params;
-   
+    let patient  = route.params?.patient;
+   if(!patient){
+    patient = {
+        name:"John",
+        age:"67",
+        contact:"3456789"
+    }
+   }
     return (
 
         <SafeAreaView>
