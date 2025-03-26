@@ -47,14 +47,20 @@ export default function HomeScreen() {
                 <Header heading="Admin Home" />
                 <View style={{ alignItems: "center", flexDirection: "column" }}>
                     {
-                        properties.map((config, key) => <><View key={key} style={styles.contentContainer}>
-                            <View style={styles.leftContainer}>
-                                <Text style={styles.leftHead}>{config.heading}</Text>
-                                <Text style={styles.leftDescription}> {config.desc}</Text>
-                                <CommonButton text={config.buttonText} onPress={() => navigation.navigate(config.navPage)} />
-                            </View>
-                            <Image style={styles.png} source={config.imgPath} />
-                        </View> <Spacer/></> )
+                        properties.map((config, key) =>
+                            <>
+                                <View style={styles.contentContainer}>
+                                    <View style={styles.leftContainer}>
+                                        <Text style={styles.leftHead}>{config.heading}</Text>
+                                        <Text style={styles.leftDescription}>{config.desc}</Text>
+                                        <CommonButton text={config.buttonText} onPress={() => { navigation.navigate(config.navPage) }} />
+                                    </View>
+                                    <View>
+                                        <Image style={styles.png} source={config.imgPath} /></View>
+                                </View>
+                                <Spacer/>
+                            </>
+                        )
                     }
 
                     <Spacer />

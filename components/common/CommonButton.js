@@ -1,9 +1,9 @@
 import { StyleSheet, Text, TouchableOpacity } from "react-native";
 import { COLORS } from "../constants/colors";
 
-export default CommonButton = ({onpress, text}) => {
+export default CommonButton = ({onPress, text}) => {
     return (
-        <TouchableOpacity style={styles.leftButton} onPress={onpress}>
+        <TouchableOpacity style={styles.leftButton} onPress={onPress}>
             <Text style={styles.leftButtonText}>{text}</Text>
         </TouchableOpacity>
     )

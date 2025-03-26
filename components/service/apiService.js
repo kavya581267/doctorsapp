@@ -20,7 +20,8 @@ const apiCall = async (endpoint, method = "GET", body = null, queryParams = {}) 
         const options = {
             method,
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "Authorization": ""
             }
         };
 

@@ -9,10 +9,9 @@ export const loginService = {
         try {
             const response = await apiService.post(AUTH_ENDPOINT, { username, password });
 
-            if (response.token) {
-                await AsyncStorage.setItem("jwtToken", response.token); // Store token
+            if (response) {
+                await AsyncStorage.setItem("userDetails", response);
             }
-
             return response;
         } catch (error) {
             console.error("Login failed:", error);
@@ -37,6 +36,6 @@ export const loginService = {
 
     // Logout and remove token
     logout: async () => {
-        await AsyncStorage.removeItem("jwtToken");
+        await AsyncStorage.removeItem("userDetails");
     }
 };
