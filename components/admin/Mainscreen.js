@@ -20,6 +20,7 @@ export default function Mainscreen() {
     const initialTab = tab || "Home";
     console.log(initialTab, "tab:", tab);
 
+
     return (
         
         <Tab.Navigator initialRouteName={initialTab} screenOptions={{

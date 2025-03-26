@@ -9,7 +9,6 @@ export default function Header({ nav , heading, tab}) {
     const navigation = useNavigation();
     const [searchText, setSearchText] = useState("");
     const route = useRoute();
-    console.log(nav);
 
     return (
         <View>

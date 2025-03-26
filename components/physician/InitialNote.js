@@ -2,8 +2,11 @@ import React from 'react';
 import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import PresentingComplaints from './PresentingComplaints';
+import { useNavigation } from '@react-navigation/native';
 
 const MedicalFormScreen = () => {
+
+    const navigation = useNavigation();
 
     const complaintsList = ["Fever", "Cough", "Headache", "Chest Pain", "Shortness of Breath"];
     const medicationsList = ["Paracetamol", "Ibuprofen", "Amoxicillin", "Aspirin", "Metformin"];
@@ -14,7 +17,7 @@ const MedicalFormScreen = () => {
         <View style={styles.container}>
             {/* Header */}
             <View style={styles.header}>
-                <Icon name="arrow-back" size={24} color="black" />
+                <Icon onPress={() => navigation.navigate("PatientDetails")} name="arrow-back" size={24} color="black" />
                 <Text style={styles.headerTitle}>Initial Note</Text>
                 <TouchableOpacity style={styles.submitButton}>
                     <Text style={styles.submitText}>Submit</Text>

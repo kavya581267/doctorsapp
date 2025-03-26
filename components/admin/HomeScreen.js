@@ -3,7 +3,6 @@ import styles from "../styles/homeScreenStyle";
 import { View, Text, SafeAreaView, Image, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import Header from "./Header";
-import AppointmentList from "../appointments/AppointmentList";
 
 
 
@@ -12,18 +11,26 @@ export default function HomeScreen() {
     return (
         <SafeAreaView>
             <View style={styles.container}>
-                <Header heading="Admin Home"/>
-                <View>
+                <Header heading="Admin Home" />
+                <View style={{alignItems:"center", flexDirection:"column"}}>
                     <View style={styles.contentContainer}>
                         <View style={styles.leftContainer}>
                             <Text style={styles.leftHead}>Add Patient</Text>
-                            <Text style={styles.leftDescription}>Quickly add new patients to the system.</Text>
-                            <TouchableOpacity style={styles.leftButton} onPress={() => navigation.navigate("NewPatient")}>
+                            <Text style={styles.leftDescription}>
+                                Quickly add new patients to the system.
+                            </Text>
+                            <TouchableOpacity
+                                style={styles.leftButton}
+                                onPress={() => navigation.navigate("NewPatient")}
+                            >
                                 <Text style={styles.leftButtonText}>Add Now</Text>
                             </TouchableOpacity>
                         </View>
                         <View>
-                            <Image style={styles.png} source={require("../../assets/addPatient.png")} />
+                            <Image
+                                style={styles.png}
+                                source={require("../../assets/addPatient.png")}
+                            />
                         </View>
                     </View>
 
@@ -41,13 +48,13 @@ export default function HomeScreen() {
                             <Image style={styles.png} source={require("../../assets/bookapp.png")} />
                         </View>
                     </View>
-                    
+
                     <View style={{ marginVertical: 10 }} />
                     <View style={styles.contentContainer}>
                         <View style={styles.leftContainer}>
                             <Text style={styles.leftHead}>View Appointments</Text>
                             <Text style={styles.leftDescription}>Track upcoming appointments easily..</Text>
-                            <TouchableOpacity style={styles.leftButton} onPress={() => navigation.navigate("NewPatient")}>
+                            <TouchableOpacity style={styles.leftButton} onPress={() => navigation.navigate("Appointments")}>
                                 <Text style={styles.leftButtonText}>Track Now</Text>
                             </TouchableOpacity>
                         </View>
@@ -55,13 +62,12 @@ export default function HomeScreen() {
                             <Image style={styles.png} source={require("../../assets/trackapp.png")} />
                         </View>
                     </View>
-                </View>
-                <View style={{ marginVertical: 10 }} />
-                <View style={styles.contentContainer}>
+                    <View style={{ marginVertical: 10 }} />
+                    <View style={styles.contentContainer}>
                         <View style={styles.leftContainer}>
                             <Text style={styles.leftHead}>Track Patients</Text>
                             <Text style={styles.leftDescription}>Track all the available patients..</Text>
-                            <TouchableOpacity style={styles.leftButton} onPress={() => navigation.navigate("NewPatient")}>
+                            <TouchableOpacity style={styles.leftButton} onPress={() => navigation.navigate("PatientsList",{tab:"Patients"})}>
                                 <Text style={styles.leftButtonText}>Track Now</Text>
                             </TouchableOpacity>
                         </View>
@@ -69,7 +75,9 @@ export default function HomeScreen() {
                             <Image style={styles.png} source={require("../../assets/trackapp.png")} />
                         </View>
                     </View>
-                <View style={{ marginVertical: 10 }} />
+                    <View style={{ marginVertical: 10 }} />
+                </View>
+
             </View>
         </SafeAreaView>
     )
