@@ -3,7 +3,40 @@ import styles from "../styles/homeScreenStyle";
 import { View, Text, SafeAreaView, Image, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import Header from "./Header";
+import CommonButton from "../common/CommonButton";
+import Spacer from "../common/Spacer";
 
+
+const properties = [
+    {
+        heading: "Add Patient",
+        navPage: "NewPatient",
+        buttonText: "Add Now",
+        desc: "Quickly add new patients to the system.",
+        imgPath: require("../../assets/addPatient.png")
+    },
+    {
+        heading: "Book Appointment",
+        navPage: "DoctorList",
+        buttonText: "Book Now",
+        desc: "Schedule appointments seamlessly.",
+        imgPath: require("../../assets/bookapp.png")
+    },
+    {
+        heading: "View Appointments",
+        navPage: "Appointments",
+        buttonText: "Track Now",
+        desc: "Track upcoming appointments easily..",
+        imgPath: require("../../assets/trackapp.png")
+    },
+    {
+        heading: "Track Patients",
+        navPage: "PatientsList",
+        buttonText: "Track Now",
+        desc: "QTrack all the available patients..",
+        imgPath: require("../../assets/trackapp.png")
+    }
+]
 
 
 export default function HomeScreen() {
@@ -12,70 +45,19 @@ export default function HomeScreen() {
         <SafeAreaView>
             <View style={styles.container}>
                 <Header heading="Admin Home" />
-                <View style={{alignItems:"center", flexDirection:"column"}}>
-                    <View style={styles.contentContainer}>
-                        <View style={styles.leftContainer}>
-                            <Text style={styles.leftHead}>Add Patient</Text>
-                            <Text style={styles.leftDescription}>
-                                Quickly add new patients to the system.
-                            </Text>
-                            <TouchableOpacity
-                                style={styles.leftButton}
-                                onPress={() => navigation.navigate("NewPatient")}
-                            >
-                                <Text style={styles.leftButtonText}>Add Now</Text>
-                            </TouchableOpacity>
-                        </View>
-                        <View>
-                            <Image
-                                style={styles.png}
-                                source={require("../../assets/addPatient.png")}
-                            />
-                        </View>
-                    </View>
+                <View style={{ alignItems: "center", flexDirection: "column" }}>
+                    {
+                        properties.map((config, key) => <><View key={key} style={styles.contentContainer}>
+                            <View style={styles.leftContainer}>
+                                <Text style={styles.leftHead}>{config.heading}</Text>
+                                <Text style={styles.leftDescription}> {config.desc}</Text>
+                                <CommonButton text={config.buttonText} onPress={() => navigation.navigate(config.navPage)} />
+                            </View>
+                            <Image style={styles.png} source={config.imgPath} />
+                        </View> <Spacer/></> )
+                    }
 
-                    <View style={{ marginVertical: 10 }} />
-
-                    <View style={styles.contentContainer}>
-                        <View style={styles.leftContainer}>
-                            <Text style={styles.leftHead}>Book Appointment</Text>
-                            <Text style={styles.leftDescription}>Schedule appointments seamlessly.</Text>
-                            <TouchableOpacity style={styles.leftButton} onPress={() => navigation.navigate("DoctorList")}>
-                                <Text style={styles.leftButtonText}>Book Now</Text>
-                            </TouchableOpacity>
-                        </View>
-                        <View>
-                            <Image style={styles.png} source={require("../../assets/bookapp.png")} />
-                        </View>
-                    </View>
-
-                    <View style={{ marginVertical: 10 }} />
-                    <View style={styles.contentContainer}>
-                        <View style={styles.leftContainer}>
-                            <Text style={styles.leftHead}>View Appointments</Text>
-                            <Text style={styles.leftDescription}>Track upcoming appointments easily..</Text>
-                            <TouchableOpacity style={styles.leftButton} onPress={() => navigation.navigate("Appointments")}>
-                                <Text style={styles.leftButtonText}>Track Now</Text>
-                            </TouchableOpacity>
-                        </View>
-                        <View>
-                            <Image style={styles.png} source={require("../../assets/trackapp.png")} />
-                        </View>
-                    </View>
-                    <View style={{ marginVertical: 10 }} />
-                    <View style={styles.contentContainer}>
-                        <View style={styles.leftContainer}>
-                            <Text style={styles.leftHead}>Track Patients</Text>
-                            <Text style={styles.leftDescription}>Track all the available patients..</Text>
-                            <TouchableOpacity style={styles.leftButton} onPress={() => navigation.navigate("PatientsList",{tab:"Patients"})}>
-                                <Text style={styles.leftButtonText}>Track Now</Text>
-                            </TouchableOpacity>
-                        </View>
-                        <View>
-                            <Image style={styles.png} source={require("../../assets/trackapp.png")} />
-                        </View>
-                    </View>
-                    <View style={{ marginVertical: 10 }} />
+                    <Spacer />
                 </View>
 
             </View>
