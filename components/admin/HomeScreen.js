@@ -10,7 +10,7 @@ import Spacer from "../common/Spacer";
 const properties = [
     {
         heading: "Add Patient",
-        navPage: "NewPatient",
+        navPage: "PatientRegistration",
         buttonText: "Add Now",
         desc: "Quickly add new patients to the system.",
         imgPath: require("../../assets/addPatient.png")

@@ -4,25 +4,24 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { useNavigation, useRoute } from "@react-navigation/native";
 import styles from "../styles/newPatientStyle";
+import PatientRegistrationRequest from "../../models/auth/PatientRegistrationRequest";
 
 
 
 
-export default function NewPatient({patients}) {
+export default function NewPatient() {
     const route =useRoute();
    
     const navigation = useNavigation();
-    const [gender, setGender] = useState("Male");
-    const [smoking, setSmoking] = useState("Never");
-    const [name, setName] = useState("");
-    const [surname, setSurname] = useState("");
-    const [dob, setDob] = useState();
-    const [age, setAge] = useState();
-    const [phone, setPhone] = useState();
+
     const [error, setError] = useState("");
+    const [newPatient, setNewPatient] = useState(new PatientRegistrationRequest());
+    
 
 
-    const allFieldsFilled = name && surname && dob && age && gender && phone && smoking;
+
+    const allFieldsFilled = newPatient.firstName && newPatient.lastName && newPatient.dateOfBirth 
+    && newPatient.phone && newPatient.gender;
 
     const addNewPatient = async () => {
       
@@ -31,15 +30,7 @@ export default function NewPatient({patients}) {
             headers: {
                 "content-type": "application/json"
             },
-            body: JSON.stringify({
-                "name": name,
-                "surName": surname,
-                "dob": dob,
-                "age": age,
-                "gender": gender,
-                "phone": phone,
-                "smokingStatus": smoking
-            })
+            body: JSON.stringify(newPatient)
         });
         const json = await response.json()
         console.log(json)
@@ -53,6 +44,10 @@ export default function NewPatient({patients}) {
             console.log("error adding List");
         }
     }
+
+    const updatePatient = (field, value) => {
+        setNewPatient((prev) => ({ ...prev, [field]: value }));
+    };
 
 
     const handlePhone = (text) => {
@@ -68,15 +63,7 @@ export default function NewPatient({patients}) {
     }
     useEffect(() => {
         if (route.params?.patient) {
-            const { name, surname, dob, age, gender, phone, smokingStatus } = route.params.patient;
-            console.log(phone);
-            setName(name || "");
-            setSurname(surname || "");
-            setDob(dob || "");
-            setAge(age ? age.toString() : ""); // Convert to string
-            setGender(gender || "Male");
-            setPhone(phone ? phone.toString() : "");
-            setSmoking(smokingStatus || "Never");
+            setNewPatient(new PatientRegistrationRequest({ ...route.params.patient }));
         }
     }, [route.params?.patient]);
 
@@ -104,22 +91,23 @@ export default function NewPatient({patients}) {
                     <View style={{ margin: 10 }}>
                         <View style={styles.marginbtm}>
                             <Text style={styles.inputText}>Name</Text>
-                            <TextInput value={name} style={styles.inputStyle} onChangeText={setName}></TextInput>
+                            <TextInput value={newPatient.firstName} style={styles.inputStyle} 
+                            onChangeText={(text) => updatePatient("firstName", text)}></TextInput>
                         </View>
 
                         <View style={styles.marginbtm}>
                             <Text style={styles.inputText}>Surname</Text>
-                            <TextInput value={surname} onChangeText={setSurname} style={styles.inputStyle}></TextInput>
+                            <TextInput value={newPatient.lastName} onChangeText={(text)=>updatePatient("lastName",text)} style={styles.inputStyle}></TextInput>
                         </View>
 
                         <View style={styles.marginbtm}>
                             <Text style={styles.inputText}>DOB</Text>
-                            <TextInput value={dob} onChangeText={setDob} style={styles.inputStyle}></TextInput>
+                            <TextInput value={newPatient.dateOfBirth} onChangeText={(text)=>updatePatient("dateOfBirth",text)} style={styles.inputStyle}></TextInput>
                         </View>
 
                         <View style={styles.marginbtm}>
-                            <Text style={styles.inputText}>Age</Text>
-                            <TextInput value={age} keyboardType="phone-pad" onChangeText={setAge} style={styles.inputStyle}>
+                            <Text style={styles.inputText}>email</Text>
+                            <TextInput value={newPatient.email}  onChangeText={(text)=>updatePatient("email",text)} style={styles.inputStyle}>
 
                             </TextInput>
                         </View>
@@ -129,38 +117,25 @@ export default function NewPatient({patients}) {
                         <View style={styles.marginbtm}>
                             <Text style={styles.inputText}>Gender</Text>
                             <View style={styles.radioContainer}>
-                                <TouchableOpacity style={[styles.radioButton, gender === "Male" && styles.selected]} onPress={() => setGender("Male")}>
-                                    <Text style={[styles.radioText, gender === "Male" && styles.selectedText]}>Male</Text>
+                                <TouchableOpacity style={[styles.radioButton, newPatient.gender === "Male" && styles.selected]} onPress={() => setGender("Male")}>
+                                    <Text style={[styles.radioText, newPatient.gender === "Male" && styles.selectedText]}>Male</Text>
                                 </TouchableOpacity>
-                                <TouchableOpacity style={[styles.radioButton, gender === "Female" && styles.selected]} onPress={() => setGender("Female")}>
-                                    <Text style={[styles.radioText, gender === "Female" && styles.selectedText]}>Female</Text>
+                                <TouchableOpacity style={[styles.radioButton, newPatient.gender === "Female" && styles.selected]} onPress={() => setGender("Female")}>
+                                    <Text style={[styles.radioText, newPatient.gender === "Female" && styles.selectedText]}>Female</Text>
                                 </TouchableOpacity>
-                                <TouchableOpacity style={[styles.radioButton, gender === "Other" && styles.selected]} onPress={() => setGender("Other")}>
-                                    <Text style={[styles.radioText, gender === "Other" && styles.selectedText]}>Other</Text>
+                                <TouchableOpacity style={[styles.radioButton, newPatient.gender === "Other" && styles.selected]} onPress={() => setGender("Other")}>
+                                    <Text style={[styles.radioText, newPatient.gender === "Other" && styles.selectedText]}>Other</Text>
                                 </TouchableOpacity>
                             </View>
                         </View>
 
                         <View style={styles.marginbtm}>
                             <Text style={styles.inputText}>Phone Number</Text>
-                            <TextInput style={styles.inputStyle} value={phone} onChangeText={handlePhone} keyboardType="phone-pad" maxLength={10}></TextInput>
+                            <TextInput style={styles.inputStyle} value={newPatient.phone} onChangeText={(text)=>updatePatient("phone",text)} keyboardType="phone-pad" maxLength={10}></TextInput>
                             {error ? <Text style={styles.error}>{error}</Text> : null}
                         </View>
 
-                        <View style={styles.marginbtm}>
-                            <Text style={styles.inputText}>Smoking Status</Text>
-                            <View style={styles.radioContainer}>
-                                <TouchableOpacity style={[styles.radioButton, smoking === "Current" && styles.selected]} onPress={() => setSmoking("Current")}>
-                                    <Text style={[styles.radioText, smoking === "Current" && styles.selectedText]}>Current</Text>
-                                </TouchableOpacity>
-                                <TouchableOpacity style={[styles.radioButton, smoking === "Former" && styles.selected]} onPress={() => setSmoking("Former")}>
-                                    <Text style={[styles.radioText, smoking === "Former" && styles.selectedText]}>Former</Text>
-                                </TouchableOpacity>
-                                <TouchableOpacity style={[styles.radioButton, smoking === "Never" && styles.selected]} onPress={() => setSmoking("Never")}>
-                                    <Text style={[styles.radioText, smoking === "Never" && styles.selectedText]}>Never</Text>
-                                </TouchableOpacity>
-                            </View>
-                        </View>
+                        
                     </View>
                 </ScrollView>
 

@@ -1,4 +1,4 @@
-class PatientRegistrationRequest{
+export default class PatientRegistrationRequest{
      constructor(clinicId,firstName,lastName,email,dateOfBirth,gender,phone,bloodGroup,createUserAccount=false,password,address,city,state,zipCode,country = "USA",emergencyContactName,emergencyContactPhone){
         this.clinicId = clinicId;
         this.firstName = firstName;

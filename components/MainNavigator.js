@@ -15,6 +15,8 @@ import HomeScreen from './admin/HomeScreen';
 import PatientDetails from './admin/PatientDetails';
 import PatientMedical from "./admin/PatientMedical";
 import InitialNote from "./physician/InitialNote"
+import { SafeAreaView } from 'react-native';
+import PatientRegistration from './registration/PatientRegistration';
 
 export default function MainNavigator() {
     const { user, loading } = useContext(AuthContext);
@@ -23,12 +25,13 @@ export default function MainNavigator() {
         return <LoadingScreen/>
     }
     return (
+       
         <NavigationContainer>
             <Stack.Navigator initialRouteName={user ? "Mainscreen" : "LaunchScreen"} screenOptions={{ headerShown: false }}>
                 <Stack.Screen name="LaunchScreen" component={LaunchScreen}></Stack.Screen>
                 <Stack.Screen name='Mainscreen' component={Mainscreen}></Stack.Screen>
                 <Stack.Screen name='SignIn' component={SignIn}></Stack.Screen>
-                <Stack.Screen name="NewPatient" component={NewPatient}></Stack.Screen>
+                <Stack.Screen name="PatientRegistration" component={PatientRegistration}></Stack.Screen>
                 <Stack.Screen name="Appointments" component={Appointments}></Stack.Screen>
                 <Stack.Screen name='DoctorList' component={DoctorList} />
                 <Stack.Screen name='BookAppointment' component={BookAppointment} />
