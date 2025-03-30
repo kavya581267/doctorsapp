@@ -29,7 +29,7 @@ export const AuthProvider = ({ children }: Props) => {
           await AsyncStorage.setItem("jwtToken", "dummy");
           const jwtToken = "dummy"
           setToken(jwtToken);
-          setUser(undefined);
+          setUser({lastName:"test", firstName:"first", id: "1234", roles: [],internalUserId: 123456, username:"testuser"});
           return true;
         }else{
           return false;
