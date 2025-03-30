@@ -4,7 +4,7 @@ import styles from "../styles/signInStyle";
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import Feather from '@expo/vector-icons/Feather';
 import { useNavigation } from "@react-navigation/native";
-import { AuthContext } from "../auth/AuthContext";
+import { AuthContext } from "@context/AuthContext";
 
 export default function SignIn() {
     const {login} = useContext(AuthContext)
@@ -41,7 +41,11 @@ export default function SignIn() {
                 </View>
                 <View>
                     <TouchableOpacity style={styles.btn_gap} onPress={async () => {
-                        const isLogin = await login(form.userName, form.password);
+                        const isLogin = await login({
+                            email:"test",
+                            password:form.password,
+                            mfa: "dummy"
+                        });
                         console.log(isLogin)
                         if(isLogin){
                             //navigation.navigate("Mainscreen")

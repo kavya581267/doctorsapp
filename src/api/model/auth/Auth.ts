@@ -14,3 +14,9 @@ export interface LoginResponse {
     roles: string[];
     internalUserId: number;
   }
+
+  export interface LoginRequest{
+    email: string;
+    password: string;
+    mfa: string;
+  }

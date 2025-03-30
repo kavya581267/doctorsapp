@@ -4,7 +4,6 @@ import SignIn from '../components/launchsignInScreen/SignIn';
 import { NavigationContainer } from '@react-navigation/native';
 import Mainscreen from '../components/admin/Mainscreen';
 import { createStackNavigator } from '@react-navigation/stack';
-import { AuthContext } from './auth/AuthContext';
 import NewPatient from '../components/admin/NewPatient'
 import Appointments from '../components/admin/Appointments'
 import DoctorList from '../components/admin/DoctorList'
@@ -17,11 +16,12 @@ import PatientMedical from "./admin/PatientMedical";
 import InitialNote from "./physician/InitialNote"
 import { SafeAreaView } from 'react-native';
 import PatientRegistration from './registration/PatientRegistration';
+import { AuthContext } from '@context/AuthContext';
 
 export default function MainNavigator() {
     const { user, loading } = useContext(AuthContext);
     const Stack = createStackNavigator();
-    if (loading) {
+    if(loading){
         return <LoadingScreen/>
     }
     return (

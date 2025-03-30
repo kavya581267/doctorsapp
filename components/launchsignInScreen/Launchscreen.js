@@ -3,7 +3,7 @@ import React, { useContext, useEffect } from "react";
 import { View, Text, TouchableOpacity, Image } from "react-native";
 import styles from "../styles/launchStyles"; // Import styles
 import { useNavigation } from "@react-navigation/native";
-import { AuthContext } from "../auth/AuthContext";
+import { AuthContext } from "@context/AuthContext";
 
 
 export default function LaunchScreen() {
