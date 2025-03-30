@@ -1,11 +1,15 @@
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { AuthProvider } from './components/auth/AuthContext';
 import MainNavigator from './components/MainNavigator';
 
 
 export default function App() {
   return (
-    <AuthProvider>
-       <MainNavigator/>
-    </AuthProvider>
+    <SafeAreaProvider>
+      <AuthProvider>
+        <MainNavigator />
+      </AuthProvider>
+    </SafeAreaProvider>
+
   );
 }

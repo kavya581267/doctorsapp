@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import styles from "../styles/homeScreenStyle";
-import { View, Text, SafeAreaView, Image, TouchableOpacity } from "react-native";
+import { View, Text, Image, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import Header from "./Header";
 import CommonButton from "../common/CommonButton";
 import Spacer from "../common/Spacer";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 
 const properties = [

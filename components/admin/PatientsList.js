@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { View, Text, TextInput, FlatList, Image, TouchableOpacity, StyleSheet, ScrollView } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { SafeAreaView } from "react-native";
 import Header from "./Header";
 import styles from "../styles/patientsListStyle";
 import Octicons from '@expo/vector-icons/Octicons';
 import { useNavigation } from "@react-navigation/native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 
 const patients = [
