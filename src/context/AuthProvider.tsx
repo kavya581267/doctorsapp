@@ -26,21 +26,19 @@ export const AuthProvider = ({ children }: Props) => {
     
       const login = async (loginRequest: LoginRequest) => {
         try{
+            setLoading(true)
             const response = await loginService.login(loginRequest);
+            await AsyncStorage.setItem("jwtToken", response.accessToken);
+            setToken(response.accessToken);
+            setUser(response.user);
+            setLoading(false)
             console.log(response)
+            return true;
         }catch(error){
           console.log(error)
-        }
-        if(loginRequest.password === "test"){
-          await AsyncStorage.setItem("jwtToken", "dummy");
-          const jwtToken = "dummy"
-          setToken(jwtToken);
-          setUser({lastName:"test", firstName:"first", id: "1234", roles: [],internalUserId: 123456, username:"testuser"});
-          return true;
-        }else{
-          return false;
-        }
-            
+          setLoading(false);
+        }   
+        return false;
       };
     
       const logout = async () => {
