@@ -20,6 +20,7 @@ export default function MdLogTextInput ({label,value, left, right}: MdLogTextInp
         onChangeText={()=>{console.log("sdfg")}}
         left={ <TextInput.Icon icon={left}/>}
         right={ <TextInput.Icon icon={right}/>}
+        
         />
     )
 }

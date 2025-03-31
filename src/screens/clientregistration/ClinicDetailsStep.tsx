@@ -2,7 +2,7 @@ import { ClinicRequest } from "@api/model/client/ClientRequest";
 import { Image, TouchableOpacity, View } from "react-native";
 import styles from "@styles/clinicRegistrationStyles";
 import MdLogTextInput from "@components/MdLogTextInput";
-import { Button, Text } from "react-native-paper";
+import { Button, Icon, Text } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 import { COLORS } from "@utils/colors";
 
@@ -18,17 +18,26 @@ interface StepProps {
 }
 
 
+
+
 export const ClientDetails: React.FC<StepProps> = ({ nextStep, formData, setFormData }) => {
+
+    const validateFormFields = () => {
+        if(!isAnyFieldsEmpty(["clinicName", "clinicLicense", "phone", "email"],formData)){
+            nextStep();
+        }
+    }
+
     return (
         <View style={styles.container}>
             <View style={styles.inputBottom}>
 
                 <MdLogTextInput
-                    label="Clinic Name"
+                    label="Clinic Name*"
                     value={formData?.clinicName}
                     left="plus-circle"
                 />
-                <MdLogTextInput label="Clinic Licence"
+                <MdLogTextInput label="Clinic Licence*"
                     value={formData?.clinicLicense}
                     left="card-text"
                 />
@@ -37,21 +46,24 @@ export const ClientDetails: React.FC<StepProps> = ({ nextStep, formData, setForm
                     left="card-text"
                 />
                 <MdLogTextInput label="Phone"
-                    value={formData?.clinicLicense}
+                    value={formData?.phone}
                     left="phone"
                 />
                 <MdLogTextInput label="Email"
-                    value={formData?.clinicLicense}
+                    value={formData?.email}
                     left="email"
                 />
                 <MdLogTextInput label="Alternate Phone"
-                    value={formData?.clinicLicense}
+                    value={formData?.alternatePhone}
                     left="phone-alert"
                 />
             </View>
-            <TouchableOpacity style={styles.buttonNext} onPress={nextStep}>
-                <Text style={styles.nextTxt}>Next</Text>
-            </TouchableOpacity>
+            <View style={{flexDirection:"row-reverse"}}>
+                <TouchableOpacity style={styles.buttonNext} onPress={validateFormFields}>
+                    <Text style={styles.nextTxt}>Next</Text>
+                </TouchableOpacity>
+            </View>
+
 
 
         </View>
