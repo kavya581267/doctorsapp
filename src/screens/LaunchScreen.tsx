@@ -4,7 +4,8 @@ import styles from "@styles/launchScreenStyles";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 
 type RootStackParamList = {
-    SignIn: undefined; // Define available routes and their parameters
+    SignIn: undefined; // Define available routes and their parameters'
+    ClinicRegistration: undefined;
   };
 
 
@@ -25,7 +26,7 @@ export default function LaunchScreen() {
                 <TouchableOpacity style={styles.buttonLogIn} onPress={loginPress}>
                     <Text style={styles.logTxt}>Log In</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.buttonSign}>
+                <TouchableOpacity style={styles.buttonSign} onPress={()=>navigation.navigate("ClinicRegistration")}>
                     <Text style={styles.signTxt}>Sign Up</Text>
                 </TouchableOpacity>
             </View>

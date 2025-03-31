@@ -33,8 +33,7 @@ export default function NewPatient() {
             body: JSON.stringify(newPatient)
         });
         const json = await response.json()
-        console.log(json)
-        console.log(response.status);
+        
 
 
         if (response.status === 200) {

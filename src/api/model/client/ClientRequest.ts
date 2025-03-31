@@ -1,5 +1,5 @@
 export class ClinicRequest {
-    clinicName: string ="";
+    clinicName: string= "";
     clinicLicense: string="";
     taxId?: string;
   
