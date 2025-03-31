@@ -4,16 +4,15 @@ export class ClinicRequest {
     taxId?: string;
   
     // Address fields
-    address: string ="";
+    address: string="";
     city: string="";
     state: string="";
     zipCode: string="";
-    country: string="";
+    country: string = "USA";
   
     // Contact fields
     phone: string="";
     email: string="";
     alternatePhone?: string;
-  
   }
   
