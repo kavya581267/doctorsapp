@@ -1,6 +1,4 @@
 import { useContext } from 'react';
-import LaunchScreen from '../components/launchsignInScreen/Launchscreen';
-import SignIn from '../components/launchsignInScreen/SignIn';
 import { NavigationContainer } from '@react-navigation/native';
 import Mainscreen from '../components/admin/Mainscreen';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -17,6 +15,8 @@ import InitialNote from "./physician/InitialNote"
 import { SafeAreaView } from 'react-native';
 import PatientRegistration from './registration/PatientRegistration';
 import { AuthContext } from '@context/AuthContext';
+import LaunchScreen from '@screens/LaunchScreen';
+import SignIn from '@screens/SignIn';
 
 export default function MainNavigator() {
     const { user, loading } = useContext(AuthContext);

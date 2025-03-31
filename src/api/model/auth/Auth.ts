@@ -6,17 +6,17 @@ export interface LoginResponse {
     requiresMfa: boolean;
   }
   
-  export interface UserInfo {
-    id: string;
-    username: string;
-    firstName: string;
-    lastName: string;
-    roles: string[];
+  export class UserInfo {
+    id: string = "";
+    username: string = "";
+    firstName: string = "";
+    lastName: string = "";
+    roles: string[] = [];
     internalUserId: number;
   }
 
-  export interface LoginRequest{
-    email: string;
-    password: string;
-    mfa: string;
+  export class LoginRequest{
+    email: string = "";
+    password: string = "";
+    mfa: string = "";
   }
