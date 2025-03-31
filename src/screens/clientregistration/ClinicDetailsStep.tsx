@@ -21,11 +21,25 @@ export const ClientDetails: React.FC<StepProps> = ({ nextStep, formData, setForm
             <MdLogTextInput
                 label="Clinic Name"
                 value={formData?.clinicName}
-                
+                left="plus-circle"
             />
             <MdLogTextInput label="Clinic Licence"
                 value={formData?.clinicLicense}
+                left="card-text"
             />
+            <MdLogTextInput label="Phone"
+                value={formData?.clinicLicense}
+                left="phone"
+            />
+            <MdLogTextInput label="Email"
+                value={formData?.clinicLicense}
+                left="email"
+            />
+            <MdLogTextInput label="Alternate Phone"
+                value={formData?.clinicLicense}
+                left="phone-alert"
+            />
+            
         </View>
     )
 };

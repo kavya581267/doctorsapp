@@ -13,7 +13,7 @@ import Swiper from "react-native-swiper";
 
 export default function ClinicRegistration() {
     const labels = ["Clinic Details", "Address", "Submit"];
-    const [step, setStep] = useState<number>(1);
+    const [step, setStep] = useState<number>(0);
     const [formData, setFormData] = useState<ClinicRequest>()
     const nextStep = () => setStep((prev) => prev + 1);
     const prevStep = () => setStep((prev) => prev - 1);
