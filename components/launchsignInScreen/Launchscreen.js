@@ -10,9 +10,7 @@ export default function LaunchScreen() {
     const navigation = useNavigation();
     const { user } = useContext(AuthContext)
     console.log("LaunchScreen", user)
-    useEffect(() => {
-        console.log(user)
-        
+    useEffect(() => { 
     }, []);
     return (
         <View style={styles.container}>
@@ -25,7 +23,7 @@ export default function LaunchScreen() {
                 <TouchableOpacity style={styles.buttonLogIn} onPress={() => navigation.navigate("SignIn")}>
                     <Text style={styles.logTxt}>Log In</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.buttonSign}>
+                <TouchableOpacity style={styles.buttonSign} onPress={()=>navigation.navigate("ClinicRegistration")}>
                     <Text style={styles.signTxt}>Sign Up</Text>
                 </TouchableOpacity>
             </View>
