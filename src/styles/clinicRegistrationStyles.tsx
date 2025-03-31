@@ -60,7 +60,9 @@ export default StyleSheet.create({
         marginTop: 10,
         borderWidth: 2,
         backgroundColor: COLORS.secondary,
-        borderColor: COLORS.primary
+        borderColor: COLORS.primary,
+        flexDirection:"row",
+        justifyContent:"space-evenly"
     },
     nextTxt: {
         color: COLORS.primary,

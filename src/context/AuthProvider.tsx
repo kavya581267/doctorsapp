@@ -3,21 +3,21 @@ import { AuthContext } from "./AuthContext"
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { LoginRequest, UserInfo } from "@api/model/auth/Auth";
 import { loginService } from "@api/loginService";
+import { JWT_ACCESS_TOKEN, USER, USER_CONTEXT } from "@utils/constants";
+import { getObject, storeObject } from "@utils/MdLogAsyncStorage";
 
 type Props = {children: ReactNode}
 
 export const AuthProvider = ({ children }: Props) => {
 
       const [user, setUser] = useState<UserInfo|undefined>(null);
-      const [token, setToken] = useState(null);
       const [loading, setLoading] = useState(true);
     
       useEffect(() => {
         const loadToken = async () => {
-          const storedToken = await AsyncStorage.getItem("jwtToken");
-          if (storedToken) {
-            setToken(storedToken);
-            setUser({lastName:"test", firstName:"first", id: "1234", roles: [],internalUserId: 123456, username:"testuser"}); // You can fetch user details here
+          const user = await getObject<UserInfo>(USER)
+          if (user) {
+            setUser(user);
           }
           setLoading(false);
         };
@@ -27,21 +27,16 @@ export const AuthProvider = ({ children }: Props) => {
       const login = async (loginRequest: LoginRequest) => {
         try{
             const response = await loginService.login(loginRequest);
-            await AsyncStorage.setItem("jwtToken", response.accessToken);
-            setToken(response.accessToken);
+            await storeObject(USER_CONTEXT, response);
             setUser(response.user);
-            setLoading(false)
-            console.log("dfgh",response)
             return true;
         }catch(error){
-        }  
-        console.log("ertyuio") 
+        }
         return false;
       };
     
       const logout = async () => {
-        await AsyncStorage.removeItem("jwtToken");
-        setToken(null);
+        await AsyncStorage.removeItem(JWT_ACCESS_TOKEN);
         setUser(null);
       };
 
