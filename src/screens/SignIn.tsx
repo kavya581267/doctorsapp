@@ -1,4 +1,4 @@
-import React, {useContext, useState} from "react";
+import React, { useContext, useState } from "react";
 import { View, Text, TextInput, TouchableOpacity, SafeAreaView, Image } from "react-native";
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import Feather from '@expo/vector-icons/Feather';
@@ -6,9 +6,14 @@ import { useNavigation } from "@react-navigation/native";
 import { AuthContext } from "@context/AuthContext";
 import styles from "@styles/signInStyle";
 import { LoginRequest } from "@api/model/auth/Auth";
+import { Portal, Snackbar, useTheme } from "react-native-paper";
 
 export default function SignIn() {
-    const {login} = useContext(AuthContext)
+
+    const [visible, setVisible] = useState(false);
+    const onToggleSnackBar = () => setVisible(!visible);
+    const onDismissSnackBar = () => setVisible(false);
+    const { login } = useContext(AuthContext)
     const navigation = useNavigation();
     const [form, setForm] = useState<LoginRequest>(new LoginRequest())
     return (
@@ -24,8 +29,8 @@ export default function SignIn() {
                     <View style={styles.inputContainer}>
                         <FontAwesome5 name="user" size={20} color="black" style={styles.icon} />
                         <TextInput style={styles.input} placeholder="Enter your user name"
-                            autoCapitalize="none" autoCorrect={false} value={form.email} onChangeText={userName => setForm((prev)=> {
-                                const newForm = {...prev};
+                            autoCapitalize="none" autoCorrect={false} value={form.email} onChangeText={userName => setForm((prev) => {
+                                const newForm = { ...prev };
                                 newForm.email = userName;
                                 return newForm;
                             })} />
@@ -44,15 +49,15 @@ export default function SignIn() {
                 <View>
                     <TouchableOpacity style={styles.btn_gap} onPress={async () => {
                         const isLogin = await login({
-                            email:form.email,
-                            password:form.password,
-                            mfa: "dummy"
+                            email: form.email,
+                            password: form.password,
+                            mfa: ""
                         });
-                        if(isLogin){
+                        if (isLogin) {
                             //navigation.navigate("Mainscreen")
                             navigation.replace('Mainscreen');
-                        }else{
-                            navigation.navigate("LaunchScreen")
+                        } else {
+                            setVisible(true)
                         }
                     }}>
                         <View style={styles.btn}>
@@ -67,7 +72,18 @@ export default function SignIn() {
                     </TouchableOpacity>
                 </View>
             </View>
-
+            <Portal>
+                <Snackbar
+                    style={{ backgroundColor: "#B00020" }}
+                    visible={visible}
+                    onDismiss={onDismissSnackBar}
+                    action={{
+                        label: 'close'
+                    }}
+                >
+                    Invalid Credentials!!
+                </Snackbar>
+            </Portal>
 
         </SafeAreaView>
 
