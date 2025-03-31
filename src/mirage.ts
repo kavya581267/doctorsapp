@@ -25,8 +25,8 @@ export function makeServer({ environment = "development" } = {}) {
       this.post("/login", (schema, request) => {
         const { email, password } = JSON.parse(request.requestBody);
         let user = schema.where("user", (user) => user.username === email).models[0];
-        console.log(user.attrs)
-        if (email === "admin@admin.com" && password === "password123") {
+        
+        if (user && email === "admin@admin.com" && password === "password123") {
           return {
             accessToken:"ddddd",
             refreshToken:"ftyhuj",

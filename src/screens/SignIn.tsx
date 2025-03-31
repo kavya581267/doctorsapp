@@ -54,7 +54,6 @@ export default function SignIn() {
                             mfa: ""
                         });
                         if (isLogin) {
-                            //navigation.navigate("Mainscreen")
                             navigation.replace('Mainscreen');
                         } else {
                             setVisible(true)

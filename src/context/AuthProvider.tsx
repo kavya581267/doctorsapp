@@ -26,18 +26,16 @@ export const AuthProvider = ({ children }: Props) => {
     
       const login = async (loginRequest: LoginRequest) => {
         try{
-            setLoading(true)
             const response = await loginService.login(loginRequest);
             await AsyncStorage.setItem("jwtToken", response.accessToken);
             setToken(response.accessToken);
             setUser(response.user);
             setLoading(false)
-            console.log(response)
+            console.log("dfgh",response)
             return true;
         }catch(error){
-          console.log(error)
-          setLoading(false);
-        }   
+        }  
+        console.log("ertyuio") 
         return false;
       };
     

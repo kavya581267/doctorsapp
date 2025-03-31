@@ -39,7 +39,6 @@ const apiCall = async (endpoint, method = "GET", body = null, queryParams = {}) 
 
         return data;
     } catch (error) {
-        console.error("API Error:", error);
         throw error;
     }
 };

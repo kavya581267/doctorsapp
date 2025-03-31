@@ -18,7 +18,6 @@ export default function Mainscreen() {
     const route= useRoute()
     const tab = route?.params?.tab;
     const initialTab = tab || "Home";
-    console.log(initialTab, "tab:", tab);
 
 
     return (

@@ -12,7 +12,6 @@ export const loginService = {
             const response = await apiService.post(AUTH_ENDPOINT, loginRequest);
             return response;
         } catch (error) {
-            console.error("Login failed:", error);
             throw error;
         }
     },

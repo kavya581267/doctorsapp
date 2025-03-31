@@ -19,7 +19,6 @@ interface StepProps {
 
 
 export const ClientDetails: React.FC<StepProps> = ({ nextStep, formData, setFormData }) => {
-    console.log("Client details")
     return (
         <View style={styles.container}>
             <View style={styles.inputBottom}>
