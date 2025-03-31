@@ -1,18 +1,16 @@
-import React, {useContext} from "react";
+import React, {useContext, useState} from "react";
 import { View, Text, TextInput, TouchableOpacity, SafeAreaView, Image } from "react-native";
-import styles from "../styles/signInStyle";
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import Feather from '@expo/vector-icons/Feather';
 import { useNavigation } from "@react-navigation/native";
 import { AuthContext } from "@context/AuthContext";
+import styles from "@styles/signInStyle";
+import { LoginRequest } from "@api/model/auth/Auth";
 
 export default function SignIn() {
     const {login} = useContext(AuthContext)
     const navigation = useNavigation();
-    const [form, setForm] = React.useState({
-        userName: "",
-        password: ""
-    })
+    const [form, setForm] = useState<LoginRequest>(new LoginRequest())
     return (
 
         <SafeAreaView >
@@ -26,7 +24,11 @@ export default function SignIn() {
                     <View style={styles.inputContainer}>
                         <FontAwesome5 name="user" size={20} color="black" style={styles.icon} />
                         <TextInput style={styles.input} placeholder="Enter your user name"
-                            autoCapitalize="none" autoCorrect={false} value={form.userName} onChangeText={userName => setForm({ ...form, userName })} />
+                            autoCapitalize="none" autoCorrect={false} value={form.email} onChangeText={userName => setForm((prev)=> {
+                                const newForm = {...prev};
+                                newForm.email = userName;
+                                return newForm;
+                            })} />
                     </View>
 
                     <View style={styles.inputContainer}>
