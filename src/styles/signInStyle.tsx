@@ -33,7 +33,7 @@ export default StyleSheet.create({
        alignItems:"center",
        paddingHorizontal:10,
        borderWidth: 1,
-       borderColor: "#ccc",
+       borderColor: COLORS.grey,
        borderRadius: 8,
        marginBottom:15,
        backgroundColor:"#F3F4F6FF"
