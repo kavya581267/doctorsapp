@@ -15,11 +15,18 @@ export function makeServer({ environment = "development" } = {}) {
         // Simulated user authentication
         if (email === "admin@admin.com" && password === "password123") {
           return {
-            token: "mock-jwt-token",
+            accessToken: "mock-jwt-token",
+            refreshToken: "",
+            expiresIn: 300,
+            requiresMfa: false,
+
             user: {
               id: 1,
-              name: "Admin User",
-              email: "admin@example.com",
+              username: "adminusername",
+              firstName: "adminfirst",
+              lastName: "adminlast",
+              roles: ["ADMIN"],
+              internalUserId: 123456
             },
           };
         } else {
