@@ -7,15 +7,16 @@ import { AuthContext } from "@context/AuthContext";
 import styles from "@styles/signInStyle";
 import { LoginRequest } from "@api/model/auth/Auth";
 import { Portal, Snackbar, useTheme } from "react-native-paper";
+import { MdLogActivityIndicator } from "@components/MdLogActivityIndicator";
 
 export default function SignIn() {
 
     const [visible, setVisible] = useState(false);
-    const onToggleSnackBar = () => setVisible(!visible);
     const onDismissSnackBar = () => setVisible(false);
     const { login } = useContext(AuthContext)
     const navigation = useNavigation();
     const [form, setForm] = useState<LoginRequest>(new LoginRequest())
+    const [loading, setLoading] = useState(false);
     return (
 
         <SafeAreaView >
@@ -48,11 +49,13 @@ export default function SignIn() {
                 </View>
                 <View>
                     <TouchableOpacity style={styles.btn_gap} onPress={async () => {
+                        setLoading(true);
                         const isLogin = await login({
                             email: form.email,
                             password: form.password,
                             mfa: ""
                         });
+                        setLoading(false);
                         if (isLogin) {
                             navigation.replace('Mainscreen');
                         } else {
@@ -83,7 +86,7 @@ export default function SignIn() {
                     Invalid Credentials!!
                 </Snackbar>
             </Portal>
-
+          <MdLogActivityIndicator loading={loading}/>
         </SafeAreaView>
 
     );
