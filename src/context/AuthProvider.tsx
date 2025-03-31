@@ -2,6 +2,7 @@ import { ReactNode, useEffect, useState } from "react"
 import { AuthContext } from "./AuthContext"
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { LoginRequest, UserInfo } from "@api/model/auth/Auth";
+import { loginService } from "@api/loginService";
 
 type Props = {children: ReactNode}
 
@@ -24,7 +25,12 @@ export const AuthProvider = ({ children }: Props) => {
       }, []);
     
       const login = async (loginRequest: LoginRequest) => {
-        console.log(loginRequest)
+        try{
+            const response = await loginService.login(loginRequest);
+            console.log(response)
+        }catch(error){
+          console.log(error)
+        }
         if(loginRequest.password === "test"){
           await AsyncStorage.setItem("jwtToken", "dummy");
           const jwtToken = "dummy"
