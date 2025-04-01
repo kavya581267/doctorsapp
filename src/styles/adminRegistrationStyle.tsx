@@ -11,7 +11,7 @@ export default StyleSheet.create({
         fontWeight:"600",
         marginBottom:15
     },
-    buttonNext: {
+    button: {
         width:"35%",
         padding: 10,
         borderRadius: 5,
@@ -23,8 +23,25 @@ export default StyleSheet.create({
         justifyContent:"space-evenly",
         
     },
-    nextTxt: {
+    submitTxt: {
         color: COLORS.primary,
         fontWeight: "bold"
+    },
+    header: {
+        alignItems: "center",
+        marginBottom: 30
+    },
+    heading: {
+        fontSize: 32,
+        fontWeight: "700",
+        lineHeight: 48
+    },
+    png: {
+        tintColor: COLORS.primary
+    },
+    subHeading: {
+        fontSize: 16,
+        lineHeight: 26,
+        textAlign: "center"
     },
 })
