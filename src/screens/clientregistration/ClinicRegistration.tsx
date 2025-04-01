@@ -10,6 +10,7 @@ import { Button, Text } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 import { COLORS } from "@utils/colors";
 import { ClinicAddress } from "./ClinicAddressStep";
+import ClinicReview from "./ClinicReview";
 
 
 
@@ -42,6 +43,7 @@ export default function ClinicRegistration() {
                 <StepIndicator stepCount={labels.length} currentPosition={step} labels={labels} />
                 {step === 0 && <ClientDetails nextStep={nextStep} formData={formData} setFormData={setFormData} />}
                 {step === 1 && <ClinicAddress nextStep={nextStep} prevStep={prevStep} formData={formData} setFormData={setFormData} />}
+                {step === 2 && <ClinicReview formData={formData} prevStep={prevStep} submitForm={submitForm}/>}
                 <View style={styles.loginText}>
                     <Text>Already Registered? </Text>
                     <Button textColor={COLORS.primary} mode="text" onPress={() => navigation.navigate("SignIn")}>

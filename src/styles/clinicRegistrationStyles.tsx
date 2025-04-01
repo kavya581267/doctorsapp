@@ -68,4 +68,10 @@ export default StyleSheet.create({
         color: COLORS.primary,
         fontWeight: "bold"
     },
+
+    clinicReviewStyle:{
+        flexDirection:"row",
+        justifyContent:"space-between",
+        marginBottom:10
+    }
 })

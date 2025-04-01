@@ -5,11 +5,9 @@ import MdLogTextInput from "@components/MdLogTextInput";
 import { Button, Icon, Portal, Snackbar, Text } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 import { COLORS } from "@utils/colors";
-<<<<<<< HEAD
 import { useState } from "react";
-=======
-import { isAnyFieldsEmpty } from "@utils/utils";
->>>>>>> 26c586ad125d0b9aca2b081beed9250bb62c1fa8
+import { isAnyFieldsEmpty, isValidEmail, isValidPhone } from "@utils/utils";
+
 
 
 
@@ -30,13 +28,9 @@ export const ClientDetails: React.FC<StepProps> = ({ nextStep, formData, setForm
     const onDismissSnackBar = () => setVisible(false);
 
     const validateFormFields = () => {
-<<<<<<< HEAD
-        if(!isAnyFieldsEmpty(["clinicName", "clinicLicense", "phone", "email"],formData) && isValidEmail(formData.email) && isValidPhone(formData.phone)){
-=======
-        console.log(formData);
-        if(!isAnyFieldsEmpty(["clinicName", "clinicLicense", "phone", "email"],formData)){
 
->>>>>>> 26c586ad125d0b9aca2b081beed9250bb62c1fa8
+        if(!isAnyFieldsEmpty(["clinicName", "clinicLicense", "phone", "email"],formData) && isValidEmail(formData.email) && isValidPhone(formData.phone)){
+            setVisible(false);
             nextStep();
         }
         else{
@@ -77,13 +71,13 @@ export const ClientDetails: React.FC<StepProps> = ({ nextStep, formData, setForm
                     onTextChange = {onChangeT}
                     field="taxId"
                 />
-                <MdLogTextInput label="Phone"
+                <MdLogTextInput label="Phone*"
                     value={formData?.phone}
                     left="phone"
                     onTextChange = {onChangeT}
                     field="phone"
                 />
-                <MdLogTextInput label="Email"
+                <MdLogTextInput label="Email*"
                 
                     value={formData?.email}
                     left="email"
@@ -111,7 +105,7 @@ export const ClientDetails: React.FC<StepProps> = ({ nextStep, formData, setForm
                     action={{
                         label: 'close'
                     }}
-               >Please fill all fields</Snackbar>
+               >Please fill all required fields</Snackbar>
            </Portal>
 
         </View>
