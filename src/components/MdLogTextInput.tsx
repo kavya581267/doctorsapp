@@ -18,8 +18,7 @@ export default function MdLogTextInput ({label,value, left, right}: MdLogTextInp
         mode="outlined"
         label={label}
         value={value}
-       
-       placeholderTextColor={COLORS.grey}
+
         onChangeText={()=>{console.log("sdfg")}}
         left={ <TextInput.Icon icon={left}/>}
         right={ <TextInput.Icon icon={right}/>}

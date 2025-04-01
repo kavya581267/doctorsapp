@@ -2,9 +2,10 @@ import { ClinicRequest } from "@api/model/client/ClientRequest";
 import { Image, TouchableOpacity, View } from "react-native";
 import styles from "@styles/clinicRegistrationStyles";
 import MdLogTextInput from "@components/MdLogTextInput";
-import { Button, Icon, Text } from "react-native-paper";
+import { Button, Icon, Portal, Snackbar, Text } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 import { COLORS } from "@utils/colors";
+import { useState } from "react";
 
 
 
@@ -21,10 +22,15 @@ interface StepProps {
 
 
 export const ClientDetails: React.FC<StepProps> = ({ nextStep, formData, setFormData }) => {
+    const [visible,setVisible] = useState(false);
+    const onDismissSnackBar = () => setVisible(false);
 
     const validateFormFields = () => {
-        if(!isAnyFieldsEmpty(["clinicName", "clinicLicense", "phone", "email"],formData)){
+        if(!isAnyFieldsEmpty(["clinicName", "clinicLicense", "phone", "email"],formData) && isValidEmail(formData.email) && isValidPhone(formData.phone)){
             nextStep();
+        }
+        else{
+          setVisible(true);
         }
     }
 
@@ -33,7 +39,9 @@ export const ClientDetails: React.FC<StepProps> = ({ nextStep, formData, setForm
             <View style={styles.inputBottom}>
 
                 <MdLogTextInput
+                    
                     label="Clinic Name*"
+                    
                     value={formData?.clinicName}
                     left="plus-circle"
                 />
@@ -50,6 +58,7 @@ export const ClientDetails: React.FC<StepProps> = ({ nextStep, formData, setForm
                     left="phone"
                 />
                 <MdLogTextInput label="Email"
+                
                     value={formData?.email}
                     left="email"
                 />
@@ -64,7 +73,16 @@ export const ClientDetails: React.FC<StepProps> = ({ nextStep, formData, setForm
                 </TouchableOpacity>
             </View>
 
-
+           <Portal>
+               <Snackbar 
+               style={{ backgroundColor: "#B00020" }}
+               visible={visible}
+               onDismiss={onDismissSnackBar}
+                    action={{
+                        label: 'close'
+                    }}
+               >Please fill all fields</Snackbar>
+           </Portal>
 
         </View>
     )
