@@ -1,9 +1,11 @@
-const BASE_URL = process.env.NODE_ENV === "development" ? "/api" : "http://192.168.0.3:8080"; 
+import { BASE_URL_PREFIX } from "@utils/constants";
+
+const BASE_URL = BASE_URL_PREFIX
 
 console.log(BASE_URL)
 
 const buildUrl = (endpoint, queryParams = {}) => {
-    const url = process.env.NODE_ENV === "development" ? `${BASE_URL}${endpoint}`:new URL(`${BASE_URL}${endpoint}`);
+    const url = new URL(`${BASE_URL}${endpoint}`);
 
     Object.keys(queryParams).forEach(key => {
         if (queryParams[key] !== undefined && queryParams[key] !== null) {
