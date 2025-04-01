@@ -18,6 +18,7 @@ import { AuthContext } from '@context/AuthContext';
 import ClinicRegistration from '@screens/clientregistration/ClinicRegistration';
 import LaunchScreen from '@screens/LaunchScreen';
 import SignIn from '@screens/SignIn';
+import AdminRegistration from '@screens/adminregistration/AdminRegistration';
 
 export default function MainNavigator() {
     const { user, loading } = useContext(AuthContext);
@@ -41,6 +42,7 @@ export default function MainNavigator() {
                <Stack.Screen name='PatientMedical' component={PatientMedical}/>
                <Stack.Screen name='InitialNote' component={InitialNote}/>
                <Stack.Screen name='ClinicRegistration' component={ClinicRegistration}/>
+               <Stack.Screen name='AdminRegistration' component={AdminRegistration}/>
             </Stack.Navigator>
         </NavigationContainer>
     );

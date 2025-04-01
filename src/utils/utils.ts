@@ -7,6 +7,10 @@ export const isEmptyString = (value: string): boolean => {
      return emailRegExpresion.test(value) ? true : false; 
 }
 
+export const isValidPassword = (value: string) : boolean =>{
+     const passwordRegExp = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+     return passwordRegExp.test(value) ? true : false;
+ }  
 export const isValidPhone = (value: string): boolean => {
     
      const phoneRegex = /^\+[1-9]\d{1,14}$/;

@@ -21,7 +21,7 @@ export default function ClinicRegistration() {
     const [formData, setFormData] = useState<ClinicRequest>()
     const nextStep = () => setStep((prev) => prev + 1);
     const prevStep = () => setStep((prev) => prev - 1);
-    const submitForm = () => alert("Form submitted!");
+    const submitForm = () => {navigation.navigate("AdminRegistration")};
     const navigation = useNavigation();
 
 
