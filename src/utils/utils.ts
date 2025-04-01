@@ -1,4 +1,4 @@
-const isEmptyString = (value: string): boolean => {
+export const isEmptyString = (value: string): boolean => {
     return !value || value.trim().length === 0
 }
 
@@ -13,7 +13,10 @@ const isValidPhone = (value: string): boolean => {
 }
 
 
-const isAnyFieldsEmpty = (values: string[], object: any): boolean => {
+export const isAnyFieldsEmpty = (values: string[], object: any): boolean => {
+    if(!object){
+        return true;
+    }
     values.forEach(field => {
        if(isEmptyString(object[field])){
         return true;
