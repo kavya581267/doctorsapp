@@ -14,5 +14,39 @@ export const clinicService = {
         } catch (error) {
             throw error;
         }
+    },
+
+    getAllClinics: () => {
+
+    },
+    updateClinic: () => {
+
+    }, 
+    getClinicById: () => {
+
+    },
+    getClinicSchedule: () => {
+
+    },
+    createClinicSchedule: () => {
+
+    },
+    updateClinicSchedule: () => {
+
+    },
+    deleteClinicSchedule: () => {
+
+    },
+    getHolidaySchedule: () => {
+
+    },
+    updateHolidaySchedule: () => {
+
+    },
+    createHolidaySchedule: () => {
+
+    },
+    deleteHolidaySchedule: () =>{
+        
     }
 };
