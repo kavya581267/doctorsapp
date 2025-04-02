@@ -1,6 +1,6 @@
 const BASE_URL = process.env.NODE_ENV === "development" ? "/api" : "http://192.168.0.3:8080"; 
 
-console.log(BASE_URL)
+console.log(process.env.NODE_ENV)
 
 const buildUrl = (endpoint, queryParams = {}) => {
     const url = process.env.NODE_ENV === "development" ? `${BASE_URL}${endpoint}`:new URL(`${BASE_URL}${endpoint}`);
@@ -14,7 +14,9 @@ const buildUrl = (endpoint, queryParams = {}) => {
     return url.toString();
 };
 
+
 const apiCall = async (endpoint, method = "GET", body = null, queryParams = {}) => {
+    console.log(process.env.BASE_URL)
     try {
         const url = buildUrl(endpoint, queryParams);
         

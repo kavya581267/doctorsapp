@@ -1,13 +1,12 @@
 import { ClinicRequest } from "@api/model/client/ClientRequest";
-import { Image, TouchableOpacity, View } from "react-native";
-import styles from "@styles/clinicRegistrationStyles";
 import MdLogTextInput from "@components/MdLogTextInput";
-import { Button, Icon, Portal, Snackbar, Text } from "react-native-paper";
-import { useNavigation } from "@react-navigation/native";
 import { COLORS } from "@utils/colors";
-import { useState } from "react";
-import { isAnyFieldsEmpty, isValidEmail, isValidPhone } from "@utils/utils";
+import { TouchableOpacity, View } from "react-native";
+import { Button, Portal, Snackbar, Text } from "react-native-paper";
 
+import styles from "@styles/clinicRegistrationStyles"
+import { isAnyFieldsEmpty } from "@utils/utils";
+import { useState } from "react";
 
 
 
@@ -21,20 +20,15 @@ interface StepProps {
 }
 
 
-
-
-export const ClientDetails: React.FC<StepProps> = ({ nextStep, formData, setFormData }) => {
+export const ClinicDetails: React.FC<StepProps> = ({ nextStep, prevStep, formData, setFormData }) => {
     const [visible,setVisible] = useState(false);
     const onDismissSnackBar = () => setVisible(false);
-
-    const validateFormFields = () => {
-
-        if(!isAnyFieldsEmpty(["clinicName", "clinicLicense", "phone", "email"],formData) && isValidEmail(formData.email) && isValidPhone(formData.phone)){
-            setVisible(false);
+    const validateFormFields = () =>{
+        if(!isAnyFieldsEmpty(["address","city","state","country","zipCode"],formData)){
+            
             nextStep();
-        }
-        else{
-          setVisible(true);
+        }else{
+           setVisible(true);
         }
     }
 
@@ -49,65 +43,61 @@ export const ClientDetails: React.FC<StepProps> = ({ nextStep, formData, setForm
     return (
         <View style={styles.container}>
             <View style={styles.inputBottom}>
-
                 <MdLogTextInput
-                    
-                    label="Clinic Name*"
-                    
-                    value={formData?.clinicName}
-                    left="plus-circle"
+                    label="Clinic address*"
+                    value={formData?.address}
+                    left="map-marker"
                     onTextChange = {onChangeT}
-                    field="clinicName"
+                    field="address"
                 />
-                <MdLogTextInput label="Clinic Licence*"
-                    value={formData?.clinicLicense}
-                    left="card-text"
+                <MdLogTextInput
+                    label="City*"
+                    value={formData?.city}
+                    left="city"
                     onTextChange = {onChangeT}
-                    field="clinicLicense"
+                    field="city"
                 />
-                <MdLogTextInput label="Tax"
-                    value={formData?.taxId}
-                    left="card-text"
+                <MdLogTextInput
+                    label="State*"
+                    value={formData?.state}
+                    left="home-group"
                     onTextChange = {onChangeT}
-                    field="taxId"
+                    field="state"
                 />
-                <MdLogTextInput label="Phone*"
-                    value={formData?.phone}
-                    left="phone"
+                <MdLogTextInput
+                    label="Country*"
+                    value={formData?.country}
+                    left="domain"
                     onTextChange = {onChangeT}
-                    field="phone"
+                    field="country"
                 />
-                <MdLogTextInput label="Email*"
-                
-                    value={formData?.email}
-                    left="email"
+                <MdLogTextInput
+                    label="ZipCode*"
+                    value={formData?.zipCode}
+                    left="pin"
                     onTextChange = {onChangeT}
-                    field="email"
-                />
-                <MdLogTextInput label="Alternate Phone"
-                    value={formData?.alternatePhone}
-                    left="phone-alert"
-                    onTextChange = {onChangeT}
-                    field="alternatePhone"
+                    field="zipCode"
                 />
             </View>
-            <View style={{flexDirection:"row-reverse"}}>
+            <View style={styles.buttonFormat}>
+                <TouchableOpacity style={styles.buttonPrev} onPress={prevStep}>
+                    <Text style={styles.prevTxt}>Previous</Text>
+                </TouchableOpacity>
                 <TouchableOpacity style={styles.buttonNext} onPress={validateFormFields}>
                     <Text style={styles.nextTxt}>Next</Text>
                 </TouchableOpacity>
             </View>
-
-           <Portal>
-               <Snackbar 
-               style={{ backgroundColor: "#B00020" }}
-               visible={visible}
-               onDismiss={onDismissSnackBar}
-                    action={{
-                        label: 'close'
-                    }}
-               >Please fill all required fields</Snackbar>
-           </Portal>
-
+            <Portal>
+                <Snackbar 
+                 style={{ backgroundColor: "#B00020" }}
+                 visible={visible}
+                 onDismiss={onDismissSnackBar}
+                      action={{
+                          label: 'close'
+                      }}
+                >Please fill all required details</Snackbar>
+            </Portal>
         </View>
     )
-};
+
+}
