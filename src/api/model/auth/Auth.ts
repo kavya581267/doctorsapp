@@ -49,3 +49,35 @@ export interface LoginResponse {
     userId: string;
     message: string;
 }
+
+export class StaffRegistration {
+  clinicId: number = 0;
+  firstName: string = "";
+  lastName: string = "";
+  email: string = "";
+  password: string = "";
+  dateOfBirth: string = "";
+  gender: string = "";
+  phone: string = "";
+  role: string = "";
+  address: string = "";
+  city: string = "";
+  state: string = "";
+  zipCode: string = "";
+  country: string = "";
+  emergencyContactName: string = "";
+  emergencyContactPhone: string = "";
+  constructor(init?: Partial<StaffRegistration>) {
+      Object.assign(this, init);
+  }
+}
+
+export class PatientRegistration extends StaffRegistration {
+  bloodGroup: string = "";
+  createUserAccount: boolean = false;
+
+  constructor(init?: Partial<PatientRegistration>) {
+      super(init);
+      Object.assign(this, init);
+  }
+}

@@ -1,4 +1,3 @@
-import { ClinicRequest } from "@api/model/client/ClientRequest";
 import MdLogTextInput from "@components/MdLogTextInput";
 import { COLORS } from "@utils/colors";
 import { TouchableOpacity, View } from "react-native";
