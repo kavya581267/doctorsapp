@@ -3,7 +3,7 @@ import { TextInput } from 'react-native-paper';
 import styles from "../styles/mdLogTextInputStyle";
 import { COLORS } from '@utils/colors';
 import { useState } from 'react';
-import { TouchableOpacity, View } from 'react-native';
+import { Platform, TouchableOpacity, View } from 'react-native';
 import DateTimePicker from 'react-native-modal-datetime-picker';
 
 interface MdLogTextInputProps {
@@ -30,7 +30,7 @@ export default function MdLogTextInput({ label, value, left, right, onTextChange
     return (
         <>
             {
-                field === "dateOfBirth" ? (
+                field === "dateOfBirth" && Platform.OS!=="web" ? (
                     <TouchableOpacity onPress={showDatePicker}>
                          <View pointerEvents="none">
                         <TextInput

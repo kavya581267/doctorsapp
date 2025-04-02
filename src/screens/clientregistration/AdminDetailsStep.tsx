@@ -1,5 +1,5 @@
 
-import { Image, TouchableOpacity, View } from "react-native";
+import { TouchableOpacity, View } from "react-native";
 import styles from "@styles/clinicRegistrationStyles";
 import MdLogTextInput from "@components/MdLogTextInput";
 import { Button, Icon, Portal, Snackbar, Text } from "react-native-paper";
