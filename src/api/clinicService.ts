@@ -4,7 +4,7 @@ import { ClinicResponse } from "./model/clinic/ClinicResponse";
 
 
 
-export const AUTH_ENDPOINT = "/clinic-registration"; // Adjust based on your API
+export const AUTH_ENDPOINT = "/auth/register/admin"; // Adjust based on your API
 
 export const clinicService = {
     register: async (clinicRegistration: AdminRegistarationRequest): Promise<AdminRegistrationResponse> => {

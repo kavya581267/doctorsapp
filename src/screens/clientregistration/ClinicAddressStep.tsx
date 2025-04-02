@@ -1,14 +1,10 @@
-import { ClinicRequest } from "@api/model/client/ClientRequest";
-import MdLogTextInput from "@components/MdLogTextInput";
-import { COLORS } from "@utils/colors";
-import { TouchableOpacity, View } from "react-native";
-import {  Portal, Snackbar, Text } from "react-native-paper";
-
-import styles from "@styles/clinicRegistrationStyles"
-import { isAnyFieldsEmpty, isValidEmail, isValidPhone } from "@utils/utils";
-import { useState } from "react";
 import { AdminRegistarationRequest } from "@api/model/auth/Auth";
-
+import MdLogTextInput from "@components/MdLogTextInput";
+import { isAnyFieldsEmpty } from "@utils/utils";
+import { useState } from "react";
+import { Text, TouchableOpacity, View } from "react-native";
+import { Portal, Snackbar } from "react-native-paper";
+import styles from "@styles/clinicRegistrationStyles"
 
 
 
@@ -21,12 +17,11 @@ interface StepProps {
 }
 
 
-export const ClinicDetails: React.FC<StepProps> = ({ nextStep, prevStep, formData, setFormData }) => {
+export const ClinicAddress: React.FC<StepProps> = ({ nextStep, prevStep, formData, setFormData }) => {
     const [visible, setVisible] = useState(false);
     const onDismissSnackBar = () => setVisible(false);
     const validateFormFields = () => {
-        if (!isAnyFieldsEmpty(["clinicName", "clinicLicense", "clinicEmail", "clinicPhone"], formData) && 
-        isValidEmail(formData.clinicEmail) && isValidPhone(formData.clinicPhone)) {
+        if (!isAnyFieldsEmpty(["clinicAddress", "clinicCity", "clinicState", "clinicZip"], formData)) {
             nextStep();
         } else {
             setVisible(true);
@@ -45,37 +40,39 @@ export const ClinicDetails: React.FC<StepProps> = ({ nextStep, prevStep, formDat
         <View style={styles.container}>
             <View style={styles.inputBottom}>
                 <MdLogTextInput
-                    label="Clinic Name*"
-                    value={formData?.clinicName}
-                    left="plus-circle"
+                    label="Clinic Address*"
+                    value={formData?.clinicAddress}
+                    left="map-marker"
                     onTextChange={onChangeT}
-                    field="clinicName"
+                    field="clinicAddress"
                 />
                 <MdLogTextInput
-                    label="Clinic License*"
-                    value={formData?.clinicLicense}
-                    left="license"
+                    label="Clinic City*"
+                    value={formData?.clinicCity}
+                    left="city"
                     onTextChange={onChangeT}
-                    field="clinicLicense"
+                    field="clinicCity"
                 />
                 <MdLogTextInput
-                    label="Clini Email*"
-                    value={formData?.clinicEmail}
-                    left="email"
+                    label="Clini State*"
+                    value={formData?.clinicState}
+                    left="home-group"
                     onTextChange={onChangeT}
-                    field="clinicEmail"
+                    field="clinicState"
                 />
                 <MdLogTextInput
-                    label="Clinic Phone*"
-                    value={formData?.clinicPhone}
-                    left="phone"
+                    label="Clinic Zip*"
+                    value={formData?.clinicZip}
+                    left="zip-box"
                     onTextChange={onChangeT}
-                    field="clinicPhone"
+                    field="clinicZip"
                 />
                
             </View>
             <View style={styles.buttonFormat}>
-               
+                <TouchableOpacity style={styles.buttonPrev} onPress={prevStep}>
+                    <Text style={styles.prevTxt}>Previous</Text>
+                </TouchableOpacity>
                 <TouchableOpacity style={styles.buttonNext} onPress={validateFormFields}>
                     <Text style={styles.nextTxt}>Next</Text>
                 </TouchableOpacity>

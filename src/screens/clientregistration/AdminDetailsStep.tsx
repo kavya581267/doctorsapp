@@ -1,4 +1,4 @@
-import { ClinicRequest } from "@api/model/client/ClientRequest";
+
 import { Image, TouchableOpacity, View } from "react-native";
 import styles from "@styles/clinicRegistrationStyles";
 import MdLogTextInput from "@components/MdLogTextInput";
@@ -7,7 +7,7 @@ import { useNavigation } from "@react-navigation/native";
 import { COLORS } from "@utils/colors";
 import { useState } from "react";
 import { isAnyFieldsEmpty, isValidEmail, isValidPassword, isValidPhone } from "@utils/utils";
-import { AdminRequest } from "@api/model/admin/AdminRequest";
+import { AdminRegistarationRequest } from "@api/model/auth/Auth";
 
 
 
@@ -16,33 +16,33 @@ import { AdminRequest } from "@api/model/admin/AdminRequest";
 interface StepProps {
     nextStep?: () => void;
     prevStep?: () => void;
-    formData: ClinicRequest;
-    setFormData: React.Dispatch<React.SetStateAction<AdminRequest>>;
-    submitForm?: () => void;
+    formData: AdminRegistarationRequest;
+    setFormData: React.Dispatch<React.SetStateAction<AdminRegistarationRequest>>;
+   
 }
 
 
 
 
-export const AdminDetails: React.FC<StepProps> = ({ nextStep, formData, setFormData }) => {
-    const [visible,setVisible] = useState(false);
+export const AdminDetails: React.FC<StepProps> = ({ nextStep, prevStep, formData, setFormData }) => {
+    const [visible, setVisible] = useState(false);
     const onDismissSnackBar = () => setVisible(false);
 
     const validateFormFields = () => {
 
-        if(!isAnyFieldsEmpty(["firstName", "lastName", "email", "password","dateOfBirth","gender","phone"],formData) && 
-        isValidEmail(formData.email) &&  isValidPhone(formData.phone) ){
+        if (!isAnyFieldsEmpty(["firstName", "lastName", "email", "password", "gender","dateOfBirth","phone"], formData) &&
+            isValidEmail(formData.email) && isValidPassword(formData.password) && isValidPhone(formData.phone)) {
             setVisible(false);
             nextStep();
         }
-        else{
-          setVisible(true);
+        else {
+            setVisible(true);
         }
     }
 
     const onChangeT = (field, val) => {
         setFormData((prev) => {
-            const newS = {...prev};
+            const newS = { ...prev };
             newS[field] = val;
             return newS
         })
@@ -53,62 +53,72 @@ export const AdminDetails: React.FC<StepProps> = ({ nextStep, formData, setFormD
             <View style={styles.inputBottom}>
 
                 <MdLogTextInput
-                    
-                    label="Clinic Name*"
-                    
-                    value={formData?.clinicName}
-                    left="plus-circle"
-                    onTextChange = {onChangeT}
-                    field="clinicName"
+
+                    label="First Name*"
+
+                    value={formData?.firstName}
+                    left="human-male"
+                    onTextChange={onChangeT}
+                    field="firstName"
                 />
-                <MdLogTextInput label="Clinic Licence*"
-                    value={formData?.clinicLicense}
-                    left="card-text"
-                    onTextChange = {onChangeT}
-                    field="clinicLicense"
+                <MdLogTextInput label="Last Name*"
+                    value={formData?.lastName}
+                    left="human-male"
+                    onTextChange={onChangeT}
+                    field="lastName"
                 />
-                <MdLogTextInput label="Tax"
-                    value={formData?.taxId}
-                    left="card-text"
-                    onTextChange = {onChangeT}
-                    field="taxId"
-                />
-                <MdLogTextInput label="Phone*"
-                    value={formData?.phone}
-                    left="phone"
-                    onTextChange = {onChangeT}
-                    field="phone"
-                />
-                <MdLogTextInput label="Email*"
-                
+                <MdLogTextInput label="Email"
                     value={formData?.email}
                     left="email"
-                    onTextChange = {onChangeT}
+                    onTextChange={onChangeT}
                     field="email"
                 />
-                <MdLogTextInput label="Alternate Phone"
-                    value={formData?.alternatePhone}
-                    left="phone-alert"
-                    onTextChange = {onChangeT}
-                    field="alternatePhone"
+                <MdLogTextInput label="password*"
+                    value={formData?.password}
+                    left="lock"
+                    onTextChange={onChangeT}
+                    field="password"
+                />
+                <MdLogTextInput label="Gender*"
+                    value={formData?.gender}
+                    left="human"
+                    onTextChange={onChangeT}
+                    field="gender"
+                />
+                <MdLogTextInput label="DateOfBirth*"
+
+                    value={formData?.dateOfBirth}
+                    left="calendar-month"
+                    onTextChange={onChangeT}
+                    field="dateOfBirth"
+                />
+                <MdLogTextInput label="Phone"
+                    value={formData?.phone}
+                    left="phone"
+                    onTextChange={onChangeT}
+                    field="phone"
                 />
             </View>
-            <View style={{flexDirection:"row-reverse"}}>
+
+            <View style={styles.buttonFormat}>
+                <TouchableOpacity style={styles.buttonPrev} onPress={prevStep}>
+                    <Text style={styles.prevTxt}>Previous</Text>
+                </TouchableOpacity>
                 <TouchableOpacity style={styles.buttonNext} onPress={validateFormFields}>
                     <Text style={styles.nextTxt}>Next</Text>
                 </TouchableOpacity>
             </View>
 
-           <Portal>
-               <Snackbar 
-               style={{ backgroundColor: "#B00020" }}
-               visible={visible}
-               onDismiss={onDismissSnackBar}
+            <Portal>
+                <Snackbar
+                    style={{ backgroundColor: "#B00020" }}
+                    visible={visible}
+                    onDismiss={onDismissSnackBar}
                     action={{
                         label: 'close'
                     }}
-               >Please fill all required fields</Snackbar>
-           </Portal>
+                >Please fill all required fields</Snackbar>
+            </Portal>
 
         </View>
     )
