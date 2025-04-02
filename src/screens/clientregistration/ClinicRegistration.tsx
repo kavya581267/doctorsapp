@@ -18,6 +18,7 @@ import { ClinicAddress } from "./ClinicAddressStep";
 
 
 export default function ClinicRegistration() {
+    const navigation = useNavigation();
     const labels = ["Clinic Details", "Address", "Admin Details", "Submit"];
     const [step, setStep] = useState<number>(0);
     const [formData, setFormData] = useState<AdminRegistarationRequest>()
@@ -27,14 +28,15 @@ export default function ClinicRegistration() {
     const onDismissSnackBar = () => setVisible(false);
     const submitForm = async () => {
         try {
-            const responce = await clinicService.register(formData)
-            console.log(responce)
+          //  const responce = await clinicService.register(formData)
+          //  console.log(responce)
+            navigation.navigate("SuccessScreen");
         } catch (error) {
-            console.log("hello", error)
-            setVisible(true);
+          //  console.log("hello", error)
+           // setVisible(true);
         }
     };
-    const navigation = useNavigation();
+   
 
 
 
