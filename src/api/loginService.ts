@@ -4,7 +4,7 @@ import { LoginRequest, LoginResponse } from "./model/auth/Auth";
 
 
 
-const AUTH_ENDPOINT = "/login"; // Adjust based on your API
+const AUTH_ENDPOINT = "/auth/login"; // Adjust based on your API
 
 export const loginService = {
     login: async (loginRequest: LoginRequest): Promise<LoginResponse> => {

@@ -44,7 +44,6 @@
     "@react-native-community/cli": "latest",
     "@types/react": "^18.3.20",
     "@types/react-native": "^0.72.8",
-    "miragejs": "^0.1.48",
     "typescript": "^5.8.2"
   },
   "private": true
