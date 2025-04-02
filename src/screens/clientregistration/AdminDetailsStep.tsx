@@ -2,12 +2,15 @@
 import { TouchableOpacity, View } from "react-native";
 import styles from "@styles/clinicRegistrationStyles";
 import MdLogTextInput from "@components/MdLogTextInput";
-import { Button, Icon, Portal, Snackbar, Text } from "react-native-paper";
+import { Button, Icon, IconButton, Portal, Snackbar, Text } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 import { COLORS } from "@utils/colors";
 import { useState } from "react";
 import { isAnyFieldsEmpty, isValidEmail, isValidPassword, isValidPhone } from "@utils/utils";
 import { AdminRegistarationRequest } from "@api/model/auth/Auth";
+
+import { Dropdown } from "react-native-element-dropdown";
+
 
 
 
@@ -18,7 +21,7 @@ interface StepProps {
     prevStep?: () => void;
     formData: AdminRegistarationRequest;
     setFormData: React.Dispatch<React.SetStateAction<AdminRegistarationRequest>>;
-   
+
 }
 
 
@@ -28,9 +31,16 @@ export const AdminDetails: React.FC<StepProps> = ({ nextStep, prevStep, formData
     const [visible, setVisible] = useState(false);
     const onDismissSnackBar = () => setVisible(false);
 
+    const genderOptions = [
+        { label: "MALE", value: "MALE" },
+        { label: "FEMALE", value: "FEMALE" },
+        { label: "OTHER", value: "OTHER" },
+    ];
+
+
     const validateFormFields = () => {
 
-        if (!isAnyFieldsEmpty(["firstName", "lastName", "email", "password", "gender","dateOfBirth","phone"], formData) &&
+        if (!isAnyFieldsEmpty(["firstName", "lastName", "email", "password", "gender", "dateOfBirth", "phone"], formData) &&
             isValidEmail(formData.email) && isValidPassword(formData.password) && isValidPhone(formData.phone)) {
             setVisible(false);
             nextStep();
@@ -72,6 +82,7 @@ export const AdminDetails: React.FC<StepProps> = ({ nextStep, prevStep, formData
                     left="email"
                     onTextChange={onChangeT}
                     field="email"
+                    keyboard="email-address"
                 />
                 <MdLogTextInput label="password*"
                     value={formData?.password}
@@ -79,12 +90,30 @@ export const AdminDetails: React.FC<StepProps> = ({ nextStep, prevStep, formData
                     onTextChange={onChangeT}
                     field="password"
                 />
-                <MdLogTextInput label="Gender*"
-                    value={formData?.gender}
-                    left="human"
-                    onTextChange={onChangeT}
-                    field="gender"
-                />
+
+                <View style={styles.genderContainer}>
+               
+                    <Dropdown
+                        data={genderOptions}
+                        labelField="label"
+                        valueField="value"
+                        placeholder="Select Gender"
+                        value={formData.gender}
+                        onChange={(item) => setFormData((prev) => ({ ...prev, gender: item.value }))}
+                        style={styles.dropdown}
+                        placeholderStyle={styles.placeholder}
+                        selectedTextStyle={styles.selectedText}
+                        renderLeftIcon={() => (
+                            <View style={styles.icon} >
+                            <Icon source="gender-male-female" size={24} color="#555" />
+                            </View>
+                          )}
+                    />
+                </View>
+
+
+
+
                 <MdLogTextInput label="DateOfBirth*"
 
                     value={formData?.dateOfBirth}
@@ -97,6 +126,7 @@ export const AdminDetails: React.FC<StepProps> = ({ nextStep, prevStep, formData
                     left="phone"
                     onTextChange={onChangeT}
                     field="phone"
+                    keyboard="phone-pad"
                 />
             </View>
 

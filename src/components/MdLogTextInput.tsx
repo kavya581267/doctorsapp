@@ -44,7 +44,9 @@ export default function MdLogTextInput({ label, value, left, right, onTextChange
                         />
                         </View>
                     </TouchableOpacity>
-                ) : (
+                )
+                
+                 : (
                     <TextInput
                         outlineColor={COLORS.grey}
                         mode="outlined"

@@ -1,5 +1,5 @@
 import { COLORS } from "@utils/colors";
-import { Dimensions, StyleSheet } from "react-native";
+import {  StyleSheet } from "react-native";
 
 
 
@@ -39,7 +39,7 @@ export default StyleSheet.create({
     },
 
     buttonPrev: {
-        width:"35%",
+        width: "35%",
         padding: 10,
         borderRadius: 5,
         alignItems: "center",
@@ -53,7 +53,7 @@ export default StyleSheet.create({
         fontWeight: "bold"
     },
     buttonNext: {
-        width:"35%",
+        width: "35%",
         padding: 10,
         borderRadius: 5,
         alignItems: "center",
@@ -61,17 +61,43 @@ export default StyleSheet.create({
         borderWidth: 2,
         backgroundColor: COLORS.secondary,
         borderColor: COLORS.primary,
-        flexDirection:"row",
-        justifyContent:"space-evenly"
+        flexDirection: "row",
+        justifyContent: "space-evenly"
     },
     nextTxt: {
         color: COLORS.primary,
         fontWeight: "bold"
     },
 
-    clinicReviewStyle:{
-        flexDirection:"row",
-        justifyContent:"space-between",
-        marginBottom:10
-    }
+    clinicReviewStyle: {
+        flexDirection: "row",
+        justifyContent: "space-between",
+        marginBottom: 10
+    },
+
+
+
+//gender
+genderContainer: { 
+    marginBottom: 5,
+    marginTop:5
+},
+label: { 
+    fontSize: 16, marginBottom: 8 
+},
+dropdown: {
+  height: 50,
+  borderWidth: 1,
+  borderColor: "#ccc",
+  borderRadius: 5,
+  paddingHorizontal: 10,
+  backgroundColor: "white",
+},
+placeholder: { color: "#aaa" },
+selectedText: { fontSize: 16 },
+icon:{
+    marginRight:18,
+    marginLeft:5
+}
+
 })

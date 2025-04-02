@@ -66,6 +66,7 @@ export const ClinicAddress: React.FC<StepProps> = ({ nextStep, prevStep, formDat
                     left="zip-box"
                     onTextChange={onChangeT}
                     field="clinicZip"
+                    keyboard="number-pad"
                 />
                
             </View>

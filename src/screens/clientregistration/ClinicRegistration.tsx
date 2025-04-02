@@ -1,7 +1,6 @@
-import { ClinicRequest } from "@api/model/client/ClientRequest";
-import MdLogTextInput from "@components/MdLogTextInput";
+
 import { useState } from "react";
-import { Image, View } from "react-native";
+import { Image, ScrollView, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import styles from "../../styles/clinicRegistrationStyles";
 import { AdminDetails } from "./AdminDetailsStep";
@@ -48,7 +47,9 @@ export default function ClinicRegistration() {
     }
 
     return (
+        <ScrollView>
         <SafeAreaView>
+             
             <View style={styles.container}>
                 <View style={styles.header}>
                     <Image style={styles.png} source={require("../../../assets/launchscreen.png")} />
@@ -79,7 +80,9 @@ export default function ClinicRegistration() {
                    
                 </Snackbar>
             </Portal>
+           
         </SafeAreaView>
+        </ScrollView>
 
     )
 }

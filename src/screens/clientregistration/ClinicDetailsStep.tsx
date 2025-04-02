@@ -64,6 +64,7 @@ export const ClinicDetails: React.FC<StepProps> = ({ nextStep, prevStep, formDat
                     left="email"
                     onTextChange={onChangeT}
                     field="clinicEmail"
+                    keyboard="email-address"
                 />
                 <MdLogTextInput
                     label="Clinic Phone*"
@@ -71,6 +72,7 @@ export const ClinicDetails: React.FC<StepProps> = ({ nextStep, prevStep, formDat
                     left="phone"
                     onTextChange={onChangeT}
                     field="clinicPhone"
+                    keyboard="phone-pad"
                 />
                
             </View>
