@@ -1,9 +1,10 @@
-import {  Image, Text } from "react-native";
+import { Image, Text } from "react-native";
 import { View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import styles from "@styles/SuccessScreenStyle";
 import { Button } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
+import * as Animatable from "react-native-animatable";
 
 
 
@@ -14,8 +15,14 @@ export default function SuccessScreen() {
         <SafeAreaView style={styles.container}>
             <View >
                 <View style={styles.img}>
-                    <Image source={require("../../assets/success.png")}></Image>
+                <Animatable.Image
+                    animation="pulse"
+                    iterationCount="infinite"
+                    duration={1500}
+                    source={require("../../assets/success.png")}    
+                />
                 </View>
+
                 <Text style={styles.title}>Registration Successful!</Text>
                 <Text style={styles.subtitle}>
                     Your clinic and admin have been registered successfully.
