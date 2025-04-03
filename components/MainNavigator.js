@@ -19,6 +19,9 @@ import ClinicRegistration from '@screens/clientregistration/ClinicRegistration';
 import LaunchScreen from '@screens/LaunchScreen';
 import SignIn from '@screens/SignIn';
 import SuccessScreen from '@screens/SuccessScreen';
+import ForgetPassword from '@screens/passwordReset/ForgetPasswordScreen';
+
+import ResetPasswordScreen from '@screens/passwordReset/ResetPasswordScreen';
 
 export default function MainNavigator() {
     const { user, loading } = useContext(AuthContext);
@@ -43,6 +46,8 @@ export default function MainNavigator() {
                <Stack.Screen name='InitialNote' component={InitialNote}/>
                <Stack.Screen name='ClinicRegistration' component={ClinicRegistration}/>
                <Stack.Screen name='SuccessScreen' component={SuccessScreen}/>
+               <Stack.Screen name='ForgetPassword' component={ForgetPassword}/>
+               <Stack.Screen name='ResetPasswordScreen' component={ResetPasswordScreen}/>
             </Stack.Navigator>
         </NavigationContainer>
     );

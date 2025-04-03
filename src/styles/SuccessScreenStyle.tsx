@@ -8,7 +8,7 @@ export default StyleSheet.create({
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
-        backgroundColor: "#E3F2FD", 
+      
         padding: 20,
       },
     img:{

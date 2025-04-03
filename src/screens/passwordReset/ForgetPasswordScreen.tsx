@@ -1,0 +1,41 @@
+import { PasswordResetRequest } from "@api/model/passwordManagement/PasswordResetRequest";
+import { FontAwesome5 } from "@expo/vector-icons";
+import { useState } from "react";
+import { Image, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import styles from "@styles/passwordResetStyles";
+import { useNavigation } from "@react-navigation/native";
+
+
+export default function ForgetPassword() {
+   
+    const navigation=useNavigation();
+    const [form, setForm] = useState<PasswordResetRequest>(new PasswordResetRequest());
+    return (
+        <SafeAreaView style={styles.container}>
+            <View>
+                <View style={styles.marginBtm}>
+                    <Image style={styles.png} source={require("../../../assets/launchscreen.png")} />
+                    <Text style={styles.heading}>Forgot Your Password?</Text>
+                    <Text style={styles.subHeading}>Enter your email so that we can send verification code</Text>
+                </View>
+                <View style={styles.inputContainer}>
+                    <FontAwesome5 name="user" size={20} color="black" style={styles.icon} />
+                    <TextInput style={styles.input} placeholder="Enter your email" keyboardType="email-address"
+                        autoCapitalize="none" autoCorrect={false} value={form.email} onChangeText={(text)=>setForm({...form,email:text})}/>
+                </View>
+                <View style={styles.marginBtm}>
+                    <TouchableOpacity onPress={()=>navigation.navigate("ResetPasswordScreen")}>
+                        <View style={styles.btn}>
+                            <Text style={styles.btnText}>Send Code</Text>
+                        </View>
+                    </TouchableOpacity>
+                </View>
+                <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("SignIn")}>
+                <FontAwesome5 name="arrow-left" size={18} color="black" />
+                    <Text style={styles.loginText}>Back to LogIn Page</Text>
+                </TouchableOpacity>
+            </View>
+        </SafeAreaView>
+    )
+}
