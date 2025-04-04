@@ -20,7 +20,7 @@ interface StepProps {
 }
 
 
-export const ClinicDetails: React.FC<StepProps> = ({ nextStep, prevStep, formData, setFormData }) => {
+export const ClinicDetails: React.FC<StepProps> = ({ nextStep, formData, setFormData }) => {
     const [visible, setVisible] = useState(false);
     const onDismissSnackBar = () => setVisible(false);
     const validateFormFields = () => {
