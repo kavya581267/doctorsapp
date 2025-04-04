@@ -53,9 +53,12 @@ export default function MdLogTextInput({ label, value, left, right, onTextChange
                         label={label}
                         value={value}
                         keyboardType={keyboard}
-
+                        placeholderTextColor={"grey"}
+                        style={{fontSize:14,backgroundColor:"#F3F4F6FF",borderColor: COLORS.grey,borderWidth:0,
+                            fontWeight:"300", height:40}}
+                        clearButtonMode={"while-editing"}
                         onChangeText={(val) => { onTextChange(field, val) }}
-                        left={<TextInput.Icon icon={left} />}
+                        left={<TextInput.Icon size={20} style={{}} icon={left} />}
                         right={<TextInput.Icon icon={right} />}
                     />
                 )

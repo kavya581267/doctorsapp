@@ -58,7 +58,8 @@ export default function ClinicRegistration() {
                     <Text style={styles.heading}>Clinic Registration</Text>
                     <Text style={styles.subHeading}>MDLog simplify clinic management effortlessly.</Text>
                 </View>
-                <StepIndicator stepCount={labels.length} currentPosition={step} labels={labels} />
+                <StepIndicator 
+                customStyles={stepindicator} stepCount={labels.length} currentPosition={step} labels={labels} />
                 {step === 0 && <ClinicDetails nextStep={nextStep} formData={formData} setFormData={setFormData} />}
                 {step === 1 && <ClinicAddress nextStep={nextStep} prevStep={prevStep} formData={formData} setFormData={setFormData} />}
                 {step === 2 && <AdminDetails nextStep={nextStep} prevStep={prevStep} formData={formData} setFormData={setFormData} />}
@@ -88,3 +89,27 @@ export default function ClinicRegistration() {
 
     )
 }
+
+const stepindicator = {
+    stepIndicatorSize: 25,
+    currentStepIndicatorSize:30,
+    separatorStrokeWidth: 2,
+    currentStepStrokeWidth: 3,
+    stepStrokeCurrentColor: '#fe7013',
+    stepStrokeWidth: 3,
+    stepStrokeFinishedColor: 'green',
+    stepStrokeUnFinishedColor: '#aaaaaa',
+    separatorFinishedColor: 'green',
+    separatorUnFinishedColor: '#aaaaaa',
+    stepIndicatorFinishedColor: 'green',
+    stepIndicatorUnFinishedColor: '#ffffff',
+    stepIndicatorCurrentColor: '#ffffff',
+    stepIndicatorLabelFontSize: 12,
+    currentStepIndicatorLabelFontSize: 13,
+    stepIndicatorLabelCurrentColor: '#fe7013',
+    stepIndicatorLabelFinishedColor: '#ffffff',
+    stepIndicatorLabelUnFinishedColor: '#aaaaaa',
+    labelColor: '#999999',
+    labelSize: 13,
+    currentStepLabelColor: '#fe7013'
+  }
