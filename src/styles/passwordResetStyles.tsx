@@ -58,8 +58,8 @@ export default StyleSheet.create({
     },
     loginText:{
         color:COLORS.primary,
-        fontSize:18,
-        lineHeight:28,
+        fontSize:14,
+        lineHeight:22,
         fontWeight:"400",
         marginLeft:10,
         textAlign:"center"

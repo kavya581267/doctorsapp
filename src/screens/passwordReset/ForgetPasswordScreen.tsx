@@ -32,7 +32,7 @@ export default function ForgetPassword() {
                     </TouchableOpacity>
                 </View>
                 <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("SignIn")}>
-                <FontAwesome5 name="arrow-left" size={18} color="black" />
+                <FontAwesome5 name="arrow-left" size={16} color="black" />
                     <Text style={styles.loginText}>Back to LogIn Page</Text>
                 </TouchableOpacity>
             </View>
