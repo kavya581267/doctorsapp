@@ -1,53 +1,53 @@
 export interface LoginResponse {
-    accessToken: string;
-    refreshToken: string;
-    expiresIn: number;
-    user: UserInfo;
-    requiresMfa: boolean;
-  }
-  
-  export class UserInfo {
-    id: string = "";
-    username: string = "";
-    firstName: string = "";
-    lastName: string = "";
-    roles: string[] = [];
-    internalUserId: number;
-  }
+  accessToken: string;
+  refreshToken: string;
+  expiresIn: number;
+  user: UserInfo;
+  requiresMfa: boolean;
+}
 
-  export class LoginRequest{
-    email: string = "";
-    password: string = "";
-    mfa: string = "";
-  }
+export class UserInfo {
+  id: string = "";
+  username: string = "";
+  firstName: string = "";
+  lastName: string = "";
+  roles: string[] = [];
+  internalUserId: number;
+}
 
-  export class AdminRegistarationRequest {
-    firstName: string = "";
-    lastName: string = "";
-    email: string = "";
-    password: string = "";
-    dateOfBirth: string = "";
-    gender: string = "";
-    phone: string = "";
-    clinicName: string = "";
-    clinicLicense: string = "";
-    clinicAddress: string = "";
-    clinicCity: string = "";
-    clinicState: string = "";
-    clinicZip: string = "";
-    clinicPhone: string = "";
-    clinicEmail: string = "";
+export class LoginRequest {
+  email: string = "";
+  password: string = "";
+  mfa: string = "";
+}
 
-    constructor(init?: Partial<AdminRegistarationRequest>) {
-        Object.assign(this, init);
-    }
+export class AdminRegistarationRequest {
+  firstName: string = "";
+  lastName: string = "";
+  email: string = "";
+  password: string = "";
+  dateOfBirth: string = "";
+  gender: string = "";
+  phone: string = "";
+  clinicName: string = "";
+  clinicLicense: string = "";
+  clinicAddress: string = "";
+  clinicCity: string = "";
+  clinicState: string = "";
+  clinicZip: string = "";
+  clinicPhone: string = "";
+  clinicEmail: string = "";
 
+  constructor(init?: Partial<AdminRegistarationRequest>) {
+    Object.assign(this, init);
   }
 
-  export interface AdminRegistrationResponse{
-    clinicId: string;
-    userId: string;
-    message: string;
+}
+
+export interface AdminRegistrationResponse {
+  clinicId: string;
+  userId: string;
+  message: string;
 }
 
 export class StaffRegistration {
@@ -68,7 +68,7 @@ export class StaffRegistration {
   emergencyContactName: string = "";
   emergencyContactPhone: string = "";
   constructor(init?: Partial<StaffRegistration>) {
-      Object.assign(this, init);
+    Object.assign(this, init);
   }
 }
 
@@ -77,7 +77,11 @@ export class PatientRegistration extends StaffRegistration {
   createUserAccount: boolean = false;
 
   constructor(init?: Partial<PatientRegistration>) {
-      super(init);
-      Object.assign(this, init);
+    super(init);
+    Object.assign(this, init);
   }
+}
+
+export interface RefreshTokenRequest {
+  refresh_token: string
 }

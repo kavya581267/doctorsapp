@@ -2,7 +2,13 @@ import { BASE_URL_PREFIX } from "@utils/constants";
 
 const BASE_URL = BASE_URL_PREFIX
 
-console.log(process.env.NODE_ENV)
+let cachedToken = null;
+
+export const initializeToken = async () => {
+  cachedToken = await AsyncStorage.getItem(JWT_REFRESH_TOKEN);
+};
+
+export const getToken = () => cachedToken;
 
 const buildUrl = (endpoint, queryParams = {}) => {
     const url = new URL(`${BASE_URL}${endpoint}`);
@@ -26,7 +32,7 @@ const apiCall = async (endpoint, method = "GET", body = null, queryParams = {}) 
             method,
             headers: {
                 "Content-Type": "application/json",
-                "Authorization": ""
+                "Authorization": cachedToken
             }
         };
 

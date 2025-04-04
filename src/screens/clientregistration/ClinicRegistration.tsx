@@ -13,6 +13,7 @@ import ClinicReview from "./ClinicReview";
 import { clinicService } from "@api/clinicService";
 import { AdminRegistarationRequest } from "@api/model/auth/Auth";
 import { ClinicAddress } from "./ClinicAddressStep";
+import { MdLogActivityIndicator } from "@components/MdLogActivityIndicator";
 
 
 
@@ -26,15 +27,17 @@ export default function ClinicRegistration() {
     const prevStep = () => setStep((prev) => prev - 1);
     const [visible, setVisible] = useState(false);
     const onDismissSnackBar = () => setVisible(false);
+    const [loading, setLoading] = useState(false);
     const submitForm = async () => {
         try {
-          //  const responce = await clinicService.register(formData)
-          //  console.log(responce)
+            setLoading(true)
+            const responce = await clinicService.register(formData)
             navigation.navigate("SuccessScreen");
         } catch (error) {
-          //  console.log("hello", error)
-           // setVisible(true);
+          setVisible(true);
         }
+        setLoading(false);
+
     };
    
 
@@ -79,10 +82,10 @@ export default function ClinicRegistration() {
                     action={{
                         label: 'close'
                     }}>
-                some error
-                   
+                        some thing went wrong please try again!!   
                 </Snackbar>
             </Portal>
+            <MdLogActivityIndicator loading={loading}/>
            
         </SafeAreaView>
         </ScrollView>

@@ -17,6 +17,7 @@ export default function SignIn() {
     const navigation = useNavigation();
     const [form, setForm] = useState<LoginRequest>(new LoginRequest())
     const [loading, setLoading] = useState(false);
+    const [errorMessage, setErrorMessage] = useState("Invalid Credentials!!")
     return (
 
         <SafeAreaView >
@@ -50,17 +51,19 @@ export default function SignIn() {
                 <View>
                     <TouchableOpacity style={styles.btn_gap} onPress={async () => {
                         setLoading(true);
-                        const isLogin = await login({
-                            email: form.email,
-                            password: form.password,
-                            mfa: ""
-                        });
-                        setLoading(false);
-                        if (isLogin) {
+                        try {
+                            const isLogin = await login({
+                                email: form.email,
+                                password: form.password,
+                                mfa: ""
+                            });
                             navigation.replace('Mainscreen');
-                        } else {
+                        } catch (error) {
+                            setErrorMessage(error.toString())
+                            console.log(error.toString())
                             setVisible(true)
                         }
+                        setLoading(false);
                     }}>
                         <View style={styles.btn}>
                             <Text style={styles.btnText}>Log In</Text>
@@ -69,7 +72,7 @@ export default function SignIn() {
                 </View>
                 <View style={styles.signupContainer}>
                     <Text>Need to create an account?</Text>
-                    <TouchableOpacity onPress={() => {  navigation.navigate("ClinicRegistration")}}>
+                    <TouchableOpacity onPress={() => { navigation.navigate("ClinicRegistration") }}>
                         <Text style={styles.signupText}>Sign Up</Text>
                     </TouchableOpacity>
                 </View>
@@ -83,10 +86,10 @@ export default function SignIn() {
                         label: 'close'
                     }}
                 >
-                    Invalid Credentials!!
+                    {errorMessage}
                 </Snackbar>
             </Portal>
-          <MdLogActivityIndicator loading={loading}/>
+            <MdLogActivityIndicator loading={loading} />
         </SafeAreaView>
 
     );
