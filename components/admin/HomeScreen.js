@@ -11,7 +11,7 @@ import Spacer from "@components/Spacer";
 const properties = [
     {
         heading: "Add Patient",
-        navPage: "PatientRegistration",
+        navPage: "StaffRegistrationScreen",
         buttonText: "Add Now",
         desc: "Quickly add new patients to the system.",
         imgPath: require("../../assets/addPatient.png")
