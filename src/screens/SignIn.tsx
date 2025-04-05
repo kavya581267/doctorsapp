@@ -2,19 +2,20 @@ import React, { useContext, useState } from "react";
 import { View, Text, TextInput, TouchableOpacity, SafeAreaView, Image } from "react-native";
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import Feather from '@expo/vector-icons/Feather';
-import { useNavigation } from "@react-navigation/native";
+import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { AuthContext } from "@context/AuthContext";
 import styles from "@styles/signInStyle";
 import { LoginRequest } from "@api/model/auth/Auth";
 import { Portal, Snackbar, useTheme } from "react-native-paper";
 import { MdLogActivityIndicator } from "@components/MdLogActivityIndicator";
+import { RootStackParamList } from "@components/MainNavigation";
 
 export default function SignIn() {
 
     const [visible, setVisible] = useState(false);
     const onDismissSnackBar = () => setVisible(false);
     const { login } = useContext(AuthContext)
-    const navigation = useNavigation();
+    const navigation = useNavigation<NavigationProp<RootStackParamList>>();
     const [form, setForm] = useState<LoginRequest>(new LoginRequest())
     const [loading, setLoading] = useState(false);
     const [errorMessage, setErrorMessage] = useState("Invalid Credentials!!")
@@ -57,7 +58,7 @@ export default function SignIn() {
                                 password: form.password,
                                 mfa: ""
                             });
-                            navigation.replace('Mainscreen');
+                            navigation.navigate('Mainscreen');
                         } catch (error) {
                             setErrorMessage(error.toString())
                             console.log(error.toString())

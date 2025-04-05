@@ -4,12 +4,13 @@ import { useState } from "react";
 import { Image, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import styles from "@styles/passwordResetStyles";
-import { useNavigation } from "@react-navigation/native";
+import { NavigationProp, useNavigation } from "@react-navigation/native";
+import { RootStackParamList } from "@components/MainNavigation";
 
 
 export default function ForgetPassword() {
    
-    const navigation=useNavigation();
+    const navigation=useNavigation<NavigationProp<RootStackParamList>>();
     const [form, setForm] = useState<PasswordResetRequest>(new PasswordResetRequest());
     return (
         <SafeAreaView style={styles.container}>

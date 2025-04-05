@@ -2,11 +2,9 @@ import React, { useContext, useEffect } from "react";
 import { View, Text, TouchableOpacity, Image } from "react-native";
 import styles from "@styles/launchScreenStyles";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
+import { RootStackParamList } from "@components/MainNavigation";
 
-type RootStackParamList = {
-    SignIn: undefined; // Define available routes and their parameters'
-    ClinicRegistration: undefined;
-  };
+
 
 
 export default function LaunchScreen() {

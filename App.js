@@ -1,7 +1,7 @@
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import MainNavigator from './components/MainNavigator';
 import { AuthProvider } from '@context/AuthProvider';
 import { PaperProvider } from 'react-native-paper';
+import MainNavigator from '@components/MainNavigation';
 
 
 

@@ -1,8 +1,7 @@
 import { apiService } from "./apiService";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { LoginRequest, LoginResponse } from "./model/auth/Auth";
+import { LoginRequest, LoginResponse, RefreshTokenResponse } from "./model/auth/Auth";
 import { JWT_ACCESS_TOKEN, JWT_REFRESH_TOKEN, LOGIN_PATH, LOGOUT_PATH, USER } from "@utils/constants";
-
 
 
 export const loginService = {
@@ -28,13 +27,12 @@ export const loginService = {
        
     },
 
-    refresh: async () => {
+    refresh: async ():Promise<any> => {
         try{
             const refreshToken =  await AsyncStorage.getItem(JWT_REFRESH_TOKEN);
-            await apiService.post(LOGOUT_PATH, {"refreshToken":refreshToken});
-            await AsyncStorage.removeItem(USER);
-            await AsyncStorage.removeItem(JWT_REFRESH_TOKEN);
-            await AsyncStorage.removeItem(JWT_ACCESS_TOKEN);
+            const resp =  await apiService.post(LOGOUT_PATH, {"refreshToken":refreshToken});
+            const token = resp.data;
+            await AsyncStorage.setItem(JWT_ACCESS_TOKEN,token);
         }catch(error){
             throw error;
         }

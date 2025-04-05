@@ -82,6 +82,57 @@ export class PatientRegistration extends StaffRegistration {
   }
 }
 
+
+export interface PatientRegistrationResponse {
+  patientId: string
+  mrn: string;
+  userId: string;
+  message: string;
+  portalAccess: boolean
+}
+
+
+
 export interface RefreshTokenRequest {
   refresh_token: string
+}
+
+
+export interface RefreshTokenResponse{
+  accessToken: string;
+  expiresIn: number;
+}
+
+export interface PasswordResetRequest{
+  email:string
+}
+
+export interface ResetPasswordRequest{
+  email: string
+  token: string
+  newPassword: string
+  confirmPassword: string
+}
+
+export interface UpdatePasswordRequest{
+  currentPassword: string
+  newPassword: string
+  confirmPassword: string
+}
+
+export interface ResendVerificationRequest{
+  userId: string
+  type: string
+}
+
+export interface EmailVerificationRequest{
+  email: string
+  otp: string
+  userId: string
+}
+
+export interface EmailVerificationRequest{
+  phone: string
+  otp: string
+  userId: string
 }

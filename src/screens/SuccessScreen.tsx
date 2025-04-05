@@ -3,14 +3,15 @@ import { View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import styles from "@styles/SuccessScreenStyle";
 import { Button } from "react-native-paper";
-import { useNavigation } from "@react-navigation/native";
+import { NavigationProp, useNavigation } from "@react-navigation/native";
 import * as Animatable from "react-native-animatable";
+import { RootStackParamList } from "@components/MainNavigation";
 
 
 
 
 export default function SuccessScreen() {
-    const navigation = useNavigation();
+    const navigation = useNavigation<NavigationProp<RootStackParamList>>();
     return (
         <SafeAreaView style={styles.container}>
             <View >
