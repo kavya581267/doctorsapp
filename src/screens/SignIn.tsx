@@ -20,6 +20,17 @@ export default function SignIn() {
     const [form, setForm] = useState<LoginRequest>(new LoginRequest())
     const [loading, setLoading] = useState(false);
     const [errorMessage, setErrorMessage] = useState("Invalid Credentials!!")
+    const submitLogin = async () => {
+        setLoading(true);
+        try {
+            await login(form);
+            navigation.navigate('Mainscreen');
+        } catch (error) {
+            setErrorMessage(error.toString())
+            setVisible(true)
+        }
+        setLoading(false);
+    }
     return (
 
         <SafeAreaView >
@@ -33,11 +44,7 @@ export default function SignIn() {
                     <View style={styles.inputContainer}>
                         <FontAwesome5 name="user" size={20} color="black" style={styles.icon} />
                         <TextInput style={styles.input} placeholder="Enter your user name"
-                            autoCapitalize="none" autoCorrect={false} value={form.email} onChangeText={userName => setForm((prev) => {
-                                const newForm = { ...prev };
-                                newForm.email = userName;
-                                return newForm;
-                            })} />
+                            autoCapitalize="none" autoCorrect={false} value={form.email} onChangeText={email => setForm({ ...form, email })} />
                     </View>
 
                     <View style={styles.inputContainer}>
@@ -51,22 +58,7 @@ export default function SignIn() {
                     </TouchableOpacity>
                 </View>
                 <View>
-                    <TouchableOpacity style={styles.btn_gap} onPress={async () => {
-                        setLoading(true);
-                        try {
-                            const isLogin = await login({
-                                email: form.email,
-                                password: form.password,
-                                mfa: ""
-                            });
-                            navigation.navigate('Mainscreen');
-                        } catch (error) {
-                            setErrorMessage(error.toString())
-                            console.log(error.toString())
-                            setVisible(true)
-                        }
-                        setLoading(false);
-                    }}>
+                    <TouchableOpacity style={styles.btn_gap} onPress={submitLogin}>
                         <View style={styles.btn}>
                             <Text style={styles.btnText}>Log In</Text>
                         </View>
@@ -79,7 +71,7 @@ export default function SignIn() {
                     </TouchableOpacity>
                 </View>
             </View>
-            <MdLodSnackbar visible={visible} onDismiss={onDismissSnackBar} message={errorMessage}/>
+            <MdLodSnackbar visible={visible} onDismiss={onDismissSnackBar} message={errorMessage} />
             <MdLogActivityIndicator loading={loading} />
         </SafeAreaView>
 
