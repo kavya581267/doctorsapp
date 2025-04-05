@@ -1,11 +1,12 @@
-import { BASE_URL_PREFIX } from "@utils/constants";
+import { BASE_URL_PREFIX, JWT_ACCESS_TOKEN } from "@utils/constants";
+import { getObject } from "@utils/MdLogAsyncStorage";
 
 const BASE_URL = BASE_URL_PREFIX
 
 let cachedToken = null;
 
 export const initializeToken = async () => {
-  cachedToken = await AsyncStorage.getItem(JWT_REFRESH_TOKEN);
+  cachedToken = await getObject(JWT_ACCESS_TOKEN);
 };
 
 export const getToken = () => cachedToken;

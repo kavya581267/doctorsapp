@@ -47,6 +47,7 @@ export const AuthProvider = ({ children }: Props) => {
       };
     
       const logout = async () => {
+        await loginService.logout();
         await AsyncStorage.removeItem(JWT_ACCESS_TOKEN);
         setUser(null);
       };

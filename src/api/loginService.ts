@@ -2,6 +2,7 @@ import { apiService } from "./apiService";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { LoginRequest, LoginResponse, RefreshTokenResponse } from "./model/auth/Auth";
 import { JWT_ACCESS_TOKEN, JWT_REFRESH_TOKEN, LOGIN_PATH, LOGOUT_PATH, USER } from "@utils/constants";
+import { getObject, removeItem } from "@utils/MdLogAsyncStorage";
 
 
 export const loginService = {
@@ -16,11 +17,11 @@ export const loginService = {
     
     logout: async () => {
         try{
-            const refreshToken =  await AsyncStorage.getItem(JWT_REFRESH_TOKEN);
+            const refreshToken = await getObject<string>(JWT_REFRESH_TOKEN);
             await apiService.post(LOGOUT_PATH, {"refreshToken":refreshToken});
-            await AsyncStorage.removeItem(USER);
-            await AsyncStorage.removeItem(JWT_REFRESH_TOKEN);
-            await AsyncStorage.removeItem(JWT_ACCESS_TOKEN);
+            await removeItem(USER);
+            await removeItem(JWT_REFRESH_TOKEN);
+            await removeItem(JWT_ACCESS_TOKEN);
         }catch(error){
             throw error;
         }

@@ -10,11 +10,11 @@ import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { COLORS } from "@utils/colors";
 import { ClinicDetails } from "./ClinicDetailsStep";
 import ClinicReview from "./ClinicReview";
-import { clinicService } from "@api/clinicService";
 import { AdminRegistarationRequest } from "@api/model/auth/Auth";
 import { ClinicAddress } from "./ClinicAddressStep";
 import { MdLogActivityIndicator } from "@components/MdLogActivityIndicator";
 import { RootStackParamList } from "@components/MainNavigation";
+import { registrationService } from "@api/registrationService";
 
 
 
@@ -32,7 +32,7 @@ export default function ClinicRegistration() {
     const submitForm = async () => {
         try {
             setLoading(true)
-            const responce = await clinicService.register(formData)
+            const responce = await registrationService.registerAdmin(formData);
             navigation.navigate("SuccessScreen");
         } catch (error) {
           setVisible(true);

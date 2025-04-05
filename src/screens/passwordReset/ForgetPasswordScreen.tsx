@@ -12,6 +12,16 @@ export default function ForgetPassword() {
    
     const navigation=useNavigation<NavigationProp<RootStackParamList>>();
     const [form, setForm] = useState<PasswordResetRequest>(new PasswordResetRequest());
+
+    const submitSendCode = async () => {
+        // validate email form.email
+        // fail error message 
+        // pass -> loading enable, call sendcode api and wait 
+        // stop loading 
+        // pass next page
+        // fail error message 
+        navigation.navigate("ResetPasswordScreen")
+    }
     return (
         <SafeAreaView style={styles.container}>
             <View>
@@ -26,7 +36,7 @@ export default function ForgetPassword() {
                         autoCapitalize="none" autoCorrect={false} value={form.email} onChangeText={(text)=>setForm({...form,email:text})}/>
                 </View>
                 <View style={styles.marginBtm}>
-                    <TouchableOpacity onPress={()=>navigation.navigate("ResetPasswordScreen")}>
+                    <TouchableOpacity onPress={submitSendCode}>
                         <View style={styles.btn}>
                             <Text style={styles.btnText}>Send Code</Text>
                         </View>

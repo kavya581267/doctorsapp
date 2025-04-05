@@ -4,12 +4,17 @@ import styles from "@styles/passwordResetStyles";
 import { Feather, FontAwesome5 } from "@expo/vector-icons";
 import { useState } from "react";
 import { ResetPassword } from "@api/model/passwordManagement/ResetPassword";
-import { useNavigation } from "@react-navigation/native";
+import { NavigationProp, useNavigation } from "@react-navigation/native";
+import { RootStackParamList } from "@components/MainNavigation";
 
 export default function ResetPasswordScreen() {
-    const navigation = useNavigation();
-    
+    const navigation = useNavigation<NavigationProp<RootStackParamList>>();
     const [form, setForm] = useState<ResetPassword>(new ResetPassword());
+
+    const onSubmitClick = () => {
+        navigation.navigate("SignIn")
+    }
+
     return (
         <SafeAreaView style={styles.container}>
             <View>
@@ -48,7 +53,7 @@ export default function ResetPasswordScreen() {
                 </View>
 
                 <View style={styles.marginBtm}>
-                    <TouchableOpacity onPress={() => navigation.navigate("SignIn")}>
+                    <TouchableOpacity onPress={onSubmitClick}>
                         <View style={styles.btn}>
                             <Text style={styles.btnText}>Submit</Text>
                         </View>

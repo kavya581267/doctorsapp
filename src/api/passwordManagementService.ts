@@ -4,7 +4,7 @@ import { REQUEST_PASSWORD_RESET_PATH, RESET_PASSWORD_PATH, UPDATE_PASSWORD_PATH 
 
 
 export const passwordManagementService = {
-    reqPasswordReset: async (passwordResetRequest: PasswordResetRequest): Promise<any> => {
+    requestPasswordReset: async (passwordResetRequest: PasswordResetRequest): Promise<any> => {
         try {
             const response = await apiService.post(REQUEST_PASSWORD_RESET_PATH, passwordResetRequest);
             return response.data;

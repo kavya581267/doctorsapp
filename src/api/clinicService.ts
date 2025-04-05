@@ -1,20 +1,29 @@
-import { GET_ALL_CLINICS_PATH, GET_CLINICS_BY_ID_PATH, UPDATE_CLINIC_PATH } from "@utils/constants";
 import { apiService } from "./apiService";
 import { AdminRegistarationRequest, AdminRegistrationResponse } from "./model/auth/Auth";
 import { ClinicResponse } from "./model/clinic/ClinicResponse";
-import { replacePlaceholders } from "@utils/utils";
-import { ClinicRequest } from "./model/clinic/ClinicRequest";
+
+
+
+export const AUTH_ENDPOINT = "/auth/register/admin"; // Adjust based on your API
 
 export const clinicService = {
-
-    getAllClinics: async () => {
+    register: async (clinicRegistration: AdminRegistarationRequest): Promise<AdminRegistrationResponse> => {
+        try {
+            const response = await apiService.post(AUTH_ENDPOINT, clinicRegistration);
+            return response;
+        } catch (error) {
+            throw error;
+        }
     },
-    updateClinic: (clinicRequest: ClinicRequest) => {
-        
+
+    getAllClinics: () => {
+
+    },
+    updateClinic: () => {
 
     }, 
-    getClinicById: (id:string) => {
-        const path = replacePlaceholders(GET_CLINICS_BY_ID_PATH,{"clinicId":id});
+    getClinicById: () => {
+
     },
     getClinicSchedule: () => {
 
