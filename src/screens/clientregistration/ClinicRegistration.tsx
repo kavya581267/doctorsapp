@@ -15,6 +15,7 @@ import { ClinicAddress } from "./ClinicAddressStep";
 import { MdLogActivityIndicator } from "@components/MdLogActivityIndicator";
 import { RootStackParamList } from "@components/MainNavigation";
 import { registrationService } from "@api/registrationService";
+import Spacer from "@components/Spacer";
 
 
 
@@ -64,6 +65,7 @@ export default function ClinicRegistration() {
                 </View>
                 <StepIndicator 
                 customStyles={stepindicator} stepCount={labels.length} currentPosition={step} labels={labels} />
+                 <Spacer height={40} />
                 {step === 0 && <ClinicDetails nextStep={nextStep} formData={formData} setFormData={setFormData} />}
                 {step === 1 && <ClinicAddress nextStep={nextStep} prevStep={prevStep} formData={formData} setFormData={setFormData} />}
                 {step === 2 && <AdminDetails nextStep={nextStep} prevStep={prevStep} formData={formData} setFormData={setFormData} />}

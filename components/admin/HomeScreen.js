@@ -4,8 +4,8 @@ import { View, Text, Image, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import Header from "./Header";
 import CommonButton from "../common/CommonButton";
-import Spacer from "../common/Spacer";
 import { SafeAreaView } from "react-native-safe-area-context";
+import Spacer from "@components/Spacer";
 
 
 const properties = [
@@ -64,7 +64,7 @@ export default function HomeScreen() {
                         )
                     }
 
-                    <Spacer />
+                    <Spacer height={10} />
                 </View>
 
             </View>
