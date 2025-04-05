@@ -12,5 +12,11 @@ export enum Role {
     ADMMIN="ADMIN",
     DOCTOR="DOCTOR",
     NURSE="NURSE",
-    FRONTDESK="FRONTDESK"
+    FRONT_OFFICE="FRONT_OFFICE"
+}
+
+export enum Gender {
+    MALE ="MALE",
+    FEMALE = "FEMALE",
+    OTHER ="OTHER"
 }

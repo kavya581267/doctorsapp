@@ -1,3 +1,5 @@
+import { Gender } from "../enums";
+
 export interface LoginResponse {
   accessToken: string;
   refreshToken: string;
@@ -27,7 +29,7 @@ export class AdminRegistarationRequest {
   email: string = "";
   password: string = "";
   dateOfBirth: string = "";
-  gender: string = "";
+  gender: Gender = Gender.MALE;
   phone: string = "";
   clinicName: string = "";
   clinicLicense: string = "";
@@ -57,7 +59,7 @@ export class StaffRegistration {
   email: string = "";
   password: string = "";
   dateOfBirth: string = "";
-  gender: string = "";
+  gender: Gender = Gender.MALE;
   phone: string = "";
   role: string = "";
   address: string = "";

@@ -1,3 +1,5 @@
+import { Gender } from "../enums";
+
 export interface MedicationResponse {
     id: string;
     clinicId: string;
@@ -78,7 +80,7 @@ export interface PatientResponse {
     firstName: string;
     lastName: string;
     dateOfBirth: string;
-    gender: string;
+    gender: Gender;
     bloodGroup: string;
     email: string;
     phone: string;

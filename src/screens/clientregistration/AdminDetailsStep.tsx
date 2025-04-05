@@ -89,6 +89,7 @@ export const AdminDetails: React.FC<StepProps> = ({ nextStep, prevStep, formData
                     left="lock"
                     onTextChange={onChangeT}
                     field="password"
+                    secureEntry={true}
                 />
 
                 <View style={styles.genderContainer}>

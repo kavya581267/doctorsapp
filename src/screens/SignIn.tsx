@@ -9,6 +9,7 @@ import { LoginRequest } from "@api/model/auth/Auth";
 import { Portal, Snackbar, useTheme } from "react-native-paper";
 import { MdLogActivityIndicator } from "@components/MdLogActivityIndicator";
 import { RootStackParamList } from "@components/MainNavigation";
+import { MdLodSnackbar } from "@components/MdLogSnacbar";
 
 export default function SignIn() {
 
@@ -78,18 +79,7 @@ export default function SignIn() {
                     </TouchableOpacity>
                 </View>
             </View>
-            <Portal>
-                <Snackbar
-                    style={{ backgroundColor: "#B00020" }}
-                    visible={visible}
-                    onDismiss={onDismissSnackBar}
-                    action={{
-                        label: 'close'
-                    }}
-                >
-                    {errorMessage}
-                </Snackbar>
-            </Portal>
+            <MdLodSnackbar visible={visible} onDismiss={onDismissSnackBar} message={errorMessage}/>
             <MdLogActivityIndicator loading={loading} />
         </SafeAreaView>
 
