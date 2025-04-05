@@ -4,12 +4,41 @@ import styles from "@styles/passwordResetStyles";
 import { Feather, FontAwesome5 } from "@expo/vector-icons";
 import { useState } from "react";
 import { ResetPassword } from "@api/model/passwordManagement/ResetPassword";
-import { useNavigation } from "@react-navigation/native";
+import { NavigationProp, useNavigation, useRoute } from "@react-navigation/native";
+import { RootStackParamList } from "@components/MainNavigation";
+import { isValidEmail, isValidPassword } from "@utils/utils";
+import { passwordManagementService } from "@api/passwordManagementService";
+import { MdLodSnackbar } from "@components/MdLogSnacbar";
+import { MdLogActivityIndicator } from "@components/MdLogActivityIndicator";
 
 export default function ResetPasswordScreen() {
-    const navigation = useNavigation();
-    
+    const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+    const route = useRoute();
     const [form, setForm] = useState<ResetPassword>(new ResetPassword());
+    const [loading, setLoading] = useState(false)
+    const [showMessage, setShowMessage] = useState(false)
+    const [message, setMessage] = useState("Something went wrong please try again!!")
+    console.log(route.params)
+    const email = route.params?.email;
+    const onSubmitClick = async() => {
+        setLoading(true)
+        try{
+          if(isValidEmail(email) && isValidPassword(form.newPassword) && form.confirmPassword === form.newPassword){
+             const payload = {...form, email}
+             const resp = await passwordManagementService.resetPassword(payload)
+             console.log(resp)
+             navigation.navigate("SignIn")
+          }else{
+              setMessage("Invalid password!!");
+              setShowMessage(true);
+          }
+        }catch(error){
+            setMessage(error.toString());
+            setShowMessage(true);
+        }
+        setLoading(false)
+    }
+
     return (
         <SafeAreaView style={styles.container}>
             <View>
@@ -35,20 +64,20 @@ export default function ResetPasswordScreen() {
 
                 <View style={styles.inputContainer}>
                     <Feather name="lock" size={20} color="black" style={styles.icon} />
-                    <TextInput placeholder="New Password" style={styles.input} 
+                    <TextInput secureTextEntry placeholder="New Password" style={styles.input} 
                     value={form.newPassword} onChangeText={(text)=>setForm({...form,newPassword:text})}
                     ></TextInput>
                 </View>
 
                 <View style={styles.inputContainer}>
                     <Feather name="lock" size={20} color="black" style={styles.icon} />
-                    <TextInput placeholder="Confirm Password" style={styles.input}
+                    <TextInput secureTextEntry placeholder="Confirm Password" style={styles.input}
                     value={form.confirmPassword} onChangeText={(text)=>setForm({...form,confirmPassword:text})}
                     ></TextInput>
                 </View>
 
                 <View style={styles.marginBtm}>
-                    <TouchableOpacity onPress={() => navigation.navigate("SignIn")}>
+                    <TouchableOpacity onPress={onSubmitClick}>
                         <View style={styles.btn}>
                             <Text style={styles.btnText}>Submit</Text>
                         </View>
@@ -59,6 +88,8 @@ export default function ResetPasswordScreen() {
                     <Text style={styles.loginText}>Back to LogIn Page</Text>
                 </TouchableOpacity>
             </View>
+            <MdLodSnackbar visible={showMessage} onDismiss={()=>setShowMessage(false)} message={message} />
+            <MdLogActivityIndicator loading={loading}/>
         </SafeAreaView>
     )
 }

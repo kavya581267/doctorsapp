@@ -2,21 +2,24 @@ import React, { useContext, useState } from "react";
 import { View, Text, TextInput, TouchableOpacity, SafeAreaView, Image } from "react-native";
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import Feather from '@expo/vector-icons/Feather';
-import { useNavigation } from "@react-navigation/native";
+import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { AuthContext } from "@context/AuthContext";
 import styles from "@styles/signInStyle";
 import { LoginRequest } from "@api/model/auth/Auth";
 import { Portal, Snackbar, useTheme } from "react-native-paper";
 import { MdLogActivityIndicator } from "@components/MdLogActivityIndicator";
+import { RootStackParamList } from "@components/MainNavigation";
+import { MdLodSnackbar } from "@components/MdLogSnacbar";
 
 export default function SignIn() {
 
     const [visible, setVisible] = useState(false);
     const onDismissSnackBar = () => setVisible(false);
     const { login } = useContext(AuthContext)
-    const navigation = useNavigation();
+    const navigation = useNavigation<NavigationProp<RootStackParamList>>();
     const [form, setForm] = useState<LoginRequest>(new LoginRequest())
     const [loading, setLoading] = useState(false);
+    const [errorMessage, setErrorMessage] = useState("Invalid Credentials!!")
     return (
 
         <SafeAreaView >
@@ -50,17 +53,19 @@ export default function SignIn() {
                 <View>
                     <TouchableOpacity style={styles.btn_gap} onPress={async () => {
                         setLoading(true);
-                        const isLogin = await login({
-                            email: form.email,
-                            password: form.password,
-                            mfa: ""
-                        });
-                        setLoading(false);
-                        if (isLogin) {
-                            navigation.replace('Mainscreen');
-                        } else {
+                        try {
+                            const isLogin = await login({
+                                email: form.email,
+                                password: form.password,
+                                mfa: ""
+                            });
+                            navigation.navigate('Mainscreen');
+                        } catch (error) {
+                            setErrorMessage(error.toString())
+                            console.log(error.toString())
                             setVisible(true)
                         }
+                        setLoading(false);
                     }}>
                         <View style={styles.btn}>
                             <Text style={styles.btnText}>Log In</Text>
@@ -69,24 +74,13 @@ export default function SignIn() {
                 </View>
                 <View style={styles.signupContainer}>
                     <Text>Need to create an account?</Text>
-                    <TouchableOpacity onPress={() => {  navigation.navigate("ClinicRegistration")}}>
+                    <TouchableOpacity onPress={() => { navigation.navigate("ClinicRegistration") }}>
                         <Text style={styles.signupText}>Sign Up</Text>
                     </TouchableOpacity>
                 </View>
             </View>
-            <Portal>
-                <Snackbar
-                    style={{ backgroundColor: "#B00020" }}
-                    visible={visible}
-                    onDismiss={onDismissSnackBar}
-                    action={{
-                        label: 'close'
-                    }}
-                >
-                    Invalid Credentials!!
-                </Snackbar>
-            </Portal>
-          <MdLogActivityIndicator loading={loading}/>
+            <MdLodSnackbar visible={visible} onDismiss={onDismissSnackBar} message={errorMessage}/>
+            <MdLogActivityIndicator loading={loading} />
         </SafeAreaView>
 
     );

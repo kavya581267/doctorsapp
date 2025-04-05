@@ -1,8 +1,15 @@
-import { BASE_URL_PREFIX } from "@utils/constants";
+import { BASE_URL_PREFIX, JWT_ACCESS_TOKEN } from "@utils/constants";
+import { getObject } from "@utils/MdLogAsyncStorage";
 
 const BASE_URL = BASE_URL_PREFIX
 
-console.log(process.env.NODE_ENV)
+let cachedToken = null;
+
+export const initializeToken = async () => {
+  cachedToken = await getObject(JWT_ACCESS_TOKEN);
+};
+
+export const getToken = () => cachedToken;
 
 const buildUrl = (endpoint, queryParams = {}) => {
     const url = new URL(`${BASE_URL}${endpoint}`);
@@ -26,7 +33,7 @@ const apiCall = async (endpoint, method = "GET", body = null, queryParams = {}) 
             method,
             headers: {
                 "Content-Type": "application/json",
-                "Authorization": ""
+                "Authorization": cachedToken
             }
         };
 

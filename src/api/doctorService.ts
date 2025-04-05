@@ -1,55 +1,91 @@
+import { ADD_DOCTOR_SPECIALTIES_PATH, CREATE_DOCTOR_EXCEPTIONS_PATH, CREATE_DOCTOR_SCHEDULE_PATH, DELETE_DOCTOR_EXCEPTIONS_PATH, DELETE_DOCTOR_SCHEDULE_PATH, REMOVE_DOCTOR_SPECIALTIES_PATH, UPDATE_DOCTOR_EXCEPTIONS_PATH, UPDATE_DOCTOR_SCHEDULE_PATH } from "@utils/constants";
 import { apiService } from "./apiService";
 import { AdminRegistarationRequest, AdminRegistrationResponse } from "./model/auth/Auth";
+import { DoctorSchedule } from "./model/doctor/DoctorSchedule";
+import { replacePlaceholders } from "@utils/utils";
+import { DoctorExceptionRequest } from "./model/doctor/DoctorException";
+import { DoctorSpecialtyRequest } from "./model/doctor/DoctorSpecialtyRequest";
 
 
 
-export const AUTH_ENDPOINT = "/auth/register/admin"; // Adjust based on your API
+export const DOCTOR_ID = "456"
 
 export const doctorService = {
-    registerAdmin: async (clinicRegistration: AdminRegistarationRequest): Promise<AdminRegistrationResponse> => {
-        try {
-            const response = await apiService.post(AUTH_ENDPOINT, clinicRegistration);
-            return response;
-        } catch (error) {
-            throw error;
-        }
-    },
     
     getDoctorSchedule: () => {
 
     },
 
-    createDoctorSchedule: () => {
-        
+    createDoctorSchedule: async (doctorSchedule: DoctorSchedule, docId:string):Promise<any> => {
+        try{
+            const response =  await apiService.post(replacePlaceholders(CREATE_DOCTOR_SCHEDULE_PATH,{doctorId:docId}),doctorSchedule)
+            return response.data;
+        }catch(error){
+            throw error
+        }
     },
-    updateDoctorSchedule: () => {
-
+    updateDoctorSchedule: async(doctorSchedule: DoctorSchedule, docId:string,scheduleId:string) => {
+        try{
+            const response =  await apiService.put(replacePlaceholders(UPDATE_DOCTOR_SCHEDULE_PATH,{doctorId:docId,scheduleId:scheduleId}),doctorSchedule)
+            return response.data;
+        }catch(error){
+            throw error
+        }
     },
-    deleteDoctorSchedule: () => {
-
+    deleteDoctorSchedule: async(doctorId: string, scheduleId:string) => {
+        try{
+            const response =  await apiService.delete(replacePlaceholders(DELETE_DOCTOR_SCHEDULE_PATH,{doctorId:doctorId,scheduleId:scheduleId}))
+            return response.data;
+        }catch(error){
+            throw error
+        }
     },
     getDoctorExceptions: () => {
 
     },
-    createDoctorException: () => {
-
+    createDoctorException:  async (doctorExceptionRequest: DoctorExceptionRequest, docId:string):Promise<any> => {
+        try{
+            const response =  await apiService.post(replacePlaceholders(CREATE_DOCTOR_EXCEPTIONS_PATH,{doctorId:docId}),doctorExceptionRequest)
+            return response.data;
+        }catch(error){
+            throw error
+        }
     },
-    updateDoctorException: () => {
-
+    updateDoctorException: async(doctorExceptionRequest: DoctorExceptionRequest, docId:string, exceptionId:string):Promise<any> =>  {
+        try{
+            const response =  await apiService.put(replacePlaceholders(UPDATE_DOCTOR_EXCEPTIONS_PATH,{doctorId:docId,exceptionId:exceptionId}),doctorExceptionRequest)
+            return response.data;
+        }catch(error){
+            throw error
+        }
     },
-    deleteDoctorException: () => {
+    deleteDoctorException: async(docId:string, exceptionId:string) => {
+        try{
+            const response =  await apiService.delete(replacePlaceholders(DELETE_DOCTOR_EXCEPTIONS_PATH,{doctorId:docId,scheduleId:exceptionId}))
+            return response.data;
+        }catch(error){
+            throw error
+        }
 
     },
     getDoctorSpecialities: () => {
 
     },
-    createDoctorSpeciality: () => {
+    createDoctorSpeciality: async(docSpeciality: DoctorSpecialtyRequest, docId: string) => {
+        try{
+            const response =  await apiService.post(replacePlaceholders(ADD_DOCTOR_SPECIALTIES_PATH,{doctorId:docId}),docSpeciality)
+            return response.data;
+        }catch(error){
+            throw error
+        }
 
     },
-    updateDoctorSpeciality: () => {
-
-    },
-    deleteDoctorSpeciality: () => {
-
+    deleteDoctorSpeciality: async(docId:string, specialtyId:string) => {
+        try{
+            const response =  await apiService.delete(replacePlaceholders(REMOVE_DOCTOR_SPECIALTIES_PATH,{doctorId:docId,specialtyId:specialtyId}))
+            return response.data;
+        }catch(error){
+            throw error
+        }
     },
 };

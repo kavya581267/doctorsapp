@@ -6,19 +6,21 @@ import styles from "../../styles/clinicRegistrationStyles";
 import { AdminDetails } from "./AdminDetailsStep";
 import StepIndicator from "react-native-step-indicator";
 import { Button, Portal, Snackbar, Text } from "react-native-paper";
-import { useNavigation } from "@react-navigation/native";
+import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { COLORS } from "@utils/colors";
 import { ClinicDetails } from "./ClinicDetailsStep";
 import ClinicReview from "./ClinicReview";
-import { clinicService } from "@api/clinicService";
 import { AdminRegistarationRequest } from "@api/model/auth/Auth";
 import { ClinicAddress } from "./ClinicAddressStep";
+import { MdLogActivityIndicator } from "@components/MdLogActivityIndicator";
+import { RootStackParamList } from "@components/MainNavigation";
+import { registrationService } from "@api/registrationService";
 
 
 
 
 export default function ClinicRegistration() {
-    const navigation = useNavigation();
+    const navigation = useNavigation<NavigationProp<RootStackParamList>>();
     const labels = ["Clinic Details", "Address", "Admin Details", "Submit"];
     const [step, setStep] = useState<number>(0);
     const [formData, setFormData] = useState<AdminRegistarationRequest>()
@@ -26,15 +28,17 @@ export default function ClinicRegistration() {
     const prevStep = () => setStep((prev) => prev - 1);
     const [visible, setVisible] = useState(false);
     const onDismissSnackBar = () => setVisible(false);
+    const [loading, setLoading] = useState(false);
     const submitForm = async () => {
         try {
-          //  const responce = await clinicService.register(formData)
-          //  console.log(responce)
+            setLoading(true)
+            const responce = await registrationService.registerAdmin(formData);
             navigation.navigate("SuccessScreen");
         } catch (error) {
-          //  console.log("hello", error)
-           // setVisible(true);
+          setVisible(true);
         }
+        setLoading(false);
+
     };
    
 
@@ -80,10 +84,10 @@ export default function ClinicRegistration() {
                     action={{
                         label: 'close'
                     }}>
-                some error
-                   
+                        some thing went wrong please try again!!   
                 </Snackbar>
             </Portal>
+            <MdLogActivityIndicator loading={loading}/>
            
         </SafeAreaView>
         </ScrollView>
