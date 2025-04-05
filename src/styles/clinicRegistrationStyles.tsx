@@ -83,21 +83,22 @@ genderContainer: {
     marginTop:5
 },
 label: { 
-    fontSize: 16, marginBottom: 8 
+    fontSize: 14, marginBottom: 8 
 },
 dropdown: {
-  height: 50,
+  height: 40,
   borderWidth: 1,
   borderColor: "#ccc",
   borderRadius: 5,
   paddingHorizontal: 10,
-  backgroundColor: "white",
+  backgroundColor: "#F3F4F6FF",
+  fontSize:14,
+  fontWeight:"400"
 },
-placeholder: { color: "#aaa" },
-selectedText: { fontSize: 16 },
+placeholder: { fontSize: 12,fontWeight:"400" },
+selectedText: { fontSize: 12,fontWeight:"400" },
 icon:{
     marginRight:18,
     marginLeft:5
 }
-
 })
