@@ -40,7 +40,9 @@ export default function MdLogTextInput({ label, value, left, right, onTextChange
                             label={label}
                             value={value}
                             editable={false}
-                            style={{fontSize:16,backgroundColor:"#F3F4F6FF",borderColor: COLORS.grey,borderWidth:0,
+
+                            style={{fontSize:14,backgroundColor:"#F3F4F6FF",borderColor: COLORS.grey,
+
                                 fontWeight:"400", height:40}}
                             left={<TextInput.Icon icon={left} />}
                             right={<TextInput.Icon icon={right} />}
@@ -58,11 +60,13 @@ export default function MdLogTextInput({ label, value, left, right, onTextChange
                         secureTextEntry={secureEntry}
                         keyboardType={keyboard}
                         placeholderTextColor={"grey"}
-                        style={{fontSize:16,backgroundColor:"#F3F4F6FF",borderColor: COLORS.grey,borderWidth:0,
+
+                        style={{fontSize:14,backgroundColor:"#F3F4F6FF",borderColor: COLORS.grey,
+
                             fontWeight:"400", height:40}}
                         clearButtonMode={"while-editing"}
                         onChangeText={(val) => { onTextChange(field, val) }}
-                        left={<TextInput.Icon size={20} style={{}} icon={left} />}
+                        left={<TextInput.Icon size={22} style={{}} icon={left} />}
                         right={<TextInput.Icon icon={right} />}
                     />
                 )

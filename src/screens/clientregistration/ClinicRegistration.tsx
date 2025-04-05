@@ -63,9 +63,8 @@ export default function ClinicRegistration() {
                     <Text style={styles.heading}>Clinic Registration</Text>
                     <Text style={styles.subHeading}>MDLog simplify clinic management effortlessly.</Text>
                 </View>
-                <StepIndicator 
-                customStyles={stepindicator} stepCount={labels.length} currentPosition={step} labels={labels} />
-                 <Spacer height={40} />
+                <StepIndicator customStyles={stepindicator} stepCount={labels.length} currentPosition={step} labels={labels} />
+                <Spacer height={40} />
                 {step === 0 && <ClinicDetails nextStep={nextStep} formData={formData} setFormData={setFormData} />}
                 {step === 1 && <ClinicAddress nextStep={nextStep} prevStep={prevStep} formData={formData} setFormData={setFormData} />}
                 {step === 2 && <AdminDetails nextStep={nextStep} prevStep={prevStep} formData={formData} setFormData={setFormData} />}
