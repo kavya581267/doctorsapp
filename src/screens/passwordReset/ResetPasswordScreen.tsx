@@ -13,13 +13,29 @@ import { MdLogActivityIndicator } from "@components/MdLogActivityIndicator";
 
 export default function ResetPasswordScreen() {
     const navigation = useNavigation<NavigationProp<RootStackParamList>>();
-    const route = useRoute();
+   
     const [form, setForm] = useState<ResetPassword>(new ResetPassword());
     const [loading, setLoading] = useState(false)
     const [showMessage, setShowMessage] = useState(false)
     const [message, setMessage] = useState("Something went wrong please try again!!")
-    console.log(route.params)
+   
+    const route = useRoute() as { params: { email: string } };
+
     const email = route.params?.email;
+   
+
+    const sendCode = async () =>{
+        setLoading(true);
+        try{
+            const respo = await passwordManagementService.requestPasswordReset({ email });
+            console.log(respo);
+        }catch(error){
+           
+            setMessage(error.toString());
+        }
+        setLoading(false);
+    }
+
     const onSubmitClick = async() => {
         setLoading(true)
         try{
@@ -56,7 +72,7 @@ export default function ResetPasswordScreen() {
 
                 <View style={styles.resendContainer}>
                     <Text>Didn't receive the otp?</Text>
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={sendCode}>
                         <Text style={styles.resendText}> Resend</Text>
                     </TouchableOpacity>
                 </View>

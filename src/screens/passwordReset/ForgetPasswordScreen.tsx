@@ -17,6 +17,7 @@ export default function ForgetPassword() {
 
     const navigation = useNavigation<NavigationProp<RootStackParamList>>();
     const [form, setForm] = useState<PasswordResetRequest>(new PasswordResetRequest());
+
     const [message, setMessage] = useState("Please try again!!");
     const [loading, setLoading] = useState(false);
     const [showError, setShowError] = useState(false);
