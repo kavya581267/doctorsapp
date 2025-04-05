@@ -16,12 +16,12 @@ export default function SuccessScreen() {
         <SafeAreaView style={styles.container}>
             <View >
                 <View style={styles.img}>
-                <Animatable.Image
-                    animation="pulse"
-                    iterationCount="infinite"
-                    duration={1500}
-                    source={require("../../assets/success.png")}    
-                />
+                    <Animatable.Image
+                        animation="pulse"
+                        iterationCount="infinite"
+                        duration={1500}
+                        source={require("../../assets/success.png")}
+                    />
                 </View>
 
                 <Text style={styles.title}>Registration Successful!</Text>
@@ -31,8 +31,7 @@ export default function SuccessScreen() {
                 <Button
                     mode="contained"
                     onPress={() => navigation.navigate("SignIn")}
-                    style={styles.button}
-                >
+                    style={styles.button}>
                     Go To LogIn Page
                 </Button>
 
