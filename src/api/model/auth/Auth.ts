@@ -131,7 +131,7 @@ export interface EmailVerificationRequest{
   userId: string
 }
 
-export interface EmailVerificationRequest{
+export interface PhoneVerificationRequest{
   phone: string
   otp: string
   userId: string

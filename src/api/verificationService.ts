@@ -1,6 +1,6 @@
 import { apiService } from "./apiService";
-import { EmailVerificationRequest, PasswordResetRequest, ResendVerificationRequest, ResetPasswordRequest, UpdatePasswordRequest } from "./model/auth/Auth";
-import { REQUEST_PASSWORD_RESET_PATH, RESEND_EMAIL_CODE_PATH, RESET_PASSWORD_PATH, UPDATE_PASSWORD_PATH, VERIFY_EMAIL_PATH, VERIFY_PHONE_PATH } from "@utils/constants";
+import { EmailVerificationRequest, PhoneVerificationRequest, ResendVerificationRequest } from "./model/auth/Auth";
+import { RESEND_EMAIL_CODE_PATH,  VERIFY_EMAIL_PATH, VERIFY_PHONE_PATH } from "@utils/constants";
 
 
 export const verificationService = {

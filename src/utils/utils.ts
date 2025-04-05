@@ -25,3 +25,7 @@ export const isAnyFieldsEmpty = (values: string[], object: any): boolean => {
     return values.some(field => isEmptyString(object[field]));
 }
 
+export function replacePlaceholders(template:string, params:any) {
+    return template.replace(/{{(.*?)}}/g, (_, key) => params[key.trim()] ?? "");
+  }
+
