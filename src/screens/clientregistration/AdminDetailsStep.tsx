@@ -10,6 +10,7 @@ import { isAnyFieldsEmpty, isValidEmail, isValidPassword, isValidPhone } from "@
 import { AdminRegistarationRequest } from "@api/model/auth/Auth";
 
 import { Dropdown } from "react-native-element-dropdown";
+import { MdLodSnackbar } from "@components/MdLogSnacbar";
 
 
 
@@ -139,18 +140,7 @@ export const AdminDetails: React.FC<StepProps> = ({ nextStep, prevStep, formData
                     <Text style={styles.nextTxt}>Next</Text>
                 </TouchableOpacity>
             </View>
-
-            <Portal>
-                <Snackbar
-                    style={{ backgroundColor: "#B00020" }}
-                    visible={visible}
-                    onDismiss={onDismissSnackBar}
-                    action={{
-                        label: 'close'
-                    }}
-                >Please fill all required fields</Snackbar>
-            </Portal>
-
+            <MdLodSnackbar visible onDismiss={onDismissSnackBar} message="Please fill all required details"/>
         </View>
     )
 };

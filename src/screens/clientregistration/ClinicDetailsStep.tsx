@@ -7,6 +7,7 @@ import styles from "@styles/clinicRegistrationStyles"
 import { isAnyFieldsEmpty, isValidEmail, isValidPhone } from "@utils/utils";
 import { useState } from "react";
 import { AdminRegistarationRequest } from "@api/model/auth/Auth";
+import { MdLodSnackbar } from "@components/MdLogSnacbar";
 
 
 
@@ -81,16 +82,7 @@ export const ClinicDetails: React.FC<StepProps> = ({ nextStep, formData, setForm
                     <Text style={styles.nextTxt}>Next</Text>
                 </TouchableOpacity>
             </View>
-            <Portal>
-                <Snackbar
-                    style={{ backgroundColor: "#B00020" }}
-                    visible={visible}
-                    onDismiss={onDismissSnackBar}
-                    action={{
-                        label: 'close'
-                    }}
-                >Please fill all required details</Snackbar>
-            </Portal>
+            <MdLodSnackbar visible onDismiss={onDismissSnackBar} message="Please fill all required details"/>
         </View>
     )
 

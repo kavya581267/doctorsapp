@@ -59,7 +59,6 @@ export default function ClinicRegistration() {
     return (
         <ScrollView>
             <SafeAreaView>
-
                 <View style={styles.container}>
                     <View style={styles.header}>
                         <Image style={styles.png} source={require("../../../assets/launchscreen.png")} />

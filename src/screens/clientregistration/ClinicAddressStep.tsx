@@ -5,6 +5,7 @@ import { useState } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import { Portal, Snackbar } from "react-native-paper";
 import styles from "@styles/clinicRegistrationStyles"
+import { MdLodSnackbar } from "@components/MdLogSnacbar";
 
 
 
@@ -78,16 +79,7 @@ export const ClinicAddress: React.FC<StepProps> = ({ nextStep, prevStep, formDat
                     <Text style={styles.nextTxt}>Next</Text>
                 </TouchableOpacity>
             </View>
-            <Portal>
-                <Snackbar
-                    style={{ backgroundColor: "#B00020" }}
-                    visible={visible}
-                    onDismiss={onDismissSnackBar}
-                    action={{
-                        label: 'close'
-                    }}
-                >Please fill all required details</Snackbar>
-            </Portal>
+            <MdLodSnackbar visible onDismiss={onDismissSnackBar} message="Please fill all required details"/>
         </View>
     )
 
