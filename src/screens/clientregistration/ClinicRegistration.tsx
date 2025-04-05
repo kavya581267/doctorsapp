@@ -16,6 +16,7 @@ import { MdLogActivityIndicator } from "@components/MdLogActivityIndicator";
 import { RootStackParamList } from "@components/MainNavigation";
 import { registrationService } from "@api/registrationService";
 import Spacer from "@components/Spacer";
+import { MdLodSnackbar } from "@components/MdLogSnacbar";
 
 
 
@@ -30,18 +31,20 @@ export default function ClinicRegistration() {
     const [visible, setVisible] = useState(false);
     const onDismissSnackBar = () => setVisible(false);
     const [loading, setLoading] = useState(false);
+    const [errorMessage, setErrorMessage] = useState("some thing went wrong please try again!!")
     const submitForm = async () => {
         try {
             setLoading(true)
             const responce = await registrationService.registerAdmin(formData);
             navigation.navigate("SuccessScreen");
         } catch (error) {
-          setVisible(true);
+            setVisible(true);
+            setErrorMessage(error.toString())
         }
         setLoading(false);
 
     };
-   
+
 
 
 
@@ -55,41 +58,31 @@ export default function ClinicRegistration() {
 
     return (
         <ScrollView>
-        <SafeAreaView>
-             
-            <View style={styles.container}>
-                <View style={styles.header}>
-                    <Image style={styles.png} source={require("../../../assets/launchscreen.png")} />
-                    <Text style={styles.heading}>Clinic Registration</Text>
-                    <Text style={styles.subHeading}>MDLog simplify clinic management effortlessly.</Text>
+            <SafeAreaView>
+
+                <View style={styles.container}>
+                    <View style={styles.header}>
+                        <Image style={styles.png} source={require("../../../assets/launchscreen.png")} />
+                        <Text style={styles.heading}>Clinic Registration</Text>
+                        <Text style={styles.subHeading}>MDLog simplify clinic management effortlessly.</Text>
+                    </View>
+                    <StepIndicator customStyles={stepindicator} stepCount={labels.length} currentPosition={step} labels={labels} />
+                    <Spacer height={40} />
+                    {step === 0 && <ClinicDetails nextStep={nextStep} formData={formData} setFormData={setFormData} />}
+                    {step === 1 && <ClinicAddress nextStep={nextStep} prevStep={prevStep} formData={formData} setFormData={setFormData} />}
+                    {step === 2 && <AdminDetails nextStep={nextStep} prevStep={prevStep} formData={formData} setFormData={setFormData} />}
+                    {step === 3 && <ClinicReview formData={formData} prevStep={prevStep} submitForm={submitForm} />}
+                    <View style={styles.loginText}>
+                        <Text>Already Registered? </Text>
+                        <Button textColor={COLORS.primary} mode="text" onPress={() => navigation.navigate("SignIn")}>
+                            Log In
+                        </Button>
+                    </View>
                 </View>
-                <StepIndicator customStyles={stepindicator} stepCount={labels.length} currentPosition={step} labels={labels} />
-                <Spacer height={40} />
-                {step === 0 && <ClinicDetails nextStep={nextStep} formData={formData} setFormData={setFormData} />}
-                {step === 1 && <ClinicAddress nextStep={nextStep} prevStep={prevStep} formData={formData} setFormData={setFormData} />}
-                {step === 2 && <AdminDetails nextStep={nextStep} prevStep={prevStep} formData={formData} setFormData={setFormData} />}
-                {step === 3 && <ClinicReview formData={formData} prevStep={prevStep} submitForm={submitForm} />}
-                <View style={styles.loginText}>
-                    <Text>Already Registered? </Text>
-                    <Button textColor={COLORS.primary} mode="text" onPress={() => navigation.navigate("SignIn")}>
-                        Log In
-                    </Button>
-                </View>
-            </View>
-            <Portal>
-                <Snackbar
-                    style={{ backgroundColor: "#B00020" }}
-                    visible={visible}
-                    onDismiss={onDismissSnackBar}
-                    action={{
-                        label: 'close'
-                    }}>
-                        some thing went wrong please try again!!   
-                </Snackbar>
-            </Portal>
-            <MdLogActivityIndicator loading={loading}/>
-           
-        </SafeAreaView>
+                <MdLodSnackbar onDismiss={onDismissSnackBar} visible={visible} message={errorMessage} />
+                <MdLogActivityIndicator loading={loading} />
+
+            </SafeAreaView>
         </ScrollView>
 
     )
@@ -97,7 +90,7 @@ export default function ClinicRegistration() {
 
 const stepindicator = {
     stepIndicatorSize: 25,
-    currentStepIndicatorSize:30,
+    currentStepIndicatorSize: 30,
     separatorStrokeWidth: 2,
     currentStepStrokeWidth: 3,
     stepStrokeCurrentColor: '#fe7013',
@@ -117,4 +110,4 @@ const stepindicator = {
     labelColor: '#999999',
     labelSize: 13,
     currentStepLabelColor: '#fe7013'
-  }
+}

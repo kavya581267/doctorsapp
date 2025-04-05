@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, FlatList, Image, TouchableOpacity, StyleSheet, ScrollView } from "react-native";
+import { View, Text, TextInput, FlatList, Image, TouchableOpacity, StyleSheet, ScrollView, Dimensions } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import Header from "./Header";
 import styles from "../styles/patientsListStyle";
@@ -83,6 +83,8 @@ const patients = [
     },
 ];
 
+const { height } = Dimensions.get('window');
+
 const PatientsList = () => {
     const [search, setSearch] = useState("");
     const navigation = useNavigation();
@@ -90,9 +92,9 @@ const PatientsList = () => {
 
     return (
         <SafeAreaView>
-            <View style={{ padding: 15, }}>
+            <View style={{ padding: 15, height}}>
                 <Header nav="Mainscreen" heading="Patients List"  tab="Patients"/>
-                <ScrollView contentContainerStyle={{ flexGrow: 1 }} keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>
+                <ScrollView  contentContainerStyle={{ flexGrow: 1 }} keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false} >
                     {
                         patients.map((patient, key) =>
 

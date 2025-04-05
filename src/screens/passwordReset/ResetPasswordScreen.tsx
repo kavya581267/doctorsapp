@@ -30,7 +30,6 @@ export default function ResetPasswordScreen() {
             const respo = await passwordManagementService.requestPasswordReset({ email });
             console.log(respo);
         }catch(error){
-           
             setMessage(error.toString());
         }
         setLoading(false);
