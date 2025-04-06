@@ -20,6 +20,7 @@ import MedicalFormScreen from '../../components/physician/InitialNote';
 import LoadingScreen from '../../components/LoadingScreen';
 import StaffRegistrationScreen from '@screens/staffPatientRegistration/staffRegistration/StaffRegistrationScreen';
 import PatientRegistrationScreen from '@screens/staffPatientRegistration/patientRegistration/PatientRegistrationScreen';
+import DashboardScreen from '@screens/Dashboard';
 
 
 
@@ -42,6 +43,7 @@ export type RootStackParamList = {
     SuccessScreen: undefined;
     ForgetPassword: undefined;
     ResetPasswordScreen: undefined;
+    DashboardScreen: undefined;
   };
 
   export default function MainNavigator() {
@@ -71,6 +73,7 @@ export type RootStackParamList = {
                  <Stack.Screen name='SuccessScreen' component={SuccessScreen}/>
                  <Stack.Screen name='ForgetPassword' component={ForgetPassword}/>
                  <Stack.Screen name='ResetPasswordScreen' component={ResetPasswordScreen}/>
+                 <Stack.Screen name='DashboardScreen' component={DashboardScreen}></Stack.Screen>
               </Stack.Navigator>
           </NavigationContainer>
       );

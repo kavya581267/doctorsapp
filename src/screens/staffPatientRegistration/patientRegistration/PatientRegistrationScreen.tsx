@@ -10,40 +10,43 @@ import StaffReview from "../staffRegistration/StaffReviewStep";
 import { PatientDetails } from "./PatientDetailsStep";
 import { PatientAddress } from "./PatientAddressStep";
 import PatientReview from "./PatientReviewStep";
+import Back from "@components/Back";
 
 
 
-export default function PatientRegistrationScreen (){
-    const labels = ["Details","Address","Submit"];
-    const [formData,setFormData] = useState<PatientRegistration>();
-     const [step, setStep] = useState<number>(0);
-    const nextStep = () =>setStep((prev)=>prev+1);
-    const prevStep = () => setStep((prev) => prev-1);
-   const submitForm =()=>{
+export default function PatientRegistrationScreen() {
+  const labels = ["Details", "Address", "Submit"];
+  const [formData, setFormData] = useState<PatientRegistration>();
+  const [step, setStep] = useState<number>(0);
+  const nextStep = () => setStep((prev) => prev + 1);
+  const prevStep = () => setStep((prev) => prev - 1);
+  const submitForm = () => {
 
-   };
+  };
 
-    interface StepProps{
-      nextStep? : () => void;
-      prevStep? : () => void;
-      formData : PatientRegistration;
-      setFormData : React.Dispatch<React.SetStateAction<PatientRegistration>>;
-      submitForm?: () => void;
-    }
+  interface StepProps {
+    nextStep?: () => void;
+    prevStep?: () => void;
+    formData: PatientRegistration;
+    setFormData: React.Dispatch<React.SetStateAction<PatientRegistration>>;
+    submitForm?: () => void;
+  }
 
-   
-    return(
-      <SafeAreaView style={{justifyContent:"center",flex:1}}>
-        <View>
-          <Text style={styles.heading}>Patient Registration</Text>
-          <StepIndicator customStyles={stepindicator} stepCount={labels.length} currentPosition={step} labels={labels}/>
-          <Spacer height={40} />
-          {step===0 && <PatientDetails nextStep={nextStep} formData={formData} setFormData={setFormData}/>}
-          {step === 1 && <PatientAddress nextStep={nextStep} prevStep={prevStep} formData={formData} setFormData={setFormData}/>}
-          {step === 2 && <PatientReview prevStep={prevStep} formData={formData} submitForm={submitForm}/>}
-        </View>
-      </SafeAreaView>
-    )
+
+  return (
+    <SafeAreaView>
+      <View style={{padding:15}}>
+        <Back nav={"DashboardScreen"}></Back>
+        <Spacer height={60} />
+        <Text style={styles.heading}>Patient Registration</Text>
+        <StepIndicator customStyles={stepindicator} stepCount={labels.length} currentPosition={step} labels={labels} />
+        <Spacer height={40} />
+        {step === 0 && <PatientDetails nextStep={nextStep} formData={formData} setFormData={setFormData} />}
+        {step === 1 && <PatientAddress nextStep={nextStep} prevStep={prevStep} formData={formData} setFormData={setFormData} />}
+        {step === 2 && <PatientReview prevStep={prevStep} formData={formData} submitForm={submitForm} />}
+      </View>
+    </SafeAreaView>
+  )
 }
 
 

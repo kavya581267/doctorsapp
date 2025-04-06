@@ -8,39 +8,42 @@ import { StaffDetails } from "./StaffDetailsStep";
 import { StaffAddress } from "./StaffAddressStep";
 import StaffReview from "./StaffReviewStep";
 import styles from "@styles/staffPatientRegistrationStyle";
+import Back from "@components/Back";
 
 
-export default function StaffRegistrationScreen (){
-    const labels = ["Details","Address","Submit"];
-    const [formData,setFormData] = useState<StaffRegistration>();
-     const [step, setStep] = useState<number>(0);
-    const nextStep = () =>setStep((prev)=>prev+1);
-    const prevStep = () => setStep((prev) => prev-1);
-   const submitForm =()=>{
+export default function StaffRegistrationScreen() {
+  const labels = ["Details", "Address", "Submit"];
+  const [formData, setFormData] = useState<StaffRegistration>();
+  const [step, setStep] = useState<number>(0);
+  const nextStep = () => setStep((prev) => prev + 1);
+  const prevStep = () => setStep((prev) => prev - 1);
+  const submitForm = () => {
 
-   };
+  };
 
-    interface StepProps{
-      nextStep? : () => void;
-      prevStep? : () => void;
-      formData : StaffRegistration;
-      setFormData : React.Dispatch<React.SetStateAction<StaffRegistration>>;
-      submitForm?: () => void;
-    }
+  interface StepProps {
+    nextStep?: () => void;
+    prevStep?: () => void;
+    formData: StaffRegistration;
+    setFormData: React.Dispatch<React.SetStateAction<StaffRegistration>>;
+    submitForm?: () => void;
+  }
 
-   
-    return(
-      <SafeAreaView style={{justifyContent:"center",flex:1}}>
-        <View>
-          <Text style={styles.heading}>Staff Registration</Text>
-          <StepIndicator customStyles={stepindicator} stepCount={labels.length} currentPosition={step} labels={labels}/>
-          <Spacer height={40} />
-          {step===0 && <StaffDetails nextStep={nextStep} formData={formData} setFormData={setFormData}/>}
-          {step === 1 && <StaffAddress nextStep={nextStep} prevStep={prevStep} formData={formData} setFormData={setFormData}/>}
-          {step === 2 && <StaffReview prevStep={prevStep} formData={formData} submitForm={submitForm}/>}
-        </View>
-      </SafeAreaView>
-    )
+
+  return (
+    <SafeAreaView>
+      <Back nav={"DashboardScreen"}></Back>
+      <Spacer height={60} />
+      <View>
+        <Text style={styles.heading}>Staff Registration</Text>
+        <StepIndicator customStyles={stepindicator} stepCount={labels.length} currentPosition={step} labels={labels} />
+        <Spacer height={40} />
+        {step === 0 && <StaffDetails nextStep={nextStep} formData={formData} setFormData={setFormData} />}
+        {step === 1 && <StaffAddress nextStep={nextStep} prevStep={prevStep} formData={formData} setFormData={setFormData} />}
+        {step === 2 && <StaffReview prevStep={prevStep} formData={formData} submitForm={submitForm} />}
+      </View>
+    </SafeAreaView>
+  )
 }
 
 
