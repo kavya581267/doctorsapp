@@ -16,18 +16,18 @@ const Tab = createBottomTabNavigator();
 
 export default function Mainscreen() {
 
-    const route= useRoute()
+    const route = useRoute()
     const tab = route?.params?.tab;
     const initialTab = tab || "Home";
 
 
     return (
-        
+
         <Tab.Navigator initialRouteName={initialTab} screenOptions={{
             headerShown: false,
             tabBarActiveTintColor: COLORS.primary,
             tabBarInactiveTintColor: "grey",
-            
+
 
             tabBarStyle: {
                 backgroundColor: 'white',
@@ -44,6 +44,8 @@ export default function Mainscreen() {
             </Tab.Screen>
             <Tab.Screen name="Patients" component={PatientsList}
                 options={{ tabBarIcon: ({ color }) => <MaterialIcons name="group" size={24} color={color} /> }}></Tab.Screen>
+            <Tab.Screen name="Staff" component={PatientsList}
+                options={{ tabBarIcon: ({ color }) => <MaterialIcons name="group" size={24} color={color} /> }}></Tab.Screen>
             <Tab.Screen name="Appointments" component={Appointments}
                 options={{ tabBarIcon: ({ color }) => <MaterialIcons name="event" size={24} color={color} /> }}></Tab.Screen>
             <Tab.Screen name="Settings" component={SettingsScreen}
@@ -51,7 +53,7 @@ export default function Mainscreen() {
             </Tab.Screen>
 
         </Tab.Navigator>
-        
+
     )
 }
 

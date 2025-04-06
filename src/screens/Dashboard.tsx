@@ -3,11 +3,13 @@ import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, TextInput,
 import { Ionicons, MaterialIcons, FontAwesome5, Feather } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { styles } from '@styles/dashboardStyles'
+import { useNavigation } from '@react-navigation/native';
 const { width, height } = Dimensions.get("window");
 
 export default function DashboardScreen() {
     const [clinicName, setClinicName] = useState("MediClinic");
     const [searchText, setSearchText] = useState('');
+    const navigation = useNavigation();
 
     return (
         <SafeAreaView style={{backgroundColor:"white"}}>
@@ -45,7 +47,7 @@ export default function DashboardScreen() {
                     <Text style={styles.sectionTitle}>Quick Actions</Text>
                     <View style={styles.quickActions}>
                         {quickActions.map((action, index) => (
-                            <TouchableOpacity key={index} style={[styles.actionItem, { backgroundColor: action.bgColor }]}>
+                            <TouchableOpacity onPress={() => navigation.navigate(action.navPage)} key={index} style={[styles.actionItem, { backgroundColor: action.bgColor }]}>
                                 {action.icon}
                                 <Text style={styles.actionLabel}>{action.label}</Text>
                             </TouchableOpacity>
@@ -88,14 +90,16 @@ const quickActions = [
         label: 'Clinic Info',
         bgColor: '#E6F0FB',
         icon: <Ionicons name="information-circle-outline" size={24} color="#2F80ED" />,
+        
     },
     {
-        label: 'Staff',
+        label: 'New Staff',
         bgColor: '#EEE8FC',
         icon: <MaterialIcons name="people-outline" size={24} color="#9B51E0" />,
+        navPage: "StaffRegistrationScreen",
     },
     {
-        label: 'Schedule',
+        label: 'Clinic Schedule',
         bgColor: '#E6F8ED',
         icon: <Ionicons name="calendar-outline" size={24} color="#27AE60" />,
     },
@@ -108,6 +112,8 @@ const quickActions = [
         label: 'New Patient',
         bgColor: '#FFF4E5',
         icon: <FontAwesome5 name="user-plus" size={20} color="#F2994A" />,
+        navPage: "PatientRegistrationScreen",
+
     },
     {
         label: 'Appointments',
