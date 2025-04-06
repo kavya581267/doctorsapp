@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, TextInput } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, TextInput, Dimensions } from 'react-native';
 import { Ionicons, MaterialIcons, FontAwesome5, Feather } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { styles } from '@styles/dashboardStyles'
+const { width, height } = Dimensions.get("window");
 
 export default function DashboardScreen() {
     const [clinicName, setClinicName] = useState("MediClinic");
@@ -11,7 +12,7 @@ export default function DashboardScreen() {
     return (
         <SafeAreaView style={{backgroundColor:"white"}}>
             <ScrollView >
-                <View style={{ padding: 15, backgroundColor:"white" }}>
+                <View style={{ padding: 15, backgroundColor:"white" , height:height}}>
                     <View style={styles.header}>
                         <Text style={styles.title}>{clinicName}</Text>
                         <View style={styles.headerIcons}>
