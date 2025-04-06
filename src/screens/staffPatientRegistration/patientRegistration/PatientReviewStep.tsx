@@ -1,16 +1,16 @@
-import { TouchableOpacity } from "react-native";
-import { Text, View } from "react-native";
+import { Text, TouchableOpacity, View } from "react-native";
 import styles from "@styles/staffPatientRegistrationStyle";
 
-export default function StaffReview({ prevStep, formData, submitForm }) {
+
+
+export default function PatientReview({ prevStep, formData, submitForm }) {
     const fields = [
         { label: 'Name', value: `${formData.firstName} ${formData.lastName}` },
         { label: 'Email', value: formData.email },
-        { label: 'Password', value: formData.password },
         { label: 'Date of Birth', value: formData.dateOfBirth },
         { label: 'Gender', value: formData.gender },
         { label: 'Phone', value: formData.phone },
-        { label: 'Role', value: formData.role },
+        { label: 'Blood Group', value: formData.bloodGroup},
         { label: 'Address', value: formData.address },
         { label: 'City', value: formData.city },
         { label: 'State', value: formData.state },
@@ -19,6 +19,7 @@ export default function StaffReview({ prevStep, formData, submitForm }) {
         { label: 'Emergency Contact Name', value: formData.emergencyContactName },
         { label: 'Emergency Contact Phone', value: formData.emergencyContactPhone },
     ];
+
     return (
 
         <View style={styles.container}>
@@ -30,7 +31,6 @@ export default function StaffReview({ prevStep, formData, submitForm }) {
                     <Text>{item.value}</Text>
                 </View>
             ))}
-
 
             <View style={styles.buttonFormat}>
                 <TouchableOpacity style={styles.buttonPrev} onPress={prevStep}>

@@ -19,6 +19,7 @@ import PatientMedical from '../../components/admin/PatientMedical';
 import MedicalFormScreen from '../../components/physician/InitialNote';
 import LoadingScreen from '../../components/LoadingScreen';
 import StaffRegistrationScreen from '@screens/staffPatientRegistration/staffRegistration/StaffRegistrationScreen';
+import PatientRegistrationScreen from '@screens/staffPatientRegistration/patientRegistration/PatientRegistrationScreen';
 
 
 
@@ -28,6 +29,7 @@ export type RootStackParamList = {
     Mainscreen: undefined;
     SignIn: undefined;
     StaffRegistrationScreen: undefined;
+    PatientRegistrationScreen: undefined;
     PatientRegistration: undefined;
     Appointments: undefined;
     DoctorList: undefined;
@@ -56,6 +58,7 @@ export type RootStackParamList = {
                   <Stack.Screen name='Mainscreen' component={Mainscreen}></Stack.Screen>
                   <Stack.Screen name='SignIn' component={SignIn}></Stack.Screen>
                   <Stack.Screen name="StaffRegistrationScreen" component={StaffRegistrationScreen}></Stack.Screen>
+                  <Stack.Screen name='PatientRegistrationScreen' component={PatientRegistrationScreen}></Stack.Screen>
                   <Stack.Screen name="PatientRegistration" component={PatientRegistration}></Stack.Screen>
                   <Stack.Screen name="Appointments" component={Appointments}></Stack.Screen>
                   <Stack.Screen name='DoctorList' component={DoctorList} />

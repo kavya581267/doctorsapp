@@ -84,5 +84,10 @@ export default StyleSheet.create({
     icon:{
         marginRight:18,
         marginLeft:5
-    }
+    },
+
+    chackBoxLabel: {
+        fontSize: 14,
+        color:"blue"
+      },
 })

@@ -1,24 +1,26 @@
-import { StaffRegistration } from "@api/model/auth/Auth";
+import { PatientRegistration } from "@api/model/auth/Auth";
+import { MdLodSnackbar } from "@components/MdLogSnacbar";
 import MdLogTextInput from "@components/MdLogTextInput";
-import { Text, TouchableOpacity, View } from "react-native";
-import styles from "@styles/staffPatientRegistrationStyle";
 import { isAnyFieldsEmpty, isValidPhone } from "@utils/utils";
 import { useState } from "react";
-import { MdLodSnackbar } from "@components/MdLogSnacbar";
+import { Text, TouchableOpacity, View } from "react-native";
+import styles from "@styles/staffPatientRegistrationStyle";
+import { Checkbox } from "react-native-paper";
+
 
 interface StepProps {
     nextStep?: () => void;
     prevStep?: () => void;
-    formData: StaffRegistration;
-    setFormData: React.Dispatch<React.SetStateAction<StaffRegistration>>;
-    submitForm?: () => void;
+    formData: PatientRegistration;
+    setFormData: React.Dispatch<React.SetStateAction<PatientRegistration>>;
 }
 
 
 
-export const StaffAddress: React.FC<StepProps> = ({ nextStep, prevStep, formData, setFormData }) => {
-    const [visible,setVisible] = useState(false);
-    const onDismissSnackBar = () =>setVisible(false);
+export const PatientAddress: React.FC<StepProps> = ({ nextStep, prevStep, formData, setFormData }) => {
+    const [visible, setVisible] = useState(false);
+    const onDismissSnackBar = () => setVisible(false);
+    const [checked,setChecked] = useState(false);
 
     const onChangeT = (field, val) => {
         setFormData((prev) => {
@@ -27,13 +29,13 @@ export const StaffAddress: React.FC<StepProps> = ({ nextStep, prevStep, formData
             return newS
         })
     }
-   
-    const validateFormFields = () =>{
-        if(!isAnyFieldsEmpty(["address","city","state","zipCode","country","emergencyContactName","emergencyContactPhone"],formData) &&
-              isValidPhone(formData.phone)){
+
+    const validateFormFields = () => {
+        if (!isAnyFieldsEmpty(["address", "city", "state", "zipCode", "country", "emergencyContactName", "emergencyContactPhone"], formData) &&
+            isValidPhone(formData.phone)) {
             setVisible(false);
             nextStep();
-        }else{
+        } else {
             setVisible(true);
         }
     }
@@ -48,21 +50,21 @@ export const StaffAddress: React.FC<StepProps> = ({ nextStep, prevStep, formData
                     onTextChange={onChangeT}
                     field="address"
                 />
-                 <MdLogTextInput
+                <MdLogTextInput
                     label="City*"
                     value={formData?.city}
                     left="city"
                     onTextChange={onChangeT}
                     field="city"
                 />
-                 <MdLogTextInput
+                <MdLogTextInput
                     label="State*"
                     value={formData?.state}
                     left="home-group"
                     onTextChange={onChangeT}
                     field="state"
                 />
-                 <MdLogTextInput
+                <MdLogTextInput
                     label="ZipCode*"
                     value={formData?.zipCode}
                     left="zip-box"
@@ -70,21 +72,21 @@ export const StaffAddress: React.FC<StepProps> = ({ nextStep, prevStep, formData
                     field="zipCode"
                     keyboard="number-pad"
                 />
-                 <MdLogTextInput
+                <MdLogTextInput
                     label="Country*"
                     value={formData?.country}
                     left="map"
                     onTextChange={onChangeT}
                     field="country"
                 />
-                 <MdLogTextInput
+                <MdLogTextInput
                     label="EmergencyContactName*"
                     value={formData?.emergencyContactName}
                     left="human-male"
                     onTextChange={onChangeT}
                     field="emergencyContactName"
                 />
-                 <MdLogTextInput
+                <MdLogTextInput
                     label="EmergencyContactPhone*"
                     value={formData?.emergencyContactPhone}
                     left="phone"
@@ -93,16 +95,34 @@ export const StaffAddress: React.FC<StepProps> = ({ nextStep, prevStep, formData
                     keyboard="phone-pad"
                 />
                 
+                <Checkbox.Item 
+                      label="Create user account?"
+                      status={checked ? "checked" : "unchecked"}
+                      onPress={()=>setChecked(!checked)}
+                      labelStyle={styles.chackBoxLabel}
+                />
+
+                {checked && 
+                    <MdLogTextInput
+                    label="Password*"
+                    value={formData?.password}
+                    left="lock"
+                    onTextChange={onChangeT}
+                    field="password"
+                    secureEntry
+                />}
+
+
             </View>
             <View style={styles.buttonFormat}>
-            <TouchableOpacity style={styles.buttonPrev} onPress={prevStep}>
-                   <Text style={styles.prevTxt}>Prev</Text>
-               </TouchableOpacity>
-               <TouchableOpacity style={styles.buttonNext} onPress={validateFormFields}>
-                   <Text style={styles.nextTxt}>Next</Text>
-               </TouchableOpacity>
-           </View>
-           <MdLodSnackbar visible={visible} onDismiss={onDismissSnackBar} message="Please fill all required details"/>
+                <TouchableOpacity style={styles.buttonPrev} onPress={prevStep}>
+                    <Text style={styles.prevTxt}>Prev</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.buttonNext} onPress={validateFormFields}>
+                    <Text style={styles.nextTxt}>Next</Text>
+                </TouchableOpacity>
+            </View>
+            <MdLodSnackbar visible={visible} onDismiss={onDismissSnackBar} message="Please fill all required details" />
         </View>
     )
 }

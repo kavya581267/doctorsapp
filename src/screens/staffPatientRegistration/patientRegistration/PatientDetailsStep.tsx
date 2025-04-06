@@ -1,26 +1,24 @@
-import { StaffRegistration } from "@api/model/auth/Auth";
-import MdLogTextInput from "@components/MdLogTextInput";
-import { Text, TouchableOpacity } from "react-native";
-import { View } from "react-native";
-import styles from "@styles/staffPatientRegistrationStyle";
-import { isAnyFieldsEmpty, isValidEmail, isValidPassword, isValidPhone } from "@utils/utils";
-import { useState } from "react";
+import { PatientRegistration } from "@api/model/auth/Auth";
 import { MdLodSnackbar } from "@components/MdLogSnacbar";
+import MdLogTextInput from "@components/MdLogTextInput";
+import { isAnyFieldsEmpty, isValidEmail, isValidPhone } from "@utils/utils";
+import { useState } from "react";
+import { Text, TouchableOpacity, View } from "react-native";
+import styles from "@styles/staffPatientRegistrationStyle";
 import { Dropdown } from "react-native-element-dropdown";
 import { Icon } from "react-native-paper";
-
 
 interface StepProps {
     nextStep?: () => void;
     prevStep?: () => void;
-    formData: StaffRegistration;
-    setFormData: React.Dispatch<React.SetStateAction<StaffRegistration>>;
-  
+    formData: PatientRegistration;
+    setFormData: React.Dispatch<React.SetStateAction<PatientRegistration>>;
+
 }
 
 
 
-export const StaffDetails: React.FC<StepProps> = ({ nextStep, formData, setFormData }) => {
+export const PatientDetails: React.FC<StepProps> = ({ nextStep, formData, setFormData }) => {
     const [visible, setVisible] = useState(false);
     const onDismissSnackBar = () => setVisible(false);
 
@@ -30,12 +28,6 @@ export const StaffDetails: React.FC<StepProps> = ({ nextStep, formData, setFormD
         { label: "OTHER", value: "OTHER" },
     ];
 
-    const roleOptions = [
-        { label : "ADMIN", value: "ADMIN"},
-        { label : "DOCTOR", value: "DOCTOR"},
-        { label : "NURSE", value: "NURSE"},
-        { label : "FRONT_OFFICE", value: "FRONT_OFFICE"},
-    ]
 
 
     const onChangeT = (field, val) => {
@@ -47,8 +39,8 @@ export const StaffDetails: React.FC<StepProps> = ({ nextStep, formData, setFormD
     }
 
     const validateFormFields = () => {
-        if (!isAnyFieldsEmpty(["firstName", "lastName", "email", "password", "dateOfBirth", "gender", "phone", "role"], formData) &&
-            isValidEmail(formData.email) && isValidPassword(formData.password) && isValidPhone(formData.phone)) {
+        if (!isAnyFieldsEmpty(["firstName", "lastName", "email", "dateOfBirth", "gender", "phone", "bloodGroup"], formData) &&
+            isValidEmail(formData.email) && isValidPhone(formData.phone)) {
             setVisible(false);
             nextStep();
         } else {
@@ -83,14 +75,6 @@ export const StaffDetails: React.FC<StepProps> = ({ nextStep, formData, setFormD
                     keyboard="email-address"
                 />
                 <MdLogTextInput
-                    label="Password*"
-                    value={formData?.password}
-                    left="lock"
-                    onTextChange={onChangeT}
-                    field="password"
-                    secureEntry
-                />
-                <MdLogTextInput
                     label="DateOfBirth*"
                     value={formData?.dateOfBirth}
                     left="calendar-month"
@@ -115,7 +99,7 @@ export const StaffDetails: React.FC<StepProps> = ({ nextStep, formData, setFormD
                         )}
                     />
                 </View>
-                
+
                 <MdLogTextInput
                     label="Phone*"
                     value={formData?.phone}
@@ -124,25 +108,15 @@ export const StaffDetails: React.FC<StepProps> = ({ nextStep, formData, setFormD
                     field="phone"
                     keyboard="phone-pad"
                 />
-                 <View style={styles.dropDownContainer}>
-                    <Dropdown
-                        data={roleOptions}
-                        labelField="label"
-                        valueField="value"
-                        placeholder="Select Role"
-                        value={formData?.role}
-                        onChange={(item) => setFormData((prev) => ({ ...prev, role: item.value }))}
-                        style={styles.dropdown}
-                        placeholderStyle={styles.placeholder}
-                        selectedTextStyle={styles.selectedText}
-                        renderLeftIcon={() => (
-                            <View style={styles.icon} >
-                                <Icon source="human-male" size={24} color="#555" />
-                            </View>
-                        )}
-                    />
-                </View>
-                
+                 <MdLogTextInput
+                    label="BloodGroup*"
+                    value={formData?.bloodGroup}
+                    left="water"
+                    onTextChange={onChangeT}
+                    field="bloodGroup"
+                />
+
+
             </View>
             <View style={styles.buttonFormat}>
 
