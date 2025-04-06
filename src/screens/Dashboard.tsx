@@ -47,7 +47,7 @@ export default function DashboardScreen() {
                     <Text style={styles.sectionTitle}>Quick Actions</Text>
                     <View style={styles.quickActions}>
                         {quickActions.map((action, index) => (
-                            <TouchableOpacity onPress={() => navigation.navigate(action.navPage)} key={index} style={[styles.actionItem, { backgroundColor: action.bgColor }]}>
+                            <TouchableOpacity onPress={() => action.navPage ? navigation.navigate(action.navPage): ""} key={index} style={[styles.actionItem, { backgroundColor: action.bgColor }]}>
                                 {action.icon}
                                 <Text style={styles.actionLabel}>{action.label}</Text>
                             </TouchableOpacity>
