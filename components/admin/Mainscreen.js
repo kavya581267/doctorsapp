@@ -32,7 +32,6 @@ export default function Mainscreen() {
                 backgroundColor: 'white',
                 borderRadius: 5,
                 height: 60,
-
                 bottom: 10,
                 elevation: 5,
                 shadowOpacity: 0.2,
