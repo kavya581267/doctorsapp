@@ -9,9 +9,9 @@ export default function DashboardScreen() {
     const [searchText, setSearchText] = useState('');
 
     return (
-        <SafeAreaView>
+        <SafeAreaView style={{backgroundColor:"white"}}>
             <ScrollView >
-                <View style={{ padding: 15 }}>
+                <View style={{ padding: 15, backgroundColor:"white" }}>
                     <View style={styles.header}>
                         <Text style={styles.title}>{clinicName}</Text>
                         <View style={styles.headerIcons}>
