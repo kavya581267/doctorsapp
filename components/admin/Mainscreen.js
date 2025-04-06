@@ -8,6 +8,7 @@ import PatientsList from "./PatientsList";
 import { COLORS } from "../constants/colors";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import DashboardScreen from "@screens/Dashboard";
+import StaffDirectoryScreen from "@screens/StaffDirectory";
 
 
 
@@ -44,7 +45,7 @@ export default function Mainscreen() {
             </Tab.Screen>
             <Tab.Screen name="Patients" component={PatientsList}
                 options={{ tabBarIcon: ({ color }) => <MaterialIcons name="group" size={24} color={color} /> }}></Tab.Screen>
-            <Tab.Screen name="Staff" component={PatientsList}
+            <Tab.Screen name="Staff" component={StaffDirectoryScreen}
                 options={{ tabBarIcon: ({ color }) => <MaterialIcons name="group" size={24} color={color} /> }}></Tab.Screen>
             <Tab.Screen name="Appointments" component={Appointments}
                 options={{ tabBarIcon: ({ color }) => <MaterialIcons name="event" size={24} color={color} /> }}></Tab.Screen>

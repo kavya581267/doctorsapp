@@ -32,15 +32,17 @@ export default function StaffRegistrationScreen() {
 
   return (
     <SafeAreaView>
-      <Back nav={"DashboardScreen"}></Back>
-      <Spacer height={60} />
-      <View>
-        <Text style={styles.heading}>Staff Registration</Text>
-        <StepIndicator customStyles={stepindicator} stepCount={labels.length} currentPosition={step} labels={labels} />
-        <Spacer height={40} />
-        {step === 0 && <StaffDetails nextStep={nextStep} formData={formData} setFormData={setFormData} />}
-        {step === 1 && <StaffAddress nextStep={nextStep} prevStep={prevStep} formData={formData} setFormData={setFormData} />}
-        {step === 2 && <StaffReview prevStep={prevStep} formData={formData} submitForm={submitForm} />}
+      <View style={{ padding: 15 }}>
+        <Back nav={"Mainscreen"}></Back>
+        <Spacer height={60} />
+        <View>
+          <Text style={styles.heading}>Staff Registration</Text>
+          <StepIndicator customStyles={stepindicator} stepCount={labels.length} currentPosition={step} labels={labels} />
+          <Spacer height={40} />
+          {step === 0 && <StaffDetails nextStep={nextStep} formData={formData} setFormData={setFormData} />}
+          {step === 1 && <StaffAddress nextStep={nextStep} prevStep={prevStep} formData={formData} setFormData={setFormData} />}
+          {step === 2 && <StaffReview prevStep={prevStep} formData={formData} submitForm={submitForm} />}
+        </View>
       </View>
     </SafeAreaView>
   )

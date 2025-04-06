@@ -36,7 +36,7 @@ export default function PatientRegistrationScreen() {
   return (
     <SafeAreaView>
       <View style={{padding:15}}>
-        <Back nav={"DashboardScreen"}></Back>
+        <Back nav={"Mainscreen"}></Back>
         <Spacer height={60} />
         <Text style={styles.heading}>Patient Registration</Text>
         <StepIndicator customStyles={stepindicator} stepCount={labels.length} currentPosition={step} labels={labels} />
