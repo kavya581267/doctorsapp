@@ -1,4 +1,4 @@
-import { Gender } from "../enums";
+import { Gender, Role } from "../enums";
 
 export interface LoginResponse {
   accessToken: string;
@@ -61,7 +61,7 @@ export class StaffRegistration {
   dateOfBirth: string = "";
   gender: Gender = Gender.MALE;
   phone: string = "";
-  role: string = "";
+  role: Role = Role.ADMIN;
   address: string = "";
   city: string = "";
   state: string = "";

@@ -9,7 +9,7 @@ export enum DayOfWeek {
 }
 
 export enum Role {
-    ADMMIN="ADMIN",
+    ADMIN="ADMIN",
     DOCTOR="DOCTOR",
     NURSE="NURSE",
     FRONT_OFFICE="FRONT_OFFICE"

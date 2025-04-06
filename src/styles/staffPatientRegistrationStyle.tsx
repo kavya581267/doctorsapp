@@ -52,4 +52,37 @@ export default StyleSheet.create({
         justifyContent: "space-between",
         marginBottom: 10
     },
+
+
+    //gender
+    dropDownContainer: { 
+        marginTop:5
+    },
+    label: { 
+        fontSize: 14, 
+        marginBottom: 8 
+    },
+    dropdown: {
+      height: 40,
+      borderWidth: 1,
+      borderColor: "#ccc",
+      borderRadius: 5,
+      paddingHorizontal: 10,
+      backgroundColor: "#F3F4F6FF",
+      fontSize:14,
+      fontWeight:"400"
+    },
+    placeholder: { 
+        fontSize: 14,
+        fontWeight:"400", 
+        
+    },
+    selectedText: { 
+        fontSize: 12,
+        fontWeight:"400" 
+    },
+    icon:{
+        marginRight:18,
+        marginLeft:5
+    }
 })
