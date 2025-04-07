@@ -15,11 +15,11 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 const defaultSchedule = [
-  { day: 'Monday', open: true, openingTime: new Date(0, 0, 0, 8, 0), closingTime: new Date(0, 0, 0, 17, 0) },
-  { day: 'Tuesday', open: true, openingTime: new Date(0, 0, 0, 9, 0), closingTime: new Date(0, 0, 0, 18, 0) },
-  { day: 'Wednesday', open: true, openingTime: new Date(0, 0, 0, 9, 0), closingTime: new Date(0, 0, 0, 18, 0) },
-  { day: 'Thursday', open: true, openingTime: new Date(0, 0, 0, 9, 0), closingTime: new Date(0, 0, 0, 18, 0) },
-  { day: 'Friday', open: true, openingTime: new Date(0, 0, 0, 9, 0), closingTime: new Date(0, 0, 0, 18, 0) },
+  { day: 'Monday', open: true, openingTime: new Date(0, 0, 0, 10, 0), closingTime: new Date(0, 0, 0, 17, 0) },
+  { day: 'Tuesday', open: true, openingTime: new Date(0, 0, 0, 10, 0), closingTime: new Date(0, 0, 0, 17, 0) },
+  { day: 'Wednesday', open: true, openingTime: new Date(0, 0, 0, 10, 0), closingTime: new Date(0, 0, 0, 17, 0) },
+  { day: 'Thursday', open: true, openingTime: new Date(0, 0, 0, 10, 0), closingTime: new Date(0, 0, 0, 17, 0) },
+  { day: 'Friday', open: true, openingTime: new Date(0, 0, 0, 10, 0), closingTime: new Date(0, 0, 0, 17, 0) },
   { day: 'Saturday', open: false, openingTime: null, closingTime: null },
   { day: 'Sunday', open: false, openingTime: null, closingTime: null },
 ];

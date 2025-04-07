@@ -13,6 +13,7 @@ import PatientReview from "./PatientReviewStep";
 import { registrationService } from "@api/registrationService";
 import { useNavigation } from "@react-navigation/native";
 import { MdLogActivityIndicator } from "@components/MdLogActivityIndicator";
+import Back from "@components/Back";
 
 
 
@@ -47,8 +48,11 @@ export default function PatientRegistrationScreen() {
 
 
   return (
-    <SafeAreaView style={{ justifyContent: "center", flex: 1 }}>
-      <View>
+
+    <SafeAreaView>
+      <View style={{padding:15}}>
+        <Back nav={"Mainscreen"}></Back>
+        <Spacer height={60} />
         <Text style={styles.heading}>Patient Registration</Text>
         <StepIndicator customStyles={stepindicator} stepCount={labels.length} currentPosition={step} labels={labels} />
         <Spacer height={40} />

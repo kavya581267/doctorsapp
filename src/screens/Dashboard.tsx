@@ -4,6 +4,7 @@ import { Ionicons, MaterialIcons, FontAwesome5, Feather } from '@expo/vector-ico
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { styles } from '@styles/dashboardStyles'
 import { useNavigation } from '@react-navigation/native';
+import Back from '@components/Back';
 const { width, height } = Dimensions.get("window");
 
 export default function DashboardScreen() {
@@ -15,16 +16,7 @@ export default function DashboardScreen() {
         <SafeAreaView style={{backgroundColor:"white"}}>
             <ScrollView >
                 <View style={{ padding: 15, backgroundColor:"white" , height:height}}>
-                    <View style={styles.header}>
-                        <Text style={styles.title}>{clinicName}</Text>
-                        <View style={styles.headerIcons}>
-                            <Ionicons name="notifications-outline" size={24} color="black" />
-                            <Image
-                                source={{ uri: 'https://i.pravatar.cc/150?img=4' }}
-                                style={styles.avatar}
-                            />
-                        </View>
-                    </View>
+                    <Back/>
                     <TextInput
                         placeholder="Search for patient or doctor"
                         value={searchText}
