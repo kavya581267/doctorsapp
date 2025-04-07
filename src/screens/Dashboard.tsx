@@ -102,6 +102,7 @@ const quickActions = [
         label: 'Clinic Schedule',
         bgColor: '#E6F8ED',
         icon: <Ionicons name="calendar-outline" size={24} color="#27AE60" />,
+        navPage: "ClinicScheduleScreen",
     },
     {
         label: 'Holidays',

@@ -3,7 +3,7 @@ import { MdLodSnackbar } from "@components/MdLogSnacbar";
 import MdLogTextInput from "@components/MdLogTextInput";
 import { isAnyFieldsEmpty, isValidEmail, isValidPhone } from "@utils/utils";
 import { useState } from "react";
-import { Text, TouchableOpacity, View } from "react-native";
+import { Keyboard, KeyboardAvoidingView, Platform, ScrollView, Text, TouchableOpacity, TouchableWithoutFeedback, View } from "react-native";
 import styles from "@styles/staffPatientRegistrationStyle";
 import { Dropdown } from "react-native-element-dropdown";
 import { Icon } from "react-native-paper";
@@ -50,6 +50,8 @@ export const PatientDetails: React.FC<StepProps> = ({ nextStep, formData, setFor
 
 
     return (
+
+
         <View style={styles.container}>
             <View>
                 <MdLogTextInput
@@ -108,7 +110,7 @@ export const PatientDetails: React.FC<StepProps> = ({ nextStep, formData, setFor
                     field="phone"
                     keyboard="phone-pad"
                 />
-                 <MdLogTextInput
+                <MdLogTextInput
                     label="BloodGroup*"
                     value={formData?.bloodGroup}
                     left="water"
@@ -126,5 +128,6 @@ export const PatientDetails: React.FC<StepProps> = ({ nextStep, formData, setFor
             </View>
             <MdLodSnackbar visible={visible} onDismiss={onDismissSnackBar} message="Please fill all required details" />
         </View>
+
     )
 }
