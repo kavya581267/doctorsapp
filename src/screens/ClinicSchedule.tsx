@@ -101,7 +101,7 @@ const App = () => {
 
     return (
 
-        <SafeAreaView style={styles.container}>
+        <View style={styles.container}>
             <Back nav='Mainscreen' />
             <View style={{ flexDirection: "row"}}>
                 <Text style={styles.header}>Clinic Schedule</Text>
@@ -191,14 +191,14 @@ const App = () => {
                     </View>
                 </View>
             </Modal>
-        </SafeAreaView>
+        </View>
     );
 };
 
 export default App;
 
 const styles = StyleSheet.create({
-    container: { flex: 1, padding: 16, backgroundColor: '#f2f2f2' },
+    container: { flex: 1 },
     header: { flex:1,fontSize: 18, fontWeight: '600', marginBottom: 10, textAlign: "center" },
     itemCard: {
         backgroundColor: 'white',
