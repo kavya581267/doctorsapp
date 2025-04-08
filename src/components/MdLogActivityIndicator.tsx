@@ -9,7 +9,7 @@ export const MdLogActivityIndicator = ({loading}) => {
   if(loading){
     return(
       <View style={styles.loaderContainer}>
-          <ActivityIndicator size="large" color={COLORS.red} />
+          <ActivityIndicator size="large" color={COLORS.primary} />
         </View> 
     )
   }else{

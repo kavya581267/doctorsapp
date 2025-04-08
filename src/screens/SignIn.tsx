@@ -35,7 +35,6 @@ export default function SignIn() {
 
         <SafeAreaView style={{ flex: 1 }}>
             <KeyboardAvoidingView style={{ flex: 1 }}>
-                <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                     <View style={{ padding: 24, flex: 1 }}>
                         <View style={styles.header}>
                             <Image style={styles.png} source={require("../../assets/launchscreen.png")} />
@@ -78,7 +77,6 @@ export default function SignIn() {
                             <MdLodSnackbar visible={visible} onDismiss={onDismissSnackBar} message={errorMessage} />
                         </View>
                     </View>
-                </TouchableWithoutFeedback>
             </KeyboardAvoidingView>
             <MdLogActivityIndicator loading={loading} />
         </SafeAreaView>

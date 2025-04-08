@@ -198,7 +198,7 @@ const App = () => {
 export default App;
 
 const styles = StyleSheet.create({
-    container: { flex: 1 },
+    container: { flex: 1, padding:15 },
     header: { flex:1,fontSize: 18, fontWeight: '600', marginBottom: 10, textAlign: "center" },
     itemCard: {
         backgroundColor: 'white',
