@@ -29,3 +29,8 @@ export function replacePlaceholders(template:string, params:any) {
     return template.replace(/{{(.*?)}}/g, (_, key) => params[key.trim()] ?? "");
   }
 
+
+  export function getAvatarName(firstName:string, lastName: string){
+    return firstName.toUpperCase().charAt(0)+lastName.toUpperCase().charAt(0);
+  }
+
