@@ -3,5 +3,7 @@ export const COLORS = {
     secondary: "#F3F5FCFF",
     white: "#FFFFFF",
     grey:"#ccc",
-    red:"#e663639e" 
+    red:"#e663639e",
+    backgroundColor: "#FFFFFF",
+    safeAreabackgroundColor: "#FFFFFF"
 };
