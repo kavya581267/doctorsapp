@@ -16,6 +16,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Back from '@components/Back';
+import { COLORS } from '@utils/colors';
 
 const defaultSchedule = [
     { day: 'Monday', open: true, openingTime: new Date(0, 0, 0, 10, 0), closingTime: new Date(0, 0, 0, 17, 0) },
@@ -102,7 +103,7 @@ const App = () => {
             </View>
             <View style={styles.iconRow}>
                 <TouchableOpacity onPress={() => openEditModal(item, index)}>
-                    <Icon name="edit" size={24} color="#007BFF" />
+                    <Icon name="edit" size={20} color="#007bff" />
                 </TouchableOpacity>
             </View>
         </View>
@@ -214,10 +215,13 @@ const styles = StyleSheet.create({
     },
   
     timeText: { fontSize: 14, marginLeft: 4 ,fontWeight:"500"},
-    openText: { color: 'green', marginLeft: 4 },
+    openText: { color: 'green', marginLeft: 4 , fontWeight:"500"},
     closedText: { color: 'red', marginTop: 4 },
     iconRow: { flexDirection: 'row' },
-
+    dayText:{
+    fontWeight:"bold",
+    fontSize:15
+    },
     rowBox: {
         flexDirection: "row",
         marginTop: 4,
@@ -260,7 +264,7 @@ const styles = StyleSheet.create({
     },
     switchLabel: { marginLeft: 10 },
     saveButton: {
-        backgroundColor: '#007BFF',
+        backgroundColor: COLORS.primary,
         padding: 14,
         borderRadius: 8,
         alignItems: 'center',
