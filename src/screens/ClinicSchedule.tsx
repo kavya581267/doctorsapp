@@ -9,6 +9,7 @@ import {
     Modal,
     Switch,
     Alert,
+    Platform,
 } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -131,16 +132,22 @@ const App = () => {
 
                         <Text style={styles.label}>Opening Time</Text>
                         <TouchableOpacity
-                            onPress={() => setShowOpeningPicker(true)}
-                            style={styles.timeBox}
+                            onPress={() => !isClosed && setShowOpeningPicker(true)} 
+                            style={[
+                              styles.timeBox,
+                              isClosed && { opacity: 0.5 } 
+                            ]}
+                            disabled={isClosed}
                         >
                             <Text>{formatTime(openingTime)}</Text>
                         </TouchableOpacity>
                         {showOpeningPicker && (
                             <DateTimePicker
                                 value={openingTime}
+                                minuteInterval={30}
+                                display={Platform.OS === 'android' ? 'clock' : 'spinner'}
                                 mode="time"
-                                display="default"
+                              
                                 onChange={(e, date) => {
                                     setShowOpeningPicker(false);
                                     if (date) setOpeningTime(date);
@@ -150,8 +157,12 @@ const App = () => {
 
                         <Text style={styles.label}>Closing Time</Text>
                         <TouchableOpacity
-                            onPress={() => setShowClosingPicker(true)}
-                            style={styles.timeBox}
+                           onPress={() => !isClosed && setShowClosingPicker(true)}
+                           style={[
+                             styles.timeBox,
+                             isClosed && { opacity: 0.5 }
+                           ]}
+                           disabled={isClosed}
                         >
                             <Text>{formatTime(closingTime)}</Text>
                         </TouchableOpacity>
@@ -159,7 +170,8 @@ const App = () => {
                             <DateTimePicker
                                 value={closingTime}
                                 mode="time"
-                                display="default"
+                                minuteInterval={30}
+                                display={Platform.OS === 'android' ? 'clock' : 'spinner'}
                                 onChange={(e, date) => {
                                     setShowClosingPicker(false);
                                     if (date) setClosingTime(date);
