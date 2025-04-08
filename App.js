@@ -2,6 +2,8 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { AuthProvider } from '@context/AuthProvider';
 import { PaperProvider } from 'react-native-paper';
 import MainNavigator from '@components/MainNavigation';
+import { SafeAreaView } from 'react-native';
+import { COLORS } from '@utils/colors';
 
 
 
@@ -10,7 +12,9 @@ export default function App() {
     <SafeAreaProvider>
       <PaperProvider>
         <AuthProvider>
-          <MainNavigator />
+          <SafeAreaView style={{backgroundColor:COLORS.primary, flex:1}}>
+            <MainNavigator />
+          </SafeAreaView>
         </AuthProvider>
       </PaperProvider>
     </SafeAreaProvider>

@@ -50,7 +50,6 @@ const properties = [
 export default function HomeScreen() {
     const navigation = useNavigation();
     return (
-        <SafeAreaView>
             <View style={styles.container}>
                 <Header heading="Admin Home" />
                 <View style={{ alignItems: "center", flexDirection: "column" }}>
@@ -75,6 +74,5 @@ export default function HomeScreen() {
                 </View>
 
             </View>
-        </SafeAreaView>
     )
 }

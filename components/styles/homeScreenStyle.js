@@ -7,7 +7,7 @@ const large = width > 720;
 
 export default StyleSheet.create({
     container: {
-        padding: 15,
+        padding: 0
     },
     png: {
         width: 100, 

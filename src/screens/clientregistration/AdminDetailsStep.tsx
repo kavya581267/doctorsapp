@@ -140,7 +140,7 @@ export const AdminDetails: React.FC<StepProps> = ({ nextStep, prevStep, formData
                     <Text style={styles.nextTxt}>Next</Text>
                 </TouchableOpacity>
             </View>
-            <MdLodSnackbar visible onDismiss={onDismissSnackBar} message="Please fill all required details"/>
+            <MdLodSnackbar visible={visible} onDismiss={onDismissSnackBar} message="Please fill all required details"/>
         </View>
     )
 };

@@ -1,4 +1,6 @@
 import Back from '@components/Back';
+import { useNavigation } from '@react-navigation/native';
+import { COLORS } from '@utils/colors';
 import React, { useState } from 'react';
 
 import {
@@ -18,21 +20,21 @@ const staffData = [
   {
     id: '1',
     name: 'John Smith',
-    role: 'Senior Developer',
+    role: 'Doctor',
     status: 'Active',
     avatar: 'https://i.pravatar.cc/150?img=1',
   },
   {
     id: '2',
     name: 'Sarah Johnson',
-    role: 'UI Designer',
+    role: 'Font Desk',
     status: 'Active',
     avatar: 'https://i.pravatar.cc/150?img=2',
   },
   {
     id: '3',
     name: 'Mike Wilson',
-    role: 'Project Manager',
+    role: 'Nurse',
     status: 'On Leave',
     avatar: 'https://i.pravatar.cc/150?img=3',
   },
@@ -40,6 +42,7 @@ const staffData = [
 
 const StaffDirectoryScreen = () => {
   const [searchText, setSearchText] = useState('');
+  const navigation = useNavigation();
 
   const filteredStaff = staffData.filter((staff) =>
     staff.name.toLowerCase().includes(searchText.toLowerCase())
@@ -59,33 +62,32 @@ const StaffDirectoryScreen = () => {
   );
 
   return (
-    <SafeAreaView>
-      
+    <SafeAreaView style={{ flex: 1 }}>
       <View style={styles.container}>
-      <Back></Back>
-        <TextInput
-          placeholder="Search staff..."
-          value={searchText}
-          onChangeText={setSearchText}
-          style={styles.searchInput}
-        />
+        <View>
+          <Back></Back>
+          <TextInput
+            placeholder="Search staff..."
+            value={searchText}
+            onChangeText={setSearchText}
+            style={styles.searchInput}
+          />
+          <View style={styles.filters}>
+            {['All Staff', 'Department ▼', 'Role ▼', 'Status ▼'].map((filter, index) => (
+              <TouchableOpacity key={index} style={styles.filterButton}>
+                <Text style={styles.filterText}>{filter}</Text>
+              </TouchableOpacity>
+            ))}
+          </View>
 
-        <View style={styles.filters}>
-          {['All Staff', 'Department ▼', 'Role ▼', 'Status ▼'].map((filter, index) => (
-            <TouchableOpacity key={index} style={styles.filterButton}>
-              <Text style={styles.filterText}>{filter}</Text>
-            </TouchableOpacity>
-          ))}
+          <FlatList
+            data={filteredStaff}
+            keyExtractor={(item) => item.id}
+            renderItem={renderStaffCard}
+            contentContainerStyle={{ paddingBottom: 100 }}
+          />
         </View>
-
-        <FlatList
-          data={filteredStaff}
-          keyExtractor={(item) => item.id}
-          renderItem={renderStaffCard}
-          contentContainerStyle={{ paddingBottom: 100 }}
-        />
-
-        <TouchableOpacity style={styles.addButton}>
+        <TouchableOpacity style={styles.addButton} onPress={()=>navigation.navigate("StaffRegistrationScreen")}>
           <Text style={styles.addButtonText}>+ Add New Staff</Text>
         </TouchableOpacity>
       </View>
@@ -95,13 +97,14 @@ const StaffDirectoryScreen = () => {
 
 export default StaffDirectoryScreen;
 
-const {height} = Dimensions.get("window")
+const { height } = Dimensions.get("window")
 
 const styles = StyleSheet.create({
   container: {
     padding: 16,
     backgroundColor: '#fff',
-    height: height
+    flex: 1,
+    justifyContent:"space-between"
 
   },
   searchInput: {
@@ -147,7 +150,7 @@ const styles = StyleSheet.create({
   name: {
     fontWeight: '600',
     fontSize: 16,
-    marginBottom: 2,
+    marginBottom: 6,
   },
   role: {
     color: '#7D7D7D',
@@ -172,9 +175,7 @@ const styles = StyleSheet.create({
     color: '#D99100',
   },
   addButton: {
-    left: 16,
-    right: 16,
-    backgroundColor: '#2764FF',
+    backgroundColor: COLORS.primary,
     paddingVertical: 14,
     borderRadius: 12,
     alignItems: 'center',

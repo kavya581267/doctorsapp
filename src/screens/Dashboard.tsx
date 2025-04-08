@@ -5,6 +5,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { styles } from '@styles/dashboardStyles'
 import { useNavigation } from '@react-navigation/native';
 import Back from '@components/Back';
+import { Avatar } from 'react-native-paper';
+import { getAvatarName } from '@utils/utils';
 const { width, height } = Dimensions.get("window");
 
 export default function DashboardScreen() {
@@ -13,7 +15,6 @@ export default function DashboardScreen() {
     const navigation = useNavigation();
 
     return (
-        <SafeAreaView style={{backgroundColor:"white"}}>
             <ScrollView >
                 <View style={{ padding: 15, backgroundColor:"white" , height:height}}>
                     <Back/>
@@ -73,8 +74,7 @@ export default function DashboardScreen() {
                     {/* Bottom spacing */}
                     <View style={{ height: 80 }} />
                 </View>
-            </ScrollView>
-        </SafeAreaView>)
+            </ScrollView>)
 }
 
 const quickActions = [
