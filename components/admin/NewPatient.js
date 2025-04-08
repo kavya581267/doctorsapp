@@ -40,7 +40,6 @@ export default function NewPatient() {
             console.log("Patient added successfully")
             navigation.navigate("Mainscreen");
         } else {
-            console.log("error adding List");
         }
     }
 

@@ -32,13 +32,10 @@ export default function Registration({ title, url, fields }) {
             const result = await response.json();
 
             if (response.status === 200) {
-                console.log(`${title} registered successfully`);
                 navigation.navigate("Mainscreen");
             } else {
-                console.log("Error:", result);
             }
         } catch (error) {
-            console.error("Error submitting form:", error);
         }
     };
 

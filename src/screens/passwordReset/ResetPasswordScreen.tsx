@@ -28,7 +28,6 @@ export default function ResetPasswordScreen() {
         setLoading(true);
         try{
             const respo = await passwordManagementService.requestPasswordReset({ email });
-            console.log(respo);
         }catch(error){
             setMessage(error.toString());
         }
@@ -41,7 +40,6 @@ export default function ResetPasswordScreen() {
           if(isValidEmail(email) && isValidPassword(form.newPassword) && form.confirmPassword === form.newPassword){
              const payload = {...form, email}
              const resp = await passwordManagementService.resetPassword(payload)
-             console.log(resp)
              navigation.navigate("SignIn")
           }else{
               setMessage("Invalid password!!");

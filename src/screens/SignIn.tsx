@@ -74,9 +74,9 @@ export default function SignIn() {
                         </View>
                     </View>
                     <MdLodSnackbar visible={visible} onDismiss={onDismissSnackBar} message={errorMessage} />
-                    <MdLogActivityIndicator loading={loading} />
                 </View>
             </View>
+            <MdLogActivityIndicator loading={loading} />
         </SafeAreaView>
 
     );

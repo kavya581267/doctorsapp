@@ -25,7 +25,6 @@ const buildUrl = (endpoint, queryParams = {}) => {
 
 
 const apiCall = async (endpoint, method = "GET", body = null, queryParams = {}) => {
-    console.log(process.env.BASE_URL)
     try {
         const url = buildUrl(endpoint, queryParams);
         
