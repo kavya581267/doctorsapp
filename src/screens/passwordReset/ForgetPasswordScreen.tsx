@@ -32,7 +32,6 @@ export default function ForgetPassword() {
                 setShowError(true)
             } else {
                 const resp = await passwordManagementService.requestPasswordReset(form);
-                console.log(resp);
                 setMessage(resp.message);
                 setShowError(true)
                 setSuccess(true)

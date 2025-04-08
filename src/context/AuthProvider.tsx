@@ -32,7 +32,6 @@ export const AuthProvider = ({ children }: Props) => {
       const login = async (loginRequest: LoginRequest) => {
         try{
             const response = await loginService.login(loginRequest);
-            console.log(response)
             await storeObject(USER_CONTEXT, response);
             await storeObject(USER, response.user);
             await storeObject(JWT_REFRESH_TOKEN,response.refreshToken)

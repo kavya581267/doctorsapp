@@ -12,7 +12,6 @@ export const storeObject = async <T>(key: string, value: T): Promise<void> => {
 export const getObject = async <T>(key: string): Promise<T | null> => {
   try {
     const jsonValue = await AsyncStorage.getItem(key);
-    console.log(jsonValue)
     return jsonValue ? JSON.parse(jsonValue) as T : null;
   } catch (error) {
     console.error('Error retrieving object:', error);

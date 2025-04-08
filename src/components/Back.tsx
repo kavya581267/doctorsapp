@@ -4,6 +4,7 @@ import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { styles } from "@styles/dashboardStyles"
+import { Avatar } from "react-native-paper";
 
 type Props={
     nav?: string
@@ -24,10 +25,7 @@ export default function Back({ nav }:Props) {
                </View>
                 <View style={styles.headerIcons}>
                     <Ionicons name="notifications-outline" size={24} color="black" />
-                    <Image
-                        source={{ uri: 'https://i.pravatar.cc/150?img=4' }}
-                        style={styles.avatar}
-                    />
+                    <Avatar.Text  size={32} label="XD"/>
                 </View>
             </View>
         </View>
