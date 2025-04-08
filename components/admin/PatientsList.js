@@ -91,7 +91,6 @@ const PatientsList = () => {
     const filterPatient = patients.filter(patient => patient.name.toLowerCase().includes(search.toLowerCase));
 
     return (
-        <SafeAreaView>
             <View style={{ padding: 15, height}}>
                 <Header nav="Mainscreen" heading="Patients List"  tab="Patients"/>
                 <ScrollView  contentContainerStyle={{ flexGrow: 1 }} keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false} >
@@ -126,7 +125,6 @@ const PatientsList = () => {
                     }
                 </ScrollView>
             </View>
-        </SafeAreaView>
     );
 };
 

@@ -48,8 +48,6 @@ export default function PatientRegistrationScreen() {
 
 
   return (
-
-    <SafeAreaView>
       <View style={{padding:15}}>
         <Back nav={"Mainscreen"}></Back>
         <Spacer height={60} />
@@ -59,9 +57,10 @@ export default function PatientRegistrationScreen() {
         {step === 0 && <PatientDetails nextStep={nextStep} formData={formData} setFormData={setFormData} />}
         {step === 1 && <PatientAddress nextStep={nextStep} prevStep={prevStep} formData={formData} setFormData={setFormData} />}
         {step === 2 && <PatientReview prevStep={prevStep} formData={formData} submitForm={submitForm} />}
+        <MdLogActivityIndicator loading={loading}/>
       </View>
-      <MdLogActivityIndicator loading={loading}/>
-    </SafeAreaView>
+     
+
   )
 }
 

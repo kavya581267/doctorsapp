@@ -31,6 +31,7 @@ interface StepProps {
 export const AdminDetails: React.FC<StepProps> = ({ nextStep, prevStep, formData, setFormData }) => {
     const [visible, setVisible] = useState(false);
     const onDismissSnackBar = () => setVisible(false);
+    const [errorMessage,setErrorMessage] = useState("");
 
     const genderOptions = [
         { label: "MALE", value: "MALE" },
@@ -41,13 +42,22 @@ export const AdminDetails: React.FC<StepProps> = ({ nextStep, prevStep, formData
 
     const validateFormFields = () => {
 
-        if (!isAnyFieldsEmpty(["firstName", "lastName", "email", "password", "gender", "dateOfBirth", "phone"], formData) &&
-            isValidEmail(formData.email) && isValidPassword(formData.password) && isValidPhone(formData.phone)) {
-            setVisible(false);
-            nextStep();
+        if (isAnyFieldsEmpty(["firstName", "lastName", "email", "password", "gender", "dateOfBirth", "phone"], formData)) {
+            setVisible(true);
+            setErrorMessage("Please fill all required details");
+        }else if(!isValidEmail(formData.email)){
+             setVisible(true);
+             setErrorMessage("enter valid email");
+        }else if(!isValidPassword(formData.password)){
+            setVisible(true);
+            setErrorMessage("Password must be at least 8 characters and include uppercase, lowercase, number, and special character.")
+        }else if(!isValidPhone(formData.phone)){
+            setVisible(true);
+            setErrorMessage("Please enter a valid phone number with country code. Eg : +91xxxxxxxxxx")
         }
         else {
-            setVisible(true);
+            setVisible(false);
+            nextStep();
         }
     }
 
@@ -140,7 +150,7 @@ export const AdminDetails: React.FC<StepProps> = ({ nextStep, prevStep, formData
                     <Text style={styles.nextTxt}>Next</Text>
                 </TouchableOpacity>
             </View>
-            <MdLodSnackbar visible={visible} onDismiss={onDismissSnackBar} message="Please fill all required details"/>
+            <MdLodSnackbar visible={visible} onDismiss={onDismissSnackBar} message={errorMessage}/>
         </View>
     )
 };

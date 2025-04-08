@@ -18,8 +18,6 @@ export default function PatientDetails() {
     }
    }
     return (
-
-        <SafeAreaView>
             <View style={{ padding: 15 }}>
                 <Header nav="Mainscreen" heading="Patient Management" tab="Patients" />
                 <View>
@@ -76,6 +74,5 @@ export default function PatientDetails() {
                     </View>
                 </View>
             </View>
-        </SafeAreaView>
     )
 }

@@ -62,7 +62,6 @@ const StaffDirectoryScreen = () => {
   );
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
       <View style={styles.container}>
         <View>
           <Back></Back>
@@ -91,7 +90,6 @@ const StaffDirectoryScreen = () => {
           <Text style={styles.addButtonText}>+ Add New Staff</Text>
         </TouchableOpacity>
       </View>
-    </SafeAreaView>
   );
 };
 

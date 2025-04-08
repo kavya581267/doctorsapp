@@ -1,5 +1,5 @@
+import { COLORS } from "@utils/colors";
 import { StyleSheet } from "react-native";
-import { COLORS } from "../constants/colors";
 
 
 export default StyleSheet.create({
@@ -9,7 +9,6 @@ export default StyleSheet.create({
         alignItems:"center"
     },
     logOutButton:{
-       
         backgroundColor:COLORS.primary,
         paddingVertical:10,
         paddingHorizontal:20,

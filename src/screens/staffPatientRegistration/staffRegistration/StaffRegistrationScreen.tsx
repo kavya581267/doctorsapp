@@ -31,7 +31,6 @@ export default function StaffRegistrationScreen() {
 
 
   return (
-    <SafeAreaView>
       <View style={{ padding: 15 }}>
         <Back nav={"Mainscreen"}></Back>
         <Spacer height={60} />
@@ -44,7 +43,6 @@ export default function StaffRegistrationScreen() {
           {step === 2 && <StaffReview prevStep={prevStep} formData={formData} submitForm={submitForm} />}
         </View>
       </View>
-    </SafeAreaView>
   )
 }
 

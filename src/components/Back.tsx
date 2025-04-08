@@ -7,6 +7,7 @@ import { styles } from "@styles/dashboardStyles"
 import { Avatar } from "react-native-paper";
 import { getAvatarName } from "@utils/utils";
 import { AuthContext } from "@context/AuthContext";
+import { COLORS } from "@utils/colors";
 
 type Props={
     nav?: string
@@ -36,6 +37,7 @@ export default function Back({ nav }:Props) {
                     <Avatar.Text  size={32} label={avatharName}/>
                 </View>
             </View>
+            <View style={{ borderBottomColor: COLORS.primary, borderBottomWidth: 1, marginVertical: 1, marginBottom:10 }} />
         </View>
     )
 }

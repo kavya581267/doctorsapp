@@ -45,7 +45,6 @@ export default function DoctorList() {
   );
 
   return (
-    <SafeAreaView>
       <View style={styles.container}>
         <Header nav="Mainscreen"/>
         
@@ -98,7 +97,6 @@ export default function DoctorList() {
           <Text style={styles.saveButtonText}>Confirm Booking</Text>
         </TouchableOpacity>
       </View>
-    </SafeAreaView>
   )
 }
 

@@ -1,7 +1,7 @@
 import MdLogTextInput from "@components/MdLogTextInput";
 import { COLORS } from "@utils/colors";
 import { TouchableOpacity, View } from "react-native";
-import {  Portal, Snackbar, Text } from "react-native-paper";
+import { Portal, Snackbar, Text } from "react-native-paper";
 
 import styles from "@styles/clinicRegistrationStyles"
 import { isAnyFieldsEmpty, isValidEmail, isValidPhone } from "@utils/utils";
@@ -22,14 +22,24 @@ interface StepProps {
 
 
 export const ClinicDetails: React.FC<StepProps> = ({ nextStep, formData, setFormData }) => {
+    const [errorMessage, setErrorMessage] = useState("");
     const [visible, setVisible] = useState(false);
     const onDismissSnackBar = () => setVisible(false);
     const validateFormFields = () => {
-        if (!isAnyFieldsEmpty(["clinicName", "clinicLicense", "clinicEmail", "clinicPhone"], formData) && 
-        isValidEmail(formData.clinicEmail) && isValidPhone(formData.clinicPhone)) {
-            nextStep();
-        } else {
+        if (isAnyFieldsEmpty(["clinicName", "clinicLicense", "clinicEmail", "clinicPhone"], formData)) {
             setVisible(true);
+            setErrorMessage("Please fill all required details");
+        } else if (!isValidEmail(formData.clinicEmail)) {
+            setVisible(true);
+            setErrorMessage("enter valid email");
+        }
+        else if (!isValidPhone(formData.clinicPhone)) {
+            setVisible(true);
+            setErrorMessage("Please enter a valid phone number with country code. Eg : +91xxxxxxxxxx")
+        }
+        else {
+            setVisible(false);
+            nextStep();
         }
     }
 
@@ -74,15 +84,15 @@ export const ClinicDetails: React.FC<StepProps> = ({ nextStep, formData, setForm
                     field="clinicPhone"
                     keyboard="phone-pad"
                 />
-               
+
             </View>
             <View style={styles.buttonFormat}>
-               
+
                 <TouchableOpacity style={styles.buttonNext} onPress={validateFormFields}>
                     <Text style={styles.nextTxt}>Next</Text>
                 </TouchableOpacity>
             </View>
-            <MdLodSnackbar visible={visible} onDismiss={onDismissSnackBar} message="Please fill all required details"/>
+            <MdLodSnackbar visible={visible} onDismiss={onDismissSnackBar} message={errorMessage} />
         </View>
     )
 

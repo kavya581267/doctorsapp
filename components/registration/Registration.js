@@ -40,7 +40,6 @@ export default function Registration({ title, url, fields }) {
     };
 
     return (
-        <SafeAreaView style={{flex:1}}>
             <View style={{flex:1}}>
                 <View style={styles.header}>
                     <AntDesign name="arrowleft" size={24} color="black" onPress={() => navigation.navigate("Mainscreen")} />
@@ -70,6 +69,5 @@ export default function Registration({ title, url, fields }) {
                     <Text style={styles.saveButtonText}>Save</Text>
                 </TouchableOpacity>
             </View>
-        </SafeAreaView>
     );
 }
