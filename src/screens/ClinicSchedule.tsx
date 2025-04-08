@@ -38,6 +38,7 @@ const App = () => {
     const [isClosed, setIsClosed] = useState(false);
     const [showOpeningPicker, setShowOpeningPicker] = useState(false);
     const [showClosingPicker, setShowClosingPicker] = useState(false);
+    const [editMode, setEditMode] = useState(false);
 
     const openEditModal = (item, index) => {
         setEditIndex(index);
@@ -63,20 +64,7 @@ const App = () => {
         setModalVisible(false);
     };
 
-    const handleDelete = (index) => {
-        Alert.alert('Delete Day?', 'Are you sure you want to delete this schedule?', [
-            { text: 'Cancel', style: 'cancel' },
-            {
-                text: 'Delete',
-                onPress: () => {
-                    const updated = [...schedule];
-                    updated.splice(index, 1);
-                    setSchedule(updated);
-                },
-                style: 'destructive',
-            },
-        ]);
-    };
+
 
     const renderItem = ({ item, index }) => (
         <View style={styles.itemCard}>
@@ -101,19 +89,27 @@ const App = () => {
 
                 )}
             </View>
-            <View style={styles.iconRow}>
-                <TouchableOpacity onPress={() => openEditModal(item, index)}>
-                    <Icon name="edit" size={20} color="#007bff" />
-                </TouchableOpacity>
-            </View>
+            {editMode &&
+                <View style={styles.iconRow}>
+                    <TouchableOpacity onPress={() => openEditModal(item, index)}>
+                        <Icon name="edit" size={20} color="#007bff" />
+                    </TouchableOpacity>
+                </View>
+            }
         </View>
     );
 
     return (
-       
+
         <SafeAreaView style={styles.container}>
-             <Back nav='Mainscreen'/>
-            <Text style={styles.header}>Clinic Schedule</Text>
+            <Back nav='Mainscreen' />
+            <View style={{ flexDirection: "row"}}>
+                <Text style={styles.header}>Clinic Schedule</Text>
+                <TouchableOpacity onPress={() => setEditMode(!editMode)}>
+                    <Icon name="edit-note" size={30} color="#007bff" />
+                </TouchableOpacity>
+            </View>
+
             <FlatList
                 data={schedule}
                 keyExtractor={(item) => item.day}
@@ -128,15 +124,15 @@ const App = () => {
 
                         <Text style={styles.label}>Day</Text>
                         <View >
-                           <Text style={styles.timeBox}>{selectedDay}</Text>
+                            <Text style={styles.timeBox}>{selectedDay}</Text>
                         </View>
 
                         <Text style={styles.label}>Opening Time</Text>
                         <TouchableOpacity
-                            onPress={() => !isClosed && setShowOpeningPicker(true)} 
+                            onPress={() => !isClosed && setShowOpeningPicker(true)}
                             style={[
-                              styles.timeBox,
-                              isClosed && { opacity: 0.5 } 
+                                styles.timeBox,
+                                isClosed && { opacity: 0.5 }
                             ]}
                             disabled={isClosed}
                         >
@@ -148,7 +144,7 @@ const App = () => {
                                 minuteInterval={30}
                                 display={Platform.OS === 'android' ? 'clock' : 'spinner'}
                                 mode="time"
-                              
+
                                 onChange={(e, date) => {
                                     setShowOpeningPicker(false);
                                     if (date) setOpeningTime(date);
@@ -158,12 +154,12 @@ const App = () => {
 
                         <Text style={styles.label}>Closing Time</Text>
                         <TouchableOpacity
-                           onPress={() => !isClosed && setShowClosingPicker(true)}
-                           style={[
-                             styles.timeBox,
-                             isClosed && { opacity: 0.5 }
-                           ]}
-                           disabled={isClosed}
+                            onPress={() => !isClosed && setShowClosingPicker(true)}
+                            style={[
+                                styles.timeBox,
+                                isClosed && { opacity: 0.5 }
+                            ]}
+                            disabled={isClosed}
                         >
                             <Text>{formatTime(closingTime)}</Text>
                         </TouchableOpacity>
@@ -203,7 +199,7 @@ export default App;
 
 const styles = StyleSheet.create({
     container: { flex: 1, padding: 16, backgroundColor: '#f2f2f2' },
-    header: { fontSize: 18, fontWeight: '600', marginBottom: 10 ,textAlign:"center"},
+    header: { flex:1,fontSize: 18, fontWeight: '600', marginBottom: 10, textAlign: "center" },
     itemCard: {
         backgroundColor: 'white',
         padding: 16,
@@ -213,14 +209,14 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
     },
-  
-    timeText: { fontSize: 14, marginLeft: 4 ,fontWeight:"500"},
-    openText: { color: 'green', marginLeft: 4 , fontWeight:"500"},
+
+    timeText: { fontSize: 14, marginLeft: 4, fontWeight: "500" },
+    openText: { color: 'green', marginLeft: 4, fontWeight: "500" },
     closedText: { color: 'red', marginTop: 4 },
     iconRow: { flexDirection: 'row' },
-    dayText:{
-    fontWeight:"bold",
-    fontSize:15
+    dayText: {
+        fontWeight: "bold",
+        fontSize: 15
     },
     rowBox: {
         flexDirection: "row",
@@ -249,7 +245,7 @@ const styles = StyleSheet.create({
         overflow: 'hidden',
     },
     timeBox: {
-        fontSize:16,
+        fontSize: 16,
         padding: 12,
         borderWidth: 1,
         borderColor: '#ccc',
