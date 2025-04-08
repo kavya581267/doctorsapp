@@ -4,7 +4,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { LoginRequest, UserInfo } from "@api/model/auth/Auth";
 import { loginService } from "@api/loginService";
 import { JWT_ACCESS_TOKEN, JWT_REFRESH_TOKEN, USER, USER_CONTEXT } from "@utils/constants";
-import { getObject, storeObject } from "@utils/MdLogAsyncStorage";
+import { getObject, removeItem, storeObject } from "@utils/MdLogAsyncStorage";
 import { initializeToken } from "@api/apiService";
 
 type Props = {children: ReactNode}
@@ -47,9 +47,18 @@ export const AuthProvider = ({ children }: Props) => {
       };
     
       const logout = async () => {
-        await loginService.logout();
-        await AsyncStorage.removeItem(JWT_ACCESS_TOKEN);
-        setUser(null);
+        try{
+          await removeItem(USER_CONTEXT);
+          await removeItem(USER);
+          await removeItem(JWT_REFRESH_TOKEN)
+          await removeItem(JWT_ACCESS_TOKEN)
+          await loginService.logout();
+
+        }catch(error){
+            throw error;
+        }
+       
+       
       };
 
     return (

@@ -14,8 +14,12 @@ export default function SettingsScreen ({}){
     return(
         <View style={styles.container}>
            <TouchableOpacity style={styles.logOutButton} onPress={async()=>{
-            setLoading(true)
-            await logout();
+            try{
+                setLoading(true)
+                await logout();
+            }catch(error){
+
+            }
             setLoading(false)
             navigation.navigate("LaunchScreen")
            }}>

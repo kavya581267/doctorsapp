@@ -1,9 +1,20 @@
 import { COLORS } from "@utils/colors";
-import { StyleSheet } from "react-native";
+import { Dimensions, StyleSheet } from "react-native";
 //import { COLORS } from "../constants/colors";
+const { width, height } = Dimensions.get("window");
+const isTablet = width >= 768;
 
 export default StyleSheet.create({
+
+    main:{
+          width: isTablet? "40%": "100%",
+          justifyContent:"flex-start",
+          flex:1,
+          height:height
+    },
+
     header:{
+        marginTop:80,
         alignItems:"center",
         marginBottom:30
     },
