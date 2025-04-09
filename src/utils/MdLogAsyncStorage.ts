@@ -26,3 +26,4 @@ export const removeItem = async (key: string): Promise<void> => {
     console.error('Error removing item:', error);
   }
 };
+

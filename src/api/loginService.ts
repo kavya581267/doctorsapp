@@ -18,6 +18,7 @@ export const loginService = {
     logout: async () => {
         try{
             const refreshToken = await getObject<string>(JWT_REFRESH_TOKEN);
+            await AsyncStorage.clear();
             await apiService.post(LOGOUT_PATH, {"refreshToken":refreshToken});
             await removeItem(USER);
             await removeItem(JWT_REFRESH_TOKEN);
