@@ -9,6 +9,7 @@ export const JWT_ACCESS_TOKEN = "access_token";
 export const JWT_REFRESH_TOKEN = "refresh_token";
 export const USER = "user";
 export const USER_CONTEXT="user_context";
+export const CLINIC_CONTEXT="clinic_context";
 
 
 
@@ -79,3 +80,6 @@ export const REMOVE_DOCTOR_SPECIALTIES_PATH ="/doctors/{{doctorId}}/specialties/
 
 //master data
 export const GET_ALL_SPECIALTIES_PATH ="/specialties";
+
+//home 
+export const ADMIN_HOME_DASHBOARD_API  ="/auth/admin/home"

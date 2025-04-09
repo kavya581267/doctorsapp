@@ -8,22 +8,34 @@ import { Avatar } from "react-native-paper";
 import { getAvatarName } from "@utils/utils";
 import { AuthContext } from "@context/AuthContext";
 import { COLORS } from "@utils/colors";
+import { getObject } from "@utils/MdLogAsyncStorage";
+import { CLINIC_CONTEXT } from "@utils/constants";
+import { ClinicOverview } from "@api/model/auth/Auth";
 
 type Props={
-    nav?: string
+    nav?: string,
+    loading?: boolean
 }
 
-export default function Back({ nav }:Props) {
+export default function Back({ nav, loading=false }:Props) {
     const navigation = useNavigation();
     const [searchText, setSearchText] = useState("");
     const route = useRoute();
-    const [clinicName, setClinicName] = useState("MediClinic");
+    const [clinicName, setClinicName] = useState("");
     const {user} = useContext(AuthContext)
     const [avatharName, setAv] = useState("XX");
 
+    const  loadClinicDeatils = async ()  => {
+        if(!loading){
+            const clinic:ClinicOverview = await getObject(CLINIC_CONTEXT);
+            setClinicName(clinic.clinic.name)
+        }
+    }
+
     useEffect(()=>{
+           loadClinicDeatils()
            setAv(getAvatarName(user.firstName, user.lastName));
-    },[])
+    },[loading])
 
     return (
         <View>
@@ -41,3 +53,5 @@ export default function Back({ nav }:Props) {
         </View>
     )
 }
+
+

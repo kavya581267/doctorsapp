@@ -138,3 +138,34 @@ export interface PhoneVerificationRequest{
   otp: string
   userId: string
 }
+
+
+export type AdminDetails = {
+  id: number;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  clinicId: number;
+};
+
+export type Clinic = {
+  id: number;
+  name: string;
+  addressLine1: string;
+  addressLine2: string | null;
+  city: string;
+  state: string;
+  postalCode: string;
+  email: string;
+  phone: string;
+  licenseNumber: string;
+  active: boolean;
+};
+
+export type ClinicOverview = {
+  adminDetails: AdminDetails;
+  clinic: Clinic;
+  staffCount: number;
+  todayAppointments: any[]; // Replace `any` with a specific type if you know the shape of appointment objects
+};
