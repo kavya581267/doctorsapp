@@ -32,7 +32,7 @@ export const MdLogTimePicker: React.FC<TimePickerProps> = ({ value, onChange ,di
                     <input
                     style={styles.webInput}
                         type="time"
-                        step={30 * 60}
+                        step="1800"
                         disabled={disabled}
                         value={value.toTimeString().slice(0, 5)}
                         onChange={(e) => {
