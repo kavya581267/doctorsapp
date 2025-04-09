@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, TextInput, Dimensions } from 'react-native';
 import { Ionicons, MaterialIcons, FontAwesome5, Feather } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -7,17 +7,40 @@ import { useNavigation } from '@react-navigation/native';
 import Back from '@components/Back';
 import { Avatar } from 'react-native-paper';
 import { getAvatarName } from '@utils/utils';
+import { dashBoardService } from '@api/dashboard';
+import { MdLogActivityIndicator } from '@components/MdLogActivityIndicator';
+import { storeObject } from '@utils/MdLogAsyncStorage';
+import { CLINIC_CONTEXT } from '@utils/constants';
 const { width, height } = Dimensions.get("window");
 
 export default function DashboardScreen() {
-    const [clinicName, setClinicName] = useState("MediClinic");
+    const [clinicName, setClinicName] = useState("");
     const [searchText, setSearchText] = useState('');
     const navigation = useNavigation();
+    const [loading, setLoading] = useState(true);
+    const [staffCount, setStaffCount] = useState(0);
+    const [appointmentsToday, setTodaysAppointments] = useState([]);
+
+
+    const loadData = async () => {
+        setLoading(true);
+        const resp = await dashBoardService.home();
+        resp.staffCount 
+        storeObject(CLINIC_CONTEXT, resp);
+        setClinicName(resp.clinic.name);
+        setStaffCount(resp.staffCount);
+        setTodaysAppointments(resp.todayAppointments)
+        setLoading(false);
+    }
+
+    useEffect(()=> {
+        loadData();
+    },[])
 
     return (
             <ScrollView >
                 <View style={{ padding: 15, backgroundColor:"white" , height:height}}>
-                    <Back/>
+                    <Back loading={loading}/>
                     <TextInput
                         placeholder="Search for patient or doctor"
                         value={searchText}
@@ -28,11 +51,11 @@ export default function DashboardScreen() {
                     <View style={styles.statsContainer}>
                         <View style={styles.statCard}>
                             <Text style={styles.statLabel}>Today's Appointments</Text>
-                            <Text style={styles.statNumber}>24</Text>
+                            <Text style={styles.statNumber}>{appointmentsToday.length}</Text>
                         </View>
                         <View style={[styles.statCard, { backgroundColor: '#E6F8ED' }]}>
                             <Text style={styles.statLabel}>Active Staff</Text>
-                            <Text style={styles.statNumber}>12</Text>
+                            <Text style={styles.statNumber}>{staffCount}</Text>
                         </View>
                     </View>
 
@@ -55,7 +78,7 @@ export default function DashboardScreen() {
                         </TouchableOpacity>
                     </View>
 
-                    {appointments.map((appt, index) => (
+                    {appointmentsToday.map((appt, index) => (
                         <View key={index} style={styles.apptCard}>
                             <Image source={{ uri: appt.avatar }} style={styles.apptAvatar} />
                             <View style={{ flex: 1 }}>
@@ -74,6 +97,7 @@ export default function DashboardScreen() {
                     {/* Bottom spacing */}
                     <View style={{ height: 80 }} />
                 </View>
+                <MdLogActivityIndicator loading={loading} />
             </ScrollView>)
 }
 
