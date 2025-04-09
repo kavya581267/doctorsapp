@@ -1,8 +1,8 @@
-import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { AuthProvider } from '@context/AuthProvider';
 import { PaperProvider } from 'react-native-paper';
 import MainNavigator from '@components/MainNavigation';
-import { SafeAreaView } from 'react-native';
+
 import { COLORS } from '@utils/colors';
 
 
