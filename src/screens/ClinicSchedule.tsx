@@ -11,12 +11,12 @@ import {
     Alert,
     Platform,
 } from 'react-native';
-import { Picker } from '@react-native-picker/picker';
-import DateTimePicker from '@react-native-community/datetimepicker';
+
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { SafeAreaView } from 'react-native-safe-area-context';
+
 import Back from '@components/Back';
 import { COLORS } from '@utils/colors';
+import { MdLogTimePicker } from '@components/MdLogTimePicker';
 
 const defaultSchedule = [
     { day: 'Monday', open: true, openingTime: new Date(0, 0, 0, 10, 0), closingTime: new Date(0, 0, 0, 17, 0) },
@@ -36,8 +36,7 @@ const App = () => {
     const [openingTime, setOpeningTime] = useState(new Date());
     const [closingTime, setClosingTime] = useState(new Date());
     const [isClosed, setIsClosed] = useState(false);
-    const [showOpeningPicker, setShowOpeningPicker] = useState(false);
-    const [showClosingPicker, setShowClosingPicker] = useState(false);
+   
     const [editMode, setEditMode] = useState(false);
 
     const openEditModal = (item, index) => {
@@ -103,7 +102,7 @@ const App = () => {
 
         <View style={styles.container}>
             <Back nav='Mainscreen' />
-            <View style={{ flexDirection: "row"}}>
+            <View style={{ flexDirection: "row" }}>
                 <Text style={styles.header}>Clinic Schedule</Text>
                 <TouchableOpacity onPress={() => setEditMode(!editMode)}>
                     <Icon name="edit-note" size={30} color="#007bff" />
@@ -128,53 +127,11 @@ const App = () => {
                         </View>
 
                         <Text style={styles.label}>Opening Time</Text>
-                        <TouchableOpacity
-                            onPress={() => !isClosed && setShowOpeningPicker(true)}
-                            style={[
-                                styles.timeBox,
-                                isClosed && { opacity: 0.5 }
-                            ]}
-                            disabled={isClosed}
-                        >
-                            <Text>{formatTime(openingTime)}</Text>
-                        </TouchableOpacity>
-                        {showOpeningPicker && (
-                            <DateTimePicker
-                                value={openingTime}
-                                minuteInterval={30}
-                                display={Platform.OS === 'android' ? 'clock' : 'spinner'}
-                                mode="time"
-
-                                onChange={(e, date) => {
-                                    setShowOpeningPicker(false);
-                                    if (date) setOpeningTime(date);
-                                }}
-                            />
-                        )}
+                        <MdLogTimePicker value={openingTime} onChange={setOpeningTime} disabled={isClosed}/>
 
                         <Text style={styles.label}>Closing Time</Text>
-                        <TouchableOpacity
-                            onPress={() => !isClosed && setShowClosingPicker(true)}
-                            style={[
-                                styles.timeBox,
-                                isClosed && { opacity: 0.5 }
-                            ]}
-                            disabled={isClosed}
-                        >
-                            <Text>{formatTime(closingTime)}</Text>
-                        </TouchableOpacity>
-                        {showClosingPicker && (
-                            <DateTimePicker
-                                value={closingTime}
-                                mode="time"
-                                minuteInterval={30}
-                                display={Platform.OS === 'android' ? 'clock' : 'spinner'}
-                                onChange={(e, date) => {
-                                    setShowClosingPicker(false);
-                                    if (date) setClosingTime(date);
-                                }}
-                            />
-                        )}
+
+                        <MdLogTimePicker value={closingTime} onChange={setClosingTime} disabled={isClosed}/>
 
                         <View style={styles.switchRow}>
                             <Switch value={isClosed} onValueChange={setIsClosed} />
@@ -198,8 +155,8 @@ const App = () => {
 export default App;
 
 const styles = StyleSheet.create({
-    container: { flex: 1, padding:15 },
-    header: { flex:1,fontSize: 18, fontWeight: '600', marginBottom: 10, textAlign: "center" },
+    container: { flex: 1, padding: 15 },
+    header: { flex: 1, fontSize: 18, fontWeight: '600', marginBottom: 10, textAlign: "center" },
     itemCard: {
         backgroundColor: 'white',
         padding: 16,
