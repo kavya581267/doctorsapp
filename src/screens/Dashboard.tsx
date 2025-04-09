@@ -24,12 +24,15 @@ export default function DashboardScreen() {
 
     const loadData = async () => {
         setLoading(true);
-        const resp = await dashBoardService.home();
-        resp.staffCount 
-        storeObject(CLINIC_CONTEXT, resp);
-        setClinicName(resp.clinic.name);
-        setStaffCount(resp.staffCount);
-        setTodaysAppointments(resp.todayAppointments)
+        try{
+            const resp = await dashBoardService.home();
+            storeObject(CLINIC_CONTEXT, resp);
+            setClinicName(resp.clinic.name);
+            setStaffCount(resp.staffCount);
+            setTodaysAppointments(resp.todayAppointments)
+        }catch(error){
+        }
+        
         setLoading(false);
     }
 
