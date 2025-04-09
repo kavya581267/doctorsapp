@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { View, Text, TextInput, Image } from "react-native";
+import { View, Text, TextInput, Image, Touchable, TouchableOpacity, Alert } from "react-native";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { useNavigation, useRoute } from "@react-navigation/native";
@@ -46,7 +46,10 @@ export default function Back({ nav, loading=false }:Props) {
                </View>
                 <View style={styles.headerIcons}>
                     <Ionicons name="notifications-outline" size={24} color="black" />
-                    <Avatar.Text  size={32} label={avatharName}/>
+                    <TouchableOpacity onPress={()=>navigation.navigate("UserProfileScreen")}>
+                    <Avatar.Text  size={32} label={avatharName} />
+                    </TouchableOpacity>
+                    
                 </View>
             </View>
             <View style={{ borderBottomColor: COLORS.primary, borderBottomWidth: 1, marginVertical: 1, marginBottom:10 }} />
