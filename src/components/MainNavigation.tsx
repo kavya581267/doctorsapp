@@ -23,6 +23,7 @@ import PatientRegistrationScreen from '@screens/staffPatientRegistration/patient
 import ClinicScheduleScreen from '@screens/ClinicSchedule';
 import DashboardScreen from '@screens/Dashboard';
 import StaffDirectoryScreen from '@screens/StaffDirectory';
+import ClinicOverview from '@screens/ClinicOverview';
 
 
 
@@ -67,6 +68,7 @@ export type RootStackParamList = {
                   <Stack.Screen name='PatientRegistrationScreen' component={PatientRegistrationScreen}></Stack.Screen>
                   <Stack.Screen name="PatientRegistration" component={PatientRegistration}></Stack.Screen>
                   <Stack.Screen name='ClinicScheduleScreen' component={ClinicScheduleScreen}></Stack.Screen>
+                  <Stack.Screen name="ClinicOverview" component={ClinicOverview}/>
                   <Stack.Screen name="Appointments" component={Appointments}></Stack.Screen>
                   <Stack.Screen name='DoctorList' component={DoctorList} />
                   <Stack.Screen name='BookAppointment' component={BookAppointment} />
