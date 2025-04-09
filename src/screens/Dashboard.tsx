@@ -109,7 +109,7 @@ const quickActions = [
         label: 'Clinic Info',
         bgColor: '#E6F0FB',
         icon: <Ionicons name="information-circle-outline" size={24} color="#2F80ED" />,
-        
+        navPage: "ClinicOverview",
     },
     {
         label: 'New Staff',
