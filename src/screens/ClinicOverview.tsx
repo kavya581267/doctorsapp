@@ -58,7 +58,7 @@ const ClinicOverview = () => {
                     <Avatar.Icon size={48} icon="hospital-building" />
                 </Card.Content>
             </Card>
-
+   
             {/* Contact Info Card */}
             <Card style={styles.card}>
                 <Card.Content>
