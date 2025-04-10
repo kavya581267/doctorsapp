@@ -3,7 +3,7 @@ import Back from '@components/Back';
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS } from '@utils/colors';
 import React, { useEffect, useState } from 'react';
-import { View, Linking, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Linking, StyleSheet, TouchableOpacity, Platform } from 'react-native';
 import { Card, Text, Avatar, Button, useTheme, Badge, TextInput } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
@@ -34,7 +34,7 @@ const ClinicOverview = () => {
     };
 
     return (
-        <View style={styles.container}>
+        <View style={Platform.OS === 'web' ? styles.webContainer : styles.container}>
             {/* Header */}
             <Back nav='Mainscreen' />
             <View >
@@ -157,9 +157,13 @@ const ClinicOverview = () => {
 
 const styles = StyleSheet.create({
     container: {
-
         flex: 1, padding: 15,
-
+    },
+    webContainer:{
+      
+        flex: 1,
+        paddingVertical: 15,
+        paddingHorizontal: '10%',
     },
     header: {
         fontSize: 18,
