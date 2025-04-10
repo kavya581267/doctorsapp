@@ -2,7 +2,7 @@ import Back from '@components/Back';
 import { AuthContext } from '@context/AuthContext';
 import {styles} from "styles/userProfileScreenStyle";
 import React, { useContext, useState } from 'react';
-import { View } from 'react-native';
+import { Platform, View } from 'react-native';
 import { Avatar, Text, TextInput, Button, Card, Divider } from 'react-native-paper';
 import { useNavigation } from "@react-navigation/native";
 
@@ -41,7 +41,7 @@ const UserProfileScreen = () => {
     };
 
     return (
-        <View style={styles.container}>
+        <View style={Platform.OS === 'web' ? styles.webContainer : styles.container}>
             <Back nav='Mainscreen' />
 
 
@@ -54,7 +54,7 @@ const UserProfileScreen = () => {
                 <Text style={styles.role}>{role}</Text>
 
             </View>
-
+          
             <Card style={styles.card}>
                 <Card.Content>
                     <Text style={styles.label}>Firstname</Text>

@@ -7,7 +7,12 @@ export const styles = StyleSheet.create({
     container: {
         padding: 15,
     },
-
+    webContainer:{
+        padding:15,
+        flex: 1,
+       paddingLeft:"10%",
+       paddingRight:"10%",
+    },
     profileSection: {
         alignItems: 'center',
         marginVertical: 10,
