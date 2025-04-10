@@ -1,16 +1,25 @@
 import { ClinicResponse } from '@api/model/clinic/ClinicResponse';
 import Back from '@components/Back';
 import { Ionicons } from '@expo/vector-icons';
+import { COLORS } from '@utils/colors';
 import React, { useEffect, useState } from 'react';
 import { View, Linking, StyleSheet, TouchableOpacity } from 'react-native';
-import { Card, Text, Avatar, Button, useTheme, Badge } from 'react-native-paper';
+import { Card, Text, Avatar, Button, useTheme, Badge, TextInput } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 const ClinicOverview = () => {
     const [editMode, setEditMode] = useState(false);
+    const [phone, setPhone] = useState("+12345678901");
+    const [email, setEmail] = useState("clinic@example.com")
+    const [address, setAddress] = useState("123 Main St New York, NY 10001")
 
-  
+    const toggleEdit = () => {
+        if (editMode) {
 
+            console.log('Saving...', { phone, email, address });
+        }
+        setEditMode(!editMode);
+    };
 
     const handlePhonePress = () => {
         Linking.openURL('tel:+12345678901');
@@ -28,14 +37,10 @@ const ClinicOverview = () => {
         <View style={styles.container}>
             {/* Header */}
             <Back nav='Mainscreen' />
-            <View style={{ flexDirection: "row" }}>
+            <View >
                 <Text style={styles.header}>
                     Clinic Overview
-                </Text>
-                <TouchableOpacity onPress={() => setEditMode(!editMode)}>
-                    <Ionicons name="create-outline" size={24} color="#1C60B3" />
-                </TouchableOpacity>
-
+                </Text>         
             </View>
 
 
@@ -50,7 +55,7 @@ const ClinicOverview = () => {
                             <Text style={styles.licenseStyle}>License: CLIN12345</Text>
                         </View>
                     </View>
-                    <Avatar.Icon size={48} icon="hospital-building"/>
+                    <Avatar.Icon size={48} icon="hospital-building" />
                 </Card.Content>
             </Card>
 
@@ -59,9 +64,6 @@ const ClinicOverview = () => {
                 <Card.Content>
                     <View style={styles.cardHead}>
                         <Text style={styles.sectionTitle}>Contact Information</Text>
-                        {editMode && (
-                            <Icon name="edit" size={20} color="#1C60B3"></Icon>
-                        )}
                     </View>
 
 
@@ -72,7 +74,13 @@ const ClinicOverview = () => {
                         </View>
                         <View>
                             <Text style={styles.phoneEmailText}>Phone</Text>
-                            <Text onPress={handlePhonePress} style={styles.textStyle}>+1 234-567-8901</Text>
+                            {editMode ? (
+                                <TextInput value={phone} onChangeText={setPhone} style={styles.input} mode='outlined' />
+                            ) : (
+                                <Text onPress={handlePhonePress} style={styles.textStyle}>{phone}</Text>
+                            )
+                            }
+
                         </View>
 
                     </View>
@@ -83,8 +91,14 @@ const ClinicOverview = () => {
                             <Ionicons name="mail" size={18} color="#1C60B3" />
                         </View>
                         <View>
-                            <Text  style={styles.phoneEmailText}>Email</Text>
-                            <Text onPress={handleEmailPress} style={styles.textStyle}>clinic@example.com</Text>
+                            <Text style={styles.phoneEmailText}>Email</Text>
+                            {editMode ? (
+                                <TextInput value={email} onChangeText={setEmail} style={styles.input} mode='outlined' />
+                            ) : (
+                                <Text onPress={handleEmailPress} style={styles.textStyle}>{email}</Text>
+                            )
+                            }
+
                         </View>
 
                     </View>
@@ -97,9 +111,7 @@ const ClinicOverview = () => {
 
                     <View style={styles.cardHead}>
                         <Text style={styles.sectionTitle}>Address</Text>
-                        {editMode && (
-                            <Icon name="edit" size={20} color="#1C60B3"></Icon>
-                        )}
+
                     </View>
                     <View style={styles.infoRow}>
                         <View style={styles.iconCircle}>
@@ -107,8 +119,12 @@ const ClinicOverview = () => {
                         </View>
 
                         <View>
-                            <Text style={styles.textStyle}>123 Main St</Text>
-                            <Text style={styles.textStyle}>New York, NY 10001</Text>
+                            {editMode ? (
+                                <TextInput value={address} onChangeText={setAddress} style={styles.input} mode='outlined' />
+                            ) : (
+                                <Text onPress={handleEmailPress} style={styles.textStyle}>{address}</Text>
+                            )
+                            }
                         </View>
                     </View>
 
@@ -119,31 +135,43 @@ const ClinicOverview = () => {
                         style={{ marginTop: 8 }}
                     >
                         Get Directions
+
                     </Button>
+
                 </Card.Content>
+
             </Card>
+
+            <Button
+                mode="outlined"
+                icon={editMode ? 'content-save':"pencil"}
+                onPress={toggleEdit}
+               >
+                {editMode ? 'Save Changes' : 'Edit Profile'}
+            </Button>
+
+
         </View>
     );
 };
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: '#fff',
+
         flex: 1, padding: 15,
 
     },
     header: {
-        flex: 1,
         fontSize: 18,
         fontWeight: '600',
         textAlign: "center",
         marginBottom: 10
     },
-    phoneEmailText:{
-        fontSize:14,
-        color:"grey",
-        fontWeight:"500",
-        marginBottom:5
+    phoneEmailText: {
+        fontSize: 14,
+        color: "grey",
+        fontWeight: "500",
+        marginBottom: 5
     },
     textStyle: {
         fontWeight: "500",
@@ -160,12 +188,14 @@ const styles = StyleSheet.create({
     card: {
         marginBottom: 16,
         borderRadius: 12,
-        elevation: 2,
-        backgroundColor: "white"
     },
     cardHead: {
         flexDirection: "row",
         justifyContent: "space-between"
+    },
+    input: {
+        marginTop: 4,
+        height: 45
     },
     rowBetween: {
         flexDirection: 'row',
@@ -201,6 +231,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginRight: 10
     },
+   
 
 });
 
