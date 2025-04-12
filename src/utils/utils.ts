@@ -31,6 +31,11 @@ export function replacePlaceholders(template:string, params:any) {
 
 
   export function getAvatarName(firstName:string, lastName: string){
-    return firstName.toUpperCase().charAt(0)+lastName.toUpperCase().charAt(0);
+    if(firstName && lastName){
+        return firstName.toUpperCase().charAt(0)+lastName.toUpperCase().charAt(0);
+    }else{
+        return "XX"
+    }
+    
   }
 

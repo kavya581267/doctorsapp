@@ -12,47 +12,48 @@ import { getObject } from "@utils/MdLogAsyncStorage";
 import { CLINIC_CONTEXT } from "@utils/constants";
 import { ClinicOverview } from "@api/model/auth/Auth";
 
-type Props={
+type Props = {
     nav?: string,
     loading?: boolean
 }
 
-export default function Back({ nav, loading=false }:Props) {
+export default function Back({ nav, loading = false }: Props) {
     const navigation = useNavigation();
     const [searchText, setSearchText] = useState("");
     const route = useRoute();
     const [clinicName, setClinicName] = useState("");
-    const {user} = useContext(AuthContext)
+    const { loggedInUserContext } = useContext(AuthContext)
     const [avatharName, setAv] = useState("XX");
 
-    const  loadClinicDeatils = async ()  => {
-        if(!loading){
-            const clinic:ClinicOverview = await getObject(CLINIC_CONTEXT);
+    const loadClinicDeatils = async () => {
+        if (!loading) {
+            const clinic: ClinicOverview = await getObject(CLINIC_CONTEXT);
             setClinicName(clinic.clinic.name)
         }
     }
 
-    useEffect(()=>{
-           loadClinicDeatils()
-           setAv(getAvatarName(user.firstName, user.lastName));
-    },[loading])
+    useEffect(() => {
+        setClinicName(loggedInUserContext?.clinicDetails?.name)
+        loadClinicDeatils()
+        setAv(getAvatarName(loggedInUserContext?.userDetails?.firstName, loggedInUserContext?.userDetails?.lastName));
+    }, [loading])
 
     return (
         <View>
             <View style={styles.header}>
-               <View style={{flexDirection:"row"}}>
-                 { nav ?  <AntDesign style={{marginRight:15}} name="arrowleft" size={24} color="black" onPress={() => navigation.navigate(nav)} />: ""}
-                <Text style={styles.title}>{clinicName}</Text>
-               </View>
+                <View style={{ flexDirection: "row" }}>
+                    {nav ? <AntDesign style={{ marginRight: 15 }} name="arrowleft" size={24} color="black" onPress={() => navigation.navigate(nav)} /> : ""}
+                    <Text style={styles.title}>{clinicName}</Text>
+                </View>
                 <View style={styles.headerIcons}>
                     <Ionicons name="notifications-outline" size={24} color="black" />
-                    <TouchableOpacity onPress={()=>navigation.navigate("UserProfileScreen")}>
-                    <Avatar.Text  size={32} label={avatharName} />
+                    <TouchableOpacity onPress={() => navigation.navigate("UserProfileScreen")}>
+                        <Avatar.Text size={32} label={avatharName} />
                     </TouchableOpacity>
-                    
+
                 </View>
             </View>
-            <View style={{ borderBottomColor: COLORS.primary, borderBottomWidth: 1, marginVertical: 1, marginBottom:10 }} />
+            <View style={{ borderBottomColor: COLORS.primary, borderBottomWidth: 1, marginVertical: 1, marginBottom: 10 }} />
         </View>
     )
 }

@@ -14,23 +14,19 @@ import { AccessTokenContext } from "@api/model/auth/AccessTokensContext";
 type Props = { children: ReactNode }
 
 export const AuthProvider = ({ children }: Props) => {
-
-  const [user, setUser] = useState<UserInfo | undefined>(null);
   const [loading, setLoading] = useState(true);
-  const [jwt, setJwt] = useState(null);
   const [loggedInUserContext, setLoggedinUserContext] = useState<LoggedInUserContext | undefined>(undefined)
   const [accessTokenContext, setAccessTokenContext] = useState<AccessTokenContext | undefined>(undefined)
-
 
   //check is usercontext exist
 
   const isLoggedInUserContext = async () => {
     const loggedInUserContext = await getObject<LoggedInUserContext>(USER_CONTEXT)
     if (loggedInUserContext) {
+      setLoggedinUserContext(loggedInUserContext);
       return true;
-    } else {
-      return false;
     }
+      return false;
   }
 
   //check if token context exist 
@@ -59,13 +55,7 @@ export const AuthProvider = ({ children }: Props) => {
   const loadToken = async () => {
     try {
       if (await isLoggedInUserContext() && await isValidAccessTokensrContext()) {
-        const user = await getObject<UserInfo>(USER)
-        let jwt = await getObject<string>(JWT_ACCESS_TOKEN)
-        if (user && jwt) {
-          setUser(user);
-          setJwt(jwt)
           initializeToken();
-        }
       } else {
         await AsyncStorage.clear()
       }
@@ -109,12 +99,7 @@ export const AuthProvider = ({ children }: Props) => {
       loginUserContext.userDetails = clinicDashboardResp.adminDetails;
       await storeObject(USER_CONTEXT, loginUserContext);
       setLoggedinUserContext(loginUserContext);
-
-
-
-      // legacy to remove
-      setUser(response.user);
-      setJwt(response.accessToken);
+      
       return true;
     } catch (error) {
       throw error;
@@ -131,7 +116,7 @@ export const AuthProvider = ({ children }: Props) => {
   };
 
   return (
-    <AuthContext.Provider value={{ login, logout, user, loading, loggedInUserContext }}>
+    <AuthContext.Provider value={{ login, logout, loading, loggedInUserContext }}>
       {children}
     </AuthContext.Provider>
   )

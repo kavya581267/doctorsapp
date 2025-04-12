@@ -15,7 +15,7 @@ const getAccessToken = async () => {
        if(cachedAccessTokes){
         await initializeToken();
        }
-       return cachedAccessTokes.accessToken
+       return cachedAccessTokes?.accessToken
 }
 
 const buildUrl = (endpoint, queryParams = {}) => {
