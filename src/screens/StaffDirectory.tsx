@@ -1,7 +1,12 @@
+import { Staff } from '@api/model/staff/Staff';
+import { staffService } from '@api/staffService';
 import Back from '@components/Back';
+import { AuthContext } from '@context/AuthContext';
 import { useNavigation } from '@react-navigation/native';
 import { COLORS } from '@utils/colors';
-import React, { useState } from 'react';
+import { getAvatarName } from '@utils/utils';
+import React, { useContext, useEffect, useState } from 'react';
+import { ListRenderItem } from 'react-native';
 
 import {
   View,
@@ -11,10 +16,9 @@ import {
   FlatList,
   TouchableOpacity,
   Image,
-  ScrollView,
-  SafeAreaView,
   Dimensions,
 } from 'react-native';
+import { Avatar } from 'react-native-paper';
 
 const staffData = [
   {
@@ -43,19 +47,34 @@ const staffData = [
 const StaffDirectoryScreen = () => {
   const [searchText, setSearchText] = useState('');
   const navigation = useNavigation();
+  const {loggedInUserContext} = useContext(AuthContext);
+  const [staff, setStaff] = useState<Staff[]>([]);
 
-  const filteredStaff = staffData.filter((staff) =>
-    staff.name.toLowerCase().includes(searchText.toLowerCase())
+  const fetchStaffLst = async () => {
+    const resp = await staffService.getClinicStaff(loggedInUserContext?.clinicDetails.id.toString());
+    setStaff(resp)
+  }
+
+
+  useEffect(()=>{
+      fetchStaffLst();
+  },[])
+
+  const filteredStaff = staff.filter((staff) =>
+    staff.firstName.toLowerCase().includes(searchText.toLowerCase()) || 
+     staff.lastName.toLowerCase().includes(searchText.toLowerCase()) ||
+     staff.phone.toLowerCase().includes(searchText.toLowerCase())   ||
+     staff.email.toLowerCase().includes(searchText.toLowerCase())
   );
 
-  const renderStaffCard = ({ item }) => (
+  const renderStaffCard: ListRenderItem<Staff>  = ({item}) => (
     <TouchableOpacity style={styles.card}>
-      <Image source={{ uri: item.avatar }} style={styles.avatar} />
+      <Avatar.Text size={60} label={getAvatarName(item?.firstName, item?.lastName)} />
       <View style={styles.cardContent}>
-        <Text style={styles.name}>{item.name}</Text>
-        <Text style={styles.role}>{item.role}</Text>
-        <Text style={[styles.status, item.status === 'Active' ? styles.active : styles.onLeave]}>
-          {item.status}
+        <Text style={styles.name}>{item.firstName}</Text>
+        <Text style={styles.role}>{item.roleName}</Text>
+        <Text style={[styles.status, item.isActive ? styles.active : styles.onLeave]}>
+          {item.isActive?"Active":"InActive"}
         </Text>
       </View>
     </TouchableOpacity>
@@ -79,9 +98,9 @@ const StaffDirectoryScreen = () => {
             ))}
           </View>
 
-          <FlatList
+          <FlatList<Staff>
             data={filteredStaff}
-            keyExtractor={(item) => item.id}
+            keyExtractor={(item) => item.id.toString()}
             renderItem={renderStaffCard}
             contentContainerStyle={{ paddingBottom: 100 }}
           />
@@ -144,6 +163,7 @@ const styles = StyleSheet.create({
   },
   cardContent: {
     flex: 1,
+    paddingLeft:30
   },
   name: {
     fontWeight: '600',

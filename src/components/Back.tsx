@@ -19,7 +19,6 @@ type Props = {
 
 export default function Back({ nav, loading = false }: Props) {
     const navigation = useNavigation();
-    const [searchText, setSearchText] = useState("");
     const route = useRoute();
     const [clinicName, setClinicName] = useState("");
     const { loggedInUserContext } = useContext(AuthContext)
