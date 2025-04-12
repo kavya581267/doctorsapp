@@ -1,10 +1,11 @@
 import Back from '@components/Back';
 import { AuthContext } from '@context/AuthContext';
-import {styles} from "styles/userProfileScreenStyle";
-import React, { useContext, useState } from 'react';
+import { styles } from "styles/userProfileScreenStyle";
+import React, { useContext, useEffect, useState } from 'react';
 import { Platform, View } from 'react-native';
 import { Avatar, Text, TextInput, Button, Card, Divider } from 'react-native-paper';
 import { useNavigation } from "@react-navigation/native";
+import { MdLogActivityIndicator } from '@components/MdLogActivityIndicator';
 
 const UserProfileScreen = () => {
     const [isEditing, setIsEditing] = useState(false);
@@ -12,39 +13,45 @@ const UserProfileScreen = () => {
     const [lastName, setLastName] = useState("Doe")
     const [email, setEmail] = useState('john.doe@example.com');
     const [phone, setPhone] = useState('+1 (555) 123-4567');
-    const role = 'Administrator';
-     const navigation = useNavigation();
+    const [role, setRole] = useState("ADMiN")
+    const navigation = useNavigation();
 
-    const[loading,setLoading] = useState(false);
-    const {logout } = useContext(AuthContext);
+    const [loading, setLoading] = useState(false);
+    const { logout, loggedInUserContext } = useContext(AuthContext);
 
-   //logout
-   const logOutButton = async () =>{
-    try{
-     setLoading(true);
-     await logout();
-    
-    }catch(error){
-       
+    //logout
+    const logOutButton = async () => {
+        try {
+            setLoading(true);
+            await logout();
+
+        } catch (error) {
+
+        }
+        setLoading(false)
+        navigation.navigate("LaunchScreen");
     }
-    setLoading(false)
-    navigation.navigate("LaunchScreen");
-}
 
 
     const toggleEdit = () => {
         if (isEditing) {
-
-            console.log('Saving...', { firstName,lastName, email, phone });
+            console.log('Saving...', { firstName, lastName, email, phone });
         }
         setIsEditing(!isEditing);
     };
 
+
+    useEffect(()=> {
+          setFirstName(loggedInUserContext?.userDetails.firstName)
+          setLastName(loggedInUserContext?.userDetails.lastName)
+          setPhone(loggedInUserContext?.userDetails.phone)
+          setEmail(loggedInUserContext?.userDetails.email)
+          setRole((loggedInUserContext?.roles?.length > 0 ? loggedInUserContext?.roles[0] : "ADMIN"))
+    },[])
+
     return (
         <View style={Platform.OS === 'web' ? styles.webContainer : styles.container}>
             <Back nav='Mainscreen' />
-
-
             <View style={styles.profileSection}>
                 <Avatar.Image
                     size={80}
@@ -54,7 +61,7 @@ const UserProfileScreen = () => {
                 <Text style={styles.role}>{role}</Text>
 
             </View>
-          
+
             <Card style={styles.card}>
                 <Card.Content>
                     <Text style={styles.label}>Firstname</Text>
@@ -150,6 +157,8 @@ const UserProfileScreen = () => {
                     )}
                 </Card.Content>
             </Card>
+
+            <MdLogActivityIndicator loading={loading}/>
         </View>
     );
 };

@@ -1,8 +1,9 @@
 import { ClinicResponse } from '@api/model/clinic/ClinicResponse';
 import Back from '@components/Back';
+import { AuthContext } from '@context/AuthContext';
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS } from '@utils/colors';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { View, Linking, StyleSheet, TouchableOpacity, Platform } from 'react-native';
 import { Card, Text, Avatar, Button, useTheme, Badge, TextInput } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -12,6 +13,16 @@ const ClinicOverview = () => {
     const [phone, setPhone] = useState("+12345678901");
     const [email, setEmail] = useState("clinic@example.com")
     const [address, setAddress] = useState("123 Main St New York, NY 10001")
+
+    const {loggedInUserContext} =   useContext(AuthContext)
+
+    useEffect(()=>{
+        setPhone(loggedInUserContext?.clinicDetails.phone);
+        setEmail(loggedInUserContext?.clinicDetails.email)
+        setAddress(loggedInUserContext?.clinicDetails.addressLine1 +", "+loggedInUserContext?.clinicDetails.city
+             +", " + loggedInUserContext?.clinicDetails.postalCode
+        )
+    },[])
 
     const toggleEdit = () => {
         if (editMode) {
