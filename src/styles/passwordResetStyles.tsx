@@ -9,7 +9,6 @@ export default StyleSheet.create({
     
     },
     png: {
-        tintColor: COLORS.primary,
         alignSelf:"center"
     },
     heading: {

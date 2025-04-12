@@ -61,7 +61,7 @@ const StaffDirectoryScreen = () => {
   },[])
 
   const filteredStaff = staff.filter((staff) =>
-    staff.firstName.toLowerCase().includes(searchText.toLowerCase()) || 
+     staff.firstName.toLowerCase().includes(searchText.toLowerCase()) || 
      staff.lastName.toLowerCase().includes(searchText.toLowerCase()) ||
      staff.phone.toLowerCase().includes(searchText.toLowerCase())   ||
      staff.email.toLowerCase().includes(searchText.toLowerCase())

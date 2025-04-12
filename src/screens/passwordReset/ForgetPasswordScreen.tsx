@@ -46,7 +46,7 @@ export default function ForgetPassword() {
         <SafeAreaView style={styles.container}>
             <View>
                 <View style={styles.marginBtm}>
-                    <Image style={styles.png} source={require("../../../assets/launchscreen.png")} />
+                    <Image style={styles.png} source={require("../../../assets/logo.png")} />
                     <Text style={styles.heading}>Forgot Your Password?</Text>
                     <Text style={styles.subHeading}>Enter your email so that we can send verification code</Text>
                 </View>

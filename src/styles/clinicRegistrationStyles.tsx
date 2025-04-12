@@ -17,7 +17,8 @@ export default StyleSheet.create({
         lineHeight: 48
     },
     png: {
-        tintColor: COLORS.primary
+        marginTop:20,
+        marginBottom:15
     },
     subHeading: {
         fontSize: 16,
@@ -60,13 +61,13 @@ export default StyleSheet.create({
         marginTop: 10,
         borderWidth: 2,
         backgroundColor: COLORS.secondary,
-        borderColor: COLORS.primary,
+        borderColor: COLORS.white,
         flexDirection: "row",
         justifyContent: "space-evenly"
     },
     nextTxt: {
-        color: COLORS.primary,
-        fontWeight: "bold"
+        color: COLORS.white,
+        fontWeight: "600"
     },
 
     clinicReviewStyle: {

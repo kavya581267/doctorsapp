@@ -84,3 +84,5 @@ export const GET_ALL_SPECIALTIES_PATH ="/specialties";
 
 //home 
 export const ADMIN_HOME_DASHBOARD_API  ="/auth/admin/home"
+
+export const LOGO_URL ="https://www.mdops.com/wp-content/themes/mdops/images/logo.png"

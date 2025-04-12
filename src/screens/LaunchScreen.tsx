@@ -16,8 +16,7 @@ export default function LaunchScreen() {
     return (
         <View style={styles.container}>
             <View style={styles.topSec}>
-                <Image source={require("../../assets/launchscreen.png")} />
-                <Text style={styles.text}>MDLog</Text>
+                <Image style={{marginBottom:10}} source={require("../../assets/logo.png")} />
                 <Text style={styles.subText}>Join us for seamless Health Management and Support</Text>
             </View>
             <View style={styles.bottomSec}>

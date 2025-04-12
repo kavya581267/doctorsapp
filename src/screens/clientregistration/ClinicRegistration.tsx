@@ -61,7 +61,7 @@ export default function ClinicRegistration() {
             <SafeAreaView>
                 <View style={styles.container}>
                     <View style={styles.header}>
-                        <Image style={styles.png} source={require("../../../assets/launchscreen.png")} />
+                        <Image style={styles.png} source={require("../../../assets/logo.png")} />
                         <Text style={styles.heading}>Clinic Registration</Text>
                         <Text style={styles.subHeading}>MDLog simplify clinic management effortlessly.</Text>
                     </View>

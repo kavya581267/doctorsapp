@@ -50,8 +50,8 @@ export default StyleSheet.create({
     },
     logTxt: {
         fontSize: 18,
-        fontWeight: "400",
-        color: COLORS.primary,
+        fontWeight: "600",
+        color: COLORS.white,
     },
     buttonSign: {
         width: isTablet ? "40%" : "90%",
@@ -65,7 +65,7 @@ export default StyleSheet.create({
     },
     signTxt: {
         fontSize: 18,
-        fontWeight: "400",
+        fontWeight: "600",
         color: COLORS.white,
     },
 });

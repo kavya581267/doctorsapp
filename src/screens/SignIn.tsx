@@ -37,7 +37,7 @@ export default function SignIn() {
             <KeyboardAvoidingView style={{ flex: 1 }}>
                     <View style={{ padding: 24, flex: 1 }}>
                         <View style={styles.header}>
-                            <Image style={styles.png} source={require("../../assets/launchscreen.png")} />
+                            <Image style={styles.png} source={require("../../assets/logo.png")} />
                             <Text style={styles.heading}>Access Account</Text>
                             <Text style={styles.subHeading}>Securely log in to manage your healthcare tasks</Text>
                         </View>
