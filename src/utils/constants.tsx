@@ -9,6 +9,7 @@ export const JWT_ACCESS_TOKEN = "access_token";
 export const JWT_REFRESH_TOKEN = "refresh_token";
 export const USER = "user";
 export const USER_CONTEXT="user_context";
+export const ACCESS_TOKENS_CONTEXT= "access_tokens";
 export const CLINIC_CONTEXT="clinic_context";
 
 

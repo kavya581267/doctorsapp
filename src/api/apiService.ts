@@ -1,15 +1,22 @@
-import { BASE_URL_PREFIX, JWT_ACCESS_TOKEN } from "@utils/constants";
+import { ACCESS_TOKENS_CONTEXT, BASE_URL_PREFIX, JWT_ACCESS_TOKEN } from "@utils/constants";
 import { getObject } from "@utils/MdLogAsyncStorage";
+import { AccessTokenContext } from "./model/auth/AccessTokensContext";
 
 const BASE_URL = BASE_URL_PREFIX
 
-let cachedToken = null;
+let cachedAccessTokes: AccessTokenContext = null;
 
 export const initializeToken = async () => {
-  cachedToken = await getObject(JWT_ACCESS_TOKEN);
+  cachedAccessTokes = await getObject(ACCESS_TOKENS_CONTEXT);
 };
 
-export const getToken = () => cachedToken;
+
+const getAccessToken = async () => {
+       if(cachedAccessTokes){
+        await initializeToken();
+       }
+       return cachedAccessTokes.accessToken
+}
 
 const buildUrl = (endpoint, queryParams = {}) => {
     const url = new URL(`${BASE_URL}${endpoint}`);
@@ -27,12 +34,13 @@ const buildUrl = (endpoint, queryParams = {}) => {
 const apiCall = async (endpoint, method = "GET", body = null, queryParams = {}) => {
     try {
         const url = buildUrl(endpoint, queryParams);
+        const accessToken = await getAccessToken()
         
         const options = {
             method,
             headers: {
                 "Content-Type": "application/json",
-                "Authorization": cachedToken
+                "Authorization": accessToken
             }
         };
 

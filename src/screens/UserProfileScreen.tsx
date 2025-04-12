@@ -16,7 +16,7 @@ const UserProfileScreen = () => {
      const navigation = useNavigation();
 
     const[loading,setLoading] = useState(false);
-     const {  logout } = useContext(AuthContext);
+    const {logout } = useContext(AuthContext);
 
    //logout
    const logOutButton = async () =>{
