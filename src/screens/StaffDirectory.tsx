@@ -50,6 +50,7 @@ const StaffDirectoryScreen = () => {
   const navigation = useNavigation();
   const {loggedInUserContext} = useContext(AuthContext);
   const [staff, setStaff] = useState<Staff[]>([]);
+  const [backUp, setBackupStaff] = useState<Staff[]>([]);
   const [loading,setLoading] = useState(false)
 
   const fetchStaffLst = async () => {
@@ -57,10 +58,10 @@ const StaffDirectoryScreen = () => {
     try{
       const resp = await staffService.getClinicStaff(loggedInUserContext?.clinicDetails.id.toString());
       setStaff(resp)
+      setBackupStaff(resp);
     }catch(error){
      
     }
-    
     setLoading(false)
     
   }
@@ -70,12 +71,21 @@ const StaffDirectoryScreen = () => {
       fetchStaffLst();
   },[])
 
-  const filteredStaff = staff.filter((staff) =>
-     staff.firstName.toLowerCase().includes(searchText.toLowerCase()) || 
-     staff.lastName.toLowerCase().includes(searchText.toLowerCase()) ||
-     staff.phone.toLowerCase().includes(searchText.toLowerCase())   ||
-     staff.email.toLowerCase().includes(searchText.toLowerCase())
-  );
+  const filterStaff = (searchText) => {
+    console.log(searchText);
+    const filteredStaff = backUp.filter((staff) =>
+      staff.firstName.toLowerCase().includes(searchText.toLowerCase()) || 
+      staff.lastName.toLowerCase().includes(searchText.toLowerCase()) ||
+      staff.phone.toLowerCase().includes(searchText.toLowerCase())   ||
+      staff.email.toLowerCase().includes(searchText.toLowerCase())
+   );
+   const filteredNewStaff = filteredStaff.map(staff => ({ ...staff }));
+   console.log(filteredNewStaff)
+   setStaff(filteredNewStaff);
+   setSearchText(searchText);
+  }
+
+  
 
   const renderStaffCard: ListRenderItem<Staff>  = ({item}) => (
     <TouchableOpacity style={styles.card}>
@@ -97,7 +107,7 @@ const StaffDirectoryScreen = () => {
           <TextInput
             placeholder="Search staff..."
             value={searchText}
-            onChangeText={setSearchText}
+            onChangeText={filterStaff}
             style={styles.searchInput}
           />
           <View style={styles.filters}>
@@ -109,7 +119,7 @@ const StaffDirectoryScreen = () => {
           </View>
 
           <FlatList<Staff>
-            data={filteredStaff}
+            data={staff}
             keyExtractor={(item) => item.id.toString()}
             renderItem={renderStaffCard}
             contentContainerStyle={{ paddingBottom: 100 }}
