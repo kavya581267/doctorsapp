@@ -1,6 +1,7 @@
 import { Staff } from '@api/model/staff/Staff';
 import { staffService } from '@api/staffService';
 import Back from '@components/Back';
+import { MdLogActivityIndicator } from '@components/MdLogActivityIndicator';
 import { AuthContext } from '@context/AuthContext';
 import { useNavigation } from '@react-navigation/native';
 import { COLORS } from '@utils/colors';
@@ -49,10 +50,19 @@ const StaffDirectoryScreen = () => {
   const navigation = useNavigation();
   const {loggedInUserContext} = useContext(AuthContext);
   const [staff, setStaff] = useState<Staff[]>([]);
+  const [loading,setLoading] = useState(false)
 
   const fetchStaffLst = async () => {
-    const resp = await staffService.getClinicStaff(loggedInUserContext?.clinicDetails.id.toString());
-    setStaff(resp)
+    setLoading(true)
+    try{
+      const resp = await staffService.getClinicStaff(loggedInUserContext?.clinicDetails.id.toString());
+      setStaff(resp)
+    }catch(error){
+     
+    }
+    
+    setLoading(false)
+    
   }
 
 
@@ -108,6 +118,7 @@ const StaffDirectoryScreen = () => {
         <TouchableOpacity style={styles.addButton} onPress={()=>navigation.navigate("StaffRegistrationScreen")}>
           <Text style={styles.addButtonText}>+ Add New Staff</Text>
         </TouchableOpacity>
+        <MdLogActivityIndicator loading={loading} />
       </View>
   );
 };

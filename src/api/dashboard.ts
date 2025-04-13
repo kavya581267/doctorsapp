@@ -5,6 +5,7 @@ import { getUser } from "@utils/loadContextDetails";
 
 
 export const dashBoardService = {
+
     home: async (): Promise<ClinicOverview> => {
         const user:UserInfo =await getUser();
         try {

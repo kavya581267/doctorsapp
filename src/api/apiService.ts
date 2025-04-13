@@ -1,6 +1,8 @@
 import { ACCESS_TOKENS_CONTEXT, BASE_URL_PREFIX, JWT_ACCESS_TOKEN } from "@utils/constants";
 import { getObject } from "@utils/MdLogAsyncStorage";
 import { AccessTokenContext } from "./model/auth/AccessTokensContext";
+import { isTokenExpired } from "@utils/jwt";
+import { loginService } from "./loginService";
 
 const BASE_URL = BASE_URL_PREFIX
 
@@ -34,8 +36,7 @@ const buildUrl = (endpoint, queryParams = {}) => {
 const apiCall = async (endpoint, method = "GET", body = null, queryParams = {}) => {
     try {
         const url = buildUrl(endpoint, queryParams);
-        const accessToken = await getAccessToken()
-        
+        let accessToken = await getAccessToken();
         const options = {
             method,
             headers: {

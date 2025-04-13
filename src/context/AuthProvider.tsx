@@ -36,11 +36,15 @@ export const AuthProvider = ({ children }: Props) => {
     if (acessTokenContext) {
       const jwt = acessTokenContext.accessToken;
       //validate the token expiry
+      debugger;
       if (isTokenExpired(jwt)) {
-        const token = await loginService.refresh();
+        const refreshTokenResp = await loginService.refresh();
         // 
         const newAccessContext = { ...acessTokenContext };
-        newAccessContext.accessToken = token;
+        newAccessContext.accessToken = refreshTokenResp.accessToken;
+        //remove this after refactor 
+        storeObject(JWT_ACCESS_TOKEN, refreshTokenResp.accessToken);
+        storeObject(ACCESS_TOKENS_CONTEXT, newAccessContext);
         // set acessTokenContext
         setAccessTokenContext(newAccessContext);
       }

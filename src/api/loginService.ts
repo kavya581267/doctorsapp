@@ -30,9 +30,8 @@ export const loginService = {
        
     },
 
-    refresh: async ():Promise<string> => {
+    refresh: async ():Promise<RefreshTokenResponse> => {
         try{
-            const accessToken = await getObject<string>(JWT_ACCESS_TOKEN)
             const refreshToken = await getObject(JWT_REFRESH_TOKEN)
             const resp =  await apiService.post(REFRESH_TOKEN_PATH, {"refreshToken":refreshToken});
             const token = resp.data;
