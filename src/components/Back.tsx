@@ -40,10 +40,19 @@ export default function Back({ nav, loading = false }: Props) {
     return (
         <View>
             <View style={styles.header}>
+                <View style={{ alignItems: "center", justifyContent: "center", width: 150 }}>
+                    <Image
+                        source={require('../../assets/logo.png')}
+                        style={{aspectRatio: 105/25, width:"100%"}}
+                        resizeMode="contain" // Ensures the whole logo fits inside
+                    />
+                </View>
                 <View style={{ flexDirection: "row" }}>
-                    {nav ? <AntDesign style={{ marginRight: 15 }} name="arrowleft" size={24} color="black" onPress={() => navigation.navigate(nav)} /> : ""}
+                    {nav ? <AntDesign style={{ marginRight: 15 }} name="arrowleft" size={24} color="black" onPress={() => navigation.navigate(nav)} /> :
+                        ""}
                     <Text style={styles.title}>{clinicName}</Text>
                 </View>
+
                 <View style={styles.headerIcons}>
                     <Ionicons name="notifications-outline" size={24} color="black" />
                     <TouchableOpacity onPress={() => navigation.navigate("UserProfileScreen")}>

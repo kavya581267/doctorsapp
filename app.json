@@ -1,33 +1,40 @@
 {
   "expo": {
     "name": "MDLog",
-    "slug": "MDLog",
+    "slug": "mdlog",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/launchscreen.png",
+    "icon": "./assets/favicon.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "splash": {
-      "image": "./assets/launchscreen.png",
+      "image": "./assets/favicon.png",
       "resizeMode": "contain",
-      "backgroundColor": "#6A81D5"
+      "backgroundColor": "#45B2EA"
     },
     "ios": {
       "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/launchscreen.png",
-        "backgroundColor": "#6A81D5"
+        "foregroundImage": "./assets/favicon.png",
+        "backgroundColor": "#45B2EA"
       }
     },
     "web": {
-      "favicon": "./assets/launchscreen.png"
+      "favicon": "./assets/favicon.png"
     },
     "extra": {
       "eas": {
-        "projectId": "f57921e8-6204-4cb5-b4de-f28bdb6c6758"
+        "projectId": "a7440d01-63e4-4a6f-952a-e3ff97e1c6b7"
       }
+    },
+    "owner": "sbathi",
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/a7440d01-63e4-4a6f-952a-e3ff97e1c6b7"
     }
   }
 }
