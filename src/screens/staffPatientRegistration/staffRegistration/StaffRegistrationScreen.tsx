@@ -1,8 +1,8 @@
 import { StaffRegistration } from "@api/model/auth/Auth";
 import Spacer from "@components/Spacer";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Text, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+
 import StepIndicator from "react-native-step-indicator";
 import { StaffDetails } from "./StaffDetailsStep";
 import { StaffAddress } from "./StaffAddressStep";
@@ -12,6 +12,10 @@ import Back from "@components/Back";
 import { registrationService } from "@api/registrationService";
 import { useNavigation } from "@react-navigation/native";
 import { MdLogActivityIndicator } from "@components/MdLogActivityIndicator";
+
+import { AuthContext } from "@context/AuthContext";
+import SuccessScreen from "@screens/SuccessScreen";
+
 
 
 export default function StaffRegistrationScreen() {
@@ -23,9 +27,11 @@ export default function StaffRegistrationScreen() {
   const nextStep = () => setStep((prev) => prev + 1);
   const prevStep = () => setStep((prev) => prev - 1);
   const [loading,setLoading] = useState(false);
+  const {loggedInUserContext} = useContext(AuthContext);
   const submitForm = async () => {
    try{
     setLoading(true);
+     formData.clinicId = loggedInUserContext.userDetails.clinicId;
      const response = await registrationService.registerStaff(formData);
      navigation.navigate("SuccessScreen");
    }catch(error){
