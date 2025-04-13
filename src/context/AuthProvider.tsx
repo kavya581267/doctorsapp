@@ -21,7 +21,7 @@ export const AuthProvider = ({ children }: Props) => {
   //check is usercontext exist
 
   const isLoggedInUserContext = async () => {
-    const loggedInUserContext = await getObject<LoggedInUserContext>(USER_CONTEXT)
+    const loggedInUserContext = await getObject<LoggedInUserContext>(USER_CONTEXT);
     if (loggedInUserContext) {
       setLoggedinUserContext(loggedInUserContext);
       return true;
@@ -37,10 +37,13 @@ export const AuthProvider = ({ children }: Props) => {
       const jwt = acessTokenContext.accessToken;
       //validate the token expiry
       if (isTokenExpired(jwt)) {
-        const token = await loginService.refresh();
+        const refreshTokenResp = await loginService.refresh();
         // 
         const newAccessContext = { ...acessTokenContext };
-        newAccessContext.accessToken = token;
+        newAccessContext.accessToken = refreshTokenResp.accessToken;
+        //remove this after refactor 
+        storeObject(JWT_ACCESS_TOKEN, refreshTokenResp.accessToken);
+        storeObject(ACCESS_TOKENS_CONTEXT, newAccessContext);
         // set acessTokenContext
         setAccessTokenContext(newAccessContext);
         await removeItem(ACCESS_TOKENS_CONTEXT);

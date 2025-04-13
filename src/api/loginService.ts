@@ -1,9 +1,10 @@
 import { apiService } from "./apiService";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { LoginRequest, LoginResponse, RefreshTokenResponse } from "./model/auth/Auth";
-import { JWT_ACCESS_TOKEN, JWT_REFRESH_TOKEN, LOGIN_PATH, LOGOUT_PATH, REFRESH_TOKEN_PATH, USER } from "@utils/constants";
-import { getObject, removeItem } from "@utils/MdLogAsyncStorage";
+import { ACCESS_TOKENS_CONTEXT, JWT_ACCESS_TOKEN, JWT_REFRESH_TOKEN, LOGIN_PATH, LOGOUT_PATH, REFRESH_TOKEN_PATH, USER } from "@utils/constants";
+import { getObject, removeItem, storeObject } from "@utils/MdLogAsyncStorage";
 import { isTokenExpired } from "@utils/jwt";
+import { AccessTokenContext } from "./model/auth/AccessTokensContext";
 
 
 export const loginService = {
@@ -30,13 +31,14 @@ export const loginService = {
        
     },
 
-    refresh: async ():Promise<string> => {
+    refresh: async ():Promise<RefreshTokenResponse> => {
         try{
-            const accessToken = await getObject<string>(JWT_ACCESS_TOKEN)
             const refreshToken = await getObject(JWT_REFRESH_TOKEN)
             const resp =  await apiService.post(REFRESH_TOKEN_PATH, {"refreshToken":refreshToken});
             const token = resp.data;
-            await AsyncStorage.setItem(JWT_ACCESS_TOKEN,token);
+            const newContext =  await getObject<AccessTokenContext>(ACCESS_TOKENS_CONTEXT);
+            newContext.accessToken = token.accessToken;
+            await storeObject(ACCESS_TOKENS_CONTEXT, newContext)
             return token;
         }catch(error){
             throw error;

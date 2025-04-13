@@ -46,7 +46,7 @@ export default function Mainscreen() {
             <Tab.Screen name="Patients" component={PatientsList}
                 options={{ tabBarIcon: ({ color }) => <MaterialIcons name="group" size={24} color={color} /> }}></Tab.Screen>
             <Tab.Screen name="Staff" component={StaffDirectoryScreen}
-                options={{ tabBarIcon: ({ color }) => <MaterialIcons name="group" size={24} color={color} /> }}></Tab.Screen>
+                options={{ tabBarIcon: ({ color }) => <MaterialIcons name="group" size={24} color={color} />, unmountOnBlur:true }}></Tab.Screen>
             <Tab.Screen name="Appointments" component={Appointments}
                 options={{ tabBarIcon: ({ color }) => <MaterialIcons name="event" size={24} color={color} /> }}></Tab.Screen>
             <Tab.Screen name="Settings" component={SettingsScreen}
