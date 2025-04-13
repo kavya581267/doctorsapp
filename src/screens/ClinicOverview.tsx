@@ -14,15 +14,15 @@ const ClinicOverview = () => {
     const [email, setEmail] = useState("clinic@example.com")
     const [address, setAddress] = useState("123 Main St New York, NY 10001")
 
-    const {loggedInUserContext} =   useContext(AuthContext)
+    const { loggedInUserContext } = useContext(AuthContext)
 
-    useEffect(()=>{
+    useEffect(() => {
         setPhone(loggedInUserContext?.clinicDetails.phone);
         setEmail(loggedInUserContext?.clinicDetails.email)
-        setAddress(loggedInUserContext?.clinicDetails.addressLine1 +", "+loggedInUserContext?.clinicDetails.city
-             +", " + loggedInUserContext?.clinicDetails.postalCode
+        setAddress(loggedInUserContext?.clinicDetails.addressLine1 + ", " + loggedInUserContext?.clinicDetails.city
+            + ", " + loggedInUserContext?.clinicDetails.postalCode
         )
-    },[])
+    }, [])
 
     const toggleEdit = () => {
         if (editMode) {
@@ -31,6 +31,14 @@ const ClinicOverview = () => {
         }
         setEditMode(!editMode);
     };
+
+    const handleSaveChanges = () =>{
+        
+    }
+
+    const toggleCancel = () =>{
+        
+    }
 
     const handlePhonePress = () => {
         Linking.openURL('tel:+12345678901');
@@ -51,7 +59,7 @@ const ClinicOverview = () => {
             <View >
                 <Text style={styles.header}>
                     Clinic Overview
-                </Text>         
+                </Text>
             </View>
 
 
@@ -152,17 +160,39 @@ const ClinicOverview = () => {
                 </Card.Content>
 
             </Card>
+            {
+                editMode ? (
+                    <>
+                        <Button
+                            mode="outlined"
+                            icon="content-save"
+                            onPress={handleSaveChanges} 
+                            style={{ marginBottom:10}}
+                        >
+                            Save Changes
+                        </Button>
+                        <Button
+                         
+                            mode="outlined"
+                            icon="close"
+                            onPress={toggleCancel} 
+                        >
+                            Cancel
+                        </Button>
+                    </>
+                ) : (
+                    <Button
+                        mode="outlined"
+                        icon="pencil"
+                        onPress={toggleEdit}>
+                        Edit Profile
+                    </Button>
+                )
+            }
 
-            <Button
-                mode="outlined"
-                icon={editMode ? 'content-save':"pencil"}
-                onPress={toggleEdit}
-               >
-                {editMode ? 'Save Changes' : 'Edit Profile'}
-            </Button>
 
 
-        </View>
+        </View >
     );
 };
 
@@ -170,8 +200,8 @@ const styles = StyleSheet.create({
     container: {
         flex: 1, padding: 15,
     },
-    webContainer:{
-      
+    webContainer: {
+
         flex: 1,
         paddingVertical: 15,
         paddingHorizontal: '10%',
@@ -246,7 +276,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginRight: 10
     },
-   
+
 
 });
 

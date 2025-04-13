@@ -40,14 +40,22 @@ const UserProfileScreen = () => {
         setIsEditing(!isEditing);
     };
 
+    const handleSaveChanges = () => {
 
-    useEffect(()=> {
-          setFirstName(loggedInUserContext?.userDetails.firstName)
-          setLastName(loggedInUserContext?.userDetails.lastName)
-          setPhone(loggedInUserContext?.userDetails.phone)
-          setEmail(loggedInUserContext?.userDetails.email)
-          setRole((loggedInUserContext?.roles?.length > 0 ? loggedInUserContext?.roles[0] : "ADMIN"))
-    },[])
+    }
+
+    const toggleCancel = () => {
+
+    }
+
+
+    useEffect(() => {
+        setFirstName(loggedInUserContext?.userDetails.firstName)
+        setLastName(loggedInUserContext?.userDetails.lastName)
+        setPhone(loggedInUserContext?.userDetails.phone)
+        setEmail(loggedInUserContext?.userDetails.email)
+        setRole((loggedInUserContext?.roles?.length > 0 ? loggedInUserContext?.roles[0] : "ADMIN"))
+    }, [])
 
     return (
         <View style={Platform.OS === 'web' ? styles.webContainer : styles.container}>
@@ -124,14 +132,36 @@ const UserProfileScreen = () => {
 
             <Card style={styles.actionCard}>
                 <Card.Content>
-                    <Button
-                        mode="outlined"
-                        icon={isEditing ? 'content-save' : 'pencil'}
-                        onPress={toggleEdit}
-                        style={styles.actionButton}
-                    >
-                        {isEditing ? 'Save Changes' : 'Edit Profile'}
-                    </Button>
+                    {
+                        isEditing ? (
+                            <>
+                                <Button
+                                    mode="outlined"
+                                    icon="content-save"
+                                    onPress={handleSaveChanges}
+                                    style={styles.actionButton}
+                                >
+                                    Save Changes
+                                </Button>
+                                <Button
+
+                                    mode="outlined"
+                                    icon="close"
+                                    onPress={toggleCancel}
+                                >
+                                    Cancel
+                                </Button>
+                            </>
+                        ) : (
+                            <Button
+                                mode="outlined"
+                                icon="pencil"
+                                style={styles.actionButton}
+                                onPress={toggleEdit}>
+                                Edit Profile
+                            </Button>
+                        )
+                    }
 
                     {!isEditing && (
                         <>
@@ -141,7 +171,7 @@ const UserProfileScreen = () => {
                                 onPress={() => { }}
                                 style={styles.actionButton}
                             >
-                                Reset Password
+                                Reset Password"
                             </Button>
 
                             <Button
@@ -158,7 +188,7 @@ const UserProfileScreen = () => {
                 </Card.Content>
             </Card>
 
-            <MdLogActivityIndicator loading={loading}/>
+            <MdLogActivityIndicator loading={loading} />
         </View>
     );
 };
