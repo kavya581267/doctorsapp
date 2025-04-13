@@ -29,7 +29,8 @@ export default StyleSheet.create({
     },
     prevTxt: {
         color: COLORS.red,
-        fontWeight: "bold"
+        fontSize: 18,
+        fontWeight: "600",
     },
       buttonNext: {
         width: "35%",
@@ -37,15 +38,14 @@ export default StyleSheet.create({
         borderRadius: 5,
         alignItems: "center",
         marginTop: 10,
-        borderWidth: 2,
-        backgroundColor: COLORS.secondary,
-        borderColor: COLORS.primary,
+        backgroundColor: COLORS.secondary,  
         flexDirection: "row",
         justifyContent: "space-evenly"
     },
     nextTxt: {
-        color: COLORS.primary,
-        fontWeight: "bold"
+        color: COLORS.white,
+        fontSize: 18,
+        fontWeight: "600",
     },
     DetailsReviewStyle: {
         flexDirection: "row",
