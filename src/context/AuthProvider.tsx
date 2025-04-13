@@ -43,6 +43,8 @@ export const AuthProvider = ({ children }: Props) => {
         newAccessContext.accessToken = token;
         // set acessTokenContext
         setAccessTokenContext(newAccessContext);
+        await removeItem(ACCESS_TOKENS_CONTEXT);
+        await storeObject(ACCESS_TOKENS_CONTEXT,accessTokenContext);
       }
     } else {
       return false;

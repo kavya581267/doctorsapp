@@ -12,7 +12,7 @@ export const initializeToken = async () => {
 
 
 const getAccessToken = async () => {
-       if(cachedAccessTokes){
+       if(!cachedAccessTokes){
         await initializeToken();
        }
        return cachedAccessTokes?.accessToken
