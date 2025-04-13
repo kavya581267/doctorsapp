@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { View, Text, TextInput, Image, Touchable, TouchableOpacity, Alert, useWindowDimensions } from "react-native";
+import { View, Text, TextInput, Image, Touchable, TouchableOpacity, Alert, useWindowDimensions, Platform } from "react-native";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { useNavigation, useRoute } from "@react-navigation/native";
@@ -39,24 +39,31 @@ export default function Back({ nav, loading = false }: Props) {
 
     const { width } = useWindowDimensions();
 
-  const logoWidth = width > 768 ? 150 : 100;
+    const logoWidth = width > 768 ? 120 : 95;
+    const isWeb = Platform.OS === "web";
 
     return (
         <View>
             <View style={styles.header}>
-                <View style={{ alignItems: "center", justifyContent: "center", width: logoWidth,flexDirection:"row" }}>
-                {nav ? <AntDesign  name="arrowleft" style={{marginLeft: 35}} size={24} color="black" onPress={() => navigation.navigate(nav)} /> :
+                <View style={{ alignItems: "center", justifyContent: "center", width: logoWidth, flexDirection: "row" }}>
+                    {nav ? <AntDesign name="arrowleft" style={{ marginLeft: 35 }} size={24} color="black" onPress={() => navigation.navigate(nav)} /> :
                         ""}
                     <Image
-                    
+
                         source={require('../../assets/logo.png')}
-                        style={{aspectRatio: 105/25, width:"100%",marginLeft: 25}}
+                        style={{ aspectRatio: 105 / 25, width: "100%", marginLeft: 15 }}
                         resizeMode="contain" // Ensures the whole logo fits inside
                     />
                 </View>
-                <View>   
-                    <Text style={styles.title}>{clinicName}</Text>
-                </View>
+                {
+                    isWeb && (
+                        <View >
+                            <Text style={styles.title}>{clinicName}</Text>
+                        </View>
+                    )
+                }
+
+
 
                 <View style={styles.headerIcons}>
                     <Ionicons name="notifications-outline" size={24} color="black" />

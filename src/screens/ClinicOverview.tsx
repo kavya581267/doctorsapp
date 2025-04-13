@@ -1,4 +1,4 @@
-import { ClinicResponse } from '@api/model/clinic/ClinicResponse';
+
 import Back from '@components/Back';
 import { AuthContext } from '@context/AuthContext';
 import { Ionicons } from '@expo/vector-icons';
@@ -6,7 +6,7 @@ import { COLORS } from '@utils/colors';
 import React, { useContext, useEffect, useState } from 'react';
 import { View, Linking, StyleSheet, TouchableOpacity, Platform } from 'react-native';
 import { Card, Text, Avatar, Button, useTheme, Badge, TextInput } from 'react-native-paper';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+
 
 const ClinicOverview = () => {
     const [editMode, setEditMode] = useState(false);
@@ -240,7 +240,7 @@ const styles = StyleSheet.create({
     },
     input: {
         marginTop: 4,
-        height: 45
+        height: 45,
     },
     rowBetween: {
         flexDirection: 'row',

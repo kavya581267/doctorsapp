@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "MDLog",
-    "slug": "mdlog",
+    "slug": "MDlog",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/favicon.png",
@@ -26,15 +26,8 @@
     },
     "extra": {
       "eas": {
-        "projectId": "a7440d01-63e4-4a6f-952a-e3ff97e1c6b7"
+        "projectId": "f57921e8-6204-4cb5-b4de-f28bdb6c6758"
       }
-    },
-    "owner": "sbathi",
-    "runtimeVersion": {
-      "policy": "appVersion"
-    },
-    "updates": {
-      "url": "https://u.expo.dev/a7440d01-63e4-4a6f-952a-e3ff97e1c6b7"
     }
   }
 }
