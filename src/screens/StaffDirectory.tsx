@@ -3,10 +3,10 @@ import { staffService } from '@api/staffService';
 import Back from '@components/Back';
 import { MdLogActivityIndicator } from '@components/MdLogActivityIndicator';
 import { AuthContext } from '@context/AuthContext';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { COLORS } from '@utils/colors';
 import { getAvatarName } from '@utils/utils';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { ListRenderItem } from 'react-native';
 
 import {
@@ -65,6 +65,19 @@ const StaffDirectoryScreen = () => {
     setLoading(false)
     
   }
+
+  useFocusEffect(
+    useCallback(() => {
+      // Do nothing on focus
+      console.log("nhvhv")
+      const filteredNewStaff = backUp.map(staff => ({ ...staff }));
+      setStaff(filteredNewStaff)
+      return () => {
+        // This runs on blur
+        console.log("ejjdff")
+      };
+    }, [])
+  );
 
 
   useEffect(()=>{
