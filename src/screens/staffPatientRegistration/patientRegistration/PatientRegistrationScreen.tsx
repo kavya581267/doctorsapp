@@ -27,12 +27,12 @@ export default function PatientRegistrationScreen() {
   const prevStep = () => setStep((prev) => prev - 1);
   const [errorMessage, setErrorMessage] = useState("some thing went wrong please try again!!");
   const [loading, setLoading] = useState(false);
-  const { loggedInUserContext } = useContext(AuthContext)
+  const { loggedInUserContext } = useContext(AuthContext);
 
   const submitForm = async () => {
     try {
       setLoading(true);
-      formData.clinicId = loggedInUserContext.clinicDetails.id;
+      formData.clinicId = loggedInUserContext.userDetails.clinicId;
       const response = await registrationService.registerPatient(formData);
       navigation.navigate("SuccessScreen");
     } catch (error) {

@@ -11,6 +11,7 @@ import { RootStackParamList } from "@components/MainNavigation";
 
 
 export default function SuccessScreen() {
+
     const navigation = useNavigation<NavigationProp<RootStackParamList>>();
     return (
         <SafeAreaView style={styles.container}>
@@ -32,7 +33,7 @@ export default function SuccessScreen() {
                     mode="contained"
                     onPress={() => navigation.navigate("SignIn")}
                     style={styles.button}>
-                    Go To LogIn Page
+                    Sign in page
                 </Button>
 
             </View>

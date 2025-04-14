@@ -14,7 +14,7 @@ export const initializeToken = async () => {
 
 
 const getAccessToken = async () => {
-       if(cachedAccessTokes){
+       if(!cachedAccessTokes){
         await initializeToken();
        }
        return cachedAccessTokes?.accessToken
@@ -61,7 +61,7 @@ const apiCall = async (endpoint: string, method = "GET", body = null, queryParam
         if (!response.ok) {
             throw new Error(data.message || "Something went wrong");
         }
-
+       console.log(body)
         return data;
     } catch (error) {
         throw error;
