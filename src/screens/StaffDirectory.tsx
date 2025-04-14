@@ -68,15 +68,9 @@ const StaffDirectoryScreen = () => {
 
   useFocusEffect(
     useCallback(() => {
-      // Do nothing on focus
-      console.log("nhvhv")
-      const filteredNewStaff = backUp.map(staff => ({ ...staff }));
-      setStaff(filteredNewStaff)
-      return () => {
-        // This runs on blur
-        console.log("ejjdff")
-      };
-    }, [])
+      fetchStaffLst()
+      setSearchText("")
+    }, [loggedInUserContext?.clinicDetails.id])
   );
 
 
@@ -135,7 +129,7 @@ const StaffDirectoryScreen = () => {
             data={staff}
             keyExtractor={(item) => item.id.toString()}
             renderItem={renderStaffCard}
-            contentContainerStyle={{ paddingBottom: 100 }}
+            contentContainerStyle={{ paddingBottom: 5 }}
           />
         </View>
         <TouchableOpacity style={styles.addButton} onPress={()=>navigation.navigate("StaffRegistrationScreen")}>
