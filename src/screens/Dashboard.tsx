@@ -81,7 +81,7 @@ export default function DashboardScreen() {
                         </TouchableOpacity>
                     </View>
 
-                    {appointmentsToday.map((appt, index) => (
+                    {appointments.map((appt, index) => (
                         <View key={index} style={styles.apptCard}>
                             <Image source={{ uri: appt.avatar }} style={styles.apptAvatar} />
                             <View style={{ flex: 1 }}>
@@ -143,6 +143,34 @@ const quickActions = [
 ];
 
 const appointments = [
+    {
+        name: 'Sarah Johnson',
+        reason: 'General Checkup',
+        time: '09:30 AM',
+        status: 'Confirmed',
+        avatar: 'https://i.pravatar.cc/100?img=5',
+    },
+    {
+        name: 'Mike Peters',
+        reason: 'Dental Consultation',
+        time: '10:15 AM',
+        status: 'Pending',
+        avatar: 'https://i.pravatar.cc/100?img=6',
+    },
+    {
+        name: 'Sarah Johnson',
+        reason: 'General Checkup',
+        time: '09:30 AM',
+        status: 'Confirmed',
+        avatar: 'https://i.pravatar.cc/100?img=5',
+    },
+    {
+        name: 'Mike Peters',
+        reason: 'Dental Consultation',
+        time: '10:15 AM',
+        status: 'Pending',
+        avatar: 'https://i.pravatar.cc/100?img=6',
+    },
     {
         name: 'Sarah Johnson',
         reason: 'General Checkup',
