@@ -21,29 +21,7 @@ import {
 } from 'react-native';
 import { Avatar } from 'react-native-paper';
 
-const staffData = [
-  {
-    id: '1',
-    name: 'John Smith',
-    role: 'Doctor',
-    status: 'Active',
-    avatar: 'https://i.pravatar.cc/150?img=1',
-  },
-  {
-    id: '2',
-    name: 'Sarah Johnson',
-    role: 'Font Desk',
-    status: 'Active',
-    avatar: 'https://i.pravatar.cc/150?img=2',
-  },
-  {
-    id: '3',
-    name: 'Mike Wilson',
-    role: 'Nurse',
-    status: 'On Leave',
-    avatar: 'https://i.pravatar.cc/150?img=3',
-  },
-];
+
 
 const StaffDirectoryScreen = () => {
   const [searchText, setSearchText] = useState('');
