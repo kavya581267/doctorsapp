@@ -1,12 +1,14 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, TextInput, View } from 'react-native';
 import { Avatar, Button, Card, Text, TouchableRipple } from 'react-native-paper';
 import { Ionicons } from '@expo/vector-icons';
 import Back from '@components/Back';
 import { COLORS } from '@utils/colors';
+import { Dropdown } from 'react-native-element-dropdown';
+import { patientService } from '@api/patientService';
 
 // 👨‍⚕️ Mock doctor data
-const doctors = [
+let doctors = [
   {
     id: 1,
     name: 'Dr. James Wilson',
@@ -24,6 +26,8 @@ const doctors = [
     avatar: 'https://randomuser.me/api/portraits/women/44.jpg',
   },
 ];
+
+doctors = []
 
 // 🗓️ Generate dynamic dates: today + next 5 days
 const getNextDates = (days = 6) => {
@@ -46,6 +50,15 @@ export default function BookAppointmentScreen() {
   const [selectedDate, setSelectedDate] = useState(new Date().toDateString());
   const [reason, setReason] = useState('');
   const dates = getNextDates();
+  useEffect(() => {
+    // const patientList =  patientService.getClinicPatients();
+
+  }, [])
+  const genderOptions = [
+    { label: "MALE", value: "male" },
+    { label: "FEMALE", value: "FEMALE" },
+    { label: "OTHER", value: "OTHER" },
+  ];
 
   return (
     <ScrollView style={styles.container}>
@@ -56,21 +69,34 @@ export default function BookAppointmentScreen() {
 
       {/* Select Patient */}
       <View style={styles.viewMarginBottom}>
-
-        <Text style={styles.subHeaders}>Select Patient</Text>
-        <TextInput
-          placeholder="Search Patient"
+        <Dropdown
+          data={genderOptions}
+          labelField="label"
+          valueField="value"
+          placeholder="Select Patient"
+          onChange={(item) => console.log(item)}
+          search={true}
           style={styles.searchInput}
+          itemTextStyle={{ color: '#555', fontSize: 16 }}
+          itemContainerStyle={{ backgroundColor: '#f5f5f5', borderRadius: 10 }}
+          inputSearchStyle={{ backgroundColor: "f5f5f5" }}
         />
       </View>
 
 
       {/* Search Bar */}
       <View style={styles.viewMarginBottom}>
-        <Text style={styles.subHeaders}>Select Doctor / Speciality</Text>
-        <TextInput
-          placeholder="Search doctors or specialties"
+        <Dropdown
+          data={genderOptions}
+          labelField="label"
+          valueField="value"
+          placeholder="Select Doctor"
+          onChange={(item) => console.log(item)}
+          search={true}
           style={styles.searchInput}
+          itemTextStyle={{ color: '#555', fontSize: 16 }}
+          itemContainerStyle={{ backgroundColor: '#f5f5f5', borderRadius: 10 }}
+          inputSearchStyle={{ backgroundColor: "f5f5f5" }}
         />
       </View>
 
@@ -87,12 +113,12 @@ export default function BookAppointmentScreen() {
                 key={idx}
                 mode={isSelected ? 'contained' : 'outlined'}
                 onPress={() => setSelectedDate(d.fullDate)}
-                style={[styles.selectDateBox,{backgroundColor: isSelected ? COLORS.primary: ""}]}
-                contentStyle={{ flexDirection: 'column' }} 
+                style={[styles.selectDateBox, { backgroundColor: isSelected ? COLORS.primary : "" }]}
+                contentStyle={{ flexDirection: 'column' }}
               >
                 <View style={{ flexDirection: "column" }}>
-                  <Text style={[styles.selectDay,{ color: isSelected ? 'white' : 'black'}]}>{d.label}</Text>
-                  <Text style={{ fontSize: 11,textAlign:"center", color: isSelected ? 'white' : 'black', }}>{d.date}</Text>
+                  <Text style={[styles.selectDay, { color: isSelected ? 'white' : 'black' }]}>{d.label}</Text>
+                  <Text style={{ fontSize: 11, textAlign: "center", color: isSelected ? 'white' : 'black', }}>{d.date}</Text>
                 </View>
 
               </Button>
@@ -101,7 +127,7 @@ export default function BookAppointmentScreen() {
 
         </ScrollView>
       </View>
-      
+
       {/* Doctors List */}
       {doctors.map((doc) => (
         <Card key={doc.id} style={{ marginBottom: 16, padding: 16 }}>
@@ -201,10 +227,10 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     backgroundColor: COLORS.secondary,
   },
-  selectDay:{
+  selectDay: {
     fontSize: 12,
     fontWeight: 'bold',
     textAlign: "center",
-    marginBottom:2
+    marginBottom: 2
   }
 })

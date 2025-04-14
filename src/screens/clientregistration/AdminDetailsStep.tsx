@@ -117,7 +117,7 @@ export const AdminDetails: React.FC<StepProps> = ({ nextStep, prevStep, formData
                         selectedTextStyle={styles.selectedText}
                         renderLeftIcon={() => (
                             <View style={styles.icon} >
-                            <Icon source="gender-male-female" size={24} color="#555" />
+                                <Icon source="gender-male-female" size={24} color="#555" />
                             </View>
                           )}
                     />
