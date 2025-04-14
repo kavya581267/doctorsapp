@@ -49,7 +49,7 @@ export default function BookAppointmentScreen() {
 
   return (
     <ScrollView style={styles.container}>
-      <Back nav="Mainscreen" />
+      <Back />
       {/* Header */}
 
       <Text style={styles.header}>Book Appointment</Text>
@@ -87,17 +87,12 @@ export default function BookAppointmentScreen() {
                 key={idx}
                 mode={isSelected ? 'contained' : 'outlined'}
                 onPress={() => setSelectedDate(d.fullDate)}
-                style={styles.selectDateBox}
-                contentStyle={{ flexDirection: 'column' }} // key for stacking vertically
+                style={[styles.selectDateBox,{backgroundColor: isSelected ? COLORS.primary: ""}]}
+                contentStyle={{ flexDirection: 'column' }} 
               >
                 <View style={{ flexDirection: "column" }}>
-                  <Text style={{
-                    fontSize: 12,
-                    fontWeight: 'bold',
-                    textAlign: "center",
-                    color: isSelected ? 'white' : 'black',
-                  }}>{d.label}</Text>
-                  <Text style={{ fontSize: 11, color: isSelected ? 'white' : 'black', }}>{d.date}</Text>
+                  <Text style={[styles.selectDay,{ color: isSelected ? 'white' : 'black'}]}>{d.label}</Text>
+                  <Text style={{ fontSize: 11,textAlign:"center", color: isSelected ? 'white' : 'black', }}>{d.date}</Text>
                 </View>
 
               </Button>
@@ -106,6 +101,7 @@ export default function BookAppointmentScreen() {
 
         </ScrollView>
       </View>
+      
       {/* Doctors List */}
       {doctors.map((doc) => (
         <Card key={doc.id} style={{ marginBottom: 16, padding: 16 }}>
@@ -187,23 +183,28 @@ const styles = StyleSheet.create({
   selectDateBox: {
     marginRight: 8,
     paddingHorizontal: 8,
-    paddingVertical: 2,
     minWidth: 64,
     alignItems: 'center',
   },
- reasonsTextInput:{
-  borderWidth: 1,
-  borderColor: '#ccc',
-  borderRadius: 8,
-  padding: 12,
-  marginBottom: 20,
-  height: 80,
-  textAlignVertical: 'top',
-},
-button:{ 
-  padding: 8, 
-  borderRadius: 8,
-   marginBottom: 20 ,
-   backgroundColor:COLORS.secondary
+  reasonsTextInput: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 8,
+    padding: 12,
+    marginBottom: 20,
+    height: 80,
+    textAlignVertical: 'top',
+  },
+  button: {
+    padding: 8,
+    borderRadius: 8,
+    marginBottom: 20,
+    backgroundColor: COLORS.secondary,
+  },
+  selectDay:{
+    fontSize: 12,
+    fontWeight: 'bold',
+    textAlign: "center",
+    marginBottom:2
   }
 })
