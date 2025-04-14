@@ -9,11 +9,11 @@ import { COLORS } from "../constants/colors";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import DashboardScreen from "@screens/Dashboard";
 import StaffDirectoryScreen from "@screens/StaffDirectory";
-<<<<<<< HEAD
+
 import PatientDirectoryScreen from "@screens/PatientsDirectory";
-=======
+
 import AppointmentScreen from "@screens/AppointmentsScreen";
->>>>>>> main
+
 
 
 

@@ -23,29 +23,7 @@ import {
 } from 'react-native';
 import { Avatar } from 'react-native-paper';
 
-const staffData = [
-  {
-    id: '1',
-    name: 'John Smith',
-    role: 'Doctor',
-    status: 'Active',
-    avatar: 'https://i.pravatar.cc/150?img=1',
-  },
-  {
-    id: '2',
-    name: 'Sarah Johnson',
-    role: 'Font Desk',
-    status: 'Active',
-    avatar: 'https://i.pravatar.cc/150?img=2',
-  },
-  {
-    id: '3',
-    name: 'Mike Wilson',
-    role: 'Nurse',
-    status: 'On Leave',
-    avatar: 'https://i.pravatar.cc/150?img=3',
-  },
-];
+
 
 const PatientDirectoryScreen = () => {
   const [searchText, setSearchText] = useState('');
@@ -127,8 +105,8 @@ const PatientDirectoryScreen = () => {
             renderItem={renderStaffCard}
           />
         </View>
-        <TouchableOpacity style={styles.addButton} onPress={()=>navigation.navigate("StaffRegistrationScreen")}>
-          <Text style={styles.addButtonText}>+ Add New Staff</Text>
+        <TouchableOpacity style={styles.addButton} onPress={()=>navigation.navigate("PatientRegistrationScreen")}>
+          <Text style={styles.addButtonText}>+ Add New Patient</Text>
         </TouchableOpacity>
         <MdLogActivityIndicator loading={loading} />
       </View>
