@@ -69,6 +69,8 @@ export class StaffRegistration {
   country: string = "";
   emergencyContactName: string = "";
   emergencyContactPhone: string = "";
+  licenseNumber?:string = "";
+  specialties:string[] = [];
   constructor(init?: Partial<StaffRegistration>) {
     Object.assign(this, init);
   }
