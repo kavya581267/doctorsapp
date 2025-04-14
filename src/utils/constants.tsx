@@ -86,3 +86,8 @@ export const GET_ALL_SPECIALTIES_PATH ="/specialties";
 export const ADMIN_HOME_DASHBOARD_API  ="/auth/admin/home"
 
 export const LOGO_URL ="https://www.mdops.com/wp-content/themes/mdops/images/logo.png"
+
+
+//patient
+//staff management
+export const GET_CLINIC_PATIENTS_PATH = "/clinics/{{clinic_id}}/patients";

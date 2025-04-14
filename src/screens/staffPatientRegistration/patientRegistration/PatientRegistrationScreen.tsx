@@ -1,6 +1,6 @@
 import { PatientRegistration } from "@api/model/auth/Auth";
 import Spacer from "@components/Spacer";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Text } from "react-native";
 import { View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -14,6 +14,7 @@ import { registrationService } from "@api/registrationService";
 import { useNavigation } from "@react-navigation/native";
 import { MdLogActivityIndicator } from "@components/MdLogActivityIndicator";
 import Back from "@components/Back";
+import { AuthContext } from "@context/AuthContext";
 
 
 
@@ -25,17 +26,19 @@ export default function PatientRegistrationScreen() {
   const nextStep = () => setStep((prev) => prev + 1);
   const prevStep = () => setStep((prev) => prev - 1);
   const [errorMessage, setErrorMessage] = useState("some thing went wrong please try again!!");
-  const [loading,setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const { loggedInUserContext } = useContext(AuthContext)
 
-  const submitForm =async () => {
-      try{
-        setLoading(true);
-       const response = await registrationService.registerPatient(formData);
-       navigation.navigate("SuccessScreen");
-      }catch(error){
-        setLoading(false);
-        setErrorMessage(error.toString())
-      }
+  const submitForm = async () => {
+    try {
+      setLoading(true);
+      formData.clinicId = loggedInUserContext.clinicDetails.id;
+      const response = await registrationService.registerPatient(formData);
+      navigation.navigate("SuccessScreen");
+    } catch (error) {
+      setLoading(false);
+      setErrorMessage(error.toString())
+    }
   };
 
   interface StepProps {
@@ -48,18 +51,18 @@ export default function PatientRegistrationScreen() {
 
 
   return (
-      <View style={{padding:15}}>
-        <Back nav={"Mainscreen"}></Back>
-        <Spacer height={60} />
-        <Text style={styles.heading}>Patient Registration</Text>
-        <StepIndicator customStyles={stepindicator} stepCount={labels.length} currentPosition={step} labels={labels} />
-        <Spacer height={40} />
-        {step === 0 && <PatientDetails nextStep={nextStep} formData={formData} setFormData={setFormData} />}
-        {step === 1 && <PatientAddress nextStep={nextStep} prevStep={prevStep} formData={formData} setFormData={setFormData} />}
-        {step === 2 && <PatientReview prevStep={prevStep} formData={formData} submitForm={submitForm} />}
-        <MdLogActivityIndicator loading={loading}/>
-      </View>
-     
+    <View style={{ padding: 15 }}>
+      <Back nav={"Mainscreen"}></Back>
+      <Spacer height={60} />
+      <Text style={styles.heading}>Patient Registration</Text>
+      <StepIndicator customStyles={stepindicator} stepCount={labels.length} currentPosition={step} labels={labels} />
+      <Spacer height={40} />
+      {step === 0 && <PatientDetails nextStep={nextStep} formData={formData} setFormData={setFormData} />}
+      {step === 1 && <PatientAddress nextStep={nextStep} prevStep={prevStep} formData={formData} setFormData={setFormData} />}
+      {step === 2 && <PatientReview prevStep={prevStep} formData={formData} submitForm={submitForm} />}
+      <MdLogActivityIndicator loading={loading} />
+    </View>
+
 
   )
 }

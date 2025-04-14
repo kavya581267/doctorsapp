@@ -26,7 +26,7 @@ export default function SuccessScreen() {
 
                 <Text style={styles.title}>Registration Successful!</Text>
                 <Text style={styles.subtitle}>
-                    Your clinic and admin have been registered successfully.
+                     Registered successfully.
                 </Text>
                 <Button
                     mode="contained"
