@@ -100,10 +100,11 @@ const StaffDirectoryScreen = () => {
       <View style={styles.cardContent}>
         <Text style={styles.name}>{item.firstName}</Text>
         <Text style={styles.role}>{item.roleName}</Text>
+        <Text style={styles.role}>{item.phone}</Text>
+      </View>
         <Text style={[styles.status, item.isActive ? styles.active : styles.onLeave]}>
           {item.isActive?"Active":"InActive"}
         </Text>
-      </View>
     </TouchableOpacity>
   );
 
@@ -129,7 +130,7 @@ const StaffDirectoryScreen = () => {
             data={staff}
             keyExtractor={(item) => item.id.toString()}
             renderItem={renderStaffCard}
-            contentContainerStyle={{ paddingBottom: 5 }}
+            contentContainerStyle={{ paddingBottom: 100 }}
           />
         </View>
         <TouchableOpacity style={styles.addButton} onPress={()=>navigation.navigate("StaffRegistrationScreen")}>
@@ -142,7 +143,8 @@ const StaffDirectoryScreen = () => {
 
 export default StaffDirectoryScreen;
 
-const { height } = Dimensions.get("window")
+const { height, width } = Dimensions.get("window")
+
 
 const styles = StyleSheet.create({
   container: {
@@ -182,6 +184,7 @@ const styles = StyleSheet.create({
     padding: 12,
     borderRadius: 12,
     marginBottom: 10,
+    width: width > 720 ? "40%" : "100%"
   },
   avatar: {
     width: 48,
