@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, TextInput, View } from 'react-native';
 import { Avatar, Button, Card, Text, TouchableRipple } from 'react-native-paper';
 import { Ionicons } from '@expo/vector-icons';
@@ -6,6 +6,8 @@ import Back from '@components/Back';
 import { COLORS } from '@utils/colors';
 import { Dropdown } from 'react-native-element-dropdown';
 import { patientService } from '@api/patientService';
+import { AuthContext } from '@context/AuthContext';
+import { staffService } from '@api/staffService';
 
 // 👨‍⚕️ Mock doctor data
 let doctors = [
@@ -50,7 +52,38 @@ export default function BookAppointmentScreen() {
   const [selectedDate, setSelectedDate] = useState(new Date().toDateString());
   const [reason, setReason] = useState('');
   const dates = getNextDates();
+  const {loggedInUserContext} = useContext(AuthContext);
+  const [patients, setPatientList] = useState([])
+
+  const loadPatients = async () => {
+    const patientList =  await patientService.getClinicPatients(loggedInUserContext?.clinicDetails.id.toString());
+    const pt = [];
+    patientList.forEach(item => {
+      let vv = item.firstName + ", "+item.phone;
+        const t = {}
+        t.label = vv;
+        t.value = item;
+        pt.push(t);
+    })
+    console.log(pt)
+    setPatientList(pt)
+  }
+
+  const loadDoctors = async () => {
+    const staffList =  await staffService.getClinicStaff(loggedInUserContext?.clinicDetails.id.toString());
+    const pt = [];
+    staffList.forEach(item => {
+      let vv = item.firstName + ", "+item.phone;
+        const t = {}
+        t.label = vv;
+        t.value = vv;
+        pt.push(t);
+    })
+    setPatientList(pt)
+  }
   useEffect(() => {
+    loadPatients()
+    loadDoctors();
     // const patientList =  patientService.getClinicPatients();
 
   }, [])
@@ -70,7 +103,7 @@ export default function BookAppointmentScreen() {
       {/* Select Patient */}
       <View style={styles.viewMarginBottom}>
         <Dropdown
-          data={genderOptions}
+          data={patients}
           labelField="label"
           valueField="value"
           placeholder="Select Patient"
