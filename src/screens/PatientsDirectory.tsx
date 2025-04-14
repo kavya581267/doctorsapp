@@ -1,4 +1,6 @@
+import { PatientResponse } from '@api/model/patient/PatientModels';
 import { Staff } from '@api/model/staff/Staff';
+import { patientService } from '@api/patientService';
 import { staffService } from '@api/staffService';
 import Back from '@components/Back';
 import { MdLogActivityIndicator } from '@components/MdLogActivityIndicator';
@@ -21,20 +23,42 @@ import {
 } from 'react-native';
 import { Avatar } from 'react-native-paper';
 
+const staffData = [
+  {
+    id: '1',
+    name: 'John Smith',
+    role: 'Doctor',
+    status: 'Active',
+    avatar: 'https://i.pravatar.cc/150?img=1',
+  },
+  {
+    id: '2',
+    name: 'Sarah Johnson',
+    role: 'Font Desk',
+    status: 'Active',
+    avatar: 'https://i.pravatar.cc/150?img=2',
+  },
+  {
+    id: '3',
+    name: 'Mike Wilson',
+    role: 'Nurse',
+    status: 'On Leave',
+    avatar: 'https://i.pravatar.cc/150?img=3',
+  },
+];
 
-
-const StaffDirectoryScreen = () => {
+const PatientDirectoryScreen = () => {
   const [searchText, setSearchText] = useState('');
   const navigation = useNavigation();
   const {loggedInUserContext} = useContext(AuthContext);
-  const [staff, setStaff] = useState<Staff[]>([]);
-  const [backUp, setBackupStaff] = useState<Staff[]>([]);
+  const [staff, setStaff] = useState<PatientResponse[]>([]);
+  const [backUp, setBackupStaff] = useState<PatientResponse[]>([]);
   const [loading,setLoading] = useState(false)
 
   const fetchStaffLst = async () => {
     setLoading(true)
     try{
-      const resp = await staffService.getClinicStaff(loggedInUserContext?.clinicDetails.id.toString());
+      const resp = await patientService.getClinicPatients(loggedInUserContext?.clinicDetails.id.toString());
       setStaff(resp)
       setBackupStaff(resp);
     }catch(error){
@@ -72,12 +96,12 @@ const StaffDirectoryScreen = () => {
 
   
 
-  const renderStaffCard: ListRenderItem<Staff>  = ({item}) => (
+  const renderStaffCard: ListRenderItem<PatientResponse>  = ({item}) => (
     <TouchableOpacity style={styles.card}>
       <Avatar.Text  size={60} label={getAvatarName(item?.firstName, item?.lastName)} />
       <View style={styles.cardContent}>
         <Text style={styles.name}>{item.firstName}</Text>
-        <Text style={styles.role}>{item.roleName}</Text>
+        <Text style={styles.role}>{item.lastName}</Text>
         <Text style={styles.role}>{item.phone}</Text>
       </View>
         <Text style={[styles.status, item.isActive ? styles.active : styles.onLeave]}>
@@ -91,13 +115,13 @@ const StaffDirectoryScreen = () => {
         <View>
           <Back></Back>
           <TextInput
-            placeholder="Search staff..."
+            placeholder="Search patient..."
             value={searchText}
             onChangeText={filterStaff}
             style={styles.searchInput}
           />
 
-          <FlatList<Staff>
+          <FlatList<PatientResponse>
             data={staff}
             keyExtractor={(item) => item.id.toString()}
             renderItem={renderStaffCard}
@@ -111,7 +135,7 @@ const StaffDirectoryScreen = () => {
   );
 };
 
-export default StaffDirectoryScreen;
+export default PatientDirectoryScreen;
 
 const { height, width } = Dimensions.get("window")
 
