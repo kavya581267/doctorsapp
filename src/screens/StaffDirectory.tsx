@@ -96,7 +96,7 @@ const StaffDirectoryScreen = () => {
 
   const renderStaffCard: ListRenderItem<Staff>  = ({item}) => (
     <TouchableOpacity style={styles.card}>
-      <Avatar.Text size={60} label={getAvatarName(item?.firstName, item?.lastName)} />
+      <Avatar.Text  size={60} label={getAvatarName(item?.firstName, item?.lastName)} />
       <View style={styles.cardContent}>
         <Text style={styles.name}>{item.firstName}</Text>
         <Text style={styles.role}>{item.roleName}</Text>
@@ -118,19 +118,11 @@ const StaffDirectoryScreen = () => {
             onChangeText={filterStaff}
             style={styles.searchInput}
           />
-          <View style={styles.filters}>
-            {['All Staff', 'Department ▼', 'Role ▼', 'Status ▼'].map((filter, index) => (
-              <TouchableOpacity key={index} style={styles.filterButton}>
-                <Text style={styles.filterText}>{filter}</Text>
-              </TouchableOpacity>
-            ))}
-          </View>
 
           <FlatList<Staff>
             data={staff}
             keyExtractor={(item) => item.id.toString()}
             renderItem={renderStaffCard}
-            contentContainerStyle={{ paddingBottom: 100 }}
           />
         </View>
         <TouchableOpacity style={styles.addButton} onPress={()=>navigation.navigate("StaffRegistrationScreen")}>
