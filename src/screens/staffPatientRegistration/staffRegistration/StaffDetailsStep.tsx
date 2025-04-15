@@ -1,12 +1,12 @@
 import { StaffRegistration } from "@api/model/auth/Auth";
 import MdLogTextInput from "@components/MdLogTextInput";
-import { Text, TouchableOpacity } from "react-native";
+import { ScrollView, Text, TouchableOpacity } from "react-native";
 import { View } from "react-native";
 import styles from "@styles/staffPatientRegistrationStyle";
 import { isAnyFieldsEmpty, isValidEmail, isValidPassword, isValidPhone } from "@utils/utils";
 import { useState } from "react";
 import { MdLodSnackbar } from "@components/MdLogSnacbar";
-import { Dropdown } from "react-native-element-dropdown";
+import { Dropdown, MultiSelect } from "react-native-element-dropdown";
 import { Icon } from "react-native-paper";
 
 
@@ -15,7 +15,7 @@ interface StepProps {
     prevStep?: () => void;
     formData: StaffRegistration;
     setFormData: React.Dispatch<React.SetStateAction<StaffRegistration>>;
-  
+
 }
 
 
@@ -23,6 +23,7 @@ interface StepProps {
 export const StaffDetails: React.FC<StepProps> = ({ nextStep, formData, setFormData }) => {
     const [visible, setVisible] = useState(false);
     const onDismissSnackBar = () => setVisible(false);
+    const [specialities, setSpecialities] = useState([]);
 
     const genderOptions = [
         { label: "MALE", value: "MALE" },
@@ -31,10 +32,10 @@ export const StaffDetails: React.FC<StepProps> = ({ nextStep, formData, setFormD
     ];
 
     const roleOptions = [
-        { label : "ADMIN", value: "ADMIN"},
-        { label : "DOCTOR", value: "DOCTOR"},
-        { label : "NURSE", value: "NURSE"},
-        { label : "FRONT_OFFICE", value: "FRONT_OFFICE"},
+        { label: "ADMIN", value: "ADMIN" },
+        { label: "DOCTOR", value: "DOCTOR" },
+        { label: "NURSE", value: "NURSE" },
+        { label: "FRONT_OFFICE", value: "FRONT_OFFICE" },
     ]
 
 
@@ -59,7 +60,7 @@ export const StaffDetails: React.FC<StepProps> = ({ nextStep, formData, setFormD
 
     return (
         <View style={styles.container}>
-            <View>
+            <ScrollView>
                 <MdLogTextInput
                     label="First Name*"
                     value={formData?.firstName}
@@ -115,7 +116,7 @@ export const StaffDetails: React.FC<StepProps> = ({ nextStep, formData, setFormD
                         )}
                     />
                 </View>
-                
+
                 <MdLogTextInput
                     label="Phone*"
                     value={formData?.phone}
@@ -124,7 +125,7 @@ export const StaffDetails: React.FC<StepProps> = ({ nextStep, formData, setFormD
                     field="phone"
                     keyboard="phone-pad"
                 />
-                 <View style={styles.dropDownContainer}>
+                <View style={styles.dropDownContainer}>
                     <Dropdown
                         data={roleOptions}
                         labelField="label"
@@ -142,8 +143,36 @@ export const StaffDetails: React.FC<StepProps> = ({ nextStep, formData, setFormD
                         )}
                     />
                 </View>
-                
-            </View>
+                {
+                    formData?.role == "DOCTOR" ?
+                        <MdLogTextInput
+                            label="LicenseNumber"
+                            value={formData?.licenseNumber}
+                            onTextChange={onChangeT}
+                            field="phone"
+                        /> : ""
+                }
+
+                {
+                    formData?.role == "DOCTOR" ?
+                        <View style={styles.dropDownContainer}>
+                            <MultiSelect
+                                style={styles.dropdown}
+                                data={roleOptions}
+                                labelField="label"
+                                valueField="value"
+                                placeholder="Select specialities"
+                                placeholderStyle={styles.placeholder}
+                                selectedTextStyle={styles.selectedText}
+                                value={specialities}
+                                onChange={(item) => {
+                                    setSpecialities(item);
+                                }}
+                            />
+                        </View> : ""
+                }
+
+            </ScrollView>
             <View style={styles.buttonFormat}>
 
                 <TouchableOpacity style={styles.buttonNext} onPress={validateFormFields}>
