@@ -8,6 +8,8 @@ import { Dropdown } from 'react-native-element-dropdown';
 import { patientService } from '@api/patientService';
 import { AuthContext } from '@context/AuthContext';
 import { staffService } from '@api/staffService';
+import { MdLogActivityIndicator } from '@components/MdLogActivityIndicator';
+import { Role } from '@api/model/enums';
 
 // 👨‍⚕️ Mock doctor data
 let doctors = [
@@ -47,6 +49,10 @@ const getNextDates = (days = 6) => {
 
   return dateList;
 };
+type dropdownprops={
+  label: string
+  value: string
+}
 
 export default function BookAppointmentScreen() {
   const [selectedDate, setSelectedDate] = useState(new Date().toDateString());
@@ -54,30 +60,34 @@ export default function BookAppointmentScreen() {
   const dates = getNextDates();
   const {loggedInUserContext} = useContext(AuthContext);
   const [patients, setPatientList] = useState([])
+  const [loading, setLoading] = useState(false)
 
   const loadPatients = async () => {
-    const patientList =  await patientService.getClinicPatients(loggedInUserContext?.clinicDetails.id.toString());
-    const pt = [];
-    patientList.forEach(item => {
-      let vv = item.firstName + ", "+item.phone;
-        const t = {}
-        t.label = vv;
-        t.value = item;
-        pt.push(t);
-    })
-    console.log(pt)
-    setPatientList(pt)
+    try{
+      setLoading(true);
+      const patientList =  await patientService.getClinicPatients(loggedInUserContext?.clinicDetails.id.toString());
+      const pt = [];
+      patientList.forEach(item => {
+        let vv = item.firstName + ", "+item.phone;
+          const t:dropdownprops = {label:vv,value:item.id.toString()};
+          pt.push(t);
+      })
+      setPatientList(pt)
+    }catch(error){
+      setLoading(false);
+    }
+    setLoading(false)
   }
 
   const loadDoctors = async () => {
     const staffList =  await staffService.getClinicStaff(loggedInUserContext?.clinicDetails.id.toString());
     const pt = [];
     staffList.forEach(item => {
-      let vv = item.firstName + ", "+item.phone;
-        const t = {}
-        t.label = vv;
-        t.value = vv;
-        pt.push(t);
+      if(item.roleName === Role.DOCTOR.toString()){
+        let vv = item.firstName + ", "+item.phone;
+        const t:dropdownprops = {label:vv,value:item.id.toString()};
+         pt.push(t);
+      }
     })
     setPatientList(pt)
   }
@@ -208,6 +218,7 @@ export default function BookAppointmentScreen() {
       >
         Book Appointment
       </Button>
+      <MdLogActivityIndicator loading={loading}/>
     </ScrollView>
   );
 }
