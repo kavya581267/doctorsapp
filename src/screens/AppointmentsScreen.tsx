@@ -59,8 +59,11 @@ export default function BookAppointmentScreen() {
   const [reason, setReason] = useState('');
   const dates = getNextDates();
   const {loggedInUserContext} = useContext(AuthContext);
-  const [patients, setPatientList] = useState([])
-  const [loading, setLoading] = useState(false)
+  const [patients, setPatientList] = useState([]);
+  const [doctors, setDoctorsList] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [selectedPatient,setSelectedpatient] = useState();
+  const [selectedDoctor,setSelectedDoctor] = useState();
 
   const loadPatients = async () => {
     try{
@@ -89,7 +92,7 @@ export default function BookAppointmentScreen() {
          pt.push(t);
       }
     })
-    setPatientList(pt)
+    setDoctorsList(pt)
   }
   useEffect(() => {
     loadPatients()
@@ -117,7 +120,8 @@ export default function BookAppointmentScreen() {
           labelField="label"
           valueField="value"
           placeholder="Select Patient"
-          onChange={(item) => console.log(item)}
+          value={selectedPatient}
+          onChange={(item) => setSelectedpatient(item)}
           search={true}
           style={styles.searchInput}
           itemTextStyle={{ color: '#555', fontSize: 16 }}
@@ -130,11 +134,12 @@ export default function BookAppointmentScreen() {
       {/* Search Bar */}
       <View style={styles.viewMarginBottom}>
         <Dropdown
-          data={genderOptions}
+          data={doctors}
           labelField="label"
           valueField="value"
           placeholder="Select Doctor"
-          onChange={(item) => console.log(item)}
+          value={selectedDoctor}
+          onChange={(item) => setSelectedDoctor(item)}
           search={true}
           style={styles.searchInput}
           itemTextStyle={{ color: '#555', fontSize: 16 }}
@@ -171,7 +176,7 @@ export default function BookAppointmentScreen() {
         </ScrollView>
       </View>
 
-      {/* Doctors List */}
+      {/* Doctors List 
       {doctors.map((doc) => (
         <Card key={doc.id} style={{ marginBottom: 16, padding: 16 }}>
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -197,7 +202,7 @@ export default function BookAppointmentScreen() {
           </View>
         </Card>
       ))}
-
+*/}
       {/* Reason for Visit */}
       <View style={styles.viewMarginBottom}>
         <Text style={styles.subHeaders}>Reason for Visit</Text>
