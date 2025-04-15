@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, Image, ScrollView, TouchableOpacity, Modal, Switch } from 'react-native';
-import { Text, Card, Avatar, Divider, Chip, Button } from 'react-native-paper';
+import { View, StyleSheet, ScrollView, TouchableOpacity, Modal, Switch } from 'react-native';
+import { Text, Card, Avatar, Button, Chip } from 'react-native-paper';
 import { MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
 import Back from '@components/Back';
 import { useRoute } from '@react-navigation/native';
@@ -13,52 +13,66 @@ const DoctorScheduleScreen = () => {
     const [startTime, setStartTime] = useState(new Date());
     const [endTime, setEndTime] = useState(new Date());
     const [isAvailable, setIsAvailable] = useState(true);
+    const [editIndex, setEditIndex] = useState(null);
     const route = useRoute();
     const { doctorDetails } = route?.params;
-
-
 
     const getFixedDays = () => {
         const fixedDays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
         return fixedDays.map((day) => ({
             label: day,
             key: day.toLowerCase()
-        }))
-    }
+        }));
+    };
     const days = getFixedDays();
     const [selectedDay, setSelectedDay] = useState(days[0].key);
 
+
     const [weeklySchedule, setWeeklySchedule] = useState(() =>
         days.reduce((acc, day) => {
-            acc[day.key] = {
-                startTime: new Date(0, 0, 0, 10, 0),
-                endTime: new Date(0, 0, 0, 17, 0),
-                isAvailable: true,
-            };
+            acc[day.key] = [];
             return acc;
-        }, {}
-        )
-    )
+        }, {})
+    );
 
     const formatTime = (time) =>
         time ? time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'N/A';
 
-    const openEditModal = () => {
-        const schedule = weeklySchedule[selectedDay];
-        setStartTime(schedule.startTime);
-        setEndTime(schedule.endTime);
-        setIsAvailable(schedule.isAvailable);
+    const openEditModal = (index = null) => {
+        if (index !== null) {
+            const schedule = weeklySchedule[selectedDay][index];
+            setStartTime(schedule.startTime);
+            setEndTime(schedule.endTime);
+            setIsAvailable(schedule.isAvailable);
+            setEditIndex(index);
+        } else {
+            setStartTime(new Date());
+            setEndTime(new Date());
+            setIsAvailable(true);
+            setEditIndex(null);
+        }
         setModalVisible(true);
     };
+
     const handleSave = () => {
-        setWeeklySchedule((prev) => ({
-            ...prev,
-            [selectedDay]: {
-                startTime,
-                endTime,
-                isAvailable,
-            },
-        }));
+        if (editIndex !== null) {
+
+            const updatedSchedule = [...weeklySchedule[selectedDay]];
+            updatedSchedule[editIndex] = { startTime, endTime, isAvailable };
+            setWeeklySchedule((prev) => ({
+                ...prev,
+                [selectedDay]: updatedSchedule,
+            }));
+        } else {
+
+            setWeeklySchedule((prev) => ({
+                ...prev,
+                [selectedDay]: [
+                    ...prev[selectedDay],
+                    { startTime, endTime, isAvailable },
+                ],
+            }));
+        }
         setModalVisible(false);
     };
 
@@ -87,7 +101,7 @@ const DoctorScheduleScreen = () => {
             <View>
                 <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
                     <Text style={styles.sectionTitle}>Regular Schedule</Text>
-                    <TouchableOpacity onPress={openEditModal}>
+                    <TouchableOpacity onPress={() => openEditModal()}>
                         <Icon name="edit" size={24} color="#007bff" />
                     </TouchableOpacity>
                 </View>
@@ -117,26 +131,39 @@ const DoctorScheduleScreen = () => {
                     })}
                 </ScrollView>
                 <View style={{ marginTop: 12 }}>
+                    {weeklySchedule[selectedDay]?.length > 0 ? (
+                        weeklySchedule[selectedDay].map((schedule, index) => (
+                            <View key={index} style={{ flexDirection: "row", marginVertical: 5 ,justifyContent:"space-between"}}>
+                                {schedule.isAvailable ? (
+                                    <View style={{ flexDirection: "row" }}>
+                                        <Icon name="access-time" size={16} color="black" />
+                                        <Text style={{ marginLeft: 4 }}>
+                                            {formatTime(schedule.startTime)} - {formatTime(schedule.endTime)}
+                                        </Text>
+                                    </View>
+                                ) : (
 
-                    {weeklySchedule[selectedDay]?.isAvailable ? (
-                        <View style={{ flexDirection: "row" }}>
-                            <Icon name="access-time" size={16} color="black" />
-                            <Text style={{ marginLeft: 4 }}>
-                                {formatTime(weeklySchedule[selectedDay].startTime)} - {formatTime(weeklySchedule[selectedDay].endTime)}
-                            </Text>
-                        </View>
-
+                                    <Text style={{ color: 'red' }}>Not Available</Text>
+                                )}
+                                <TouchableOpacity onPress={() => openEditModal(index)}>
+                                    <Text style={{ marginLeft: 8, color: 'blue' }}>Edit</Text>
+                                </TouchableOpacity>
+                            </View>
+                        ))
                     ) : (
-                        <Text style={{ color: 'red' }}>Not Available</Text>
+                        <Text>No schedule for this day</Text>
                     )}
                 </View>
+
                 <Modal visible={modalVisible} animationType="slide" transparent>
                     <View style={styles.modalOverlay}>
                         <View style={styles.modal}>
-                            <Text style={styles.modalTitle}>Edit Schedule</Text>
+                            <Text style={styles.modalTitle}>
+                                {editIndex !== null ? "Edit Schedule" : "Add New Time Slot"}
+                            </Text>
 
                             <Text style={styles.label}>Day</Text>
-                            <View >
+                            <View>
                                 <Text style={styles.timeBox}>{selectedDay}</Text>
                             </View>
 
@@ -144,7 +171,6 @@ const DoctorScheduleScreen = () => {
                             <MdLogTimePicker value={startTime} onChange={setStartTime} disabled={!isAvailable} />
 
                             <Text style={styles.label}>Closing Time</Text>
-
                             <MdLogTimePicker value={endTime} onChange={setEndTime} disabled={!isAvailable} />
 
                             <View style={styles.switchRow}>
@@ -153,7 +179,9 @@ const DoctorScheduleScreen = () => {
                             </View>
 
                             <TouchableOpacity onPress={handleSave} style={styles.saveButton}>
-                                <Text style={styles.saveText}>Save Changes</Text>
+                                <Text style={styles.saveText}>
+                                    {editIndex !== null ? "Save Changes" : "Add Time Slot"}
+                                </Text>
                             </TouchableOpacity>
 
                             <TouchableOpacity onPress={() => setModalVisible(false)}>
@@ -164,9 +192,6 @@ const DoctorScheduleScreen = () => {
                 </Modal>
             </View>
 
-
-
-
             {/* Specialities */}
             <Text style={styles.sectionTitle}>Specialities</Text>
             <View style={styles.chipContainer}>
@@ -174,8 +199,6 @@ const DoctorScheduleScreen = () => {
                 <Chip style={styles.chip}>Heart Surgery</Chip>
                 <Chip style={styles.chip}>Vascular Medicine</Chip>
             </View>
-
-
         </View>
     );
 };
