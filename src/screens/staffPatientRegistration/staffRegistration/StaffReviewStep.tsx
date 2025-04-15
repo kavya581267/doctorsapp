@@ -18,6 +18,8 @@ export default function StaffReview({ prevStep, formData, submitForm }) {
         { label: 'Country', value: formData.country },
         { label: 'Emergency Contact Name', value: formData.emergencyContactName },
         { label: 'Emergency Contact Phone', value: formData.emergencyContactPhone },
+        { label: "License Number", value: formData.LicenseNumber},
+        { label: "Specialties", value: formData.specialities}
     ];
     return (
 

@@ -29,7 +29,7 @@ export const StaffAddress: React.FC<StepProps> = ({ nextStep, prevStep, formData
     }
    
     const validateFormFields = () =>{
-        if(!isAnyFieldsEmpty(["address","city","state","zipCode","country","emergencyContactName","emergencyContactPhone"],formData) &&
+        if(!isAnyFieldsEmpty(["address","city","state","zipCode","country"],formData) &&
               isValidPhone(formData.phone)){
             setVisible(false);
             nextStep();
@@ -78,14 +78,14 @@ export const StaffAddress: React.FC<StepProps> = ({ nextStep, prevStep, formData
                     field="country"
                 />
                  <MdLogTextInput
-                    label="EmergencyContactName*"
+                    label="EmergencyContactName"
                     value={formData?.emergencyContactName}
                     left="human-male"
                     onTextChange={onChangeT}
                     field="emergencyContactName"
                 />
                  <MdLogTextInput
-                    label="EmergencyContactPhone*"
+                    label="EmergencyContactPhone"
                     value={formData?.emergencyContactPhone}
                     left="phone"
                     onTextChange={onChangeT}

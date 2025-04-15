@@ -57,7 +57,6 @@ export default StyleSheet.create({
     //gender
     dropDownContainer: { 
         marginTop:5,
-      
     },
     label: { 
         fontSize: 14, 

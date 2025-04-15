@@ -8,6 +8,7 @@ import { MdLodSnackbar } from "@components/MdLogSnacbar";
 import { Dropdown, MultiSelect } from "react-native-element-dropdown";
 import { Icon } from "react-native-paper";
 import { registrationService } from "@api/registrationService";
+import { Item } from "react-native-paper/lib/typescript/components/Drawer/Drawer";
 
 interface StepProps {
     nextStep?: () => void;
@@ -27,14 +28,13 @@ export const StaffRole: React.FC<StepProps> = ({ nextStep, prevStep, formData, s
 
 
 
-
     useEffect(() => {
         const fetchSpecialities = async () => {
             try {
                 const result = await registrationService.getSpecialities();
                 const options = result.map(speciality => ({
                     label: speciality.specialty_name,
-                    value: speciality.id,
+                    value: speciality.specialty_name,
                 }));
                 setSpecialityOptions(options);
             } catch (error) {
@@ -42,6 +42,7 @@ export const StaffRole: React.FC<StepProps> = ({ nextStep, prevStep, formData, s
             }
         };
         fetchSpecialities();
+       setSelectedSpecialities( formData?.specialties);
     }, []);
 
     const roleOptions = [
@@ -61,13 +62,20 @@ export const StaffRole: React.FC<StepProps> = ({ nextStep, prevStep, formData, s
 
     const validateFormFields = () => {
         if (!isAnyFieldsEmpty(["role"], formData)) {
+            if (formData?.role === "DOCTOR") {
+                if (selectedSpecialities.length === 0) {
+                    setVisible(true);
+                    return;
+                }
+            }
             setVisible(false);
             nextStep();
         } else {
             setVisible(true);
         }
-    }
+    };
 
+  
     return (
         <View style={styles.container}>
             <View>
@@ -95,7 +103,7 @@ export const StaffRole: React.FC<StepProps> = ({ nextStep, prevStep, formData, s
                             label="LicenseNumber"
                             value={formData?.licenseNumber}
                             onTextChange={onChangeT}
-                            field="phone"
+                            field="licenseNumber"
                             left="card-account-details-outline"
                         /> : ""
                 }
@@ -112,9 +120,7 @@ export const StaffRole: React.FC<StepProps> = ({ nextStep, prevStep, formData, s
                                 placeholderStyle={styles.placeholder}
                                 selectedTextStyle={styles.selectedText}
                                 value={selectedSpecialities}
-                                onChange={(item) => {
-                                    setSelectedSpecialities(item);
-                                }}
+                                onChange={(item)=>{setFormData((prev) => ({ ...prev, specialties: item }));setSelectedSpecialities(item)}}
                                 renderLeftIcon={() => (
                                     <View style={styles.icon} >
                                         <Icon source="star-circle-outline" size={24} color="#555" />
