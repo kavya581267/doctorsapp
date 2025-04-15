@@ -14,7 +14,7 @@ export default StyleSheet.create({
     },
     buttonFormat: {
         flexDirection: "row",
-        justifyContent: "space-between"
+        justifyContent:"space-between",
     },
 
     buttonPrev: {
@@ -56,7 +56,8 @@ export default StyleSheet.create({
 
     //gender
     dropDownContainer: { 
-        marginTop:5
+        marginTop:5,
+      
     },
     label: { 
         fontSize: 14, 

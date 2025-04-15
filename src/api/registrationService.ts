@@ -1,6 +1,7 @@
-import { REGISTER_ADMIN_PATH, REGISTER_PATIENT_PATH, REGISTER_STAFF_PATH } from "@utils/constants";
+import { GET_ALL_SPECIALTIES_PATH, REGISTER_ADMIN_PATH, REGISTER_PATIENT_PATH, REGISTER_STAFF_PATH } from "@utils/constants";
 import { apiService } from "./apiService";
 import { AdminRegistarationRequest, AdminRegistrationResponse, StaffRegistration, PatientRegistration, PatientRegistrationResponse } from "./model/auth/Auth";
+import { Speciality } from "./model/Speciality";
 
 
 export const registrationService = {
@@ -29,5 +30,15 @@ export const registrationService = {
         } catch (error) {
             throw error;
         }
+    },
+
+    getSpecialities: async () : Promise<Speciality[]> =>{
+        try{
+           const response = await apiService.get(GET_ALL_SPECIALTIES_PATH, "");
+           return response.data;
+        }catch(error){
+            throw error;
+        }
     }
+
 };

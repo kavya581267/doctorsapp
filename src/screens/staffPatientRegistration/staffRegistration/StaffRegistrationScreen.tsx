@@ -14,14 +14,14 @@ import { useNavigation } from "@react-navigation/native";
 import { MdLogActivityIndicator } from "@components/MdLogActivityIndicator";
 
 import { AuthContext } from "@context/AuthContext";
-import SuccessScreen from "@screens/SuccessScreen";
+import { StaffRole } from "./StaffRoleStep";
 
 
 
 export default function StaffRegistrationScreen() {
    const navigation = useNavigation();
    const [errorMessage, setErrorMessage] = useState("some thing went wrong please try again!!");
-  const labels = ["Details", "Address", "Submit"];
+  const labels = ["Details","Role", "Address", "Submit"];
   const [formData, setFormData] = useState<StaffRegistration>();
   const [step, setStep] = useState<number>(0);
   const nextStep = () => setStep((prev) => prev + 1);
@@ -58,8 +58,9 @@ export default function StaffRegistrationScreen() {
           <StepIndicator customStyles={stepindicator} stepCount={labels.length} currentPosition={step} labels={labels} />
           <Spacer height={40} />
           {step === 0 && <StaffDetails nextStep={nextStep} formData={formData} setFormData={setFormData} />}
-          {step === 1 && <StaffAddress nextStep={nextStep} prevStep={prevStep} formData={formData} setFormData={setFormData} />}
-          {step === 2 && <StaffReview prevStep={prevStep} formData={formData} submitForm={submitForm} />}
+          {step === 1 && <StaffRole nextStep={nextStep} prevStep={prevStep} formData={formData} setFormData={setFormData} />}
+          {step === 2 && <StaffAddress nextStep={nextStep} prevStep={prevStep} formData={formData} setFormData={setFormData} />}
+          {step === 3 && <StaffReview prevStep={prevStep} formData={formData} submitForm={submitForm} />}
         </View>
         <MdLogActivityIndicator loading={loading}/>
       </View>
