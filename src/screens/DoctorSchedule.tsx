@@ -30,7 +30,11 @@ const DoctorScheduleScreen = () => {
 
     const [weeklySchedule, setWeeklySchedule] = useState(() =>
         days.reduce((acc, day) => {
-            acc[day.key] = [];
+            acc[day.key] = [{
+                startTime: new Date(0,0,0,10),
+                endTime: new Date(0,0,0,17),
+                isAvailable: true
+            }];
             return acc;
         }, {})
     );
@@ -99,10 +103,10 @@ const DoctorScheduleScreen = () => {
 
             {/* Regular Schedule */}
             <View>
-                <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+                <View style={{ flexDirection: "row", justifyContent: "space-between",alignItems:"center" }}>
                     <Text style={styles.sectionTitle}>Regular Schedule</Text>
                     <TouchableOpacity onPress={() => openEditModal()}>
-                        <Icon name="edit" size={24} color="#007bff" />
+                    <Text style={{  color: COLORS.primary ,fontWeight:"600"}}>Add</Text>
                     </TouchableOpacity>
                 </View>
 
@@ -146,7 +150,7 @@ const DoctorScheduleScreen = () => {
                                     <Text style={{ color: 'red' }}>Not Available</Text>
                                 )}
                                 <TouchableOpacity onPress={() => openEditModal(index)}>
-                                    <Text style={{ marginLeft: 8, color: 'blue' }}>Edit</Text>
+                                    <Text style={{  color: COLORS.primary,fontWeight:"600" }}>Edit</Text>
                                 </TouchableOpacity>
                             </View>
                         ))
