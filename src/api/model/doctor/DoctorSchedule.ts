@@ -1,7 +1,7 @@
 import { DayOfWeek } from "../enums";
 
 export class DoctorSchedule {
-    clinicId: string;
+    clinicId: number;
     dayOfWeek: DayOfWeek;
     startTime: string;
     endTime: string;

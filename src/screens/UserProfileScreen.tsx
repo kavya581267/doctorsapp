@@ -63,7 +63,7 @@ const UserProfileScreen = () => {
             <View style={styles.profileSection}>
                 <Avatar.Image
                     size={80}
-                    source={{ uri: 'https://randomuser.me/api/portraits/men/75.jpg' }}
+                    source={{ uri: 'https://api.dicebear.com/7.x/adventurer/svg?seed=doctor' }}
                 />
                 <Text style={styles.name}>{firstName} {lastName}</Text>
                 <Text style={styles.role}>{role}</Text>

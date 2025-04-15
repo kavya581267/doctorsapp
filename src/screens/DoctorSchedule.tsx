@@ -1,12 +1,19 @@
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { View, StyleSheet, ScrollView, TouchableOpacity, Modal, Switch } from 'react-native';
-import { Text, Card, Avatar, Button, Chip } from 'react-native-paper';
+import { Text, Card, Avatar, Button, Chip, Divider } from 'react-native-paper';
 import { MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
 import Back from '@components/Back';
 import { useRoute } from '@react-navigation/native';
 import { COLORS } from '@utils/colors';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { MdLogTimePicker } from '@components/MdLogTimePicker';
+import Spacer from '@components/Spacer';
+import { doctorService } from '@api/doctorService';
+import { DoctorSchedule } from '@api/model/doctor/DoctorSchedule';
+import { AuthContext } from '@context/AuthContext';
+import { DayOfWeek } from '@api/model/enums';
+import { MdLogActivityIndicator } from '@components/MdLogActivityIndicator';
+import { MdLodSnackbar } from '@components/MdLogSnacbar';
 
 const DoctorScheduleScreen = () => {
     const [modalVisible, setModalVisible] = useState(false);
@@ -15,29 +22,35 @@ const DoctorScheduleScreen = () => {
     const [isAvailable, setIsAvailable] = useState(true);
     const [editIndex, setEditIndex] = useState(null);
     const route = useRoute();
+    const [loading, setLoading] = useState(false);
+    const [showError, setShowError] = useState(false);
+    const [errorMessage, setErrorMessage] = useState("Failed");
+    const { loggedInUserContext } = useContext(AuthContext);
+    const [selectedDay, setSelectedDay] = useState<DayOfWeek>(DayOfWeek.MONDAY);
+
     const { doctorDetails } = route?.params;
 
+
     const getFixedDays = () => {
-        const fixedDays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+        const fixedDays = [DayOfWeek.MONDAY, DayOfWeek.TUESDAY, DayOfWeek.WEDNESDAY,
+        DayOfWeek.THIRSDAY, DayOfWeek.FRIDAY, DayOfWeek.SATURDAY, DayOfWeek.SUNDAY];
         return fixedDays.map((day) => ({
             label: day,
-            key: day.toLowerCase()
+            key: day
         }));
     };
     const days = getFixedDays();
-    const [selectedDay, setSelectedDay] = useState(days[0].key);
-
 
     const [weeklySchedule, setWeeklySchedule] = useState(() =>
         days.reduce((acc, day) => {
-            acc[day.key] = [{
-                startTime: new Date(0,0,0,10),
-                endTime: new Date(0,0,0,17),
-                isAvailable: true
-            }];
+            acc[day.key] = [];
             return acc;
         }, {})
     );
+
+    useEffect(() => {
+
+    }, [])
 
     const formatTime = (time) =>
         time ? time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'N/A';
@@ -58,9 +71,40 @@ const DoctorScheduleScreen = () => {
         setModalVisible(true);
     };
 
+    const addSchedule = async () => {
+        const doctorSchedule = new DoctorSchedule();
+        doctorSchedule.clinicId = loggedInUserContext.clinicDetails.id;
+        doctorSchedule.consultationDuration = 15;
+        doctorSchedule.dayOfWeek = selectedDay;
+        doctorSchedule.isAvailable = true;
+        const formattedStartTime = startTime.toLocaleTimeString('en-GB', {
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: false,
+        });
+        const formattedEndTime = startTime.toLocaleTimeString('en-GB', {
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: false,
+        });
+        doctorSchedule.startTime = formattedStartTime;
+        doctorSchedule.endTime = formattedEndTime;
+        setModalVisible(false);
+        setLoading(true)
+        try {
+            const resp = await doctorService.createDoctorSchedule(doctorSchedule, doctorDetails.id);
+            console.log(resp);
+        } catch (error) {
+            setShowError(true);
+            setErrorMessage(error.toString());
+        }
+        setLoading(false)
+    }
+
     const handleSave = () => {
         if (editIndex !== null) {
-
             const updatedSchedule = [...weeklySchedule[selectedDay]];
             updatedSchedule[editIndex] = { startTime, endTime, isAvailable };
             setWeeklySchedule((prev) => ({
@@ -68,7 +112,6 @@ const DoctorScheduleScreen = () => {
                 [selectedDay]: updatedSchedule,
             }));
         } else {
-
             setWeeklySchedule((prev) => ({
                 ...prev,
                 [selectedDay]: [
@@ -83,7 +126,7 @@ const DoctorScheduleScreen = () => {
     return (
         <View style={styles.container}>
             {/* Header */}
-            <Back nav='StaffDirectoryScreen' />
+            <Back nav='Mainscreen' />
 
             {/* Doctor Info */}
             <Card style={styles.card}>
@@ -94,19 +137,19 @@ const DoctorScheduleScreen = () => {
                         <Avatar.Image
                             size={50}
                             source={{
-                                uri: 'https://randomuser.me/api/portraits/men/75.jpg', // Replace with actual image
+                                uri: 'https://api.dicebear.com/7.x/adventurer/svg?seed=doctor', // Replace with actual image
                             }}
                         />
                     )}
                 />
             </Card>
-
+            <Divider />
             {/* Regular Schedule */}
-            <View>
-                <View style={{ flexDirection: "row", justifyContent: "space-between",alignItems:"center" }}>
+            <View style={{ marginBottom: 30 }}>
+                <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: 5 }}>
                     <Text style={styles.sectionTitle}>Regular Schedule</Text>
                     <TouchableOpacity onPress={() => openEditModal()}>
-                    <Text style={{  color: COLORS.primary ,fontWeight:"600"}}>Add</Text>
+                        <Icon name="add" size={24} color={COLORS.primary} />
                     </TouchableOpacity>
                 </View>
 
@@ -134,23 +177,23 @@ const DoctorScheduleScreen = () => {
                         );
                     })}
                 </ScrollView>
-                <View style={{ marginTop: 12 }}>
+                {/* Timings */}
+                <View style={{ marginTop: 18 }}>
                     {weeklySchedule[selectedDay]?.length > 0 ? (
                         weeklySchedule[selectedDay].map((schedule, index) => (
-                            <View key={index} style={{ flexDirection: "row", marginVertical: 5 ,justifyContent:"space-between"}}>
+                            <View key={index} style={{ flexDirection: "row", marginVertical: 5, justifyContent: "space-between" }}>
                                 {schedule.isAvailable ? (
                                     <View style={{ flexDirection: "row" }}>
                                         <Icon name="access-time" size={16} color="black" />
-                                        <Text style={{ marginLeft: 4 }}>
+                                        <Text style={{ marginLeft: 4, fontWeight: "600" }}>
                                             {formatTime(schedule.startTime)} - {formatTime(schedule.endTime)}
                                         </Text>
                                     </View>
                                 ) : (
-
                                     <Text style={{ color: 'red' }}>Not Available</Text>
                                 )}
                                 <TouchableOpacity onPress={() => openEditModal(index)}>
-                                    <Text style={{  color: COLORS.primary,fontWeight:"600" }}>Edit</Text>
+                                    <Text style={{ color: COLORS.primary, fontWeight: "600" }}>Edit</Text>
                                 </TouchableOpacity>
                             </View>
                         ))
@@ -182,7 +225,7 @@ const DoctorScheduleScreen = () => {
                                 <Text style={styles.switchLabel}>Available</Text>
                             </View>
 
-                            <TouchableOpacity onPress={handleSave} style={styles.saveButton}>
+                            <TouchableOpacity onPress={addSchedule} style={styles.saveButton}>
                                 <Text style={styles.saveText}>
                                     {editIndex !== null ? "Save Changes" : "Add Time Slot"}
                                 </Text>
@@ -195,7 +238,7 @@ const DoctorScheduleScreen = () => {
                     </View>
                 </Modal>
             </View>
-
+            <Divider />
             {/* Specialities */}
             <Text style={styles.sectionTitle}>Specialities</Text>
             <View style={styles.chipContainer}>
@@ -203,6 +246,8 @@ const DoctorScheduleScreen = () => {
                 <Chip style={styles.chip}>Heart Surgery</Chip>
                 <Chip style={styles.chip}>Vascular Medicine</Chip>
             </View>
+            <MdLogActivityIndicator loading={loading} />
+            <MdLodSnackbar onDismiss={setShowError} message={errorMessage} visible={showError} />
         </View>
     );
 };
@@ -226,13 +271,15 @@ const styles = StyleSheet.create({
         fontWeight: '600',
     },
     card: {
-        marginBottom: 16,
+        marginTop: 10,
+        marginBottom: 35,
         padding: 8,
     },
     sectionTitle: {
         fontSize: 16,
         fontWeight: '700',
         marginVertical: 8,
+        marginTop: 15
     },
 
     chipContainer: {
