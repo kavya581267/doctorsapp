@@ -25,6 +25,7 @@ import DashboardScreen from '@screens/Dashboard';
 import StaffDirectoryScreen from '@screens/StaffDirectory';
 import ClinicOverview from '@screens/ClinicOverview';
 import UserProfileScreen from '@screens/UserProfileScreen';
+import DoctorScheduleScreen from '@screens/DoctorSchedule';
 
 
 
@@ -86,6 +87,7 @@ export default function MainNavigator() {
                 <Stack.Screen name='ResetPasswordScreen' component={ResetPasswordScreen} />
                 <Stack.Screen name='DashboardScreen' component={DashboardScreen}></Stack.Screen>
                 <Stack.Screen name='StaffDirectoryScreen' component={StaffDirectoryScreen}></Stack.Screen>
+                <Stack.Screen name='DoctorScheduleScreen' component={DoctorScheduleScreen}></Stack.Screen>
             </Stack.Navigator>
         </NavigationContainer>
     );

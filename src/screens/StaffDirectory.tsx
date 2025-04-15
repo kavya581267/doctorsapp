@@ -7,7 +7,7 @@ import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { COLORS } from '@utils/colors';
 import { getAvatarName } from '@utils/utils';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
-import { ListRenderItem } from 'react-native';
+import { Alert, ListRenderItem } from 'react-native';
 
 import {
   View,
@@ -26,22 +26,23 @@ import { Avatar } from 'react-native-paper';
 const StaffDirectoryScreen = () => {
   const [searchText, setSearchText] = useState('');
   const navigation = useNavigation();
-  const {loggedInUserContext} = useContext(AuthContext);
+  const { loggedInUserContext } = useContext(AuthContext);
   const [staff, setStaff] = useState<Staff[]>([]);
   const [backUp, setBackupStaff] = useState<Staff[]>([]);
-  const [loading,setLoading] = useState(false)
+  const [loading, setLoading] = useState(false)
+
 
   const fetchStaffLst = async () => {
     setLoading(true)
-    try{
+    try {
       const resp = await staffService.getClinicStaff(loggedInUserContext?.clinicDetails.id.toString());
       setStaff(resp)
       setBackupStaff(resp);
-    }catch(error){
-     
+    } catch (error) {
+
     }
     setLoading(false)
-    
+
   }
 
   useFocusEffect(
@@ -52,62 +53,72 @@ const StaffDirectoryScreen = () => {
   );
 
 
-  useEffect(()=>{
-      fetchStaffLst();
-  },[])
+  useEffect(() => {
+    fetchStaffLst();
+  }, [])
 
   const filterStaff = (searchText) => {
     console.log(searchText);
     const filteredStaff = backUp.filter((staff) =>
-      staff.firstName.toLowerCase().includes(searchText.toLowerCase()) || 
+      staff.firstName.toLowerCase().includes(searchText.toLowerCase()) ||
       staff.lastName.toLowerCase().includes(searchText.toLowerCase()) ||
-      staff.phone.toLowerCase().includes(searchText.toLowerCase())   ||
+      staff.phone.toLowerCase().includes(searchText.toLowerCase()) ||
       staff.email.toLowerCase().includes(searchText.toLowerCase())
-   );
-   const filteredNewStaff = filteredStaff.map(staff => ({ ...staff }));
-   console.log(filteredNewStaff)
-   setStaff(filteredNewStaff);
-   setSearchText(searchText);
+    );
+    const filteredNewStaff = filteredStaff.map(staff => ({ ...staff }));
+    console.log(filteredNewStaff)
+    setStaff(filteredNewStaff);
+    setSearchText(searchText);
   }
 
-  
 
-  const renderStaffCard: ListRenderItem<Staff>  = ({item}) => (
-    <TouchableOpacity style={styles.card}>
-      <Avatar.Text  size={60} label={getAvatarName(item?.firstName, item?.lastName)} />
-      <View style={styles.cardContent}>
-        <Text style={styles.name}>{item.firstName}</Text>
-        <Text style={styles.role}>{item.roleName}</Text>
-        <Text style={styles.role}>{item.phone}</Text>
-      </View>
+
+  const renderStaffCard: ListRenderItem<Staff> = ({ item }) => {
+
+    const handlePress = () => {
+      const role = item?.roleName.toLowerCase();
+      if (role === "doctor") {
+        navigation.navigate("DoctorScheduleScreen",{doctorDetails:item});
+      }
+    }
+
+    return (
+      <TouchableOpacity style={styles.card} onPress={handlePress}>
+        <Avatar.Text size={60} label={getAvatarName(item?.firstName, item?.lastName)} />
+        <View style={styles.cardContent}>
+          <Text style={styles.name}>{item.firstName}</Text>
+          <Text style={styles.role}>{item.roleName}</Text>
+          <Text style={styles.role}>{item.phone}</Text>
+        </View>
         <Text style={[styles.status, item.isActive ? styles.active : styles.onLeave]}>
-          {item.isActive?"Active":"InActive"}
+          {item.isActive ? "Active" : "InActive"}
         </Text>
-    </TouchableOpacity>
-  );
+      </TouchableOpacity>
+    )
+  };
 
   return (
-      <View style={styles.container}>
-        <View>
-          <Back></Back>
-          <TextInput
-            placeholder="Search staff..."
-            value={searchText}
-            onChangeText={filterStaff}
-            style={styles.searchInput}
-          />
+    <View style={styles.container}>
+      <View>
+        <Back></Back>
+        <TextInput
+          placeholder="Search staff..."
+          value={searchText}
+          onChangeText={filterStaff}
+          style={styles.searchInput}
+        />
 
-          <FlatList<Staff>
-            data={staff}
-            keyExtractor={(item) => item.id.toString()}
-            renderItem={renderStaffCard}
-          />
-        </View>
-        <TouchableOpacity style={styles.addButton} onPress={()=>navigation.navigate("StaffRegistrationScreen")}>
-          <Text style={styles.addButtonText}>+ Add New Staff</Text>
-        </TouchableOpacity>
-        <MdLogActivityIndicator loading={loading} />
+        <FlatList<Staff>
+          data={staff}
+          keyExtractor={(item) => item.id.toString()}
+          renderItem={renderStaffCard}
+        />
       </View>
+      <TouchableOpacity style={styles.addButton} onPress={() => navigation.navigate("StaffRegistrationScreen")}>
+        <Text style={styles.addButtonText}>+ Add New Staff</Text>
+      </TouchableOpacity>
+      <MdLogActivityIndicator loading={loading} />
+    </View>
   );
 };
 
@@ -121,7 +132,7 @@ const styles = StyleSheet.create({
     padding: 16,
     backgroundColor: '#fff',
     flex: 1,
-    justifyContent:"space-between"
+    justifyContent: "space-between"
 
   },
   searchInput: {
@@ -164,7 +175,7 @@ const styles = StyleSheet.create({
   },
   cardContent: {
     flex: 1,
-    paddingLeft:30
+    paddingLeft: 30
   },
   name: {
     fontWeight: '600',

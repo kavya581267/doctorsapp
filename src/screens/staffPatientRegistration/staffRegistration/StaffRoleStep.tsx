@@ -22,27 +22,24 @@ interface StepProps {
 export const StaffRole: React.FC<StepProps> = ({ nextStep, prevStep, formData, setFormData }) => {
     const [visible, setVisible] = useState(false);
     const onDismissSnackBar = () => setVisible(false);
-
     const [specialityOptions, setSpecialityOptions] = useState([]);
-    const [selectedSpecialities, setSelectedSpecialities] = useState<string[]>([]);
 
-
+    const fetchSpecialities = async () => {
+        try {
+            const result = await registrationService.getSpecialities();
+            const options = result.map(speciality => ({
+                label: speciality.specialty_name,
+                value: speciality.specialty_name,
+            }));
+            setSpecialityOptions(options);
+          
+        } catch (error) {
+            //console.error("Error fetching specialities:", error);
+        }
+    };
 
     useEffect(() => {
-        const fetchSpecialities = async () => {
-            try {
-                const result = await registrationService.getSpecialities();
-                const options = result.map(speciality => ({
-                    label: speciality.specialty_name,
-                    value: speciality.specialty_name,
-                }));
-                setSpecialityOptions(options);
-            } catch (error) {
-                //console.error("Error fetching specialities:", error);
-            }
-        };
         fetchSpecialities();
-       setSelectedSpecialities( formData?.specialties);
     }, []);
 
     const roleOptions = [
@@ -63,7 +60,7 @@ export const StaffRole: React.FC<StepProps> = ({ nextStep, prevStep, formData, s
     const validateFormFields = () => {
         if (!isAnyFieldsEmpty(["role"], formData)) {
             if (formData?.role === "DOCTOR") {
-                if (selectedSpecialities.length === 0) {
+                if (formData?.specialties && formData?.specialties?.length === 0) {
                     setVisible(true);
                     return;
                 }
@@ -119,8 +116,8 @@ export const StaffRole: React.FC<StepProps> = ({ nextStep, prevStep, formData, s
                                 placeholder="Select specialities"
                                 placeholderStyle={styles.placeholder}
                                 selectedTextStyle={styles.selectedText}
-                                value={selectedSpecialities}
-                                onChange={(item)=>{setFormData((prev) => ({ ...prev, specialties: item }));setSelectedSpecialities(item)}}
+                                value={formData?.specialties}
+                                onChange={(item)=>setFormData((prev) => ({ ...prev, specialties: item }))}
                                 renderLeftIcon={() => (
                                     <View style={styles.icon} >
                                         <Icon source="star-circle-outline" size={24} color="#555" />

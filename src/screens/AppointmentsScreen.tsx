@@ -10,28 +10,9 @@ import { AuthContext } from '@context/AuthContext';
 import { staffService } from '@api/staffService';
 import { MdLogActivityIndicator } from '@components/MdLogActivityIndicator';
 import { Role } from '@api/model/enums';
+import { Modal, Portal } from 'react-native-paper';
 
-// 👨‍⚕️ Mock doctor data
-let doctors = [
-  {
-    id: 1,
-    name: 'Dr. James Wilson',
-    specialty: 'Cardiologist',
-    rating: 4.8,
-    times: ['09:00 AM', '10:00 AM', '11:30 AM'],
-    avatar: 'https://randomuser.me/api/portraits/men/32.jpg',
-  },
-  {
-    id: 2,
-    name: 'Dr. Sarah Chen',
-    specialty: 'Cardiologist',
-    rating: 4.9,
-    times: ['02:00 PM', '03:30 PM', '04:00 PM'],
-    avatar: 'https://randomuser.me/api/portraits/women/44.jpg',
-  },
-];
 
-doctors = []
 
 // 🗓️ Generate dynamic dates: today + next 5 days
 const getNextDates = (days = 6) => {
@@ -64,6 +45,7 @@ export default function BookAppointmentScreen() {
   const [loading, setLoading] = useState(false);
   const [selectedPatient,setSelectedpatient] = useState();
   const [selectedDoctor,setSelectedDoctor] = useState();
+
 
   const loadPatients = async () => {
     try{
@@ -175,34 +157,7 @@ export default function BookAppointmentScreen() {
 
         </ScrollView>
       </View>
-
-      {/* Doctors List 
-      {doctors.map((doc) => (
-        <Card key={doc.id} style={{ marginBottom: 16, padding: 16 }}>
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <Avatar.Image source={{ uri: doc.avatar }} size={48} />
-            <View style={{ marginLeft: 12 }}>
-              <Text style={{ fontWeight: 'bold', fontSize: 16 }}>{doc.name}</Text>
-              <Text>{doc.specialty}</Text>
-              <Text style={{ color: '#888' }}>⭐ {doc.rating}</Text>
-            </View>
-          </View>
-
-          <View style={{ flexDirection: 'row', marginTop: 12, flexWrap: 'wrap' }}>
-            {doc.times.map((time, idx) => (
-              <Button
-                key={idx}
-                mode="outlined"
-                compact
-                style={{ marginRight: 8, marginTop: 8 }}
-              >
-                {time}
-              </Button>
-            ))}
-          </View>
-        </Card>
-      ))}
-*/}
+ 
       {/* Reason for Visit */}
       <View style={styles.viewMarginBottom}>
         <Text style={styles.subHeaders}>Reason for Visit</Text>
@@ -223,6 +178,7 @@ export default function BookAppointmentScreen() {
       >
         Book Appointment
       </Button>
+
       <MdLogActivityIndicator loading={loading}/>
     </ScrollView>
   );
