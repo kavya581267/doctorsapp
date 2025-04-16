@@ -166,6 +166,7 @@ export type Clinic = {
 };
 
 export type ClinicOverview = {
+  staffDetails:AdminDetails;
   adminDetails: AdminDetails;
   clinic: Clinic;
   staffCount: number;

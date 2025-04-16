@@ -94,7 +94,9 @@ export const AuthProvider = ({ children }: Props) => {
 
       initializeToken();
       // fetch logged in user clinic details 
-      const clinicDashboardResp = await dashBoardService.home()
+      
+      const clinicDashboardResp = await dashBoardService.home();
+      clinicDashboardResp.adminDetails = !clinicDashboardResp.adminDetails ? clinicDashboardResp.staffDetails : clinicDashboardResp.adminDetails
       //set user context
       const loginUserContext: LoggedInUserContext = new LoggedInUserContext();
       loginUserContext.clinicDetails = clinicDashboardResp.clinic;
@@ -110,7 +112,6 @@ export const AuthProvider = ({ children }: Props) => {
 
   const logout = async () => {
     try {
-      await AsyncStorage.clear();
       await loginService.logout();
     } catch (error) {
       throw error;
