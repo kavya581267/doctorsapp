@@ -91,3 +91,7 @@ export const LOGO_URL ="https://www.mdops.com/wp-content/themes/mdops/images/log
 //patient
 //staff management
 export const GET_CLINIC_PATIENTS_PATH = "/clinics/{{clinic_id}}/patients";
+
+
+//amppointments
+export const CREATE_DOCTO_APPOINTMENT = "/patients/{{patient_id}}/appointments";

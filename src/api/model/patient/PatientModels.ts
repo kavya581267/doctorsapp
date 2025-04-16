@@ -214,9 +214,9 @@ export interface MedicationRequest {
     updatedAt: string;
   }
   
-  export interface AppointmentRequest {
-    clinicId: string;
-    doctorId: string;
+  export class AppointmentRequest {
+    clinicId: number;
+    doctorId: number;
     appointmentDate: string;
     startTime: string;
     endTime: string;

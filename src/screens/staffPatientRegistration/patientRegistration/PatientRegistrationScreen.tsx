@@ -15,6 +15,7 @@ import { useNavigation } from "@react-navigation/native";
 import { MdLogActivityIndicator } from "@components/MdLogActivityIndicator";
 import Back from "@components/Back";
 import { AuthContext } from "@context/AuthContext";
+import { MdLodSnackbar } from "@components/MdLogSnacbar";
 
 
 
@@ -28,6 +29,7 @@ export default function PatientRegistrationScreen() {
   const [errorMessage, setErrorMessage] = useState("some thing went wrong please try again!!");
   const [loading, setLoading] = useState(false);
   const { loggedInUserContext } = useContext(AuthContext);
+  const [visible, setVisible] = useState(false);
 
   const submitForm = async () => {
     try {
@@ -52,10 +54,10 @@ export default function PatientRegistrationScreen() {
 
   return (
    
-    <View style={{ padding: 15 }}>
+    <ScrollView style={{ padding: 15 }}>
       <Back nav={"Mainscreen"}></Back>
 
-      <Spacer height={60} />
+      <Spacer height={30} />
 
       <Text style={styles.heading}>Patient Registration</Text>
       <StepIndicator customStyles={stepindicator} stepCount={labels.length} currentPosition={step} labels={labels} />
@@ -65,7 +67,8 @@ export default function PatientRegistrationScreen() {
       {step === 2 && <PatientReview prevStep={prevStep} formData={formData} submitForm={submitForm} />}
      
       <MdLogActivityIndicator loading={loading} />
-    </View>
+      <MdLodSnackbar onDismiss={setVisible} message={errorMessage} visible={visible}/>
+    </ScrollView>
   
 
   )

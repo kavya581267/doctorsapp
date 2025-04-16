@@ -8,10 +8,10 @@ import { COLORS } from "@utils/colors";
 type TimePickerProps = {
     value: Date;
     onChange: (date: Date) => void;
-    disabled  : boolean;
+    disabled?: boolean;
 
 }
-export const MdLogTimePicker: React.FC<TimePickerProps> = ({ value, onChange ,disabled}) => {
+export const MdLogTimePicker: React.FC<TimePickerProps> = ({ value, onChange, disabled }) => {
     const [showPicker, setShowPicker] = useState(false);
 
     const formattedTime = value.toLocaleTimeString([], {
@@ -30,7 +30,7 @@ export const MdLogTimePicker: React.FC<TimePickerProps> = ({ value, onChange ,di
             {
                 Platform.OS === "web" ? (
                     <input
-                    style={styles.webInput}
+                        style={styles.webInput}
                         type="time"
                         step="1800"
                         disabled={disabled}
@@ -42,8 +42,8 @@ export const MdLogTimePicker: React.FC<TimePickerProps> = ({ value, onChange ,di
                                 newDate.setHours(hours);
                                 newDate.setMinutes(minutes);
                                 onChange(newDate);
-                              }
-                  
+                            }
+
                         }} />
                 ) : (
                     <>
@@ -58,6 +58,7 @@ export const MdLogTimePicker: React.FC<TimePickerProps> = ({ value, onChange ,di
 
 
                         {showPicker &&
+
                             <DateTimePicker
 
                                 value={value}
@@ -71,7 +72,7 @@ export const MdLogTimePicker: React.FC<TimePickerProps> = ({ value, onChange ,di
                     </>
                 )
 
-                
+
 
             }
 
@@ -82,20 +83,20 @@ export const MdLogTimePicker: React.FC<TimePickerProps> = ({ value, onChange ,di
 
 
 const styles = StyleSheet.create({
-      input: {
+    input: {
         borderWidth: 1,
         borderColor: COLORS.grey,
         padding: 10,
         borderRadius: 8,
-      },
-      webInput: {
+    },
+    webInput: {
         padding: 10,
         borderRadius: 8,
-        borderWidth:1,
-        borderColor:COLORS.grey,
-      
-      },
-      opacity:{
-        opacity:0.5
-      }
+        borderWidth: 1,
+        borderColor: COLORS.grey,
+
+    },
+    opacity: {
+        opacity: 0.5
+    }
 });

@@ -9,16 +9,19 @@ import { patientService } from '@api/patientService';
 import { AuthContext } from '@context/AuthContext';
 import { staffService } from '@api/staffService';
 import { MdLogActivityIndicator } from '@components/MdLogActivityIndicator';
-import { Role } from '@api/model/enums';
+import { DayOfWeek, Role } from '@api/model/enums';
 import { Modal, Portal } from 'react-native-paper';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import { MdLogTimePicker } from '@components/MdLogTimePicker';
+import { doctorService } from '@api/doctorService';
+import { AppointmentRequest } from '@api/model/patient/PatientModels';
 
 
 
 
 const getNextDates = (days = 6) => {
   const dateList = [];
-  const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  const dayNames = [DayOfWeek.SUNDAY, DayOfWeek.MONDAY, DayOfWeek.TUESDAY, DayOfWeek.WEDNESDAY, DayOfWeek.THURSDAY, DayOfWeek.FRIDAY,DayOfWeek.SATURDAY];
   const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
   for (let i = 0; i < days; i++) {
@@ -38,25 +41,31 @@ type dropdownprops = {
 
 export default function BookAppointmentScreen() {
 
-  const [selectedDate, setSelectedDate] = useState(new Date().toDateString());
+  const [selectedDate, setSelectedDate] = useState(new Date());
   const [reason, setReason] = useState('');
   const dates = getNextDates();
   const { loggedInUserContext } = useContext(AuthContext);
   const [patients, setPatientList] = useState([]);
   const [doctors, setDoctorsList] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [selectedPatient, setSelectedpatient] = useState();
-  const [selectedDoctor, setSelectedDoctor] = useState();
-  const [startTime, setStartTime] = useState(new Date(2025, 3, 16, 18,0 ));
+  const [selectedPatient, setSelectedpatient] = useState<dropdownprops>();
+  const [selectedDoctor, setSelectedDoctor] = useState<dropdownprops>();
+  const [startTime, setStartTime] = useState(new Date(2025, 3, 16, 18, 0));
   const [endTime, setEndTime] = useState(new Date(2025, 3, 16, 19, 0));
 
   const [showStartPicker, setShowStartPicker] = useState(false);
   const [showEndPicker, setShowEndPicker] = useState(false);
 
   const formatTime = (date: Date) =>
-    date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit'});
+    date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
 
-
+  function formatToYYYYMMDD(date:Date) {
+    date = new Date(date);
+    const year = date.getFullYear();
+    const month = `${date.getMonth() + 1}`.padStart(2, '0'); // Months are 0-indexed
+    const day = `${date.getDate()}`.padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
   const loadPatients = async () => {
     try {
       setLoading(true);
@@ -72,6 +81,22 @@ export default function BookAppointmentScreen() {
       setLoading(false);
     }
     setLoading(false)
+  }
+
+  const bookAppointment = async () => {
+    const appointmentPayload = new AppointmentRequest();
+    appointmentPayload.appointmentDate = formatToYYYYMMDD(selectedDate);
+    appointmentPayload.appointmentType = "INITIAL";
+    appointmentPayload.clinicId= loggedInUserContext.clinicDetails.id;
+    appointmentPayload.doctorId =  Number(selectedDoctor.value);
+    appointmentPayload.endTime = formatTime(endTime);
+    appointmentPayload.startTime = formatTime(startTime);
+    try{
+      const response =  await patientService.createAppointment(appointmentPayload, selectedPatient.value);
+      console.log(response);
+    }catch(error){
+
+    }
   }
 
   const loadDoctors = async () => {
@@ -165,55 +190,16 @@ export default function BookAppointmentScreen() {
         </ScrollView>
       </View>
 
-
-      <View>
-        <View style={styles.row}>
-          <Text style={styles.label}>Select Start Time</Text>
-          <View style={styles.timeBoxRow}>
-            <Text style={styles.dateBox}>{selectedDate}</Text>
-            <TouchableOpacity onPress={() => setShowStartPicker(true)}>
-              <Text style={styles.timeBox}>{formatTime(startTime)}</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-
-        <View style={styles.row}>
-          <Text style={styles.label}>Select End Time</Text>
-          <View style={styles.timeBoxRow}>
-            <Text style={styles.dateBox}>{selectedDate}</Text>
-            <TouchableOpacity onPress={() => setShowEndPicker(true)}>
-              <Text style={styles.timeBox}>{formatTime(endTime)}</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-
-        {showStartPicker && (
-          <DateTimePicker
-            value={startTime}
-            mode="time"
-            display="spinner"
-            minuteInterval={15}
-            onChange={(event, selectedDate) => {
-              setShowStartPicker(false);
-              if (selectedDate) setStartTime(selectedDate);
-            }}
-          />
-        )}
-
-        {showEndPicker && (
-          <DateTimePicker
-            value={endTime}
-            mode="time"
-            display="spinner"
-            minuteInterval={15}
-            onChange={(event, selectedDate) => {
-              setShowEndPicker(false);
-              if (selectedDate) setEndTime(selectedDate);
-            }}
-          />
-        )}
+      <View style={styles.viewMarginBottom}>
+        <Text style={styles.label}>Start Time</Text>
+        <MdLogTimePicker value={startTime} onChange={setStartTime} />
       </View>
-
+      <View style={styles.viewMarginBottom}>
+        <Text style={styles.label}>End Time</Text>
+        <MdLogTimePicker value={endTime} onChange={setEndTime} />
+      </View>
+      
+  
 
       {/* Reason for Visit */}
       <View style={styles.viewMarginBottom}>
@@ -229,9 +215,7 @@ export default function BookAppointmentScreen() {
       <Button
         mode="contained"
         style={styles.button}
-        onPress={() => {
-          // handle booking logic here
-        }}
+        onPress={bookAppointment}
       >
         Book Appointment
       </Button>
@@ -306,17 +290,17 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
   },
 
-//time
+  //time
   row: {
     gap: 10,
-    marginBottom:10
+    marginBottom: 10
   },
   label: {
     fontWeight: '600',
   },
   timeBoxRow: {
     flexDirection: 'row',
-    gap: 12,
+    // gap: 12,
   },
   dateBox: {
     backgroundColor: '#eee',

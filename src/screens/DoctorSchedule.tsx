@@ -33,7 +33,7 @@ const DoctorScheduleScreen = () => {
 
     const getFixedDays = () => {
         const fixedDays = [DayOfWeek.MONDAY, DayOfWeek.TUESDAY, DayOfWeek.WEDNESDAY,
-        DayOfWeek.THIRSDAY, DayOfWeek.FRIDAY, DayOfWeek.SATURDAY, DayOfWeek.SUNDAY];
+        DayOfWeek.THURSDAY, DayOfWeek.FRIDAY, DayOfWeek.SATURDAY, DayOfWeek.SUNDAY];
         return fixedDays.map((day) => ({
             label: day,
             key: day

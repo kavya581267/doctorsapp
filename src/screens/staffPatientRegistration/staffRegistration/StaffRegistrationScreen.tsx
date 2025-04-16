@@ -15,6 +15,7 @@ import { MdLogActivityIndicator } from "@components/MdLogActivityIndicator";
 
 import { AuthContext } from "@context/AuthContext";
 import { StaffRole } from "./StaffRoleStep";
+import { ScrollView } from "react-native-gesture-handler";
 
 
 
@@ -51,9 +52,9 @@ export default function StaffRegistrationScreen() {
 
   return (
     
-      <View style={{ padding: 15 }}>
+      <ScrollView style={{ padding: 15 }}>
         <Back nav={"Mainscreen"}></Back>
-        <Spacer height={60} />
+        <Spacer height={30} />
         <View>
           <Text style={styles.heading}>Staff Registration</Text>
           <StepIndicator customStyles={stepindicator} stepCount={labels.length} currentPosition={step} labels={labels} />
@@ -64,7 +65,7 @@ export default function StaffRegistrationScreen() {
           {step === 3 && <StaffReview prevStep={prevStep} formData={formData} submitForm={submitForm} />}
         </View>
         <MdLogActivityIndicator loading={loading}/>
-      </View>
+      </ScrollView>
   )
 }
 
