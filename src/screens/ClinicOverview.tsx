@@ -13,6 +13,8 @@ const ClinicOverview = () => {
     const [phone, setPhone] = useState("+12345678901");
     const [email, setEmail] = useState("clinic@example.com")
     const [address, setAddress] = useState("123 Main St New York, NY 10001")
+    const [clinicName, setClinicName] = useState("Example Clinic")
+    const [clinicLicense, setClinicLicense] = useState("")
 
     const { loggedInUserContext } = useContext(AuthContext)
 
@@ -22,6 +24,8 @@ const ClinicOverview = () => {
         setAddress(loggedInUserContext?.clinicDetails.addressLine1 + ", " + loggedInUserContext?.clinicDetails.city
             + ", " + loggedInUserContext?.clinicDetails.postalCode
         )
+        setClinicName(loggedInUserContext?.clinicDetails.name)
+        setClinicLicense(loggedInUserContext?.clinicDetails.licenseNumber)
     }, [])
 
     const toggleEdit = () => {
@@ -67,11 +71,11 @@ const ClinicOverview = () => {
             <Card style={styles.card}>
                 <Card.Content style={styles.rowBetween}>
                     <View>
-                        <Text style={styles.clinicTitle}>Example Clinic</Text>
+                        <Text style={styles.clinicTitle}>{clinicName}</Text>
                         <Badge style={styles.activeBadge}>Active</Badge>
                         <View style={styles.licenseCard}>
                             <Ionicons name="card-outline" size={20} color="#1C60B3" />
-                            <Text style={styles.licenseStyle}>License: CLIN12345</Text>
+                            <Text style={styles.licenseStyle}>License: {clinicLicense}</Text>
                         </View>
                     </View>
                     <Avatar.Icon size={48} icon="hospital-building" />
