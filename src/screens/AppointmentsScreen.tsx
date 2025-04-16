@@ -82,15 +82,10 @@ export default function BookAppointmentScreen() {
     // const patientList =  patientService.getClinicPatients();
 
   }, [])
-  const genderOptions = [
-    { label: "MALE", value: "male" },
-    { label: "FEMALE", value: "FEMALE" },
-    { label: "OTHER", value: "OTHER" },
-  ];
 
   return (
     <ScrollView style={styles.container}>
-      <Back />
+      <Back nav='Mainscreen' tab='Appointments'  />
       {/* Header */}
 
       <Text style={styles.header}>Book Appointment</Text>

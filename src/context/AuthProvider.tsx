@@ -41,9 +41,6 @@ export const AuthProvider = ({ children }: Props) => {
         // 
         const newAccessContext = { ...acessTokenContext };
         newAccessContext.accessToken = refreshTokenResp.accessToken;
-        //remove this after refactor 
-        storeObject(JWT_ACCESS_TOKEN, refreshTokenResp.accessToken);
-        storeObject(ACCESS_TOKENS_CONTEXT, newAccessContext);
         // set acessTokenContext
         setAccessTokenContext(newAccessContext);
         await removeItem(ACCESS_TOKENS_CONTEXT);

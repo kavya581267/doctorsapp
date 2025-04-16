@@ -15,9 +15,10 @@ import { ClinicOverview } from "@api/model/auth/Auth";
 type Props = {
     nav?: string,
     loading?: boolean
+    tab?: string
 }
 
-export default function Back({ nav, loading = false }: Props) {
+export default function Back({ nav, loading = false, tab =undefined }: Props) {
     const navigation = useNavigation();
     const route = useRoute();
     const [clinicName, setClinicName] = useState("");
@@ -46,7 +47,7 @@ export default function Back({ nav, loading = false }: Props) {
         <View>
             <View style={styles.header}>
                 <View style={{ alignItems: "center", justifyContent: "center", width: logoWidth, flexDirection: "row" }}>
-                    {nav ? <AntDesign name="arrowleft" style={{ marginLeft: 35 }} size={24} color="black" onPress={() => navigation.navigate(nav)} /> :
+                    {nav ? <AntDesign name="arrowleft" style={{ marginLeft: 35 }} size={24} color="black" onPress={() => navigation.navigate(nav, {tab:tab})} /> :
                         ""}
                     <Image
 

@@ -8,6 +8,9 @@ import {
   StyleSheet,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import Back from '@components/Back';
+import { COLORS } from '@utils/colors';
+import { useNavigation } from '@react-navigation/native';
 
 
 const appointments = [
@@ -31,11 +34,17 @@ const appointments = [
   },
 ];
 
-const days = ['15 JAN', '16 JAN', '17 JAN', '18 JAN'];
-
+const pastappointments = [
+  {
+    id: '1',
+    patient: 'Sarah Johnson',
+    doctor: 'Dr. Michael Smith',
+    time: '09:30 AM - 10:00 AM',
+  }
+];
 const AppointmentsListScreen = () => {
-  const [selectedDate, setSelectedDate] = useState('15 JAN');
-
+  const navigation = useNavigation();
+  const [selected, setSelected] = useState(0);
   const renderItem = ({ item }) => (
     <View style={styles.card}>
       <Text style={styles.patient}>{item.patient}</Text>
@@ -57,37 +66,26 @@ const AppointmentsListScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Appointments</Text>
-
+      <Back />
       <TextInput style={styles.searchBar} placeholder="Search patient, doctor or mobile number" />
-
-      <View style={styles.dateRow}>
-        {days.map((day) => (
-          <TouchableOpacity
-            key={day}
-            onPress={() => setSelectedDate(day)}
-            style={[
-              styles.dateButton,
-              selectedDate === day && styles.dateButtonSelected,
-            ]}
-          >
-            <Text style={selectedDate === day ? styles.dateTextSelected : styles.dateText}>
-              {day}
-            </Text>
-          </TouchableOpacity>
-        ))}
-      </View>
-
       <View style={styles.tabRow}>
-        <Text style={styles.tabSelected}>Upcoming</Text>
-        <Text style={styles.tab}>Past</Text>
+        <TouchableOpacity onPress={() => setSelected(0)} style={selected === 0 ? styles.tabSelected : styles.tab}>
+          <Text>Upcoming</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => setSelected(1)} style={selected === 1 ? styles.tabSelected : styles.tab}>
+          <Text>Past</Text>
+        </TouchableOpacity>
       </View>
 
       <FlatList
-        data={appointments}
+        data={selected === 0 ? appointments: pastappointments}
         renderItem={renderItem}
         keyExtractor={(item) => item.id}
       />
+
+      <TouchableOpacity style={styles.addButton} onPress={() => navigation.navigate("BookAppointmentScreen")}>
+        <Text style={styles.addButtonText}>+ Book Appointment</Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -114,8 +112,8 @@ const styles = StyleSheet.create({
   dateText: { color: '#000' },
   dateTextSelected: { color: '#fff', fontWeight: 'bold' },
   tabRow: { flexDirection: 'row', borderBottomWidth: 1, borderColor: '#ccc', marginBottom: 10 },
-  tab: { flex: 1, textAlign: 'center', padding: 10 },
-  tabSelected: { flex: 1, textAlign: 'center', padding: 10, fontWeight: 'bold', borderBottomWidth: 2, borderColor: '#007bff' },
+  tab: { flex: 1, textAlign: 'center', padding: 10, alignItems:"center" },
+  tabSelected: { flex: 1, textAlign: 'center', padding: 10, fontWeight: 'bold', borderBottomWidth: 2, borderColor: '#007bff', alignItems:"center"},
   card: {
     padding: 12,
     borderRadius: 10,
@@ -134,6 +132,17 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     borderTopWidth: 1,
     borderColor: '#eee',
+  },
+  addButton: {
+    backgroundColor: COLORS.primary,
+    paddingVertical: 14,
+    borderRadius: 12,
+    alignItems: 'center',
+  },
+  addButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: '600',
   },
 });
 

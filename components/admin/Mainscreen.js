@@ -13,6 +13,7 @@ import StaffDirectoryScreen from "@screens/StaffDirectory";
 import PatientDirectoryScreen from "@screens/PatientsDirectory";
 
 import AppointmentScreen from "@screens/AppointmentsScreen";
+import AppointmentsListScreen from "@screens/AppontmentsListScree";
 
 
 
@@ -25,7 +26,6 @@ export default function Mainscreen() {
     const route = useRoute()
     const tab = route?.params?.tab;
     const initialTab = tab || "Home";
-
 
     return (
 
@@ -52,7 +52,7 @@ export default function Mainscreen() {
                 options={{ tabBarIcon: ({ color }) => <MaterialIcons name="group" size={24} color={color} /> }}></Tab.Screen>
             <Tab.Screen name="Staff" component={StaffDirectoryScreen}
                 options={{ tabBarIcon: ({ color }) => <MaterialIcons name="group" size={24} color={color} />, unmountOnBlur:true }}></Tab.Screen>
-            <Tab.Screen name="Appointments" component={AppointmentScreen}
+            <Tab.Screen name="Appointments" component={AppointmentsListScreen}
                 options={{ tabBarIcon: ({ color }) => <MaterialIcons name="event" size={24} color={color} /> }}></Tab.Screen>
             <Tab.Screen name="Settings" component={SettingsScreen}
                 options={{ tabBarIcon: ({ color }) => <MaterialIcons name="settings" size={24} color={color} /> }}>

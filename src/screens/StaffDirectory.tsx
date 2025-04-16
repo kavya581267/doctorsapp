@@ -58,7 +58,6 @@ const StaffDirectoryScreen = () => {
   }, [])
 
   const filterStaff = (searchText) => {
-    console.log(searchText);
     const filteredStaff = backUp.filter((staff) =>
       staff.firstName.toLowerCase().includes(searchText.toLowerCase()) ||
       staff.lastName.toLowerCase().includes(searchText.toLowerCase()) ||
@@ -66,7 +65,6 @@ const StaffDirectoryScreen = () => {
       staff.email.toLowerCase().includes(searchText.toLowerCase())
     );
     const filteredNewStaff = filteredStaff.map(staff => ({ ...staff }));
-    console.log(filteredNewStaff)
     setStaff(filteredNewStaff);
     setSearchText(searchText);
   }

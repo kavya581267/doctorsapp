@@ -126,7 +126,7 @@ const DoctorScheduleScreen = () => {
     return (
         <View style={styles.container}>
             {/* Header */}
-            <Back nav='Mainscreen' />
+            <Back nav='Mainscreen' tab="Staff" />
 
             {/* Doctor Info */}
             <Card style={styles.card}>
