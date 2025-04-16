@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { ScrollView, StyleSheet, TextInput, View } from 'react-native';
+import { ScrollView, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
 import { Avatar, Button, Card, Text, TouchableRipple } from 'react-native-paper';
 import { Ionicons } from '@expo/vector-icons';
 import Back from '@components/Back';
@@ -11,6 +11,7 @@ import { staffService } from '@api/staffService';
 import { MdLogActivityIndicator } from '@components/MdLogActivityIndicator';
 import { Role } from '@api/model/enums';
 import { Modal, Portal } from 'react-native-paper';
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 
 
@@ -30,49 +31,57 @@ const getNextDates = (days = 6) => {
 
   return dateList;
 };
-type dropdownprops={
+type dropdownprops = {
   label: string
   value: string
 }
 
 export default function BookAppointmentScreen() {
-  const [timeSlot, setTimeSlot] = useState('10:00 AM - 12:00 PM');
+
   const [selectedDate, setSelectedDate] = useState(new Date().toDateString());
   const [reason, setReason] = useState('');
   const dates = getNextDates();
-  const {loggedInUserContext} = useContext(AuthContext);
+  const { loggedInUserContext } = useContext(AuthContext);
   const [patients, setPatientList] = useState([]);
   const [doctors, setDoctorsList] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [selectedPatient,setSelectedpatient] = useState();
-  const [selectedDoctor,setSelectedDoctor] = useState();
+  const [selectedPatient, setSelectedpatient] = useState();
+  const [selectedDoctor, setSelectedDoctor] = useState();
+  const [startTime, setStartTime] = useState(new Date(2025, 3, 16, 18,0 ));
+  const [endTime, setEndTime] = useState(new Date(2025, 3, 16, 19, 0));
+
+  const [showStartPicker, setShowStartPicker] = useState(false);
+  const [showEndPicker, setShowEndPicker] = useState(false);
+
+  const formatTime = (date: Date) =>
+    date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit'});
 
 
   const loadPatients = async () => {
-    try{
+    try {
       setLoading(true);
-      const patientList =  await patientService.getClinicPatients(loggedInUserContext?.clinicDetails.id.toString());
+      const patientList = await patientService.getClinicPatients(loggedInUserContext?.clinicDetails.id.toString());
       const pt = [];
       patientList.forEach(item => {
-        let vv = item.firstName + ", "+item.phone;
-          const t:dropdownprops = {label:vv,value:item.id.toString()};
-          pt.push(t);
+        let vv = item.firstName + ", " + item.phone;
+        const t: dropdownprops = { label: vv, value: item.id.toString() };
+        pt.push(t);
       })
       setPatientList(pt)
-    }catch(error){
+    } catch (error) {
       setLoading(false);
     }
     setLoading(false)
   }
 
   const loadDoctors = async () => {
-    const staffList =  await staffService.getClinicStaff(loggedInUserContext?.clinicDetails.id.toString());
+    const staffList = await staffService.getClinicStaff(loggedInUserContext?.clinicDetails.id.toString());
     const pt = [];
     staffList.forEach(item => {
-      if(item.roleName === Role.DOCTOR.toString()){
-        let vv = item.firstName + ", "+item.phone;
-        const t:dropdownprops = {label:vv,value:item.id.toString()};
-         pt.push(t);
+      if (item.roleName === Role.DOCTOR.toString()) {
+        let vv = item.firstName + ", " + item.phone;
+        const t: dropdownprops = { label: vv, value: item.id.toString() };
+        pt.push(t);
       }
     })
     setDoctorsList(pt)
@@ -86,7 +95,7 @@ export default function BookAppointmentScreen() {
 
   return (
     <ScrollView style={styles.container}>
-      <Back nav='Mainscreen' tab='Appointments'  />
+      <Back nav='Mainscreen' tab='Appointments' />
       {/* Header */}
 
       <Text style={styles.header}>Book Appointment</Text>
@@ -140,7 +149,6 @@ export default function BookAppointmentScreen() {
                 mode={isSelected ? 'contained' : 'outlined'}
                 onPress={() => {
                   setSelectedDate(d.fullDate);
-                  setTimeSlot('10:00 AM - 12:00 PM');
                 }}
                 style={[styles.selectDateBox, { backgroundColor: isSelected ? COLORS.primary : "" }]}
                 contentStyle={{ flexDirection: 'column' }}
@@ -157,13 +165,56 @@ export default function BookAppointmentScreen() {
         </ScrollView>
       </View>
 
-      {timeSlot !== '' && (
-        <View style={styles.viewMarginBottom}>
-          <Text style={styles.subHeaders}>Time Slot</Text>
-          <Text style={styles.timeSlotText}>{timeSlot}</Text>
+
+      <View>
+        <View style={styles.row}>
+          <Text style={styles.label}>Select Start Time</Text>
+          <View style={styles.timeBoxRow}>
+            <Text style={styles.dateBox}>{selectedDate}</Text>
+            <TouchableOpacity onPress={() => setShowStartPicker(true)}>
+              <Text style={styles.timeBox}>{formatTime(startTime)}</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-      )}
- 
+
+        <View style={styles.row}>
+          <Text style={styles.label}>Select End Time</Text>
+          <View style={styles.timeBoxRow}>
+            <Text style={styles.dateBox}>{selectedDate}</Text>
+            <TouchableOpacity onPress={() => setShowEndPicker(true)}>
+              <Text style={styles.timeBox}>{formatTime(endTime)}</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+
+        {showStartPicker && (
+          <DateTimePicker
+            value={startTime}
+            mode="time"
+            display="spinner"
+            minuteInterval={15}
+            onChange={(event, selectedDate) => {
+              setShowStartPicker(false);
+              if (selectedDate) setStartTime(selectedDate);
+            }}
+          />
+        )}
+
+        {showEndPicker && (
+          <DateTimePicker
+            value={endTime}
+            mode="time"
+            display="spinner"
+            minuteInterval={15}
+            onChange={(event, selectedDate) => {
+              setShowEndPicker(false);
+              if (selectedDate) setEndTime(selectedDate);
+            }}
+          />
+        )}
+      </View>
+
+
       {/* Reason for Visit */}
       <View style={styles.viewMarginBottom}>
         <Text style={styles.subHeaders}>Reason for Visit</Text>
@@ -185,7 +236,7 @@ export default function BookAppointmentScreen() {
         Book Appointment
       </Button>
 
-      <MdLogActivityIndicator loading={loading}/>
+      <MdLogActivityIndicator loading={loading} />
     </ScrollView>
   );
 }
@@ -204,7 +255,7 @@ const styles = StyleSheet.create({
   },
   viewMarginBottom: {
     marginBottom: 15,
-   marginTop:10
+    marginTop: 10
   },
   subHeaders: {
     fontWeight: '600',
@@ -254,4 +305,31 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     alignSelf: 'flex-start',
   },
+
+//time
+  row: {
+    gap: 10,
+    marginBottom:10
+  },
+  label: {
+    fontWeight: '600',
+  },
+  timeBoxRow: {
+    flexDirection: 'row',
+    gap: 12,
+  },
+  dateBox: {
+    backgroundColor: '#eee',
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 8,
+    fontSize: 16,
+  },
+  timeBox: {
+    backgroundColor: '#eee',
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 8,
+    fontSize: 16
+  }
 })
