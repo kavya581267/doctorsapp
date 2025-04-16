@@ -15,7 +15,7 @@ import DoctorList from '../../components/admin/DoctorList';
 import BookAppointment from '../../components/admin/BookAppointment';
 import PatientsList from '../../components/admin/PatientsList';
 import PatientDetails from '../../components/admin/PatientDetails';
-import PatientMedical from '../../components/admin/PatientMedical';
+
 import MedicalFormScreen from '../../components/physician/InitialNote';
 import LoadingScreen from '../../components/LoadingScreen';
 import StaffRegistrationScreen from '@screens/staffPatientRegistration/staffRegistration/StaffRegistrationScreen';
@@ -27,6 +27,7 @@ import ClinicOverview from '@screens/ClinicOverview';
 import UserProfileScreen from '@screens/UserProfileScreen';
 import DoctorScheduleScreen from '@screens/DoctorSchedule';
 import BookAppointmentScreen from '@screens/AppointmentsScreen';
+import PatientMedical from '@screens/patientVitals/PatientMedical';
 
 
 

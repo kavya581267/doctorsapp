@@ -46,7 +46,7 @@ const AppointmentsListScreen = () => {
   const navigation = useNavigation();
   const [selected, setSelected] = useState(0);
   const renderItem = ({ item }) => (
-    <View style={styles.card}>
+    <TouchableOpacity style={styles.card} onPress={()=>navigation.navigate("PatientMedical")}>
       <Text style={styles.patient}>{item.patient}</Text>
       <Text style={styles.doctor}>{item.doctor}</Text>
       <View style={styles.timeRow}>
@@ -61,7 +61,7 @@ const AppointmentsListScreen = () => {
           <Ionicons name="close-outline" size={20} color="red" />
         </TouchableOpacity>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 
   return (

@@ -4,6 +4,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import PresentingComplaints from './PresentingComplaints';
 import { useNavigation } from '@react-navigation/native';
 import Note from './Note';
+import Back from '@components/Back';
 
 const MedicalFormScreen = () => {
 
@@ -16,9 +17,9 @@ const MedicalFormScreen = () => {
 
     return (
         <View style={styles.container}>
+            <Back nav='PatientMedical'/>
 
-            <View style={styles.header}>
-                <Icon onPress={() => navigation.navigate("PatientDetails")} name="arrow-back" size={24} color="black" />
+            <View style={styles.header}>          
                 <Text style={styles.headerTitle}>Initial Note</Text>
                 <TouchableOpacity style={styles.submitButton}>
                     <Text style={styles.submitText}>Submit</Text>
@@ -59,14 +60,13 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: 'white',
+        padding:10
     },
     header: {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        //  backgroundColor: '#7B1FA2',
-        padding: 15,
-        paddingTop: 50,
+        paddingTop: 10,
     },
     headerTitle: {
         fontSize: 18,
@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     content: {
-        padding: 15,
+        paddingTop: 10,
     },
     userInfo: {
         flexDirection: 'row',

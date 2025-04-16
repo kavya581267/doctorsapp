@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView } from "react-native";
-import styles from "../styles/patientMedicalStyle";
-import ActionSheetMore from "./ActionSheetMore";
+import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, ScrollView } from "react-native";
 import Entypo from '@expo/vector-icons/Entypo';
-import Vitals from "./Vitals";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import Header from "./Header";
+import Vitals from "./Vitals";
+import ActionSheetMore from "./ActionSheetMore";
+import styles from "styles/patientMedicalStyle";
+import Back from "@components/Back";
+
 
 export default function PatientMedical() {
     const route = useRoute();
@@ -14,9 +15,10 @@ export default function PatientMedical() {
     const navigation = useNavigation();
     console.log("Received Params:", route.params);
     return (
-        <SafeAreaView>
+       
             <View style={{ padding: 10 }}>
-               
+                <Back nav="Mainscreen"/>
+           
                 <View style={styles.patientContainer}>
                     <View>
                         <View>
@@ -60,8 +62,9 @@ export default function PatientMedical() {
                         </TouchableOpacity>
                     </View>
                 </View>
+               
             </View>
-        </SafeAreaView>
+       
     )
 }
 
