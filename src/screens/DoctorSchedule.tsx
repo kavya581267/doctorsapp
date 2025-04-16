@@ -246,6 +246,28 @@ const DoctorScheduleScreen = () => {
                 <Chip style={styles.chip}>Heart Surgery</Chip>
                 <Chip style={styles.chip}>Vascular Medicine</Chip>
             </View>
+            <Divider />
+
+            {/* Exceptions */}
+            <View>
+                <View style={{flexDirection:"row",justifyContent:"space-between",alignItems:"center"}}>
+                    <Text style={styles.sectionTitle}>Exceptions</Text>
+                    <TouchableOpacity onPress={() => openEditModal()}>
+                        <Icon name="add" size={24} color={COLORS.primary} />
+                    </TouchableOpacity>
+                </View>
+
+                <Card style={styles.exceptionCard}>
+                    <Card.Content>
+                        <View style={styles.scheduleRow}>
+                            <MaterialCommunityIcons name="calendar-remove" size={20} color="#e53935" />
+                            <Text style={styles.holidayText}>  August 15, 2025</Text>
+                        </View>
+                        <Text style={styles.holidayReason}>Holiday - Independence Day</Text>
+                        <Text style={styles.holidayNote}>Doctor unavailable</Text>
+                    </Card.Content>
+                </Card>
+            </View>
             <MdLogActivityIndicator loading={loading} />
             <MdLodSnackbar onDismiss={setShowError} message={errorMessage} visible={showError} />
         </View>
@@ -286,7 +308,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         flexWrap: 'wrap',
         gap: 8,
-        marginBottom: 12,
+        marginBottom: 30,
     },
     chip: {
         marginRight: 6,
@@ -351,5 +373,32 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         color: '#888',
         marginTop: 10,
+    },
+
+    //exceptions
+    exceptionCard: {
+        backgroundColor: '#fdecea',
+        borderColor: '#f44336',
+        borderWidth: 1,
+    },
+    holidayText: {
+        fontWeight: '600',
+        fontSize: 15,
+        color: '#b71c1c',
+    },
+    holidayReason: {
+        fontSize: 14,
+        marginTop: 6,
+        fontWeight: '500',
+    },
+    holidayNote: {
+        fontSize: 13,
+        color: 'gray',
+        marginTop: 2,
+    },
+    scheduleRow: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginBottom: 6,
     },
 });
