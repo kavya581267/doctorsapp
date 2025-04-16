@@ -45,7 +45,7 @@ const UserProfileScreen = () => {
     }
 
     const toggleCancel = () => {
-
+       setIsEditing(false)
     }
 
 
