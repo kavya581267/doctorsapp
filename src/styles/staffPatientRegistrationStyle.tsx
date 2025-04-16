@@ -3,7 +3,8 @@ import {  StyleSheet } from "react-native";
 
 export default StyleSheet.create({
     container: {
-        padding: 15
+        padding: 15,
+       
     },
     heading: {
         fontSize: 24,
@@ -15,6 +16,7 @@ export default StyleSheet.create({
     buttonFormat: {
         flexDirection: "row",
         justifyContent:"space-between",
+        marginBottom:50
     },
 
     buttonPrev: {

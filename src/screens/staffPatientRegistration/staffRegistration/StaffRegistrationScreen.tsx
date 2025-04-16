@@ -50,6 +50,7 @@ export default function StaffRegistrationScreen() {
 
 
   return (
+    
       <View style={{ padding: 15 }}>
         <Back nav={"Mainscreen"}></Back>
         <Spacer height={60} />

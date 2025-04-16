@@ -5,6 +5,7 @@ import PresentingComplaints from './PresentingComplaints';
 import { useNavigation } from '@react-navigation/native';
 import Note from './Note';
 import Back from '@components/Back';
+import { Divider } from 'react-native-paper';
 
 const MedicalFormScreen = () => {
 
@@ -25,7 +26,7 @@ const MedicalFormScreen = () => {
                     <Text style={styles.submitText}>Submit</Text>
                 </TouchableOpacity>
             </View>
-
+            <Divider/>
             <ScrollView contentContainerStyle={styles.content}>
 
                 <View style={styles.userInfo}>
@@ -67,6 +68,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-between',
         paddingTop: 10,
+        marginBottom:10
     },
     headerTitle: {
         fontSize: 18,

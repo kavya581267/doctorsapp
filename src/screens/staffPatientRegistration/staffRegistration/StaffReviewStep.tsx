@@ -1,4 +1,4 @@
-import { TouchableOpacity } from "react-native";
+import { SafeAreaView, ScrollView, TouchableOpacity } from "react-native";
 import { Text, View } from "react-native";
 import styles from "@styles/staffPatientRegistrationStyle";
 
@@ -22,7 +22,8 @@ export default function StaffReview({ prevStep, formData, submitForm }) {
         { label: "Specialties", value: formData.specialities}
     ];
     return (
-
+<ScrollView>
+  
         <View style={styles.container}>
             <Text style={{ textAlign: "center", color: "blue", fontWeight: "600", marginBottom: 20, fontSize: 18 }}>Review Your Details</Text>
 
@@ -43,6 +44,8 @@ export default function StaffReview({ prevStep, formData, submitForm }) {
                 </TouchableOpacity>
             </View>
         </View>
+   
+        </ScrollView>
 
     )
 }

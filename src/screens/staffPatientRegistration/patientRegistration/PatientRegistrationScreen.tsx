@@ -1,7 +1,7 @@
 import { PatientRegistration } from "@api/model/auth/Auth";
 import Spacer from "@components/Spacer";
 import { useContext, useState } from "react";
-import { Text } from "react-native";
+import { ScrollView, Text } from "react-native";
 import { View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import StepIndicator from "react-native-step-indicator";
@@ -51,18 +51,22 @@ export default function PatientRegistrationScreen() {
 
 
   return (
+   
     <View style={{ padding: 15 }}>
       <Back nav={"Mainscreen"}></Back>
+
       <Spacer height={60} />
+
       <Text style={styles.heading}>Patient Registration</Text>
       <StepIndicator customStyles={stepindicator} stepCount={labels.length} currentPosition={step} labels={labels} />
       <Spacer height={40} />
       {step === 0 && <PatientDetails nextStep={nextStep} formData={formData} setFormData={setFormData} />}
       {step === 1 && <PatientAddress nextStep={nextStep} prevStep={prevStep} formData={formData} setFormData={setFormData} />}
       {step === 2 && <PatientReview prevStep={prevStep} formData={formData} submitForm={submitForm} />}
+     
       <MdLogActivityIndicator loading={loading} />
     </View>
-
+  
 
   )
 }

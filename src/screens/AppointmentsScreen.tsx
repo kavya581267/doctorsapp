@@ -14,7 +14,7 @@ import { Modal, Portal } from 'react-native-paper';
 
 
 
-// 🗓️ Generate dynamic dates: today + next 5 days
+
 const getNextDates = (days = 6) => {
   const dateList = [];
   const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
@@ -36,6 +36,7 @@ type dropdownprops={
 }
 
 export default function BookAppointmentScreen() {
+  const [timeSlot, setTimeSlot] = useState('10:00 AM - 12:00 PM');
   const [selectedDate, setSelectedDate] = useState(new Date().toDateString());
   const [reason, setReason] = useState('');
   const dates = getNextDates();
@@ -137,7 +138,10 @@ export default function BookAppointmentScreen() {
               <Button
                 key={idx}
                 mode={isSelected ? 'contained' : 'outlined'}
-                onPress={() => setSelectedDate(d.fullDate)}
+                onPress={() => {
+                  setSelectedDate(d.fullDate);
+                  setTimeSlot('10:00 AM - 12:00 PM');
+                }}
                 style={[styles.selectDateBox, { backgroundColor: isSelected ? COLORS.primary : "" }]}
                 contentStyle={{ flexDirection: 'column' }}
               >
@@ -152,6 +156,13 @@ export default function BookAppointmentScreen() {
 
         </ScrollView>
       </View>
+
+      {timeSlot !== '' && (
+        <View style={styles.viewMarginBottom}>
+          <Text style={styles.subHeaders}>Time Slot</Text>
+          <Text style={styles.timeSlotText}>{timeSlot}</Text>
+        </View>
+      )}
  
       {/* Reason for Visit */}
       <View style={styles.viewMarginBottom}>
@@ -188,15 +199,16 @@ const styles = StyleSheet.create({
   header: {
     fontSize: 18,
     fontWeight: '600',
-    marginBottom: 10,
+    marginBottom: 25,
     textAlign: "center"
   },
   viewMarginBottom: {
-    marginBottom: 10
+    marginBottom: 15,
+   marginTop:10
   },
   subHeaders: {
     fontWeight: '600',
-    marginBottom: 4
+    marginBottom: 10
   },
   searchInput: {
     borderWidth: 1,
@@ -232,5 +244,14 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: "center",
     marginBottom: 2
-  }
+  },
+  timeSlotText: {
+    fontSize: 16,
+    paddingVertical: 4,
+    paddingHorizontal: 10,
+    borderWidth: 1,
+    borderColor: COLORS.primary,
+    borderRadius: 10,
+    alignSelf: 'flex-start',
+  },
 })
