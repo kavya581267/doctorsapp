@@ -1,9 +1,9 @@
-import { Image, Text } from "react-native";
+import {  Text } from "react-native";
 import { View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import styles from "@styles/SuccessScreenStyle";
 import { Button } from "react-native-paper";
-import { NavigationProp, useNavigation } from "@react-navigation/native";
+import { NavigationProp, useNavigation, useRoute } from "@react-navigation/native";
 import * as Animatable from "react-native-animatable";
 import { RootStackParamList } from "@components/MainNavigation";
 
@@ -11,7 +11,7 @@ import { RootStackParamList } from "@components/MainNavigation";
 
 
 export default function SuccessScreen() {
-
+    
     const navigation = useNavigation<NavigationProp<RootStackParamList>>();
     return (
         <SafeAreaView style={styles.container}>
@@ -27,11 +27,11 @@ export default function SuccessScreen() {
 
                 <Text style={styles.title}>Registration Successful!</Text>
                 <Text style={styles.subtitle}>
-                     Registered successfully.
+                     
                 </Text>
                 <Button
                     mode="contained"
-                    onPress={() => navigation.navigate("SignIn")}
+                    onPress={() => navigation.navigate("Mainscreen")}
                     style={styles.button}>
                     Sign in page
                 </Button>

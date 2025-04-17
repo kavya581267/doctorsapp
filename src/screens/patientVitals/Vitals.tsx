@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { StyleSheet, View, Text, TextInput, TouchableOpacity } from "react-native";
 import styles from "@styles/vitalsStyle";
+import { VitalsRequest } from '@api/model/patient/PatientModels';
 
 export default function Vitals() {
     const [height, setHeight] = useState("");
@@ -11,6 +12,11 @@ export default function Vitals() {
     const [pulse, setPulse] = useState("");
     const [spo2, setSpo2] = useState("");
     const [temperature, setTemperature] = useState("");
+
+    const storeVitals = async() => {
+        const vitalsPayload = new VitalsRequest();
+        
+    }
     return (
         <View style={styles.vitalsContainer}>
 

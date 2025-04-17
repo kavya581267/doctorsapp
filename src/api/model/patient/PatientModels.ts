@@ -113,7 +113,7 @@ export interface PatientUpdateRequest {
     emergencyContactPhone: string;
 }
 
-export interface VitalsRequest {
+export class VitalsRequest {
     clinicId: string;
     appointmentId: string;
     temperature: number;
@@ -127,7 +127,7 @@ export interface VitalsRequest {
     bmi: number;
 }
 
-export interface VitalsResponse {
+export class VitalsResponse {
     id: string;
     clinicId: string;
     patientId: string;

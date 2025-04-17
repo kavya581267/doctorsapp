@@ -2,11 +2,8 @@ import { PatientRegistration } from "@api/model/auth/Auth";
 import Spacer from "@components/Spacer";
 import { useContext, useState } from "react";
 import { ScrollView, Text } from "react-native";
-import { View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 import StepIndicator from "react-native-step-indicator";
 import styles from "@styles/staffPatientRegistrationStyle";
-import StaffReview from "../staffRegistration/StaffReviewStep";
 import { PatientDetails } from "./PatientDetailsStep";
 import { PatientAddress } from "./PatientAddressStep";
 import PatientReview from "./PatientReviewStep";
@@ -16,6 +13,7 @@ import { MdLogActivityIndicator } from "@components/MdLogActivityIndicator";
 import Back from "@components/Back";
 import { AuthContext } from "@context/AuthContext";
 import { MdLodSnackbar } from "@components/MdLogSnacbar";
+
 
 
 
