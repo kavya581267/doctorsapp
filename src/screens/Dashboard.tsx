@@ -11,6 +11,7 @@ import { dashBoardService } from '@api/dashboard';
 import { MdLogActivityIndicator } from '@components/MdLogActivityIndicator';
 import { storeObject } from '@utils/MdLogAsyncStorage';
 import { CLINIC_CONTEXT } from '@utils/constants';
+import { getUser } from '@utils/loadContextDetails';
 const { width, height } = Dimensions.get("window");
 
 export default function DashboardScreen() {
@@ -26,10 +27,12 @@ export default function DashboardScreen() {
         setLoading(true);
         try{
             const resp = await dashBoardService.home();
-            storeObject(CLINIC_CONTEXT, resp);
+            await storeObject(CLINIC_CONTEXT, resp);
             setClinicName(resp.clinic.name);
             setStaffCount(resp.staffCount);
             setTodaysAppointments(resp.todayAppointments)
+           const userInfo = await getUser()
+           userInfo.roles[0] 
         }catch(error){
         }
         

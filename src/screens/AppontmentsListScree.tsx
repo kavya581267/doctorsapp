@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -13,6 +13,11 @@ import { COLORS } from '@utils/colors';
 import { useNavigation } from '@react-navigation/native';
 import { doctorService } from '@api/doctorService';
 import { MdLogActivityIndicator } from '@components/MdLogActivityIndicator';
+import { getUser } from '@utils/loadContextDetails';
+import { AuthContext } from '@context/AuthContext';
+import { Role } from '@api/model/enums';
+import { AppointmentListResponse } from '@api/model/appointments/AppointmentListResponse';
+import { clinicService } from '@api/clinicService';
 
 
 const appointments = [
@@ -48,16 +53,32 @@ const AppointmentsListScreen = () => {
   const navigation = useNavigation();
   const [selected, setSelected] = useState(0);
   const [loading, setLoading] = useState(false);
+  const {loggedInUserContext} = useContext(AuthContext);
+ 
 
   const fetchAppointments = async () => {
+    const loggedinUserInfo =  await getUser();
+    let appointments: AppointmentListResponse[] = [];
+    const clinicId = loggedInUserContext.clinicDetails.id;
+    const userId = loggedinUserInfo.internalUserId;
+    const role = loggedinUserInfo.roles[0];
+    const date = new Date();
+    const fromDate = date.toISOString().split('T')[0];  
+    date.setDate(date.getDate() + 15);
+    const toDate = date.toISOString().split('T')[0];
+   
+
+    
     try{
       setLoading(true)
-      await doctorService.getDoctorAppointments("83", "2025-04-01")
+      if(role === Role.DOCTOR)
+      appointments = await doctorService.getDoctorAppointments(userId.toString(), fromDate, toDate)
+      else
+      appointments = await clinicService.getClinicAppointments(clinicId.toString(), fromDate, toDate)
     }catch(error){
 
     }
-    setLoading(false);
-     
+    setLoading(false);   
   }
 
   useEffect(()=> {

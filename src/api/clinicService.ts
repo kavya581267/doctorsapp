@@ -1,6 +1,9 @@
+import { GET_CLINIC_APPOINTMENTS } from "@utils/constants";
 import { apiService } from "./apiService";
+import { AppointmentListResponse } from "./model/appointments/AppointmentListResponse";
 import { AdminRegistarationRequest, AdminRegistrationResponse } from "./model/auth/Auth";
 import { ClinicResponse } from "./model/clinic/ClinicResponse";
+import { replacePlaceholders } from "@utils/utils";
 
 
 
@@ -21,7 +24,7 @@ export const clinicService = {
     },
     updateClinic: () => {
 
-    }, 
+    },
     getClinicById: () => {
 
     },
@@ -46,7 +49,20 @@ export const clinicService = {
     createHolidaySchedule: () => {
 
     },
-    deleteHolidaySchedule: () =>{
-        
+    deleteHolidaySchedule: () => {
+
+    },
+
+    getClinicAppointments:async (clinicId: string, from:string, to:string): Promise<AppointmentListResponse[]> => {
+        const queryParama = {
+            fromDate: from,
+            toDate:to
+        }
+        try {
+            const resp = await apiService.get(replacePlaceholders(GET_CLINIC_APPOINTMENTS, { "clinic_id": clinicId }), queryParama)
+            return resp.data;
+        } catch (error) {
+            throw error
+        }
     }
 };

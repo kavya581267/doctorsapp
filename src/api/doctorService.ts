@@ -5,6 +5,7 @@ import { DoctorSchedule } from "./model/doctor/DoctorSchedule";
 import { replacePlaceholders } from "@utils/utils";
 import { DoctorExceptionRequest } from "./model/doctor/DoctorException";
 import { DoctorSpecialtyRequest } from "./model/doctor/DoctorSpecialtyRequest";
+import { AppointmentListResponse } from "./model/appointments/AppointmentListResponse";
 
 
 
@@ -88,9 +89,10 @@ export const doctorService = {
             throw error
         }
     },
-    getDoctorAppointments: async(docId:string, fromDate:string) => {
+    getDoctorAppointments: async(docId:string, fromDate:string, toDate:string):Promise<AppointmentListResponse[]> => {
         const queryParam = {
-            fromDate: fromDate
+            fromDate: fromDate,
+            toDate: toDate
         }
         let url = replacePlaceholders(GET_DOCTOR_APPOINTMENTS_FROM,{doctor_id:docId});
         try{
