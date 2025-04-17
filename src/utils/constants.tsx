@@ -98,6 +98,7 @@ export const GET_CLINIC_PATIENTS_PATH = "/clinics/{{clinic_id}}/patients";
 export const CREATE_DOCTO_APPOINTMENT = "/patients/{{patient_id}}/appointments";
 export const GET_DOCTOR_APPOINTMENTS_FROM = "/doctors/{{doctor_id}}/appointments"
 export const GET_CLINIC_APPOINTMENTS = "/clinics/{{clinic_id}}/appointments"
+export const DELETE_PATIENT_APPOINTMENT="/patients/{{patient_id}}/appointments/{{appointment_id}}"
 
 //vitals
 export const GET_PATIENT_VITALS = "/patients/{{patient_id}}/vitals";

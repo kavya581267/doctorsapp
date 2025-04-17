@@ -6,6 +6,7 @@ import {
   FlatList,
   TouchableOpacity,
   StyleSheet,
+  Alert,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import Back from '@components/Back';
@@ -18,6 +19,7 @@ import { AuthContext } from '@context/AuthContext';
 import { Role } from '@api/model/enums';
 import { AppointmentListResponse } from '@api/model/appointments/AppointmentListResponse';
 import { clinicService } from '@api/clinicService';
+import { Badge } from 'react-native-paper';
 
 
 
@@ -35,17 +37,36 @@ const AppointmentsListScreen = () => {
   const [selected, setSelected] = useState(0);
   const [loading, setLoading] = useState(false);
   const { loggedInUserContext } = useContext(AuthContext);
+  const [isEditing, setIsEditing] = useState(false);
 
   const [upcomingAppointments, setUpcomingAppointments] = useState<AppointmentListResponse[]>([]);
   const [pastAppointments, setPastAppointments] = useState<AppointmentListResponse[]>([]);
 
 
-  const cancleAppointment = () => {
+  const cancleAppointment = (item) => {
+    Alert.alert(
+      "Cancel Appointment",
+      `Are you sure you want to cancel the appointment for ${item.firstName}?`,
+      [
+        {
+          text: "No",
+          style: "cancel",
+        },
+        {
+          text: "Yes",
+          onPress: () => {
+            const reason = ""
 
+          },
+          style: "destructive"
+        },
+      ],
+      { cancelable: true }
+    );
   }
 
   const editAppintment = () => {
-    
+
   }
 
 
@@ -69,11 +90,7 @@ const AppointmentsListScreen = () => {
         response = await clinicService.getClinicAppointments(clinicId.toString(), fromDate, toDate)
       }
 
-      const upcoming = response.filter(appointment => new Date(appointment.startTime) >= date);
-      const past = response.filter(appointment => new Date(appointment.endTime) < date);
-
       setUpcomingAppointments(response);
-      //setPastAppointments(past);
     }
     catch (error) {
 
@@ -87,19 +104,28 @@ const AppointmentsListScreen = () => {
 
   const renderItem = ({ item }) => (
     <TouchableOpacity style={styles.card} onPress={() => navigation.navigate("PatientMedical")}>
-      <Text style={styles.patient}>{item.firstName}</Text>
-      <Text style={styles.doctor}>{"Dr. " + item.doctorName}</Text>
-      <View style={styles.timeRow}>
-        <Ionicons name="time-outline" size={16} />
-        <Text style={styles.time}>{item.startTime} - {item.endTime}</Text>
+      <View>
+        <Text style={styles.patient}>{item.firstName}</Text>
+        <Text style={styles.doctor}>{"Dr. " + item.doctorName}</Text>
+        <Text >{item.appointmentDate}</Text>
+        <View style={styles.timeRow}>
+          <Ionicons name="time-outline" size={16} />
+          <Text style={styles.time}>{item.startTime} - {item.endTime}</Text>
+        </View>
       </View>
-      <View style={styles.actions}>
-        <TouchableOpacity onPress={editAppintment}>
-          <Ionicons name="create-outline" size={20} color="#007bff" />
-        </TouchableOpacity>
-        <TouchableOpacity onPress={cancleAppointment}>
-          <Ionicons name="close-outline" size={20} color="red" />
-        </TouchableOpacity>
+
+      <View style={{ justifyContent: "space-between" }}>
+        <View>
+          <Badge style={styles.activeBadge}>{item.status}</Badge>
+        </View>
+        <View style={styles.actions}>
+          <TouchableOpacity onPress={editAppintment} style={{marginRight:25}}>
+            <Ionicons name="create-outline" size={20} color="#007bff" />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={()=>cancleAppointment(item)}>
+            <Ionicons name="close-outline" size={20} color="red" />
+          </TouchableOpacity>
+        </View>
       </View>
     </TouchableOpacity>
   );
@@ -156,17 +182,25 @@ const styles = StyleSheet.create({
   tab: { flex: 1, textAlign: 'center', padding: 10, alignItems: "center" },
   tabSelected: { flex: 1, textAlign: 'center', padding: 10, fontWeight: 'bold', borderBottomWidth: 2, borderColor: '#007bff', alignItems: "center" },
   card: {
+    flexDirection: "row",
+    justifyContent: "space-between",
     padding: 12,
     borderRadius: 10,
     backgroundColor: '#f9f9f9',
     marginBottom: 10,
-    position: 'relative',
+
   },
   patient: { fontWeight: 'bold', fontSize: 16 },
   doctor: { color: '#666', marginBottom: 5 },
   timeRow: { flexDirection: 'row', alignItems: 'center' },
   time: { marginLeft: 4 },
-  actions: { flexDirection: 'row', position: 'absolute', right: 12, top: 12, gap: 10 },
+  actions: { flexDirection: 'row',justifyContent:"center" },
+  activeBadge: {
+    marginTop: 4,
+    backgroundColor: '#d1fae5',
+    color: '#10b981',
+    fontWeight:"bold"
+},
   navBar: {
     flexDirection: 'row',
     justifyContent: 'space-around',

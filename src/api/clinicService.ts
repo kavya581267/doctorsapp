@@ -1,4 +1,4 @@
-import { GET_CLINIC_APPOINTMENTS } from "@utils/constants";
+import { DELETE_PATIENT_APPOINTMENT, GET_CLINIC_APPOINTMENTS } from "@utils/constants";
 import { apiService } from "./apiService";
 import { AppointmentListResponse } from "./model/appointments/AppointmentListResponse";
 import { AdminRegistarationRequest, AdminRegistrationResponse } from "./model/auth/Auth";
@@ -63,6 +63,18 @@ export const clinicService = {
             return resp.data;
         } catch (error) {
             throw error
+        }
+    },
+
+    cancelAppointment: async(patientId:string, appointmentId: string, reason:string) =>{
+        const bdy = {
+            reason: reason
+        }
+        try{
+           const resp =await apiService.delete(replacePlaceholders(DELETE_PATIENT_APPOINTMENT, {"patient_id": patientId,"appointment_id": appointmentId}), bdy)
+           return resp.data;
+        }catch(error){
+        throw error
         }
     }
 };

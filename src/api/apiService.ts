@@ -72,5 +72,5 @@ export const apiService = {
     get: (endpoint, queryParams) => apiCall(endpoint, "GET", null, queryParams),
     post: (endpoint, body, retry= false) => apiCall(endpoint, "POST", body),
     put: (endpoint, body) => apiCall(endpoint, "PUT", body),
-    delete: (endpoint) => apiCall(endpoint, "DELETE")
+    delete: (endpoint, body) => apiCall(endpoint, "DELETE", body)
 };
