@@ -17,7 +17,7 @@ export default function PatientMedical() {
     return (
        
             <View style={{ padding: 10 }}>
-                <Back nav="Mainscreen"/>
+                <Back nav="Mainscreen" tab="Appointments"/>
            
                 <View style={styles.patientContainer}>
                     <View>

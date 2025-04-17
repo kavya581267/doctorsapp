@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { ScrollView, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
-import { Avatar, Button, Card, Text, TouchableRipple } from 'react-native-paper';
-import { Ionicons } from '@expo/vector-icons';
+import { ScrollView, StyleSheet, TextInput, View } from 'react-native';
+import { Button, Text } from 'react-native-paper';
 import Back from '@components/Back';
 import { COLORS } from '@utils/colors';
 import { Dropdown } from 'react-native-element-dropdown';
@@ -10,10 +9,7 @@ import { AuthContext } from '@context/AuthContext';
 import { staffService } from '@api/staffService';
 import { MdLogActivityIndicator } from '@components/MdLogActivityIndicator';
 import { DayOfWeek, Role } from '@api/model/enums';
-import { Modal, Portal } from 'react-native-paper';
-import DateTimePicker from '@react-native-community/datetimepicker';
 import { MdLogTimePicker } from '@components/MdLogTimePicker';
-import { doctorService } from '@api/doctorService';
 import { AppointmentRequest } from '@api/model/patient/PatientModels';
 
 
@@ -21,7 +17,7 @@ import { AppointmentRequest } from '@api/model/patient/PatientModels';
 
 const getNextDates = (days = 6) => {
   const dateList = [];
-  const dayNames = [DayOfWeek.SUNDAY, DayOfWeek.MONDAY, DayOfWeek.TUESDAY, DayOfWeek.WEDNESDAY, DayOfWeek.THURSDAY, DayOfWeek.FRIDAY,DayOfWeek.SATURDAY];
+  const dayNames = [DayOfWeek.SUNDAY, DayOfWeek.MONDAY, DayOfWeek.TUESDAY, DayOfWeek.WEDNESDAY, DayOfWeek.THURSDAY, DayOfWeek.FRIDAY, DayOfWeek.SATURDAY];
   const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
   for (let i = 0; i < days; i++) {
@@ -53,13 +49,10 @@ export default function BookAppointmentScreen() {
   const [startTime, setStartTime] = useState(new Date(2025, 3, 16, 18, 0));
   const [endTime, setEndTime] = useState(new Date(2025, 3, 16, 19, 0));
 
-  const [showStartPicker, setShowStartPicker] = useState(false);
-  const [showEndPicker, setShowEndPicker] = useState(false);
-
   const formatTime = (date: Date) =>
     date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
 
-  function formatToYYYYMMDD(date:Date) {
+  function formatToYYYYMMDD(date: Date) {
     date = new Date(date);
     const year = date.getFullYear();
     const month = `${date.getMonth() + 1}`.padStart(2, '0'); // Months are 0-indexed
@@ -87,14 +80,14 @@ export default function BookAppointmentScreen() {
     const appointmentPayload = new AppointmentRequest();
     appointmentPayload.appointmentDate = formatToYYYYMMDD(selectedDate);
     appointmentPayload.appointmentType = "INITIAL";
-    appointmentPayload.clinicId= loggedInUserContext.clinicDetails.id;
-    appointmentPayload.doctorId =  Number(selectedDoctor.value);
+    appointmentPayload.clinicId = loggedInUserContext.clinicDetails.id;
+    appointmentPayload.doctorId = Number(selectedDoctor.value);
     appointmentPayload.endTime = formatTime(endTime);
     appointmentPayload.startTime = formatTime(startTime);
-    try{
-      const response =  await patientService.createAppointment(appointmentPayload, selectedPatient.value);
+    try {
+      const response = await patientService.createAppointment(appointmentPayload, selectedPatient.value);
       console.log(response);
-    }catch(error){
+    } catch (error) {
 
     }
   }
@@ -198,8 +191,8 @@ export default function BookAppointmentScreen() {
         <Text style={styles.label}>End Time</Text>
         <MdLogTimePicker value={endTime} onChange={setEndTime} />
       </View>
-      
-  
+
+
 
       {/* Reason for Visit */}
       <View style={styles.viewMarginBottom}>

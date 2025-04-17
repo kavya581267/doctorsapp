@@ -20,26 +20,7 @@ import { AppointmentListResponse } from '@api/model/appointments/AppointmentList
 import { clinicService } from '@api/clinicService';
 
 
-const appointments = [
-  {
-    id: '1',
-    patient: 'Sarah Johnson',
-    doctor: 'Dr. Michael Smith',
-    time: '09:30 AM - 10:00 AM',
-  },
-  {
-    id: '2',
-    patient: 'David Wilson',
-    doctor: 'Dr. Emily Brown',
-    time: '10:15 AM - 10:45 AM',
-  },
-  {
-    id: '3',
-    patient: 'Emma Davis',
-    doctor: 'Dr. Robert Wilson',
-    time: '11:00 AM - 11:30 AM',
-  },
-];
+
 
 const pastappointments = [
   {
@@ -53,51 +34,70 @@ const AppointmentsListScreen = () => {
   const navigation = useNavigation();
   const [selected, setSelected] = useState(0);
   const [loading, setLoading] = useState(false);
-  const {loggedInUserContext} = useContext(AuthContext);
- 
+  const { loggedInUserContext } = useContext(AuthContext);
+
+  const [upcomingAppointments, setUpcomingAppointments] = useState<AppointmentListResponse[]>([]);
+  const [pastAppointments, setPastAppointments] = useState<AppointmentListResponse[]>([]);
+
+
+  const cancleAppointment = () => {
+
+  }
+
+  const editAppintment = () => {
+    
+  }
+
+
 
   const fetchAppointments = async () => {
-    const loggedinUserInfo =  await getUser();
-    let appointments: AppointmentListResponse[] = [];
+    const loggedinUserInfo = await getUser();
+    let response: AppointmentListResponse[] = [];
     const clinicId = loggedInUserContext.clinicDetails.id;
     const userId = loggedinUserInfo.internalUserId;
     const role = loggedinUserInfo.roles[0];
     const date = new Date();
-    const fromDate = date.toISOString().split('T')[0];  
+    const fromDate = date.toISOString().split('T')[0];
     date.setDate(date.getDate() + 15);
     const toDate = date.toISOString().split('T')[0];
-   
 
-    
-    try{
+    try {
       setLoading(true)
-      if(role === Role.DOCTOR)
-      appointments = await doctorService.getDoctorAppointments(userId.toString(), fromDate, toDate)
-      else
-      appointments = await clinicService.getClinicAppointments(clinicId.toString(), fromDate, toDate)
-    }catch(error){
+      if (role === Role.DOCTOR) {
+        response = await doctorService.getDoctorAppointments(userId.toString(), fromDate, toDate)
+      } else {
+        response = await clinicService.getClinicAppointments(clinicId.toString(), fromDate, toDate)
+      }
+
+      const upcoming = response.filter(appointment => new Date(appointment.startTime) >= date);
+      const past = response.filter(appointment => new Date(appointment.endTime) < date);
+
+      setUpcomingAppointments(response);
+      //setPastAppointments(past);
+    }
+    catch (error) {
 
     }
-    setLoading(false);   
+    setLoading(false);
   }
 
-  useEffect(()=> {
+  useEffect(() => {
     fetchAppointments();
-  },[])
+  }, [])
 
   const renderItem = ({ item }) => (
-    <TouchableOpacity style={styles.card} onPress={()=>navigation.navigate("PatientMedical")}>
-      <Text style={styles.patient}>{item.patient}</Text>
-      <Text style={styles.doctor}>{item.doctor}</Text>
+    <TouchableOpacity style={styles.card} onPress={() => navigation.navigate("PatientMedical")}>
+      <Text style={styles.patient}>{item.firstName}</Text>
+      <Text style={styles.doctor}>{"Dr. " + item.doctorName}</Text>
       <View style={styles.timeRow}>
         <Ionicons name="time-outline" size={16} />
-        <Text style={styles.time}>{item.time}</Text>
+        <Text style={styles.time}>{item.startTime} - {item.endTime}</Text>
       </View>
       <View style={styles.actions}>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={editAppintment}>
           <Ionicons name="create-outline" size={20} color="#007bff" />
         </TouchableOpacity>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={cancleAppointment}>
           <Ionicons name="close-outline" size={20} color="red" />
         </TouchableOpacity>
       </View>
@@ -118,7 +118,7 @@ const AppointmentsListScreen = () => {
       </View>
 
       <FlatList
-        data={selected === 0 ? appointments: pastappointments}
+        data={selected === 0 ? upcomingAppointments : pastAppointments}
         renderItem={renderItem}
         keyExtractor={(item) => item.id}
       />
@@ -126,7 +126,7 @@ const AppointmentsListScreen = () => {
       <TouchableOpacity style={styles.addButton} onPress={() => navigation.navigate("BookAppointmentScreen")}>
         <Text style={styles.addButtonText}>+ Book Appointment</Text>
       </TouchableOpacity>
-      <MdLogActivityIndicator loading={loading}/>
+      <MdLogActivityIndicator loading={loading} />
     </View>
   );
 };
@@ -153,8 +153,8 @@ const styles = StyleSheet.create({
   dateText: { color: '#000' },
   dateTextSelected: { color: '#fff', fontWeight: 'bold' },
   tabRow: { flexDirection: 'row', borderBottomWidth: 1, borderColor: '#ccc', marginBottom: 10 },
-  tab: { flex: 1, textAlign: 'center', padding: 10, alignItems:"center" },
-  tabSelected: { flex: 1, textAlign: 'center', padding: 10, fontWeight: 'bold', borderBottomWidth: 2, borderColor: '#007bff', alignItems:"center"},
+  tab: { flex: 1, textAlign: 'center', padding: 10, alignItems: "center" },
+  tabSelected: { flex: 1, textAlign: 'center', padding: 10, fontWeight: 'bold', borderBottomWidth: 2, borderColor: '#007bff', alignItems: "center" },
   card: {
     padding: 12,
     borderRadius: 10,

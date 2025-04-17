@@ -19,7 +19,6 @@ export default function Vitals() {
     }
     return (
         <View style={styles.vitalsContainer}>
-
             <View style={{ flexDirection: "row" }}>
                 <Text style={styles.inputText}>Height (cms)</Text>
                 <TextInput style={styles.input} keyboardType="numeric" value={height} onChangeText={setHeight}></TextInput>
