@@ -67,3 +67,28 @@ export function replacePlaceholders(template:string, params:any) {
     return `${hour12}:${minute} ${ampm}`;
   }
 
+  export function formatDateToMonthDay(dateString) {
+    const date = new Date(dateString);
+  
+    const monthNames = [
+      'January', 'February', 'March', 'April', 'May', 'June',
+      'July', 'August', 'September', 'October', 'November', 'December'
+    ];
+  
+    const day = date.getDate();
+    const month = monthNames[date.getMonth()];
+  
+    // Add ordinal suffix to the day (1st, 2nd, 3rd, 4th, etc.)
+    const getOrdinalSuffix = (n) => {
+      if (n > 3 && n < 21) return 'th';
+      switch (n % 10) {
+        case 1: return 'st';
+        case 2: return 'nd';
+        case 3: return 'rd';
+        default: return 'th';
+      }
+    };
+  
+    return `${month} ${day}${getOrdinalSuffix(day)}`;
+  }
+

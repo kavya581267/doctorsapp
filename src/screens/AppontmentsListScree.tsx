@@ -20,6 +20,7 @@ import { Role } from '@api/model/enums';
 import { AppointmentListResponse } from '@api/model/appointments/AppointmentListResponse';
 import { clinicService } from '@api/clinicService';
 import { Badge } from 'react-native-paper';
+import { convertTo12Hour, formatDateToMonthDay } from '@utils/utils';
 
 const AppointmentsListScreen = () => {
   const navigation = useNavigation();
@@ -32,6 +33,7 @@ const AppointmentsListScreen = () => {
   const [showCancelPopup, setShowCancelPopup] = useState(false);
   const [cancelReason, setCancelReason] = useState('');
   const [selectedAppointment, setSelectedAppointment] = useState<AppointmentListResponse | null>(null);
+  const [refresh, setRefresh] = useState(false);
 
   const cancelAppointment = (item: AppointmentListResponse) => {
     setSelectedAppointment(item);
@@ -74,13 +76,12 @@ const AppointmentsListScreen = () => {
   const renderItem = ({ item }) => (
     <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('PatientMedical')}>
       <View>
-        <Text style={styles.patient}>{item.firstName}</Text>
+        <Text style={styles.patient}>{item.firstName} {item.lastName}</Text>
         <Text style={styles.doctor}>{'Dr. ' + item.doctorName}</Text>
-        <Text>{item.appointmentDate}</Text>
         <View style={styles.timeRow}>
           <Ionicons name="time-outline" size={16} />
           <Text style={styles.time}>
-            {item.startTime} - {item.endTime}
+          {formatDateToMonthDay(item.appointmentDate)} : {convertTo12Hour(item.startTime)} - {convertTo12Hour(item.endTime)}  
           </Text>
         </View>
       </View>
@@ -150,16 +151,23 @@ const AppointmentsListScreen = () => {
                 <Text style={{ color: 'gray', fontSize: 16 }}>No</Text>
               </TouchableOpacity>
               <TouchableOpacity
-                onPress={() => {
+                onPress={async () => {
                   if (!cancelReason.trim()) {
                     Alert.alert('Please provide a reason for cancellation.');
                     return;
                   }
 
                   // TODO: Call cancellation API here
-                  console.log('Cancelling appointment ID:', selectedAppointment?.id);
-                  console.log('Reason:', cancelReason);
-
+                  try{
+                    setLoading(true)
+                    const resp =  await clinicService.cancelAppointment(selectedAppointment.patientId.toString(),
+                    selectedAppointment.id.toString(), cancelReason);
+                    fetchAppointments();
+                  }catch(error){
+                     console.log(error.toString());
+                  }
+                   
+                  setLoading(false);
                   setShowCancelPopup(false);
                   setCancelReason('');
                   setSelectedAppointment(null);
@@ -212,7 +220,7 @@ const styles = StyleSheet.create({
   patient: { fontWeight: 'bold', fontSize: 16 },
   doctor: { color: '#666', marginBottom: 5 },
   timeRow: { flexDirection: 'row', alignItems: 'center' },
-  time: { marginLeft: 4 },
+  time: { marginLeft: 4, fontWeight:"600", color:COLORS.red },
   actions: { flexDirection: 'row', justifyContent: 'center' },
   activeBadge: {
     marginTop: 4,
