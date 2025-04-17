@@ -49,8 +49,7 @@ export default function Back({ nav, loading = false, tab =undefined }: Props) {
                 <View style={{ alignItems: "center", justifyContent: "center", width: logoWidth, flexDirection: "row" }}>
                     {nav ? <AntDesign name="arrowleft" style={{ marginLeft: 35 }} size={24} color="black" onPress={() => navigation.navigate(nav, {tab:tab})} /> :
                         ""}
-                    <Image
-
+                    <Image 
                         source={require('../../assets/logo.png')}
                         style={{ aspectRatio: 105 / 25, width: "100%", marginLeft: 15 }}
                         resizeMode="contain" // Ensures the whole logo fits inside

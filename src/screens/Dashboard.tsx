@@ -53,6 +53,13 @@ export default function DashboardScreen() {
             roles: ['DOCTOR', 'ADMIN'],
         },
         {
+            label: 'Your Schedule',
+            bgColor: '#EEE8FC',
+            icon: <MaterialIcons name="event-note" size={24} color="#EB5757" />,
+            navPage: "DoctorScheduleScreen",
+            roles: ['DOCTOR'],
+        },
+        {
             label: 'New Patient',
             bgColor: '#FFF4E5',
             icon: <FontAwesome5 name="user-plus" size={20} color="#F2994A" />,
