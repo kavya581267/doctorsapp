@@ -96,3 +96,4 @@ export const GET_CLINIC_PATIENTS_PATH = "/clinics/{{clinic_id}}/patients";
 
 //amppointments
 export const CREATE_DOCTO_APPOINTMENT = "/patients/{{patient_id}}/appointments";
+export const GET_DOCTOR_APPOINTMENTS_FROM = "/doctors/{{doctor_id}}/appointments"

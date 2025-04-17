@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -11,6 +11,8 @@ import { Ionicons } from '@expo/vector-icons';
 import Back from '@components/Back';
 import { COLORS } from '@utils/colors';
 import { useNavigation } from '@react-navigation/native';
+import { doctorService } from '@api/doctorService';
+import { MdLogActivityIndicator } from '@components/MdLogActivityIndicator';
 
 
 const appointments = [
@@ -45,6 +47,23 @@ const pastappointments = [
 const AppointmentsListScreen = () => {
   const navigation = useNavigation();
   const [selected, setSelected] = useState(0);
+  const [loading, setLoading] = useState(false);
+
+  const fetchAppointments = async () => {
+    try{
+      setLoading(true)
+      await doctorService.getDoctorAppointments("83", "2025-04-01")
+    }catch(error){
+
+    }
+    setLoading(false);
+     
+  }
+
+  useEffect(()=> {
+    fetchAppointments();
+  },[])
+
   const renderItem = ({ item }) => (
     <TouchableOpacity style={styles.card} onPress={()=>navigation.navigate("PatientMedical")}>
       <Text style={styles.patient}>{item.patient}</Text>
@@ -86,6 +105,7 @@ const AppointmentsListScreen = () => {
       <TouchableOpacity style={styles.addButton} onPress={() => navigation.navigate("BookAppointmentScreen")}>
         <Text style={styles.addButtonText}>+ Book Appointment</Text>
       </TouchableOpacity>
+      <MdLogActivityIndicator loading={loading}/>
     </View>
   );
 };

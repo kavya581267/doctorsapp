@@ -28,3 +28,9 @@ export const getUser = async () => {
     return user;
 }
 
+export const clear = () => {
+    user = undefined;
+    cachedToken = undefined;
+
+}
+

@@ -10,6 +10,7 @@ import { dashBoardService } from "@api/dashboard";
 import { LoggedInUserContext } from "@api/model/auth/LoggedinUserContext";
 import { isTokenExpired } from "@utils/jwt";
 import { AccessTokenContext } from "@api/model/auth/AccessTokensContext";
+import { clear } from "@utils/loadContextDetails";
 
 type Props = { children: ReactNode }
 
@@ -112,6 +113,7 @@ export const AuthProvider = ({ children }: Props) => {
 
   const logout = async () => {
     try {
+      clear();
       await loginService.logout();
     } catch (error) {
       throw error;

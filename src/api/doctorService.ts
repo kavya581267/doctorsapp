@@ -1,4 +1,4 @@
-import { ADD_DOCTOR_SPECIALTIES_PATH, CREATE_DOCTOR_EXCEPTIONS_PATH, CREATE_DOCTOR_SCHEDULE_PATH, DELETE_DOCTOR_EXCEPTIONS_PATH, DELETE_DOCTOR_SCHEDULE_PATH, REMOVE_DOCTOR_SPECIALTIES_PATH, UPDATE_DOCTOR_EXCEPTIONS_PATH, UPDATE_DOCTOR_SCHEDULE_PATH } from "@utils/constants";
+import { ADD_DOCTOR_SPECIALTIES_PATH, CREATE_DOCTOR_EXCEPTIONS_PATH, CREATE_DOCTOR_SCHEDULE_PATH, DELETE_DOCTOR_EXCEPTIONS_PATH, DELETE_DOCTOR_SCHEDULE_PATH, GET_DOCTOR_APPOINTMENTS_FROM, REMOVE_DOCTOR_SPECIALTIES_PATH, UPDATE_DOCTOR_EXCEPTIONS_PATH, UPDATE_DOCTOR_SCHEDULE_PATH } from "@utils/constants";
 import { apiService } from "./apiService";
 import { AdminRegistarationRequest, AdminRegistrationResponse } from "./model/auth/Auth";
 import { DoctorSchedule } from "./model/doctor/DoctorSchedule";
@@ -88,4 +88,16 @@ export const doctorService = {
             throw error
         }
     },
+    getDoctorAppointments: async(docId:string, fromDate:string) => {
+        const queryParam = {
+            fromDate: fromDate
+        }
+        let url = replacePlaceholders(GET_DOCTOR_APPOINTMENTS_FROM,{doctor_id:docId});
+        try{
+            const response =  await apiService.get(url, queryParam);
+            return response.data;
+        }catch(error){
+            throw error
+        }
+    }
 };
