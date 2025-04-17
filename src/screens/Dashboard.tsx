@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, TextInput, Dimensions } from 'react-native';
 import { Ionicons, MaterialIcons, FontAwesome5, Feather } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -21,129 +21,163 @@ export default function DashboardScreen() {
     const [loading, setLoading] = useState(true);
     const [staffCount, setStaffCount] = useState(0);
     const [appointmentsToday, setTodaysAppointments] = useState([]);
+    const [quickActions, setQuickActions] = useState([]);
+    const [role, setRole] = useState<string>("");
 
+    const allQuickActions = [
+        {
+            label: 'Clinic Info',
+            bgColor: '#E6F0FB',
+            icon: <Ionicons name="information-circle-outline" size={24} color="#2F80ED" />,
+            navPage: "ClinicOverview",
+            roles: ['DOCTOR', 'ADMIN'],
+        },
+        {
+            label: 'New Staff',
+            bgColor: '#EEE8FC',
+            icon: <MaterialIcons name="people-outline" size={24} color="#9B51E0" />,
+            navPage: "StaffRegistrationScreen",
+            roles: ['ADMIN'],
+        },
+        {
+            label: 'Clinic Schedule',
+            bgColor: '#E6F8ED',
+            icon: <Ionicons name="calendar-outline" size={24} color="#27AE60" />,
+            navPage: "ClinicScheduleScreen",
+            roles: ['DOCTOR', 'ADMIN'],
+        },
+        {
+            label: 'Holidays',
+            bgColor: '#FDEAEA',
+            icon: <MaterialIcons name="event-note" size={24} color="#EB5757" />,
+            roles: ['DOCTOR', 'ADMIN'],
+        },
+        {
+            label: 'New Patient',
+            bgColor: '#FFF4E5',
+            icon: <FontAwesome5 name="user-plus" size={20} color="#F2994A" />,
+            navPage: "PatientRegistrationScreen",
+            roles: ['ADMIN'],
+        },
+        {
+            label: 'Appointments',
+            bgColor: '#E6F9F8',
+            icon: <Feather name="activity" size={20} color="#2D9CDB" />,
+            roles: ['DOCTOR', 'ADMIN'],
+        },
+    ];
 
     const loadData = async () => {
         setLoading(true);
-        try{
+        try {
             const resp = await dashBoardService.home();
             await storeObject(CLINIC_CONTEXT, resp);
             setClinicName(resp.clinic.name);
             setStaffCount(resp.staffCount);
-            setTodaysAppointments(resp.todayAppointments)
-           const userInfo = await getUser()
-           userInfo.roles[0] 
-        }catch(error){
-        }
-        
-        setLoading(false);
-    }
+            setTodaysAppointments(resp.todayAppointments);
 
-    useEffect(()=> {
+
+            const userInfo = await getUser();
+            const role = userInfo.roles[0];
+            setRole(role);
+            const filteredActions = allQuickActions.filter(action => action.roles.includes(role));
+            setQuickActions(filteredActions);
+        } catch (error) {
+            console.error("Error loading dashboard:", error);
+        }
+        setLoading(false);
+    };
+
+    useEffect(() => {
         loadData();
-    },[])
+    }, []);
 
     return (
-            <ScrollView >
-                <View style={{ padding: 15, backgroundColor:"white" , height:height}}>
-                    <Back loading={loading}/>
-                    <TextInput
-                        placeholder="Search for patient or doctor"
-                        value={searchText}
-                        onChangeText={setSearchText}
-                        style={styles.searchInput}
-                    />
-                    {/* Stats */}
-                    <View style={styles.statsContainer}>
-                        <View style={styles.statCard}>
-                            <Text style={styles.statLabel}>Today's Appointments</Text>
-                            <Text style={styles.statNumber}>{appointmentsToday.length}</Text>
-                        </View>
-                        <View style={[styles.statCard, { backgroundColor: '#E6F8ED' }]}>
-                            <Text style={styles.statLabel}>Active Staff</Text>
-                            <Text style={styles.statNumber}>{staffCount}</Text>
-                        </View>
-                    </View>
+        <ScrollView>
+            <View style={{ padding: 15, backgroundColor: "white", height }}>
+                <Back loading={loading} />
+                <TextInput
+                    placeholder="Search for patient or doctor"
+                    value={searchText}
+                    onChangeText={setSearchText}
+                    style={styles.searchInput}
+                />
 
-                    {/* Quick Actions */}
-                    <Text style={styles.sectionTitle}>Quick Actions</Text>
-                    <View style={styles.quickActions}>
-                        {quickActions.map((action, index) => (
-                            <TouchableOpacity onPress={() => action.navPage ? navigation.navigate(action.navPage): ""} key={index} style={[styles.actionItem, { backgroundColor: action.bgColor }]}>
-                                {action.icon}
-                                <Text style={styles.actionLabel}>{action.label}</Text>
-                            </TouchableOpacity>
-                        ))}
-                    </View>
-
-                    {/* Today's Schedule */}
-                    <View style={styles.scheduleHeader}>
-                        <Text style={styles.sectionTitle}>Today's Schedule</Text>
-                        <TouchableOpacity>
-                            <Text style={styles.viewAll}>View All</Text>
-                        </TouchableOpacity>
-                    </View>
-
-                    {appointments.map((appt, index) => (
-                        <View key={index} style={styles.apptCard}>
-                            <Image source={{ uri: appt.avatar }} style={styles.apptAvatar} />
-                            <View style={{ flex: 1 }}>
-                                <Text style={styles.apptName}>{appt.name}</Text>
-                                <Text style={styles.apptDesc}>{appt.reason}</Text>
-                            </View>
-                            <View style={{ alignItems: 'flex-end' }}>
-                                <Text style={styles.apptTime}>{appt.time}</Text>
-                                <Text style={[styles.statusBadge, appt.status === 'Confirmed' ? styles.confirmed : styles.pending]}>
-                                    {appt.status}
-                                </Text>
+                {/* Stats */}
+                {
+                    role === "DOCTOR" ? (
+                        <View style={styles.statsContainer}>
+                            <View style={styles.statCard}>
+                                <Text style={styles.statLabel}>Today's Appointments</Text>
+                                <Text style={styles.statNumber}>{appointmentsToday.length}</Text>
                             </View>
                         </View>
-                    ))}
 
-                    {/* Bottom spacing */}
-                    <View style={{ height: 80 }} />
+                    ) :(
+                <View style={styles.statsContainer}>
+                    <View style={styles.statCard}>
+                        <Text style={styles.statLabel}>Today's Appointments</Text>
+                        <Text style={styles.statNumber}>{appointmentsToday.length}</Text>
+                    </View>
+                    <View style={[styles.statCard, { backgroundColor: '#E6F8ED' }]}>
+                        <Text style={styles.statLabel}>Active Staff</Text>
+                        <Text style={styles.statNumber}>{staffCount}</Text>
+                    </View>
                 </View>
-                <MdLogActivityIndicator loading={loading} />
-            </ScrollView>)
+                )
+                }
+
+
+                {/* Quick Actions */}
+
+                <Text style={styles.sectionTitle}>Quick Actions</Text>
+                <View style={styles.quickActions}>
+                    {quickActions.map((action, index) => (
+                        <TouchableOpacity
+                            key={index}
+                            onPress={() => action.navPage ? navigation.navigate(action.navPage) : null}
+                            style={[styles.actionItem, { backgroundColor: action.bgColor }]}
+                        >
+                            {action.icon}
+                            <Text style={styles.actionLabel}>{action.label}</Text>
+                        </TouchableOpacity>
+                    ))}
+                </View>
+
+                {/* Today's Schedule */}
+                <View style={styles.scheduleHeader}>
+                    <Text style={styles.sectionTitle}>Today's Schedule</Text>
+                    <TouchableOpacity>
+                        <Text style={styles.viewAll}>View All</Text>
+                    </TouchableOpacity>
+                </View>
+
+                {appointments.map((appt, index) => (
+                    <View key={index} style={styles.apptCard}>
+                        <Image source={{ uri: appt.avatar }} style={styles.apptAvatar} />
+                        <View style={{ flex: 1 }}>
+                            <Text style={styles.apptName}>{appt.name}</Text>
+                            <Text style={styles.apptDesc}>{appt.reason}</Text>
+                        </View>
+                        <View style={{ alignItems: 'flex-end' }}>
+                            <Text style={styles.apptTime}>{appt.time}</Text>
+                            <Text style={[styles.statusBadge, appt.status === 'Confirmed' ? styles.confirmed : styles.pending]}>
+                                {appt.status}
+                            </Text>
+                        </View>
+                    </View>
+                ))}
+
+                {/* Bottom spacing */}
+                <View style={{ height: 80 }} />
+            </View>
+            <MdLogActivityIndicator loading={loading} />
+        </ScrollView>
+    );
 }
 
-const quickActions = [
-    {
-        label: 'Clinic Info',
-        bgColor: '#E6F0FB',
-        icon: <Ionicons name="information-circle-outline" size={24} color="#2F80ED" />,
-        navPage: "ClinicOverview",
-    },
-    {
-        label: 'New Staff',
-        bgColor: '#EEE8FC',
-        icon: <MaterialIcons name="people-outline" size={24} color="#9B51E0" />,
-        navPage: "StaffRegistrationScreen",
-    },
-    {
-        label: 'Clinic Schedule',
-        bgColor: '#E6F8ED',
-        icon: <Ionicons name="calendar-outline" size={24} color="#27AE60" />,
-        navPage: "ClinicScheduleScreen",
-    },
-    {
-        label: 'Holidays',
-        bgColor: '#FDEAEA',
-        icon: <MaterialIcons name="event-note" size={24} color="#EB5757" />,
-    },
-    {
-        label: 'New Patient',
-        bgColor: '#FFF4E5',
-        icon: <FontAwesome5 name="user-plus" size={20} color="#F2994A" />,
-        navPage: "PatientRegistrationScreen",
 
-    },
-    {
-        label: 'Appointments',
-        bgColor: '#E6F9F8',
-        icon: <Feather name="activity" size={20} color="#2D9CDB" />,
-    },
-];
+
 
 const appointments = [
     {
