@@ -39,3 +39,31 @@ export function replacePlaceholders(template:string, params:any) {
     
   }
 
+  export const getFutureDate = (date: Date, plusDays: number): string => {
+    date.setDate(date.getDate() + plusDays);
+    return date.toISOString().split('T')[0];
+  }
+
+  export const getPastDate = (date: Date, minusDays: number): string => {
+    date.setDate(date.getDate() + minusDays);
+    return date.toISOString().split('T')[0];
+  }
+
+  export const formatTimeHHMMSS = (date: Date) =>
+    date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+
+  export function formatToYYYYMMDD(date: Date) {
+    date = new Date(date);
+    const year = date.getFullYear();
+    const month = `${date.getMonth() + 1}`.padStart(2, '0'); // Months are 0-indexed
+    const day = `${date.getDate()}`.padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+
+  export function convertTo12Hour(time24:string) {
+    const [hour, minute, second] = time24.split(':');
+    let hour12 = ((+hour % 12) || 12); // convert to 12-hour format
+    const ampm = +hour < 12 ? 'AM' : 'PM';
+    return `${hour12}:${minute} ${ampm}`;
+  }
+

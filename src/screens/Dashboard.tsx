@@ -6,12 +6,16 @@ import { styles } from '@styles/dashboardStyles'
 import { useNavigation } from '@react-navigation/native';
 import Back from '@components/Back';
 import { Avatar } from 'react-native-paper';
-import { getAvatarName } from '@utils/utils';
+import { convertTo12Hour, formatToYYYYMMDD, getAvatarName, getFutureDate } from '@utils/utils';
 import { dashBoardService } from '@api/dashboard';
 import { MdLogActivityIndicator } from '@components/MdLogActivityIndicator';
 import { storeObject } from '@utils/MdLogAsyncStorage';
 import { CLINIC_CONTEXT } from '@utils/constants';
 import { getUser } from '@utils/loadContextDetails';
+import { Role } from '@api/model/enums';
+import { AppointmentListResponse } from '@api/model/appointments/AppointmentListResponse';
+import { doctorService } from '@api/doctorService';
+import { clinicService } from '@api/clinicService';
 const { width, height } = Dimensions.get("window");
 
 export default function DashboardScreen() {
@@ -82,13 +86,14 @@ export default function DashboardScreen() {
             setClinicName(resp.clinic.name);
             setStaffCount(resp.staffCount);
             setTodaysAppointments(resp.todayAppointments);
-
-
             const userInfo = await getUser();
             const role = userInfo.roles[0];
             setRole(role);
             const filteredActions = allQuickActions.filter(action => action.roles.includes(role));
             setQuickActions(filteredActions);
+            // fetch todays appointments
+        
+
         } catch (error) {
             console.error("Error loading dashboard:", error);
         }
@@ -154,20 +159,20 @@ export default function DashboardScreen() {
                 {/* Today's Schedule */}
                 <View style={styles.scheduleHeader}>
                     <Text style={styles.sectionTitle}>Today's Schedule</Text>
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={() => navigation.navigate("Appointments")}>
                         <Text style={styles.viewAll}>View All</Text>
                     </TouchableOpacity>
                 </View>
 
-                {appointments.map((appt, index) => (
+                {appointmentsToday.map((appt, index) => (
                     <View key={index} style={styles.apptCard}>
-                        <Image source={{ uri: appt.avatar }} style={styles.apptAvatar} />
+                        <Image source={{ uri: "https://i.pravatar.cc/100?img=5" }} style={styles.apptAvatar} />
                         <View style={{ flex: 1 }}>
-                            <Text style={styles.apptName}>{appt.name}</Text>
-                            <Text style={styles.apptDesc}>{appt.reason}</Text>
+                            <Text style={styles.apptName}>Dr. {appt.doctorFirstName} {appt.doctorLastName}</Text>
+                            <Text style={styles.apptDesc}>{appt.patientFirstName} {appt.patientLastName}</Text>
                         </View>
                         <View style={{ alignItems: 'flex-end' }}>
-                            <Text style={styles.apptTime}>{appt.time}</Text>
+                            <Text style={styles.apptTime}>{convertTo12Hour(appt.startTime)}</Text>
                             <Text style={[styles.statusBadge, appt.status === 'Confirmed' ? styles.confirmed : styles.pending]}>
                                 {appt.status}
                             </Text>
