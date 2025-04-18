@@ -20,7 +20,7 @@ import { Role } from '@api/model/enums';
 import { AppointmentListResponse } from '@api/model/appointments/AppointmentListResponse';
 import { clinicService } from '@api/clinicService';
 import { Badge } from 'react-native-paper';
-import { convertTo12Hour, formatDateToMonthDay } from '@utils/utils';
+import { convertTo12Hour, formatDateToMonthDay, formatToYYYYMMDD, getFutureDate, getPastDate } from '@utils/utils';
 
 const AppointmentsListScreen = () => {
   const navigation = useNavigation();
@@ -50,19 +50,26 @@ const AppointmentsListScreen = () => {
     const clinicId = loggedInUserContext.clinicDetails.id;
     const userId = loggedinUserInfo.internalUserId;
     const role = loggedinUserInfo.roles[0];
-    const date = new Date();
-    const fromDate = date.toISOString().split('T')[0];
-    date.setDate(date.getDate() + 15);
-    const toDate = date.toISOString().split('T')[0];
+    const today = new Date();
+    const fromDate = formatToYYYYMMDD(today);
+    const toDate = getFutureDate(today, 15)
+    const pastFromDate = getPastDate(today, 15);
 
     try {
       setLoading(true);
       if (role === Role.DOCTOR) {
-        response = await doctorService.getDoctorAppointments(userId.toString(), fromDate, toDate);
+        response = await doctorService.getDoctorAppointments(userId.toString(), fromDate , toDate);
       } else {
         response = await clinicService.getClinicAppointments(clinicId.toString(), fromDate, toDate);
       }
       setUpcomingAppointments(response);
+      if (role === Role.DOCTOR) {
+        response = await doctorService.getDoctorAppointments(userId.toString(), pastFromDate , fromDate);
+      } else {
+        response = await clinicService.getClinicAppointments(clinicId.toString(), pastFromDate, fromDate);
+      }
+      setPastAppointments(response);
+
     } catch (error) {
       console.error(error);
     }
@@ -81,23 +88,27 @@ const AppointmentsListScreen = () => {
         <View style={styles.timeRow}>
           <Ionicons name="time-outline" size={16} />
           <Text style={styles.time}>
-          {formatDateToMonthDay(item.appointmentDate)} : {convertTo12Hour(item.startTime)} - {convertTo12Hour(item.endTime)}  
+            {formatDateToMonthDay(item.appointmentDate)} : {convertTo12Hour(item.startTime)} - {convertTo12Hour(item.endTime)}
           </Text>
         </View>
       </View>
 
       <View style={{ justifyContent: 'space-between' }}>
         <View>
-          <Badge style={styles.activeBadge}>{item.status}</Badge>
+          <Badge style={item.status === "CANCELLED" ? styles.activeBadgeCanceled : styles.activeBadge}>{item.status}</Badge>
         </View>
-        <View style={styles.actions}>
-          <TouchableOpacity onPress={editAppointment} style={{ marginRight: 25 }}>
-            <Ionicons name="create-outline" size={20} color="#007bff" />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => cancelAppointment(item)}>
-            <Ionicons name="close-outline" size={20} color="red" />
-          </TouchableOpacity>
-        </View>
+        {
+          item.status === "CANCELLED" ? "" :
+            <View style={styles.actions}>
+              <TouchableOpacity onPress={editAppointment} style={{ marginRight: 25 }}>
+                <Ionicons name="create-outline" size={20} color="#007bff" />
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => cancelAppointment(item)}>
+                <Ionicons name="close-outline" size={20} color="red" />
+              </TouchableOpacity>
+            </View>
+        }
+
       </View>
     </TouchableOpacity>
   );
@@ -158,15 +169,15 @@ const AppointmentsListScreen = () => {
                   }
 
                   // TODO: Call cancellation API here
-                  try{
+                  try {
                     setLoading(true)
-                    const resp =  await clinicService.cancelAppointment(selectedAppointment.patientId.toString(),
-                    selectedAppointment.id.toString(), cancelReason);
+                    const resp = await clinicService.cancelAppointment(selectedAppointment.patientId.toString(),
+                      selectedAppointment.id.toString(), cancelReason);
                     fetchAppointments();
-                  }catch(error){
-                     console.log(error.toString());
+                  } catch (error) {
+                    console.log(error.toString());
                   }
-                   
+
                   setLoading(false);
                   setShowCancelPopup(false);
                   setCancelReason('');
@@ -220,12 +231,24 @@ const styles = StyleSheet.create({
   patient: { fontWeight: 'bold', fontSize: 16 },
   doctor: { color: '#666', marginBottom: 5 },
   timeRow: { flexDirection: 'row', alignItems: 'center' },
-  time: { marginLeft: 4, fontWeight:"600", color:COLORS.red },
+  time: { marginLeft: 4, fontWeight: "600", color: COLORS.red },
   actions: { flexDirection: 'row', justifyContent: 'center' },
   activeBadge: {
     marginTop: 4,
     backgroundColor: '#d1fae5',
     color: '#10b981',
+    fontWeight: 'bold',
+  },
+  activeBadgeScheduled: {
+    marginTop: 4,
+    backgroundColor: '#d1fae5',
+    color: '#10b981',
+    fontWeight: 'bold',
+  },
+  activeBadgeCanceled: {
+    marginTop: 4,
+    backgroundColor: COLORS.red,
+    color: COLORS.white,
     fontWeight: 'bold',
   },
   addButton: {
@@ -261,11 +284,11 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 10,
-    textAlign:"center"
+    textAlign: "center"
   },
   popupMessage: {
     marginBottom: 10,
-    textAlign:"center"
+    textAlign: "center"
   },
   reasonInput: {
     borderColor: '#ccc',

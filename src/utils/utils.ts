@@ -40,13 +40,15 @@ export function replacePlaceholders(template:string, params:any) {
   }
 
   export const getFutureDate = (date: Date, plusDays: number): string => {
-    date.setDate(date.getDate() + plusDays);
-    return date.toISOString().split('T')[0];
+    let newDate = new Date();
+    newDate.setDate(date.getDate() + plusDays);
+    return newDate.toISOString().split('T')[0];
   }
 
   export const getPastDate = (date: Date, minusDays: number): string => {
-    date.setDate(date.getDate() + minusDays);
-    return date.toISOString().split('T')[0];
+    let newDate = new Date();
+    newDate.setDate(date.getDate() - minusDays);
+    return newDate.toISOString().split('T')[0];
   }
 
   export const formatTimeHHMMSS = (date: Date) =>
