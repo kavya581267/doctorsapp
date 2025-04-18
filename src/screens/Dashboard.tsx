@@ -178,7 +178,7 @@ export default function DashboardScreen() {
                         </View>
                         <View style={{ alignItems: 'flex-end' }}>
                             <Text style={styles.apptTime}>{convertTo12Hour(appt.startTime)}</Text>
-                            <Text style={[styles.statusBadge, appt.status === 'Confirmed' ? styles.confirmed : styles.pending]}>
+                            <Text style={[styles.statusBadge, appt.status === 'SCHEDULED' ? styles.confirmed : styles.pending]}>
                                 {appt.status}
                             </Text>
                         </View>

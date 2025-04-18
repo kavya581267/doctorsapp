@@ -119,6 +119,7 @@ export const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: '600',
     alignSelf: 'flex-end',
+   
   },
   confirmed: {
     backgroundColor: '#E6F8ED',
