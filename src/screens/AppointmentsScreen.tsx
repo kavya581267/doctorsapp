@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { ScrollView, StyleSheet, TextInput, View } from 'react-native';
+import { Alert, ScrollView, StyleSheet, TextInput, View } from 'react-native';
 import { Button, Text } from 'react-native-paper';
 import Back from '@components/Back';
 import { COLORS } from '@utils/colors';
@@ -12,6 +12,8 @@ import { DayOfWeek, Role } from '@api/model/enums';
 import { MdLogTimePicker } from '@components/MdLogTimePicker';
 import { AppointmentRequest } from '@api/model/patient/PatientModels';
 import { formatTimeHHMMSS, formatTimeHHMMSS24Hours } from '@utils/utils';
+import { useNavigation } from '@react-navigation/native';
+import { MdLodSnackbar } from '@components/MdLogSnacbar';
 
 
 
@@ -49,6 +51,10 @@ export default function BookAppointmentScreen() {
   const [selectedDoctor, setSelectedDoctor] = useState<dropdownprops>();
   const [startTime, setStartTime] = useState(new Date(2025, 3, 16, 18, 0));
   const [endTime, setEndTime] = useState(new Date(2025, 3, 16, 19, 0));
+  const [error,setError] = useState("");
+  const [visible,setVisible] = useState(false);
+  const navigation = useNavigation();
+  const onDismissSnackBar = () => setVisible(false);
 
   const formatTime = (date: Date) =>
     date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
@@ -72,9 +78,11 @@ export default function BookAppointmentScreen() {
       })
       setPatientList(pt)
     } catch (error) {
+      setVisible(true);
       setLoading(false);
     }
     setLoading(false)
+    setVisible(false);
   }
 
   const bookAppointment = async () => {
@@ -88,9 +96,19 @@ export default function BookAppointmentScreen() {
     try {
       setLoading(true)
       const response = await patientService.createAppointment(appointmentPayload, selectedPatient.value);
-      console.log(response);
+      if (response) {
+        Alert.alert(
+          "Appointment Booked",
+          `Appointment booked for ${response.doctorName} on ${selectedDate}`,
+          [{
+            text: "OK",
+            onPress: () => navigation.navigate("Mainscreen", {tab:"Appointments"})
+          }],
+          { cancelable: false }
+        )
+      }
     } catch (error) {
-
+        setError(error);
     }
     setLoading(false)
   }
@@ -215,7 +233,7 @@ export default function BookAppointmentScreen() {
       >
         Book Appointment
       </Button>
-
+      <MdLodSnackbar visible={visible} message={error} onDismiss={onDismissSnackBar}/>
       <MdLogActivityIndicator loading={loading} />
     </ScrollView>
   );

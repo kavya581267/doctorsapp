@@ -73,7 +73,6 @@ export default function Vitals() {
     }
 
     useEffect(() => {
-        console.log("Vitals")
         fetchVitals()
     }, []);
 

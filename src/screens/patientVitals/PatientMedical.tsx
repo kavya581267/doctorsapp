@@ -13,7 +13,6 @@ export default function PatientMedical() {
     const { surname, name, age, phone, } = route.params || {};
     const [showVitals, setShowVitals] = useState(false);
     const navigation = useNavigation();
-    console.log("Received Params:", route.params);
     return (
        
             <View style={{ padding: 10 }}>
@@ -45,7 +44,7 @@ export default function PatientMedical() {
                         </View>
                         {
                             showVitals && (
-                                <Vitals></Vitals>
+                                <Vitals ></Vitals>
                             )
                         }
                     </View>

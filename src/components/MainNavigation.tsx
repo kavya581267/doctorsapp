@@ -28,6 +28,7 @@ import UserProfileScreen from '@screens/UserProfileScreen';
 import DoctorScheduleScreen from '@screens/DoctorSchedule';
 import BookAppointmentScreen from '@screens/AppointmentsScreen';
 import PatientMedical from '@screens/patientVitals/PatientMedical';
+import AppointmentsListScreen from '@screens/AppontmentsListScree';
 
 
 
@@ -57,6 +58,7 @@ export type RootStackParamList = {
     ClinicOverview: undefined;
     BookAppointmentScreen:undefined;
     DoctorScheduleScreen: undefined;
+    AppointmentsListScreen:undefined
 
 };
 
@@ -94,6 +96,7 @@ export default function MainNavigator() {
                 <Stack.Screen name='StaffDirectoryScreen' component={StaffDirectoryScreen}></Stack.Screen>
                 <Stack.Screen name='DoctorScheduleScreen' component={DoctorScheduleScreen}></Stack.Screen>
                 <Stack.Screen name='BookAppointmentScreen' component={BookAppointmentScreen}></Stack.Screen>
+                <Stack.Screen name='AppointmentsListScreen' component={AppointmentsListScreen}></Stack.Screen>
             </Stack.Navigator>
         </NavigationContainer>
     );
