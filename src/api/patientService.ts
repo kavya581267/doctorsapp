@@ -1,11 +1,11 @@
-import { CREATE_DOCTO_APPOINTMENT, CREATE_PATIENT_VITALS, GET_CLINIC_PATIENTS_PATH, GET_CLINIC_STAFF_PATH } from "@utils/constants";
+import { CREATE_DOCTO_APPOINTMENT, CREATE_PATIENT_VITALS, GET_CLINIC_PATIENTS_PATH, GET_CLINIC_STAFF_PATH, UPDATE_APPOINTMENT } from "@utils/constants";
 import { apiService } from "./apiService";
 import { AdminRegistarationRequest, AdminRegistrationResponse } from "./model/auth/Auth";
 import { ClinicResponse } from "./model/clinic/ClinicResponse";
 import { StaffRequest } from "./model/clinic/StaffRequest";
 import { Staff } from "./model/staff/Staff";
 import { replacePlaceholders } from "@utils/utils";
-import { AppointmentRequest, AppointmentResponse, PatientResponse, VitalsRequest, VitalsResponse } from "./model/patient/PatientModels";
+import { AppointmentRequest, AppointmentResponse, AppointmentUpdateRequest, PatientResponse, VitalsRequest, VitalsResponse } from "./model/patient/PatientModels";
 
 
 
@@ -44,6 +44,15 @@ export const patientService = {
             throw error
         }
 
+    },
+
+    updateAppointment: async (appointment: AppointmentUpdateRequest,patientId: string,appointmentId: string): Promise<AppointmentResponse>=>{
+      try{
+        const resp = await apiService.put(replacePlaceholders(UPDATE_APPOINTMENT,{"patient_id": patientId, "appointment_id":appointmentId}),appointment)
+        return resp.data;
+      }catch(error){
+        throw error;
+      }
     },
 
     getPatientVitals: async (patientId: string): Promise<VitalsResponse[]> => {

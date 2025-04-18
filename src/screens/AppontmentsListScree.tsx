@@ -40,8 +40,8 @@ const AppointmentsListScreen = () => {
     setShowCancelPopup(true);
   };
 
-  const editAppointment = () => {
-    // edit logic
+  const editAppointment = (item) => {
+    navigation.navigate("BookAppointmentScreen",{existingAppointment: item});
   };
 
   const fetchAppointments = async () => {
@@ -101,7 +101,7 @@ const AppointmentsListScreen = () => {
         {
           item.status === "CANCELLED" ? "" :
             <View style={styles.actions}>
-              <TouchableOpacity onPress={editAppointment} style={{ marginRight: 25 }}>
+              <TouchableOpacity onPress={()=>editAppointment(item)} style={{ marginRight: 25 }}>
                 <Ionicons name="create-outline" size={20} color="#007bff" />
               </TouchableOpacity>
               <TouchableOpacity onPress={() => cancelAppointment(item)}>

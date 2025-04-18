@@ -66,6 +66,7 @@ export default function BookAppointmentScreen() {
     const day = `${date.getDate()}`.padStart(2, '0');
     return `${year}-${month}-${day}`;
   }
+  
   const loadPatients = async () => {
     try {
       setLoading(true);
@@ -84,6 +85,7 @@ export default function BookAppointmentScreen() {
     setLoading(false)
     setVisible(false);
   }
+
 
   const bookAppointment = async () => {
     const appointmentPayload = new AppointmentRequest();
@@ -106,12 +108,15 @@ export default function BookAppointmentScreen() {
           }],
           { cancelable: false }
         )
+
       }
     } catch (error) {
-        setError(error);
+      setError(error);
+     
     }
     setLoading(false)
   }
+
 
   const loadDoctors = async () => {
     const staffList = await staffService.getClinicStaff(loggedInUserContext?.clinicDetails.id.toString());
@@ -233,6 +238,8 @@ export default function BookAppointmentScreen() {
       >
         Book Appointment
       </Button>
+
+     
       <MdLodSnackbar visible={visible} message={error} onDismiss={onDismissSnackBar}/>
       <MdLogActivityIndicator loading={loading} />
     </ScrollView>
