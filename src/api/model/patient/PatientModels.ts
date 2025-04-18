@@ -114,7 +114,7 @@ export interface PatientUpdateRequest {
 }
 
 export class VitalsRequest {
-    clinicId: string;
+    clinicId: number;
     appointmentId: string;
     temperature: number;
     bloodPressureSystolic: number;

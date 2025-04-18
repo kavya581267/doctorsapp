@@ -54,6 +54,7 @@ const AppointmentsListScreen = () => {
     const fromDate = formatToYYYYMMDD(today);
     const toDate = getFutureDate(today, 15)
     const pastFromDate = getPastDate(today, 15);
+    const pastToDate = getPastDate(today, 1);
 
     try {
       setLoading(true);
@@ -64,9 +65,9 @@ const AppointmentsListScreen = () => {
       }
       setUpcomingAppointments(response);
       if (role === Role.DOCTOR) {
-        response = await doctorService.getDoctorAppointments(userId.toString(), pastFromDate , fromDate);
+        response = await doctorService.getDoctorAppointments(userId.toString(), pastFromDate , pastToDate);
       } else {
-        response = await clinicService.getClinicAppointments(clinicId.toString(), pastFromDate, fromDate);
+        response = await clinicService.getClinicAppointments(clinicId.toString(), pastFromDate, pastToDate);
       }
       setPastAppointments(response);
 
@@ -81,7 +82,7 @@ const AppointmentsListScreen = () => {
   }, []);
 
   const renderItem = ({ item }) => (
-    <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('PatientMedical')}>
+    <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('PatientMedical',{appointment:item})}>
       <View>
         <Text style={styles.patient}>{item.firstName} {item.lastName}</Text>
         <Text style={styles.doctor}>{'Dr. ' + item.doctorName}</Text>

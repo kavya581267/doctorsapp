@@ -46,8 +46,13 @@ export const patientService = {
 
     },
 
-    getPatientVitals: () => {
-
+    getPatientVitals: async (patientId: string): Promise<VitalsResponse[]> => {
+        try {
+            const resp = await apiService.get(replacePlaceholders(CREATE_PATIENT_VITALS, { "patient_id": patientId }),"")
+            return resp.data;
+        } catch (error) {
+            throw error
+        }
     },
 
     recordPatientVitals: async (vitals: VitalsRequest, patientId: string): Promise<VitalsResponse> => {
