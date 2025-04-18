@@ -16,6 +16,7 @@ import { Role } from '@api/model/enums';
 import { AppointmentListResponse } from '@api/model/appointments/AppointmentListResponse';
 import { doctorService } from '@api/doctorService';
 import { clinicService } from '@api/clinicService';
+import EmptyListScreen from '@components/Empty';
 const { width, height } = Dimensions.get("window");
 
 export default function DashboardScreen() {
@@ -163,6 +164,10 @@ export default function DashboardScreen() {
                         <Text style={styles.viewAll}>View All</Text>
                     </TouchableOpacity>
                 </View>
+
+                {
+                    appointmentsToday.length === 0 ? <EmptyListScreen  message='No appointments scheduled Today'/> : <></>
+                }
 
                 {appointmentsToday.map((appt, index) => (
                     <View key={index} style={styles.apptCard}>

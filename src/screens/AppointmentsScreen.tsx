@@ -11,6 +11,7 @@ import { MdLogActivityIndicator } from '@components/MdLogActivityIndicator';
 import { DayOfWeek, Role } from '@api/model/enums';
 import { MdLogTimePicker } from '@components/MdLogTimePicker';
 import { AppointmentRequest } from '@api/model/patient/PatientModels';
+import { formatTimeHHMMSS, formatTimeHHMMSS24Hours } from '@utils/utils';
 
 
 
@@ -82,14 +83,16 @@ export default function BookAppointmentScreen() {
     appointmentPayload.appointmentType = "INITIAL";
     appointmentPayload.clinicId = loggedInUserContext.clinicDetails.id;
     appointmentPayload.doctorId = Number(selectedDoctor.value);
-    appointmentPayload.endTime = formatTime(endTime);
-    appointmentPayload.startTime = formatTime(startTime);
+    appointmentPayload.endTime = formatTimeHHMMSS24Hours(endTime);
+    appointmentPayload.startTime = formatTimeHHMMSS24Hours(startTime);
     try {
+      setLoading(true)
       const response = await patientService.createAppointment(appointmentPayload, selectedPatient.value);
       console.log(response);
     } catch (error) {
 
     }
+    setLoading(false)
   }
 
   const loadDoctors = async () => {
