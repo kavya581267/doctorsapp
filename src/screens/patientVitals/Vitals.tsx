@@ -16,6 +16,7 @@ export default function Vitals() {
     const [bloodPressureSystolic,setBloodPressureSystolic] = useState("");
     const [bloodPressureDiastolic,setBloodPressureDiastolic] = useState("");
     const [heartRate,setHeartRate] = useState("");
+    const [isUpdate,setIsUpdate] = useState(false);
     const [loading, setLoading] = useState(true);
     const route = useRoute();
     const { appointment } = route.params;
@@ -64,6 +65,8 @@ export default function Vitals() {
                 setOxygenSaturation(appointmentVital.oxygenSaturation.toString());
                setHeight(appointmentVital.height.toString());
                setWeight(appointmentVital.weight.toString());   
+
+               setIsUpdate(true);
             }
 
         } catch (error) {
@@ -120,7 +123,7 @@ export default function Vitals() {
                 </View>
                 <View>
                     <TouchableOpacity style={styles.Btnupdate} onPress={storeVitals}>
-                        <Text style={styles.updatebtnText}>Update</Text>
+                        <Text style={styles.updatebtnText}>{isUpdate ? "Update" : "Create"}</Text>
                     </TouchableOpacity>
                 </View>
 
