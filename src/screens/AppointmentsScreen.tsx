@@ -51,8 +51,8 @@ export default function BookAppointmentScreen() {
   const [selectedDoctor, setSelectedDoctor] = useState<dropdownprops>();
   const [startTime, setStartTime] = useState(new Date(2025, 3, 16, 18, 0));
   const [endTime, setEndTime] = useState(new Date(2025, 3, 16, 19, 0));
-  const [error,setError] = useState("");
-  const [visible,setVisible] = useState(false);
+  const [error, setError] = useState("");
+  const [visible, setVisible] = useState(false);
   const navigation = useNavigation();
   const onDismissSnackBar = () => setVisible(false);
 
@@ -66,7 +66,7 @@ export default function BookAppointmentScreen() {
     const day = `${date.getDate()}`.padStart(2, '0');
     return `${year}-${month}-${day}`;
   }
-  
+
   const loadPatients = async () => {
     try {
       setLoading(true);
@@ -104,7 +104,7 @@ export default function BookAppointmentScreen() {
           `Appointment booked for ${response.doctorName} on ${selectedDate}`,
           [{
             text: "OK",
-            onPress: () => navigation.navigate("Mainscreen", {tab:"Appointments"})
+            onPress: () => navigation.navigate("Mainscreen", { tab: "Appointments" })
           }],
           { cancelable: false }
         )
@@ -112,7 +112,6 @@ export default function BookAppointmentScreen() {
       }
     } catch (error) {
       setError(error);
-     
     }
     setLoading(false)
   }
@@ -138,111 +137,108 @@ export default function BookAppointmentScreen() {
   }, [])
 
   return (
-    <ScrollView style={styles.container}>
-      <Back nav='Mainscreen' tab='Appointments' />
-      {/* Header */}
+    <View>
+      <ScrollView style={styles.container}>
+        <Back nav='Mainscreen' tab='Appointments' />
+        {/* Header */}
 
-      <Text style={styles.header}>Book Appointment</Text>
+        <Text style={styles.header}>Book Appointment</Text>
 
-      {/* Select Patient */}
-      <View style={styles.viewMarginBottom}>
-        <Dropdown
-          data={patients}
-          labelField="label"
-          valueField="value"
-          placeholder="Select Patient"
-          value={selectedPatient}
-          onChange={(item) => setSelectedpatient(item)}
-          search={true}
-          style={styles.searchInput}
-          itemTextStyle={{ color: '#555', fontSize: 16 }}
-          itemContainerStyle={{ backgroundColor: '#f5f5f5', borderRadius: 10 }}
-          inputSearchStyle={{ backgroundColor: "f5f5f5" }}
-        />
-      </View>
-
-
-      {/* Search Bar */}
-      <View style={styles.viewMarginBottom}>
-        <Dropdown
-          data={doctors}
-          labelField="label"
-          valueField="value"
-          placeholder="Select Doctor"
-          value={selectedDoctor}
-          onChange={(item) => setSelectedDoctor(item)}
-          search={true}
-          style={styles.searchInput}
-          itemTextStyle={{ color: '#555', fontSize: 16 }}
-          itemContainerStyle={{ backgroundColor: '#f5f5f5', borderRadius: 10 }}
-          inputSearchStyle={{ backgroundColor: "f5f5f5" }}
-        />
-      </View>
+        {/* Select Patient */}
+        <View style={styles.viewMarginBottom}>
+          <Dropdown
+            data={patients}
+            labelField="label"
+            valueField="value"
+            placeholder="Select Patient"
+            value={selectedPatient}
+            onChange={(item) => setSelectedpatient(item)}
+            search={true}
+            style={styles.searchInput}
+            itemTextStyle={{ color: '#555', fontSize: 16 }}
+            itemContainerStyle={{ backgroundColor: '#f5f5f5', borderRadius: 10 }}
+            inputSearchStyle={{ backgroundColor: "f5f5f5" }}
+          />
+        </View>
 
 
-
-      {/* Select Date */}
-      <View style={styles.viewMarginBottom}>
-        <Text style={styles.subHeaders}>Select Date</Text>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} >
-          {dates.map((d, idx) => {
-            const isSelected = d.fullDate === selectedDate;
-            return (
-              <Button
-                key={idx}
-                mode={isSelected ? 'contained' : 'outlined'}
-                onPress={() => {
-                  setSelectedDate(d.fullDate);
-                }}
-                style={[styles.selectDateBox, { backgroundColor: isSelected ? COLORS.primary : "" }]}
-                contentStyle={{ flexDirection: 'column' }}
-              >
-                <View style={{ flexDirection: "column" }}>
-                  <Text style={[styles.selectDay, { color: isSelected ? 'white' : 'black' }]}>{d.label}</Text>
-                  <Text style={{ fontSize: 11, textAlign: "center", color: isSelected ? 'white' : 'black', }}>{d.date}</Text>
-                </View>
-
-              </Button>
-            );
-          })}
-
-        </ScrollView>
-      </View>
-
-      <View style={styles.viewMarginBottom}>
-        <Text style={styles.label}>Start Time</Text>
-        <MdLogTimePicker value={startTime} onChange={setStartTime} />
-      </View>
-      <View style={styles.viewMarginBottom}>
-        <Text style={styles.label}>End Time</Text>
-        <MdLogTimePicker value={endTime} onChange={setEndTime} />
-      </View>
+        {/* Search Bar */}
+        <View style={styles.viewMarginBottom}>
+          <Dropdown
+            data={doctors}
+            labelField="label"
+            valueField="value"
+            placeholder="Select Doctor"
+            value={selectedDoctor}
+            onChange={(item) => setSelectedDoctor(item)}
+            search={true}
+            style={styles.searchInput}
+            itemTextStyle={{ color: '#555', fontSize: 16 }}
+            itemContainerStyle={{ backgroundColor: '#f5f5f5', borderRadius: 10 }}
+            inputSearchStyle={{ backgroundColor: "f5f5f5" }}
+          />
+        </View>
 
 
 
-      {/* Reason for Visit */}
-      <View style={styles.viewMarginBottom}>
-        <Text style={styles.subHeaders}>Reason for Visit</Text>
-        <TextInput
-          value={reason}
-          onChangeText={setReason}
-          style={styles.reasonsTextInput}
-          multiline
-        />
-      </View>
-      {/* Book Appointment Button */}
-      <Button
-        mode="contained"
-        style={styles.button}
-        onPress={bookAppointment}
-      >
-        Book Appointment
-      </Button>
+        {/* Select Date */}
+        <View style={styles.viewMarginBottom}>
+          <Text style={styles.subHeaders}>Select Date</Text>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false} >
+            {dates.map((d, idx) => {
+              const isSelected = d.fullDate === selectedDate;
+              return (
+                <Button
+                  key={idx}
+                  mode={isSelected ? 'contained' : 'outlined'}
+                  onPress={() => {
+                    setSelectedDate(d.fullDate);
+                  }}
+                  style={[styles.selectDateBox, { backgroundColor: isSelected ? COLORS.primary : "" }]}
+                  contentStyle={{ flexDirection: 'column' }}
+                >
+                  <View style={{ flexDirection: "column" }}>
+                    <Text style={[styles.selectDay, { color: isSelected ? 'white' : 'black' }]}>{d.label}</Text>
+                    <Text style={{ fontSize: 11, textAlign: "center", color: isSelected ? 'white' : 'black', }}>{d.date}</Text>
+                  </View>
 
-     
-      <MdLodSnackbar visible={visible} message={error} onDismiss={onDismissSnackBar}/>
+                </Button>
+              );
+            })}
+
+          </ScrollView>
+        </View>
+
+        <View style={styles.viewMarginBottom}>
+          <Text style={styles.label}>Start Time</Text>
+          <MdLogTimePicker value={startTime} onChange={setStartTime} />
+        </View>
+        <View style={styles.viewMarginBottom}>
+          <Text style={styles.label}>End Time</Text>
+          <MdLogTimePicker value={endTime} onChange={setEndTime} />
+        </View>
+        {/* Reason for Visit */}
+        <View style={styles.viewMarginBottom}>
+          <Text style={styles.subHeaders}>Reason for Visit</Text>
+          <TextInput
+            value={reason}
+            onChangeText={setReason}
+            style={styles.reasonsTextInput}
+            multiline
+          />
+        </View>
+        {/* Book Appointment Button */}
+        <Button
+          mode="contained"
+          style={styles.button}
+          onPress={bookAppointment}
+        >
+          Book Appointment
+        </Button>
+        <MdLodSnackbar visible={visible} message={error} onDismiss={onDismissSnackBar} />
+      </ScrollView>
       <MdLogActivityIndicator loading={loading} />
-    </ScrollView>
+    </View>
   );
 }
 
