@@ -1,4 +1,4 @@
-import { apiService } from "./apiService";
+import { apiService, initializeToken } from "./apiService";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { LoginRequest, LoginResponse, RefreshTokenResponse } from "./model/auth/Auth";
 import { ACCESS_TOKENS_CONTEXT, JWT_ACCESS_TOKEN, JWT_REFRESH_TOKEN, LOGIN_PATH, LOGOUT_PATH, REFRESH_TOKEN_PATH, USER } from "@utils/constants";
@@ -39,6 +39,7 @@ export const loginService = {
             const newContext =  await getObject<AccessTokenContext>(ACCESS_TOKENS_CONTEXT);
             newContext.accessToken = token.accessToken;
             await storeObject(ACCESS_TOKENS_CONTEXT, newContext)
+            await initializeToken()
             return token;
         }catch(error){
             throw error;

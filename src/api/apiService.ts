@@ -40,6 +40,7 @@ const apiCall = async (endpoint: string, method = "GET", body = null, queryParam
 
         if(accessToken && !endpoint.includes(REFRESH_TOKEN_PATH) && isTokenExpired(accessToken)){
           const resp =  await loginService.refresh()
+          accessToken = await getAccessToken();
 
         }
 
