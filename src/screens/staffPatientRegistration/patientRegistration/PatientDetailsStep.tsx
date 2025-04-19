@@ -41,6 +41,7 @@ export const PatientDetails: React.FC<StepProps> = ({ nextStep, formData, setFor
 
     const validateFormFields = () => {
         if (isAnyFieldsEmpty(["firstName", "lastName", "email", "dateOfBirth", "gender", "phone", "bloodGroup"], formData)) {
+            setVisible(true);
             setErrorMessage("Please fill all the required fields");
         }
         if (!isValidEmail(formData.email)) {

@@ -21,6 +21,7 @@ export const PatientAddress: React.FC<StepProps> = ({ nextStep, prevStep, formDa
     const [visible, setVisible] = useState(false);
     const onDismissSnackBar = () => setVisible(false);
     const [checked, setChecked] = useState(false);
+    const [errorMessage, setErrorMessage] = useState("");
 
     const onChangeT = (field, val) => {
         setFormData((prev) => {
@@ -31,11 +32,18 @@ export const PatientAddress: React.FC<StepProps> = ({ nextStep, prevStep, formDa
     }
 
     const validateFormFields = () => {
-        if (!isAnyFieldsEmpty(["address", "city", "state", "zipCode", "country"], formData)) {
+
+        if (isAnyFieldsEmpty(["address", "city", "state", "zipCode", "country", "emergencyContactName", "emergencyContactPhone"], formData)) {
+            setVisible(true)
+            setErrorMessage("Please fill all the required fields");
+        }
+
+        if (!isValidPhone(formData.emergencyContactPhone)) {
+            setVisible(true);
+            setErrorMessage("Please enter a valid phone number with country code. Eg : +91xxxxxxxxxx")
+        } else {
             setVisible(false);
             nextStep();
-        } else {
-            setVisible(true);
         }
     }
 
@@ -79,14 +87,14 @@ export const PatientAddress: React.FC<StepProps> = ({ nextStep, prevStep, formDa
                     field="country"
                 />
                 <MdLogTextInput
-                    label="EmergencyContactName"
+                    label="EmergencyContactName*"
                     value={formData?.emergencyContactName}
                     left="human-male"
                     onTextChange={onChangeT}
                     field="emergencyContactName"
                 />
                 <MdLogTextInput
-                    label="EmergencyContactPhone"
+                    label="EmergencyContactPhone*"
                     value={formData?.emergencyContactPhone}
                     left="phone"
                     onTextChange={onChangeT}
