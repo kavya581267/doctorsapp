@@ -77,7 +77,7 @@ const StaffDirectoryScreen = () => {
     const handlePress = () => {
       const role = item?.roleName.toLowerCase();
       if (role === "doctor") {
-        navigation.navigate("DoctorScheduleScreen",{doctorDetails:item});
+        navigation.navigate("DoctorScheduleScreen", { doctorDetails: item });
       }
     }
 
@@ -98,7 +98,6 @@ const StaffDirectoryScreen = () => {
 
   return (
     <View style={styles.container}>
-      <View>
         <Back></Back>
         <TextInput
           placeholder="Search staff..."
@@ -112,11 +111,10 @@ const StaffDirectoryScreen = () => {
           keyExtractor={(item) => item.id.toString()}
           renderItem={renderStaffCard}
         />
-      </View>
-      <TouchableOpacity style={styles.addButton} onPress={() => navigation.navigate("StaffRegistrationScreen")}>
-        <Text style={styles.addButtonText}>+ Add New Staff</Text>
-      </TouchableOpacity>
-      <MdLogActivityIndicator loading={loading} />
+        <TouchableOpacity style={styles.addButton} onPress={() => navigation.navigate("StaffRegistrationScreen")}>
+          <Text style={styles.addButtonText}>+ Add New Staff</Text>
+        </TouchableOpacity>
+        <MdLogActivityIndicator loading={loading} />
     </View>
   );
 };
