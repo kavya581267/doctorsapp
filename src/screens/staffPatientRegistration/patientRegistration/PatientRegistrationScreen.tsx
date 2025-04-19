@@ -8,17 +8,17 @@ import { PatientDetails } from "./PatientDetailsStep";
 import { PatientAddress } from "./PatientAddressStep";
 import PatientReview from "./PatientReviewStep";
 import { registrationService } from "@api/registrationService";
-import { useNavigation } from "@react-navigation/native";
+import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { MdLogActivityIndicator } from "@components/MdLogActivityIndicator";
 import Back from "@components/Back";
 import { AuthContext } from "@context/AuthContext";
 import { MdLodSnackbar } from "@components/MdLogSnacbar";
+import { RootStackParamList } from "@components/MainNavigation";
 
 
 
 
 export default function PatientRegistrationScreen() {
-  const navigation = useNavigation();
   const labels = ["Details", "Address", "Submit"];
   const [formData, setFormData] = useState<PatientRegistration>();
   const [step, setStep] = useState<number>(0);
@@ -28,7 +28,7 @@ export default function PatientRegistrationScreen() {
   const [loading, setLoading] = useState(false);
   const { loggedInUserContext } = useContext(AuthContext);
   const [visible, setVisible] = useState(false);
-
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const submitForm = async () => {
     try {
       setLoading(true);

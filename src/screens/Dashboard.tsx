@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, Image, TextInput, Dimensions } from 'react-native';
 import { Ionicons, MaterialIcons, FontAwesome5, Feather } from '@expo/vector-icons';
 import { styles } from '@styles/dashboardStyles'
-import { useNavigation } from '@react-navigation/native';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
 import Back from '@components/Back';
 import { convertTo12Hour} from '@utils/utils';
 import { dashBoardService } from '@api/dashboard';
@@ -11,12 +11,13 @@ import { storeObject } from '@utils/MdLogAsyncStorage';
 import { CLINIC_CONTEXT } from '@utils/constants';
 import { getUser } from '@utils/loadContextDetails';
 import EmptyListScreen from '@components/Empty';
+import { RootStackParamList } from '@components/MainNavigation';
 const { width, height } = Dimensions.get("window");
 
 export default function DashboardScreen() {
     const [clinicName, setClinicName] = useState("");
     const [searchText, setSearchText] = useState('');
-    const navigation = useNavigation();
+    const navigation = useNavigation<NavigationProp<RootStackParamList>>();
     const [loading, setLoading] = useState(true);
     const [staffCount, setStaffCount] = useState(0);
     const [appointmentsToday, setTodaysAppointments] = useState([]);

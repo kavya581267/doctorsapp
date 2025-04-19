@@ -1,12 +1,13 @@
-import { useNavigation } from "@react-navigation/native";
+import { NavigationProp, useNavigation } from "@react-navigation/native";
 import React, { useState } from "react";
 import { View, Text, TouchableOpacity, StyleSheet, ActionSheetIOS, Modal, Platform } from "react-native";
 import styles from "@styles/actionSheetMoreStyles";
+import { RootStackParamList } from "@components/MainNavigation";
 
 
 export default function ActionSheetMore() {
     const [modalVisible, setModalVisible] = useState(false);
-    const navigation = useNavigation();
+    const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
     const showActionSheet = () => {
         ActionSheetIOS.showActionSheetWithOptions(

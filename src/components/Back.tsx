@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { View, Text, TextInput, Image, TouchableOpacity, Alert, useWindowDimensions, Platform } from "react-native";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import AntDesign from '@expo/vector-icons/AntDesign';
-import { useNavigation, useRoute } from "@react-navigation/native";
+import { NavigationProp, useNavigation, useRoute } from "@react-navigation/native";
 import { styles } from "@styles/dashboardStyles"
 import { Avatar } from "react-native-paper";
 import { getAvatarName } from "@utils/utils";
@@ -11,6 +11,7 @@ import { COLORS } from "@utils/colors";
 import { getObject } from "@utils/MdLogAsyncStorage";
 import { CLINIC_CONTEXT } from "@utils/constants";
 import { ClinicOverview } from "@api/model/auth/Auth";
+import { RootStackParamList } from "./MainNavigation";
 
 type Props = {
     nav?: string,
@@ -19,7 +20,7 @@ type Props = {
 }
 
 export default function Back({ nav, loading = false, tab = undefined }: Props) {
-    const navigation = useNavigation();
+    const navigation = useNavigation<NavigationProp<RootStackParamList>>();
     const route = useRoute();
     const [clinicName, setClinicName] = useState("");
     const { loggedInUserContext } = useContext(AuthContext)

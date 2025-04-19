@@ -1,18 +1,19 @@
 import React, { useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, ScrollView } from "react-native";
 import Entypo from '@expo/vector-icons/Entypo';
-import { useNavigation, useRoute } from "@react-navigation/native";
+import { NavigationProp, useNavigation, useRoute } from "@react-navigation/native";
 import Vitals from "./Vitals";
 import ActionSheetMore from "./ActionSheetMore";
 import styles from "styles/patientMedicalStyle";
 import Back from "@components/Back";
+import { RootStackParamList } from "@components/MainNavigation";
 
 
 export default function PatientMedical() {
     const route = useRoute();
     const { appointment } = route.params;
     const [showVitals, setShowVitals] = useState(false);
-    const navigation = useNavigation();
+    const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
     function calculateAge(dob) {
         const birthDate = new Date(dob);

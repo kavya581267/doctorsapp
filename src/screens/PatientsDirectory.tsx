@@ -3,9 +3,10 @@ import { Staff } from '@api/model/staff/Staff';
 import { patientService } from '@api/patientService';
 import { staffService } from '@api/staffService';
 import Back from '@components/Back';
+import { RootStackParamList } from '@components/MainNavigation';
 import { MdLogActivityIndicator } from '@components/MdLogActivityIndicator';
 import { AuthContext } from '@context/AuthContext';
-import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { NavigationProp, useFocusEffect, useNavigation } from '@react-navigation/native';
 import { COLORS } from '@utils/colors';
 import { getAvatarName } from '@utils/utils';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
@@ -27,7 +28,7 @@ import { Avatar } from 'react-native-paper';
 
 const PatientDirectoryScreen = () => {
   const [searchText, setSearchText] = useState('');
-  const navigation = useNavigation();
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const {loggedInUserContext} = useContext(AuthContext);
   const [staff, setStaff] = useState<PatientResponse[]>([]);
   const [backUp, setBackupStaff] = useState<PatientResponse[]>([]);

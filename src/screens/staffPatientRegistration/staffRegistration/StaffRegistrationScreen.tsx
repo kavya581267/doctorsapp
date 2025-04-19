@@ -10,17 +10,18 @@ import StaffReview from "./StaffReviewStep";
 import styles from "@styles/staffPatientRegistrationStyle";
 import Back from "@components/Back";
 import { registrationService } from "@api/registrationService";
-import { useNavigation } from "@react-navigation/native";
+import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { MdLogActivityIndicator } from "@components/MdLogActivityIndicator";
 
 import { AuthContext } from "@context/AuthContext";
 import { StaffRole } from "./StaffRoleStep";
 import { ScrollView } from "react-native-gesture-handler";
+import { RootStackParamList } from "@components/MainNavigation";
 
 
 
 export default function StaffRegistrationScreen() {
-   const navigation = useNavigation();
+   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
    const [errorMessage, setErrorMessage] = useState("some thing went wrong please try again!!");
   const labels = ["Details","Role", "Address", "Submit"];
   const [formData, setFormData] = useState<StaffRegistration>();

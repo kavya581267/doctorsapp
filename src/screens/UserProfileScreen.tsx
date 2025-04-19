@@ -4,8 +4,9 @@ import { styles } from "styles/userProfileScreenStyle";
 import React, { useContext, useEffect, useState } from 'react';
 import { Platform, View } from 'react-native';
 import { Avatar, Text, TextInput, Button, Card, Divider } from 'react-native-paper';
-import { useNavigation } from "@react-navigation/native";
+import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { MdLogActivityIndicator } from '@components/MdLogActivityIndicator';
+import { RootStackParamList } from '@components/MainNavigation';
 
 const UserProfileScreen = () => {
     const [isEditing, setIsEditing] = useState(false);
@@ -14,7 +15,7 @@ const UserProfileScreen = () => {
     const [email, setEmail] = useState('john.doe@example.com');
     const [phone, setPhone] = useState('+1 (555) 123-4567');
     const [role, setRole] = useState("ADMiN")
-    const navigation = useNavigation();
+    const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
     const [loading, setLoading] = useState(false);
     const { logout, loggedInUserContext } = useContext(AuthContext);
