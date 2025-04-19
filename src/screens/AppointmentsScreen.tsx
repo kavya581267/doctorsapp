@@ -10,7 +10,7 @@ import { staffService } from '@api/staffService';
 import { MdLogActivityIndicator } from '@components/MdLogActivityIndicator';
 import { DayOfWeek, Role } from '@api/model/enums';
 import { MdLogTimePicker } from '@components/MdLogTimePicker';
-import { AppointmentRequest } from '@api/model/patient/PatientModels';
+import { AppointmentRequest, AppointmentResponse, AppointmentUpdateRequest } from '@api/model/patient/PatientModels';
 import { formatTimeHHMMSS, formatTimeHHMMSS24Hours, formatToYYYYMMDD } from '@utils/utils';
 import { NavigationProp, RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { MdLodSnackbar } from '@components/MdLogSnacbar';
@@ -58,12 +58,14 @@ export default function BookAppointmentScreen() {
   const [startTime, setStartTime] = useState(new Date(2025, 3, 16, 18, 0));
   const [endTime, setEndTime] = useState(new Date(2025, 3, 16, 19, 0));
   const [error, setError] = useState("");
+  const [note,setNote] = useState("");
   const [visible, setVisible] = useState(false);
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const onDismissSnackBar = () => setVisible(false);
   const route = useRoute<RouteProp<RouteParams>>();
   const edit = route.params?.edit;
   const bookingDetails = route.params?.bookingDetails;
+
 
   const loadPatients = async () => {
     try {
@@ -86,16 +88,30 @@ export default function BookAppointmentScreen() {
 
 
   const bookAppointment = async () => {
-    const appointmentPayload = new AppointmentRequest();
-    appointmentPayload.appointmentDate = formatToYYYYMMDD(new Date(selectedDate));
-    appointmentPayload.appointmentType = "INITIAL";
-    appointmentPayload.clinicId = loggedInUserContext.clinicDetails.id;
-    appointmentPayload.doctorId = Number(selectedDoctor.value);
-    appointmentPayload.endTime = formatTimeHHMMSS24Hours(endTime);
-    appointmentPayload.startTime = formatTimeHHMMSS24Hours(startTime);
     try {
       setLoading(true)
-      const response = await patientService.createAppointment(appointmentPayload, selectedPatient.value);
+      let response:AppointmentResponse = undefined;
+      if(!edit){
+        const appointmentPayload = new AppointmentRequest();
+        appointmentPayload.appointmentDate = formatToYYYYMMDD(new Date(selectedDate));
+        appointmentPayload.appointmentType = "INITIAL";
+        appointmentPayload.clinicId = loggedInUserContext.clinicDetails.id;
+        appointmentPayload.doctorId = Number(selectedDoctor.value);
+        appointmentPayload.endTime = formatTimeHHMMSS24Hours(endTime);
+        appointmentPayload.startTime = formatTimeHHMMSS24Hours(startTime);
+        response = await patientService.createAppointment(appointmentPayload, selectedPatient.value);
+      }else{
+        const appUpdate = new AppointmentUpdateRequest()
+        appUpdate.appointmentDate = formatToYYYYMMDD(new Date(selectedDate));
+        appUpdate.appointmentType = ""
+        appUpdate.endTime = formatTimeHHMMSS24Hours(endTime);
+        appUpdate.startTime = formatTimeHHMMSS24Hours(startTime);
+        appUpdate.notes = note;
+        appUpdate.reason = reason;
+        response = await patientService.updateAppointment(appUpdate, bookingDetails.patientId.toString(),
+         bookingDetails.id.toString())
+      }
+      
       if (response) {
         Alert.alert(
           "Appointment Booked",
@@ -125,19 +141,22 @@ export default function BookAppointmentScreen() {
     })
     setDoctorsList(pt)
   }
-  console.log(loggedInUserContext)
-  console.log(clinicDoctors)
   useEffect(() => {
     if(!edit){
       loadPatients()
       loadDoctors();
     }else{
       const selItem: dropdownprops = { label: bookingDetails.doctorName, value: bookingDetails.doctorId.toString() };
+      setDoctorsList([selItem]);
       setSelectedDoctor(selItem)
+      
       const selPatientItem: dropdownprops = { label: bookingDetails.firstName+", "+bookingDetails.lastName, value: bookingDetails.patientId.toString() };
+      setPatientList([selPatientItem]);
       setSelectedpatient(selPatientItem)
-      setSelectedDate(bookingDetails.appointmentDate)
-      //setStartTime(bookingDetails.startTime)
+      setSelectedDate(new Date(bookingDetails.appointmentDate).toDateString())
+      setStartTime(new Date(bookingDetails.appointmentDate+"T"+bookingDetails.startTime))
+      setEndTime(new Date(bookingDetails.appointmentDate+"T"+bookingDetails.endTime))
+      setReason(bookingDetails.reason);
     }
     // const patientList =  patientService.getClinicPatients();
   }, [clinicDoctors])
@@ -148,7 +167,7 @@ export default function BookAppointmentScreen() {
         <Back nav='Mainscreen' tab='Appointments' />
         {/* Header */}
 
-        <Text style={styles.header}>Book Appointment</Text>
+        <Text style={styles.header}>{edit?"Update Appointment":"Book Appointment"}</Text>
 
         {/* Select Patient */}
         <View style={styles.viewMarginBottom}>
@@ -229,8 +248,8 @@ export default function BookAppointmentScreen() {
         <View style={styles.viewMarginBottom}>
           <Text style={styles.subHeaders}>Reason for Visit</Text>
           <TextInput
-            value={reason}
-            onChangeText={setReason}
+            value={edit?note:reason}
+            onChangeText={edit? setNote: setReason}
             style={styles.reasonsTextInput}
             multiline
           />
@@ -241,7 +260,7 @@ export default function BookAppointmentScreen() {
           style={styles.button}
           onPress={bookAppointment}
         >
-          Book Appointment
+          {edit?"Update Appointment":"Book Appointment"}
         </Button>
         <MdLodSnackbar visible={visible} message={error} onDismiss={onDismissSnackBar} />
       </ScrollView>

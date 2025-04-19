@@ -186,7 +186,7 @@ export interface MedicationRequest {
     notes: string;
   }
   
-  export interface AppointmentUpdateRequest {
+  export class AppointmentUpdateRequest {
     appointmentDate: string;
     startTime: string;
     endTime: string;
