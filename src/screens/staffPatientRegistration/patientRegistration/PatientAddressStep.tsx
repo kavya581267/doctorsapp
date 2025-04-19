@@ -20,7 +20,7 @@ interface StepProps {
 export const PatientAddress: React.FC<StepProps> = ({ nextStep, prevStep, formData, setFormData }) => {
     const [visible, setVisible] = useState(false);
     const onDismissSnackBar = () => setVisible(false);
-    const [checked,setChecked] = useState(false);
+    const [checked, setChecked] = useState(false);
 
     const onChangeT = (field, val) => {
         setFormData((prev) => {
@@ -31,8 +31,7 @@ export const PatientAddress: React.FC<StepProps> = ({ nextStep, prevStep, formDa
     }
 
     const validateFormFields = () => {
-        if (!isAnyFieldsEmpty(["address", "city", "state", "zipCode", "country", "emergencyContactName", "emergencyContactPhone"], formData) &&
-            isValidPhone(formData.phone)) {
+        if (!isAnyFieldsEmpty(["address", "city", "state", "zipCode", "country"], formData)) {
             setVisible(false);
             nextStep();
         } else {
@@ -80,37 +79,37 @@ export const PatientAddress: React.FC<StepProps> = ({ nextStep, prevStep, formDa
                     field="country"
                 />
                 <MdLogTextInput
-                    label="EmergencyContactName*"
+                    label="EmergencyContactName"
                     value={formData?.emergencyContactName}
                     left="human-male"
                     onTextChange={onChangeT}
                     field="emergencyContactName"
                 />
                 <MdLogTextInput
-                    label="EmergencyContactPhone*"
+                    label="EmergencyContactPhone"
                     value={formData?.emergencyContactPhone}
                     left="phone"
                     onTextChange={onChangeT}
                     field="emergencyContactPhone"
                     keyboard="phone-pad"
                 />
-                
-                <Checkbox.Item 
-                      label="Create user account?"
-                      status={checked ? "checked" : "unchecked"}
-                      onPress={()=>setChecked(!checked)}
-                      labelStyle={styles.chackBoxLabel}
+
+                <Checkbox.Item
+                    label="Create user account?"
+                    status={checked ? "checked" : "unchecked"}
+                    onPress={() => setChecked(!checked)}
+                    labelStyle={styles.chackBoxLabel}
                 />
 
-                {checked && 
+                {checked &&
                     <MdLogTextInput
-                    label="Password*"
-                    value={formData?.password}
-                    left="lock"
-                    onTextChange={onChangeT}
-                    field="password"
-                    secureEntry
-                />}
+                        label="Password*"
+                        value={formData?.password}
+                        left="lock"
+                        onTextChange={onChangeT}
+                        field="password"
+                        secureEntry
+                    />}
 
 
             </View>

@@ -17,8 +17,9 @@ interface StepProps {
 
 
 export const StaffAddress: React.FC<StepProps> = ({ nextStep, prevStep, formData, setFormData }) => {
-    const [visible,setVisible] = useState(false);
-    const onDismissSnackBar = () =>setVisible(false);
+    const [visible, setVisible] = useState(false);
+    const onDismissSnackBar = () => setVisible(false);
+    const [errorMessage, setErrorMessage] = useState("");
 
     const onChangeT = (field, val) => {
         setFormData((prev) => {
@@ -27,14 +28,22 @@ export const StaffAddress: React.FC<StepProps> = ({ nextStep, prevStep, formData
             return newS
         })
     }
-   
-    const validateFormFields = () =>{
-        if(!isAnyFieldsEmpty(["address","city","state","zipCode","country"],formData) &&
-              isValidPhone(formData.phone)){
+
+    const validateFormFields = () => {
+        if (!isAnyFieldsEmpty(["address", "city", "state", "zipCode", "country"], formData)) {
+            setVisible(true);
+            setErrorMessage("Please fill all required details");
+
+        }
+        if (formData.emergencyContactPhone) {
+            if (!isValidPhone(formData.emergencyContactPhone)) {
+                setVisible(true);
+                setErrorMessage("Please enter a valid phone number with country code. Eg : +91xxxxxxxxxx")
+            }
+
+        } else {
             setVisible(false);
             nextStep();
-        }else{
-            setVisible(true);
         }
     }
 
@@ -48,21 +57,21 @@ export const StaffAddress: React.FC<StepProps> = ({ nextStep, prevStep, formData
                     onTextChange={onChangeT}
                     field="address"
                 />
-                 <MdLogTextInput
+                <MdLogTextInput
                     label="City*"
                     value={formData?.city}
                     left="city"
                     onTextChange={onChangeT}
                     field="city"
                 />
-                 <MdLogTextInput
+                <MdLogTextInput
                     label="State*"
                     value={formData?.state}
                     left="home-group"
                     onTextChange={onChangeT}
                     field="state"
                 />
-                 <MdLogTextInput
+                <MdLogTextInput
                     label="ZipCode*"
                     value={formData?.zipCode}
                     left="zip-box"
@@ -70,21 +79,21 @@ export const StaffAddress: React.FC<StepProps> = ({ nextStep, prevStep, formData
                     field="zipCode"
                     keyboard="number-pad"
                 />
-                 <MdLogTextInput
+                <MdLogTextInput
                     label="Country*"
                     value={formData?.country}
                     left="map"
                     onTextChange={onChangeT}
                     field="country"
                 />
-                 <MdLogTextInput
+                <MdLogTextInput
                     label="EmergencyContactName"
                     value={formData?.emergencyContactName}
                     left="human-male"
                     onTextChange={onChangeT}
                     field="emergencyContactName"
                 />
-                 <MdLogTextInput
+                <MdLogTextInput
                     label="EmergencyContactPhone"
                     value={formData?.emergencyContactPhone}
                     left="phone"
@@ -92,17 +101,17 @@ export const StaffAddress: React.FC<StepProps> = ({ nextStep, prevStep, formData
                     field="emergencyContactPhone"
                     keyboard="phone-pad"
                 />
-                
+
             </View>
             <View style={styles.buttonFormat}>
-            <TouchableOpacity style={styles.buttonPrev} onPress={prevStep}>
-                   <Text style={styles.prevTxt}>Prev</Text>
-               </TouchableOpacity>
-               <TouchableOpacity style={styles.buttonNext} onPress={validateFormFields}>
-                   <Text style={styles.nextTxt}>Next</Text>
-               </TouchableOpacity>
-           </View>
-           <MdLodSnackbar visible={visible} onDismiss={onDismissSnackBar} message="Please fill all required details"/>
+                <TouchableOpacity style={styles.buttonPrev} onPress={prevStep}>
+                    <Text style={styles.prevTxt}>Prev</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.buttonNext} onPress={validateFormFields}>
+                    <Text style={styles.nextTxt}>Next</Text>
+                </TouchableOpacity>
+            </View>
+            <MdLodSnackbar visible={visible} onDismiss={onDismissSnackBar} message="Please fill all required details" />
         </View>
     )
 }

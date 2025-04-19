@@ -14,7 +14,7 @@ export default function SuccessScreen() {
     
     const navigation = useNavigation<NavigationProp<RootStackParamList>>();
     const route= useRoute();
-    const screen = route.params?.screen | "Mainscreen";
+    const {screen} = route.params;
 
     return (
         <SafeAreaView style={styles.container}>

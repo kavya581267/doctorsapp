@@ -16,9 +16,11 @@ export default function PatientReview({ prevStep, formData, submitForm }) {
         { label: 'State', value: formData.state },
         { label: 'Zip Code', value: formData.zipCode },
         { label: 'Country', value: formData.country },
-        { label: 'Emergency Contact Name', value: formData.emergencyContactName },
-        { label: 'Emergency Contact Phone', value: formData.emergencyContactPhone },
     ];
+    if (formData.emergencyContactName && formData.emergencyContactPhone) {
+        fields.push({ label: 'Emergency Contact Name', value: formData.emergencyContactName });
+        fields.push({ label: 'Emergency Contact Phone', value: formData.emergencyContactPhone });
+    }
 
     return (
 

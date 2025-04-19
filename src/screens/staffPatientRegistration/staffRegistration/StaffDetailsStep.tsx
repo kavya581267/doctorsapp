@@ -47,22 +47,19 @@ export const StaffDetails: React.FC<StepProps> = ({ nextStep, formData, setFormD
             setErrorMessage("Please fill all the required fields");
         }
         if(!isValidEmail(formData.email)){
-            setErrorMessage("Please fill all the required fields");
+            setVisible(true);
+            setErrorMessage("enter valid email");
         }
         if(!isValidPassword(formData.password)){
-            setErrorMessage("Please fill all the required fields");
+            setVisible(true);
+            setErrorMessage("Password must be at least 8 characters and include uppercase, lowercase, number, and special character.")
         }
         if(!isValidPhone(formData.phone)){
-            setErrorMessage("Please fill all the required fields");
-        }
-
-
-        if (!isAnyFieldsEmpty(["firstName", "lastName", "email", "password", "dateOfBirth", "gender", "phone"], formData) &&
-            isValidEmail(formData.email) && isValidPassword(formData.password) && isValidPhone(formData.phone)) {
-            setVisible(false);
-            nextStep();
+            setVisible(true);
+            setErrorMessage("Please enter a valid phone number with country code. Eg : +91xxxxxxxxxx")
         } else {
             setVisible(true);
+            nextStep();
         }
     }
 

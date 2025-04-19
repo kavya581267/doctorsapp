@@ -21,6 +21,7 @@ interface StepProps {
 export const PatientDetails: React.FC<StepProps> = ({ nextStep, formData, setFormData }) => {
     const [visible, setVisible] = useState(false);
     const onDismissSnackBar = () => setVisible(false);
+    const [errorMessage, setErrorMessage] = useState("");
 
     const genderOptions = [
         { label: "MALE", value: "MALE" },
@@ -39,12 +40,19 @@ export const PatientDetails: React.FC<StepProps> = ({ nextStep, formData, setFor
     }
 
     const validateFormFields = () => {
-        if (!isAnyFieldsEmpty(["firstName", "lastName", "email", "dateOfBirth", "gender", "phone", "bloodGroup"], formData) &&
-            isValidEmail(formData.email) && isValidPhone(formData.phone)) {
-            setVisible(false);
-            nextStep();
+        if (isAnyFieldsEmpty(["firstName", "lastName", "email", "dateOfBirth", "gender", "phone", "bloodGroup"], formData)) {
+            setErrorMessage("Please fill all the required fields");
+        }
+        if (!isValidEmail(formData.email)) {
+            setVisible(true);
+            setErrorMessage("enter valid email");
+        }
+        if (!isValidPhone(formData.phone)) {
+            setVisible(true);
+            setErrorMessage("Please enter a valid phone number with country code. Eg : +91xxxxxxxxxx")
         } else {
             setVisible(true);
+            nextStep();
         }
     }
 
