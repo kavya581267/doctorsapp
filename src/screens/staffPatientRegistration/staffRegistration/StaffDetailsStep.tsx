@@ -141,7 +141,7 @@ export const StaffDetails: React.FC<StepProps> = ({ nextStep, formData, setFormD
                 </TouchableOpacity>
             </View>
             </ScrollView>
-            <MdLodSnackbar visible={visible} onDismiss={onDismissSnackBar} message="Please fill all required details" />
+            <MdLodSnackbar visible={visible} onDismiss={onDismissSnackBar} message={errorMessage}/>
         </View>
     )
 }

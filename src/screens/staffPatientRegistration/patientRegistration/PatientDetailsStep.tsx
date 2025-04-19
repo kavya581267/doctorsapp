@@ -135,7 +135,7 @@ export const PatientDetails: React.FC<StepProps> = ({ nextStep, formData, setFor
                     <Text style={styles.nextTxt}>Next</Text>
                 </TouchableOpacity>
             </View>
-            <MdLodSnackbar visible={visible} onDismiss={onDismissSnackBar} message="Please fill all required details" />
+            <MdLodSnackbar visible={visible} onDismiss={onDismissSnackBar} message={errorMessage} />
         </View>
 
     )
