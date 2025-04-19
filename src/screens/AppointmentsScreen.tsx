@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Alert, ScrollView, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
+import { Alert, StyleSheet, TextInput, ScrollView, View } from 'react-native';
 import { Button, Text } from 'react-native-paper';
 import Back from '@components/Back';
 import { COLORS } from '@utils/colors';
@@ -16,6 +16,7 @@ import { NavigationProp, RouteProp, useNavigation, useRoute } from '@react-navig
 import { MdLodSnackbar } from '@components/MdLogSnacbar';
 import { AppointmentListResponse } from '@api/model/appointments/AppointmentListResponse';
 import { BookAppointmentScreenRouteParams, RootStackParamList } from '@components/MainNavigation';
+
 
 
 
@@ -49,6 +50,8 @@ export default function BookAppointmentScreen() {
   const [selectedDate, setSelectedDate] = useState(new Date().toDateString());
   const [reason, setReason] = useState('');
   const dates = getNextDates();
+  const [appointmentType, setAppointmentType] = useState("INITIAL");
+  const [appointmentStatus, setAppointmentStatus] = useState("");
   const { loggedInUserContext, clinicDoctors } = useContext(AuthContext);
   const [patients, setPatientList] = useState([]);
   const [doctors, setDoctorsList] = useState([]);
@@ -58,13 +61,27 @@ export default function BookAppointmentScreen() {
   const [startTime, setStartTime] = useState(new Date(2025, 3, 16, 18, 0));
   const [endTime, setEndTime] = useState(new Date(2025, 3, 16, 19, 0));
   const [error, setError] = useState("");
-  const [note,setNote] = useState("");
+  const [note, setNote] = useState("");
   const [visible, setVisible] = useState(false);
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const onDismissSnackBar = () => setVisible(false);
   const route = useRoute<RouteProp<RouteParams>>();
   const edit = route.params?.edit;
   const bookingDetails = route.params?.bookingDetails;
+
+  const appointmentTypes = [
+    { label: 'INITIAL', value: 'INITIAL' },
+    { label: 'FOLLOW_UP', value: 'FOLLOW_UP' }
+  ];
+
+  const AppointmentStatus = [
+    { label: 'SCHEDULED', value: 'SCHEDULED' },
+    { label: 'CONFIRMED', value: 'CONFIRMED' },
+    { label: 'CANCELLED', value: 'CANCELLED' },
+    { label: 'COMPLETED', value: 'COMPLETED' },
+    { label: 'NO_SHOW', value: 'NO_SHOW' },
+  ]
+
 
 
   const loadPatients = async () => {
@@ -90,32 +107,33 @@ export default function BookAppointmentScreen() {
   const bookAppointment = async () => {
     try {
       setLoading(true)
-      let response:AppointmentResponse = undefined;
-      if(!edit){
+      let response: AppointmentResponse = undefined;
+      if (!edit) {
         const appointmentPayload = new AppointmentRequest();
         appointmentPayload.appointmentDate = formatToYYYYMMDD(new Date(selectedDate));
-        appointmentPayload.appointmentType = "INITIAL";
+        appointmentPayload.appointmentType = appointmentType;
         appointmentPayload.clinicId = loggedInUserContext.clinicDetails.id;
         appointmentPayload.doctorId = Number(selectedDoctor.value);
         appointmentPayload.endTime = formatTimeHHMMSS24Hours(endTime);
         appointmentPayload.startTime = formatTimeHHMMSS24Hours(startTime);
         response = await patientService.createAppointment(appointmentPayload, selectedPatient.value);
-      }else{
+      } else {
         const appUpdate = new AppointmentUpdateRequest()
         appUpdate.appointmentDate = formatToYYYYMMDD(new Date(selectedDate));
-        appUpdate.appointmentType = ""
         appUpdate.endTime = formatTimeHHMMSS24Hours(endTime);
         appUpdate.startTime = formatTimeHHMMSS24Hours(startTime);
+        appUpdate.appointmentType = appointmentType;
+        appUpdate.status = appointmentStatus;
         appUpdate.notes = note;
         appUpdate.reason = reason;
         response = await patientService.updateAppointment(appUpdate, bookingDetails.patientId.toString(),
-         bookingDetails.id.toString())
+        bookingDetails.id.toString())
       }
-      
+
       if (response) {
         Alert.alert(
-          "Appointment Booked",
-          `Appointment booked for ${response.doctorName} on ${selectedDate}`,
+          edit? "Appointment Updated": "Appointment Booked",
+          `For ${response.doctorName} on ${selectedDate}`,
           [{
             text: "OK",
             onPress: () => navigation.navigate("Mainscreen", { tab: "Appointments" })
@@ -131,43 +149,45 @@ export default function BookAppointmentScreen() {
   }
 
 
-  const loadDoctors =  () => {
+  const loadDoctors = () => {
     const pt = [];
     console.log(clinicDoctors)
     clinicDoctors.forEach(item => {
       let vv = item.first_name + ", " + item.last_name;
-        const t: dropdownprops = { label: vv, value: item.user_id.toString() };
-        pt.push(t);
+      const t: dropdownprops = { label: vv, value: item.user_id.toString() };
+      pt.push(t);
     })
     setDoctorsList(pt)
   }
   useEffect(() => {
-    if(!edit){
+    if (!edit) {
       loadPatients()
       loadDoctors();
-    }else{
+    } else {
       const selItem: dropdownprops = { label: bookingDetails.doctorName, value: bookingDetails.doctorId.toString() };
       setDoctorsList([selItem]);
       setSelectedDoctor(selItem)
-      
-      const selPatientItem: dropdownprops = { label: bookingDetails.firstName+", "+bookingDetails.lastName, value: bookingDetails.patientId.toString() };
+
+      const selPatientItem: dropdownprops = { label: bookingDetails.firstName + ", " + bookingDetails.lastName, value: bookingDetails.patientId.toString() };
       setPatientList([selPatientItem]);
       setSelectedpatient(selPatientItem)
       setSelectedDate(new Date(bookingDetails.appointmentDate).toDateString())
-      setStartTime(new Date(bookingDetails.appointmentDate+"T"+bookingDetails.startTime))
-      setEndTime(new Date(bookingDetails.appointmentDate+"T"+bookingDetails.endTime))
+      setStartTime(new Date(bookingDetails.appointmentDate + "T" + bookingDetails.startTime))
+      setEndTime(new Date(bookingDetails.appointmentDate + "T" + bookingDetails.endTime))
       setReason(bookingDetails.reason);
+      setAppointmentType(bookingDetails.appointmentType);
+      setAppointmentStatus(bookingDetails.status)
     }
     // const patientList =  patientService.getClinicPatients();
   }, [clinicDoctors])
 
   return (
-    <View>
-      <ScrollView style={styles.container}>
+    <ScrollView>
+      <View style={styles.container}>
         <Back nav='Mainscreen' tab='Appointments' />
         {/* Header */}
 
-        <Text style={styles.header}>{edit?"Update Appointment":"Book Appointment"}</Text>
+        <Text style={styles.header}>{edit ? "Update Appointment" : "Book Appointment"}</Text>
 
         {/* Select Patient */}
         <View style={styles.viewMarginBottom}>
@@ -236,6 +256,7 @@ export default function BookAppointmentScreen() {
           </ScrollView>
         </View>
 
+
         <View style={styles.viewMarginBottom}>
           <Text style={styles.label}>Start Time</Text>
           <MdLogTimePicker value={startTime} onChange={setStartTime} />
@@ -244,12 +265,61 @@ export default function BookAppointmentScreen() {
           <Text style={styles.label}>End Time</Text>
           <MdLogTimePicker value={endTime} onChange={setEndTime} />
         </View>
+
+        {/* Appointment Type */}
+        <View style={styles.viewMarginBottom}>
+          <Text style={styles.subHeaders}>Appointment Type</Text>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+            {appointmentTypes.map((type, idx) => {
+              const isSelected = appointmentType === type.value;
+              return (
+                <Button
+                  key={idx}
+                  mode={isSelected ? 'contained' : 'outlined'}
+                  onPress={() => setAppointmentType(type.value)}
+                  style={[styles.selectDateBox, { backgroundColor: isSelected ? COLORS.primary : "" }]}
+                  contentStyle={{ flexDirection: 'column' }}
+                >
+                  <Text style={{ color: isSelected ? 'white' : 'black', fontSize: 13 }}>
+                    {type.value}
+                  </Text>
+                </Button>
+              );
+            })}
+          </ScrollView>
+        </View>
+
+        {/* Appointment Status */}
+        {edit &&
+          <View style={styles.viewMarginBottom}>
+            <Text style={styles.subHeaders}>Appointment Status</Text>
+            <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+              {AppointmentStatus.map((type, idx) => {
+                const isSelected = appointmentStatus === type.value;
+                return (
+                  <Button
+                    key={idx}
+                    mode={isSelected ? 'contained' : 'outlined'}
+                    onPress={() => setAppointmentStatus(type.value)}
+                    style={[styles.selectDateBox, { backgroundColor: isSelected ? COLORS.primary : "" }]}
+                    contentStyle={{ flexDirection: 'column' }}
+                  >
+                    <Text style={{ color: isSelected ? 'white' : 'black', fontSize: 13 }}>
+                      {type.value}
+                    </Text>
+                  </Button>
+                );
+              })}
+            </ScrollView>
+          </View>
+        }
+
         {/* Reason for Visit */}
         <View style={styles.viewMarginBottom}>
           <Text style={styles.subHeaders}>Reason for Visit</Text>
           <TextInput
-            value={edit?note:reason}
-            onChangeText={edit? setNote: setReason}
+            value={edit ? note : reason}
+            onChangeText={edit ? setNote : setReason}
             style={styles.reasonsTextInput}
             multiline
           />
@@ -260,12 +330,12 @@ export default function BookAppointmentScreen() {
           style={styles.button}
           onPress={bookAppointment}
         >
-          {edit?"Update Appointment":"Book Appointment"}
+          {edit ? "Update Appointment" : "Book Appointment"}
         </Button>
         <MdLodSnackbar visible={visible} message={error} onDismiss={onDismissSnackBar} />
-      </ScrollView>
+      </View>
       <MdLogActivityIndicator loading={loading} />
-    </View>
+    </ScrollView>
   );
 }
 
