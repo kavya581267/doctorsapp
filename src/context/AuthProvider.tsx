@@ -1,7 +1,7 @@
 import { ReactNode, useEffect, useState } from "react"
 import { AuthContext } from "./AuthContext"
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { LoginRequest, UserInfo } from "@api/model/auth/Auth";
+import { Doctor, LoginRequest, UserInfo } from "@api/model/auth/Auth";
 import { loginService } from "@api/loginService";
 import { ACCESS_TOKENS_CONTEXT, JWT_ACCESS_TOKEN, JWT_REFRESH_TOKEN, USER, USER_CONTEXT } from "@utils/constants";
 import { getObject, removeItem, storeObject } from "@utils/MdLogAsyncStorage";
@@ -11,6 +11,7 @@ import { LoggedInUserContext } from "@api/model/auth/LoggedinUserContext";
 import { isTokenExpired } from "@utils/jwt";
 import { AccessTokenContext } from "@api/model/auth/AccessTokensContext";
 import { clear } from "@utils/loadContextDetails";
+import { Staff } from "@api/model/staff/Staff";
 
 type Props = { children: ReactNode }
 
@@ -18,6 +19,8 @@ export const AuthProvider = ({ children }: Props) => {
   const [loading, setLoading] = useState(true);
   const [loggedInUserContext, setLoggedinUserContext] = useState<LoggedInUserContext | undefined>(undefined)
   const [accessTokenContext, setAccessTokenContext] = useState<AccessTokenContext | undefined>(undefined)
+  const [clinicDoctors, setClinicDoctors] = useState<Doctor[]>([])
+
 
   //check is usercontext exist
 
@@ -82,6 +85,7 @@ export const AuthProvider = ({ children }: Props) => {
       await storeObject(USER, response.user);
       await storeObject(JWT_REFRESH_TOKEN, response.refreshToken)
       await storeObject(JWT_ACCESS_TOKEN, response.accessToken)
+      setClinicDoctors(response.doctors)
 
 
       //set access context
@@ -121,7 +125,7 @@ export const AuthProvider = ({ children }: Props) => {
   };
 
   return (
-    <AuthContext.Provider value={{ login, logout, loading, loggedInUserContext }}>
+    <AuthContext.Provider value={{ login, logout, loading, loggedInUserContext, clinicDoctors }}>
       {children}
     </AuthContext.Provider>
   )

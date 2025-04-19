@@ -1,4 +1,12 @@
 import { Gender, Role } from "../enums";
+import { Staff } from "../staff/Staff";
+
+
+export interface Doctor{
+  first_name: string;
+  last_name: string;
+  user_id: number;
+}
 
 export interface LoginResponse {
   accessToken: string;
@@ -6,6 +14,8 @@ export interface LoginResponse {
   expiresIn: number;
   user: UserInfo;
   requiresMfa: boolean;
+  clinicId: number;
+  doctors: Doctor[];
 }
 
 export class UserInfo {

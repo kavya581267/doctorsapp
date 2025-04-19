@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Alert, ScrollView, StyleSheet, TextInput, View } from 'react-native';
+import { Alert, ScrollView, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
 import { Button, Text } from 'react-native-paper';
 import Back from '@components/Back';
 import { COLORS } from '@utils/colors';
@@ -43,7 +43,7 @@ export default function BookAppointmentScreen() {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [reason, setReason] = useState('');
   const dates = getNextDates();
-  const { loggedInUserContext } = useContext(AuthContext);
+  const { loggedInUserContext, clinicDoctors } = useContext(AuthContext);
   const [patients, setPatientList] = useState([]);
   const [doctors, setDoctorsList] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -117,24 +117,23 @@ export default function BookAppointmentScreen() {
   }
 
 
-  const loadDoctors = async () => {
-    const staffList = await staffService.getClinicStaff(loggedInUserContext?.clinicDetails.id.toString());
+  const loadDoctors =  () => {
     const pt = [];
-    staffList.forEach(item => {
-      if (item.roleName === Role.DOCTOR.toString()) {
-        let vv = item.firstName + ", " + item.phone;
-        const t: dropdownprops = { label: vv, value: item.id.toString() };
+    console.log(clinicDoctors)
+    clinicDoctors.forEach(item => {
+      let vv = item.first_name + ", " + item.last_name;
+        const t: dropdownprops = { label: vv, value: item.user_id.toString() };
         pt.push(t);
-      }
     })
     setDoctorsList(pt)
   }
+  console.log(loggedInUserContext)
+  console.log(clinicDoctors)
   useEffect(() => {
     loadPatients()
     loadDoctors();
     // const patientList =  patientService.getClinicPatients();
-
-  }, [])
+  }, [clinicDoctors])
 
   return (
     <View>
@@ -176,6 +175,36 @@ export default function BookAppointmentScreen() {
             itemTextStyle={{ color: '#555', fontSize: 16 }}
             itemContainerStyle={{ backgroundColor: '#f5f5f5', borderRadius: 10 }}
             inputSearchStyle={{ backgroundColor: "f5f5f5" }}
+            renderItem={(item) => {
+              if (doctors.length === 0) {
+                return (
+                  <View style={{ padding: 10, alignItems: 'center' }}>
+                    <Text>No doctors found.</Text>
+                    <TouchableOpacity
+                      onPress={() => {
+                        // Add your "Add Doctor" logic here
+                        console.log('Add Doctor clicked');
+                      }}
+                      style={{
+                        marginTop: 10,
+                        backgroundColor: '#007bff',
+                        paddingHorizontal: 15,
+                        paddingVertical: 8,
+                        borderRadius: 6,
+                      }}
+                    >
+                      <Text style={{ color: '#fff' }}>Add Doctor</Text>
+                    </TouchableOpacity>
+                  </View>
+                );
+              }
+    
+              return (
+                <View style={{ padding: 10 }}>
+                  <Text>{item.label}</Text>
+                </View>
+              );
+            }}
           />
         </View>
 

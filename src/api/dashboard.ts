@@ -11,13 +11,13 @@ export const dashBoardService = {
         const user:UserInfo =await getUser();
         let url;
         const queryParam = {
-            id:user.internalUserId
+            id:user.internalUserId,
         }
-        if(user.roles[0]===Role.DOCTOR){
-            queryParam.role = Role.DOCTOR;
-            url =  DOCTOR_HOME_DASHBOARD_API;
-        }else{
+        if(user.roles[0]===Role.ADMIN){
             url =ADMIN_HOME_DASHBOARD_API;
+        }else{
+            queryParam.role = user.roles[0];
+            url =  DOCTOR_HOME_DASHBOARD_API;
         }
 
         try {
