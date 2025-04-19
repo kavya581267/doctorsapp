@@ -348,16 +348,15 @@ const styles = StyleSheet.create({
   header: {
     fontSize: 18,
     fontWeight: '600',
-    marginBottom: 25,
-    textAlign: "center"
+    marginBottom: 10,
+    textAlign: "left"
   },
   viewMarginBottom: {
-    marginBottom: 15,
-    marginTop: 10
+    marginTop: 20
   },
   subHeaders: {
     fontWeight: '600',
-    marginBottom: 10
+    marginBottom: 5
   },
   searchInput: {
     borderWidth: 1,
@@ -365,7 +364,6 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     paddingHorizontal: 12,
     paddingVertical: 10,
-    marginBottom: 10,
   },
   selectDateBox: {
     marginRight: 8,
@@ -411,6 +409,7 @@ const styles = StyleSheet.create({
   },
   label: {
     fontWeight: '600',
+    marginBottom:5
   },
   timeBoxRow: {
     flexDirection: 'row',
