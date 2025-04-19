@@ -11,7 +11,7 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import Back from '@components/Back';
 import { COLORS } from '@utils/colors';
-import { useNavigation } from '@react-navigation/native';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { doctorService } from '@api/doctorService';
 import { MdLogActivityIndicator } from '@components/MdLogActivityIndicator';
 import { getUser } from '@utils/loadContextDetails';
@@ -21,16 +21,10 @@ import { AppointmentListResponse } from '@api/model/appointments/AppointmentList
 import { clinicService } from '@api/clinicService';
 import { Badge } from 'react-native-paper';
 import { convertTo12Hour, formatDateToMonthDay, formatToYYYYMMDD, getFutureDate, getPastDate } from '@utils/utils';
-
-type RouteParams = {
-  params: {
-    edit?: boolean; // or string, depending on your use case
-    bookingDetails?:any 
-  };
-};
+import { RootStackParamList } from '@components/MainNavigation';
 
 const AppointmentsListScreen = () => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const [selected, setSelected] = useState(0);
   const [loading, setLoading] = useState(false);
   const { loggedInUserContext } = useContext(AuthContext);
@@ -48,7 +42,7 @@ const AppointmentsListScreen = () => {
   };
 
   const editAppointment = (item) => {
-    navigation.navigate("BookAppointmentScreen",{existingAppointment: item});
+    navigation.navigate("BookAppointmentScreen",{edit: true,  bookingDetails:item});
   };
 
   const fetchAppointments = async () => {
@@ -89,7 +83,7 @@ const AppointmentsListScreen = () => {
   }, []);
 
   const renderItem = ({ item }) => (
-    <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('PatientMedical',{edit:true, bookingDetails: item})}>
+    <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('PatientMedical',{ appointment: item})}>
       <View>
         <Text style={styles.patient}>{item.firstName} {item.lastName}</Text>
         <Text style={styles.doctor}>{'Dr. ' + item.doctorName}</Text>

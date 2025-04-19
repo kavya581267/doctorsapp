@@ -12,9 +12,10 @@ import { DayOfWeek, Role } from '@api/model/enums';
 import { MdLogTimePicker } from '@components/MdLogTimePicker';
 import { AppointmentRequest } from '@api/model/patient/PatientModels';
 import { formatTimeHHMMSS, formatTimeHHMMSS24Hours, formatToYYYYMMDD } from '@utils/utils';
-import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { NavigationProp, RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { MdLodSnackbar } from '@components/MdLogSnacbar';
 import { AppointmentListResponse } from '@api/model/appointments/AppointmentListResponse';
+import { BookAppointmentScreenRouteParams, RootStackParamList } from '@components/MainNavigation';
 
 
 
@@ -40,10 +41,7 @@ type dropdownprops = {
 }
 
 type RouteParams = {
-  params: {
-    edit?: boolean; // or string, depending on your use case
-    bookingDetails?:AppointmentListResponse 
-  };
+  params: BookAppointmentScreenRouteParams;
 };
 
 export default function BookAppointmentScreen() {
@@ -61,7 +59,7 @@ export default function BookAppointmentScreen() {
   const [endTime, setEndTime] = useState(new Date(2025, 3, 16, 19, 0));
   const [error, setError] = useState("");
   const [visible, setVisible] = useState(false);
-  const navigation = useNavigation();
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const onDismissSnackBar = () => setVisible(false);
   const route = useRoute<RouteProp<RouteParams>>();
   const edit = route.params?.edit;

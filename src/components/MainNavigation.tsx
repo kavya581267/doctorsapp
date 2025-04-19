@@ -29,13 +29,22 @@ import DoctorScheduleScreen from '@screens/DoctorSchedule';
 import BookAppointmentScreen from '@screens/AppointmentsScreen';
 import PatientMedical from '@screens/patientVitals/PatientMedical';
 import AppointmentsListScreen from '@screens/AppontmentsListScree';
+import { AppointmentListResponse } from '@api/model/appointments/AppointmentListResponse';
 
+export type BookAppointmentScreenRouteParams = {
+      edit?: boolean; // or string, depending on your use case
+      bookingDetails?:AppointmentListResponse 
+};
+
+export type MainScreenRouteParams = {
+    tab: string
+};
 
 
 
 export type RootStackParamList = {
     LaunchScreen: undefined;
-    Mainscreen: undefined;
+    Mainscreen: MainScreenRouteParams;
     SignIn: undefined;
     StaffRegistrationScreen: undefined;
     PatientRegistrationScreen: undefined;
@@ -56,7 +65,7 @@ export type RootStackParamList = {
     StaffDirectoryScreen: undefined;
     UserProfileScreen: undefined;
     ClinicOverview: undefined;
-    BookAppointmentScreen:undefined;
+    BookAppointmentScreen: BookAppointmentScreenRouteParams;
     DoctorScheduleScreen: undefined;
     AppointmentsListScreen:undefined
 
