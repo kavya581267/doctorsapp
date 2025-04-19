@@ -55,7 +55,7 @@ const PatientDirectoryScreen = () => {
 
 
   useEffect(()=>{
-      fetchStaffLst();
+      //fetchStaffLst();
   },[])
 
   const filterStaff = (searchText) => {

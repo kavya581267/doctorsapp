@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { View, Text, TextInput, Image, Touchable, TouchableOpacity, Alert, useWindowDimensions, Platform } from "react-native";
+import { View, Text, TextInput, Image, TouchableOpacity, Alert, useWindowDimensions, Platform } from "react-native";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { useNavigation, useRoute } from "@react-navigation/native";
@@ -18,7 +18,7 @@ type Props = {
     tab?: string
 }
 
-export default function Back({ nav, loading = false, tab =undefined }: Props) {
+export default function Back({ nav, loading = false, tab = undefined }: Props) {
     const navigation = useNavigation();
     const route = useRoute();
     const [clinicName, setClinicName] = useState("");
@@ -47,13 +47,13 @@ export default function Back({ nav, loading = false, tab =undefined }: Props) {
         <View>
             <View style={styles.header}>
                 <View style={{ alignItems: "center", justifyContent: "center", width: logoWidth, flexDirection: "row" }}>
-                    {nav ? <AntDesign name="arrowleft" style={{ marginLeft: 35 }} size={24} color="black" onPress={() => navigation.navigate(nav, {tab:tab})} /> :
+                    {nav ? <AntDesign name="arrowleft" style={{ marginLeft: 35 }} size={24} color="black" onPress={() => navigation.navigate(nav, { tab: tab })} /> :
                         ""}
-                    <Image 
-                        source={require('../../assets/logo.png')}
-                        style={{ aspectRatio: 105 / 25, width: "100%", marginLeft: 15 }}
-                        resizeMode="contain" // Ensures the whole logo fits inside
-                    />
+                        <Image
+                            source={require('../../assets/logo.png')}
+                            style={{ aspectRatio: 105 / 25, width: "100%", marginLeft: 15 }}
+                            resizeMode="contain" // Ensures the whole logo fits inside
+                        />
                 </View>
                 {
                     isWeb && (

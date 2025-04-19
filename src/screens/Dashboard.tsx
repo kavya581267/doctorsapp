@@ -29,7 +29,7 @@ export default function DashboardScreen() {
             bgColor: '#E6F0FB',
             icon: <Ionicons name="information-circle-outline" size={24} color="#2F80ED" />,
             navPage: "ClinicOverview",
-            roles: ['DOCTOR', 'ADMIN'],
+            roles: ['DOCTOR', 'ADMIN',"FRONT_OFFICE","NURSE"],
         },
         {
             label: 'New Staff',
@@ -43,13 +43,13 @@ export default function DashboardScreen() {
             bgColor: '#E6F8ED',
             icon: <Ionicons name="calendar-outline" size={24} color="#27AE60" />,
             navPage: "ClinicScheduleScreen",
-            roles: ['DOCTOR', 'ADMIN'],
+            roles: ['DOCTOR', 'ADMIN',"FRONT_OFFICE","NURSE"],
         },
         {
             label: 'Holidays',
             bgColor: '#FDEAEA',
             icon: <MaterialIcons name="event-note" size={24} color="#EB5757" />,
-            roles: ['DOCTOR', 'ADMIN'],
+            roles: ['DOCTOR', 'ADMIN',"FRONT_OFFICE","NURSE"],
         },
         {
             label: 'Your Schedule',
@@ -63,13 +63,13 @@ export default function DashboardScreen() {
             bgColor: '#FFF4E5',
             icon: <FontAwesome5 name="user-plus" size={20} color="#F2994A" />,
             navPage: "PatientRegistrationScreen",
-            roles: ['ADMIN'],
+            roles: ['ADMIN',"FRONT_OFFICE","NURSE"],
         },
         {
             label: 'Appointments',
             bgColor: '#E6F9F8',
             icon: <Feather name="activity" size={20} color="#2D9CDB" />,
-            roles: ['DOCTOR', 'ADMIN'],
+            roles: ['DOCTOR', 'FRONT_OFFICE',"NURSE"],
         },
     ];
 

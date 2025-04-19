@@ -54,7 +54,7 @@ const StaffDirectoryScreen = () => {
 
 
   useEffect(() => {
-    fetchStaffLst();
+    //fetchStaffLst();
   }, [])
 
   const filterStaff = (searchText) => {
