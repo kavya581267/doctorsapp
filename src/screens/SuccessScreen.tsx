@@ -13,6 +13,9 @@ import { RootStackParamList } from "@components/MainNavigation";
 export default function SuccessScreen() {
     
     const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+    const route= useRoute();
+    const screen = route.params?.screen | "Mainscreen";
+
     return (
         <SafeAreaView style={styles.container}>
             <View >
@@ -31,9 +34,9 @@ export default function SuccessScreen() {
                 </Text>
                 <Button
                     mode="contained"
-                    onPress={() => navigation.navigate("Mainscreen")}
+                    onPress={() => navigation.navigate(screen)}
                     style={styles.button}>
-                    Sign in page
+                    Ok
                 </Button>
 
             </View>

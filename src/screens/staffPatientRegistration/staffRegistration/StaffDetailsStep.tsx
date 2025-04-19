@@ -24,6 +24,7 @@ interface StepProps {
 export const StaffDetails: React.FC<StepProps> = ({ nextStep, formData, setFormData }) => {
     const [visible, setVisible] = useState(false);
     const onDismissSnackBar = () => setVisible(false);
+    const [errorMessage, setErrorMessage] = useState("");
    
     const genderOptions = [
         { label: "MALE", value: "MALE" },
@@ -41,6 +42,21 @@ export const StaffDetails: React.FC<StepProps> = ({ nextStep, formData, setFormD
     }
 
     const validateFormFields = () => {
+
+        if(isAnyFieldsEmpty(["firstName", "lastName", "email", "password", "dateOfBirth", "gender", "phone"], formData)){
+            setErrorMessage("Please fill all the required fields");
+        }
+        if(!isValidEmail(formData.email)){
+            setErrorMessage("Please fill all the required fields");
+        }
+        if(!isValidPassword(formData.password)){
+            setErrorMessage("Please fill all the required fields");
+        }
+        if(!isValidPhone(formData.phone)){
+            setErrorMessage("Please fill all the required fields");
+        }
+
+
         if (!isAnyFieldsEmpty(["firstName", "lastName", "email", "password", "dateOfBirth", "gender", "phone"], formData) &&
             isValidEmail(formData.email) && isValidPassword(formData.password) && isValidPhone(formData.phone)) {
             setVisible(false);

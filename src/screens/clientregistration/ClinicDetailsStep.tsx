@@ -31,7 +31,7 @@ export const ClinicDetails: React.FC<StepProps> = ({ nextStep, formData, setForm
             setErrorMessage("Please fill all required details");
         } else if (!isValidEmail(formData.clinicEmail)) {
             setVisible(true);
-            setErrorMessage("enter valid email");
+            setErrorMessage("Enter valid email");
         }
         else if (!isValidPhone(formData.clinicPhone)) {
             setVisible(true);

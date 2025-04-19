@@ -34,7 +34,7 @@ export default function StaffRegistrationScreen() {
     setLoading(true);
      formData.clinicId = loggedInUserContext.userDetails.clinicId;
      const response = await registrationService.registerStaff(formData);
-     navigation.navigate("SuccessScreen");
+     navigation.navigate("SuccessScreen",{screen:"Mainscreen"});
    }catch(error){
     setLoading(false);
     setErrorMessage(error.toString())

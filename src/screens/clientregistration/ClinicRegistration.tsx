@@ -36,7 +36,7 @@ export default function ClinicRegistration() {
         try {
             setLoading(true)
             const responce = await registrationService.registerAdmin(formData);
-            navigation.navigate("SuccessScreen");
+            navigation.navigate("SuccessScreen",{screen:"Signup"});
         } catch (error) {
             setVisible(true);
             setErrorMessage(error.toString())

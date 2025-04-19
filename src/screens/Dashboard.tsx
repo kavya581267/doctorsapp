@@ -1,21 +1,15 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, TextInput, Dimensions } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, ScrollView, TouchableOpacity, Image, TextInput, Dimensions } from 'react-native';
 import { Ionicons, MaterialIcons, FontAwesome5, Feather } from '@expo/vector-icons';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { styles } from '@styles/dashboardStyles'
 import { useNavigation } from '@react-navigation/native';
 import Back from '@components/Back';
-import { Avatar } from 'react-native-paper';
-import { convertTo12Hour, formatToYYYYMMDD, getAvatarName, getFutureDate } from '@utils/utils';
+import { convertTo12Hour} from '@utils/utils';
 import { dashBoardService } from '@api/dashboard';
 import { MdLogActivityIndicator } from '@components/MdLogActivityIndicator';
 import { storeObject } from '@utils/MdLogAsyncStorage';
 import { CLINIC_CONTEXT } from '@utils/constants';
 import { getUser } from '@utils/loadContextDetails';
-import { Role } from '@api/model/enums';
-import { AppointmentListResponse } from '@api/model/appointments/AppointmentListResponse';
-import { doctorService } from '@api/doctorService';
-import { clinicService } from '@api/clinicService';
 import EmptyListScreen from '@components/Empty';
 const { width, height } = Dimensions.get("window");
 
@@ -171,7 +165,7 @@ export default function DashboardScreen() {
 
                 {appointmentsToday.map((appt, index) => (
                     <View key={index} style={styles.apptCard}>
-                        <Image source={{ uri: "https://i.pravatar.cc/100?img=5" }} style={styles.apptAvatar} />
+                        <Image source={require("../../assets/user-avatar.png")} style={styles.apptAvatar} />
                         <View style={{ flex: 1 }}>
                             <Text style={styles.apptName}>Dr. {appt.doctorFirstName} {appt.doctorLastName}</Text>
                             <Text style={styles.apptDesc}>{appt.patientFirstName} {appt.patientLastName}</Text>
@@ -202,7 +196,7 @@ const appointments = [
         reason: 'General Checkup',
         time: '09:30 AM',
         status: 'Confirmed',
-        avatar: 'https://i.pravatar.cc/100?img=5',
+        avatar: require("../../assets/user-avatar.png"),
     },
     {
         name: 'Mike Peters',

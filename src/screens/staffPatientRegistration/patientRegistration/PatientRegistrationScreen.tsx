@@ -34,9 +34,10 @@ export default function PatientRegistrationScreen() {
       setLoading(true);
       formData.clinicId = loggedInUserContext.userDetails.clinicId;
       const response = await registrationService.registerPatient(formData);
-      navigation.navigate("SuccessScreen");
+      navigation.navigate("SuccessScreen",{screen:"Mainscreen"});
     } catch (error) {
       setLoading(false);
+      setVisible(true);
       setErrorMessage(error.toString())
     }
   };
