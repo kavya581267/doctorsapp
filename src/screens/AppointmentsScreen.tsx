@@ -11,9 +11,10 @@ import { MdLogActivityIndicator } from '@components/MdLogActivityIndicator';
 import { DayOfWeek, Role } from '@api/model/enums';
 import { MdLogTimePicker } from '@components/MdLogTimePicker';
 import { AppointmentRequest } from '@api/model/patient/PatientModels';
-import { formatTimeHHMMSS, formatTimeHHMMSS24Hours } from '@utils/utils';
-import { useNavigation } from '@react-navigation/native';
+import { formatTimeHHMMSS, formatTimeHHMMSS24Hours, formatToYYYYMMDD } from '@utils/utils';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { MdLodSnackbar } from '@components/MdLogSnacbar';
+import { AppointmentListResponse } from '@api/model/appointments/AppointmentListResponse';
 
 
 
@@ -38,9 +39,16 @@ type dropdownprops = {
   value: string
 }
 
+type RouteParams = {
+  params: {
+    edit?: boolean; // or string, depending on your use case
+    bookingDetails?:AppointmentListResponse 
+  };
+};
+
 export default function BookAppointmentScreen() {
 
-  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [selectedDate, setSelectedDate] = useState(new Date().toDateString());
   const [reason, setReason] = useState('');
   const dates = getNextDates();
   const { loggedInUserContext, clinicDoctors } = useContext(AuthContext);
@@ -55,17 +63,9 @@ export default function BookAppointmentScreen() {
   const [visible, setVisible] = useState(false);
   const navigation = useNavigation();
   const onDismissSnackBar = () => setVisible(false);
-
-  const formatTime = (date: Date) =>
-    date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-
-  function formatToYYYYMMDD(date: Date) {
-    date = new Date(date);
-    const year = date.getFullYear();
-    const month = `${date.getMonth() + 1}`.padStart(2, '0'); // Months are 0-indexed
-    const day = `${date.getDate()}`.padStart(2, '0');
-    return `${year}-${month}-${day}`;
-  }
+  const route = useRoute<RouteProp<RouteParams>>();
+  const edit = route.params?.edit;
+  const bookingDetails = route.params?.bookingDetails;
 
   const loadPatients = async () => {
     try {
@@ -89,7 +89,7 @@ export default function BookAppointmentScreen() {
 
   const bookAppointment = async () => {
     const appointmentPayload = new AppointmentRequest();
-    appointmentPayload.appointmentDate = formatToYYYYMMDD(selectedDate);
+    appointmentPayload.appointmentDate = formatToYYYYMMDD(new Date(selectedDate));
     appointmentPayload.appointmentType = "INITIAL";
     appointmentPayload.clinicId = loggedInUserContext.clinicDetails.id;
     appointmentPayload.doctorId = Number(selectedDoctor.value);
@@ -130,8 +130,17 @@ export default function BookAppointmentScreen() {
   console.log(loggedInUserContext)
   console.log(clinicDoctors)
   useEffect(() => {
-    loadPatients()
-    loadDoctors();
+    if(!edit){
+      loadPatients()
+      loadDoctors();
+    }else{
+      const selItem: dropdownprops = { label: bookingDetails.doctorName, value: bookingDetails.doctorId.toString() };
+      setSelectedDoctor(selItem)
+      const selPatientItem: dropdownprops = { label: bookingDetails.firstName+", "+bookingDetails.lastName, value: bookingDetails.patientId.toString() };
+      setSelectedpatient(selPatientItem)
+      setSelectedDate(bookingDetails.appointmentDate)
+      //setStartTime(bookingDetails.startTime)
+    }
     // const patientList =  patientService.getClinicPatients();
   }, [clinicDoctors])
 
@@ -157,6 +166,7 @@ export default function BookAppointmentScreen() {
             itemTextStyle={{ color: '#555', fontSize: 16 }}
             itemContainerStyle={{ backgroundColor: '#f5f5f5', borderRadius: 10 }}
             inputSearchStyle={{ backgroundColor: "f5f5f5" }}
+            disable={edit}
           />
         </View>
 
@@ -175,36 +185,7 @@ export default function BookAppointmentScreen() {
             itemTextStyle={{ color: '#555', fontSize: 16 }}
             itemContainerStyle={{ backgroundColor: '#f5f5f5', borderRadius: 10 }}
             inputSearchStyle={{ backgroundColor: "f5f5f5" }}
-            renderItem={(item) => {
-              if (doctors.length === 0) {
-                return (
-                  <View style={{ padding: 10, alignItems: 'center' }}>
-                    <Text>No doctors found.</Text>
-                    <TouchableOpacity
-                      onPress={() => {
-                        // Add your "Add Doctor" logic here
-                        console.log('Add Doctor clicked');
-                      }}
-                      style={{
-                        marginTop: 10,
-                        backgroundColor: '#007bff',
-                        paddingHorizontal: 15,
-                        paddingVertical: 8,
-                        borderRadius: 6,
-                      }}
-                    >
-                      <Text style={{ color: '#fff' }}>Add Doctor</Text>
-                    </TouchableOpacity>
-                  </View>
-                );
-              }
-    
-              return (
-                <View style={{ padding: 10 }}>
-                  <Text>{item.label}</Text>
-                </View>
-              );
-            }}
+            disable={edit}
           />
         </View>
 

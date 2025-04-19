@@ -66,10 +66,11 @@ export default function DashboardScreen() {
             roles: ['ADMIN',"FRONT_OFFICE","NURSE"],
         },
         {
-            label: 'Appointments',
+            label: 'Book Appointment',
             bgColor: '#E6F9F8',
             icon: <Feather name="activity" size={20} color="#2D9CDB" />,
             roles: ['DOCTOR', 'FRONT_OFFICE',"NURSE"],
+            navPage: "BookAppointmentScreen"
         },
     ];
 

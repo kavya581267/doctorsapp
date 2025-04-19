@@ -3,7 +3,7 @@ import { AuthContext } from "./AuthContext"
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Doctor, LoginRequest, UserInfo } from "@api/model/auth/Auth";
 import { loginService } from "@api/loginService";
-import { ACCESS_TOKENS_CONTEXT, JWT_ACCESS_TOKEN, JWT_REFRESH_TOKEN, USER, USER_CONTEXT } from "@utils/constants";
+import { ACCESS_TOKENS_CONTEXT, DOCTORS_LIST, JWT_ACCESS_TOKEN, JWT_REFRESH_TOKEN, USER, USER_CONTEXT } from "@utils/constants";
 import { getObject, removeItem, storeObject } from "@utils/MdLogAsyncStorage";
 import { initializeToken } from "@api/apiService";
 import { dashBoardService } from "@api/dashboard";
@@ -19,15 +19,17 @@ export const AuthProvider = ({ children }: Props) => {
   const [loading, setLoading] = useState(true);
   const [loggedInUserContext, setLoggedinUserContext] = useState<LoggedInUserContext | undefined>(undefined)
   const [accessTokenContext, setAccessTokenContext] = useState<AccessTokenContext | undefined>(undefined)
-  const [clinicDoctors, setClinicDoctors] = useState<Doctor[]>([])
+  const [clinicDoctors, setClinicDoctors] = useState<Doctor[] | undefined>([])
 
 
   //check is usercontext exist
 
   const isLoggedInUserContext = async () => {
     const loggedInUserContext = await getObject<LoggedInUserContext>(USER_CONTEXT);
+    const docs = await getObject<Doctor[]>(DOCTORS_LIST)
     if (loggedInUserContext) {
       setLoggedinUserContext(loggedInUserContext);
+      setClinicDoctors(docs)
       return true;
     }
       return false;
@@ -79,14 +81,15 @@ export const AuthProvider = ({ children }: Props) => {
 
   const login = async (loginRequest: LoginRequest) => {
     try {
+      setLoading(true)
       const response = await loginService.login(loginRequest);
 
       //legacy to remove
       await storeObject(USER, response.user);
       await storeObject(JWT_REFRESH_TOKEN, response.refreshToken)
       await storeObject(JWT_ACCESS_TOKEN, response.accessToken)
+      await storeObject(DOCTORS_LIST, response.doctors);
       setClinicDoctors(response.doctors)
-
 
       //set access context
       const accessTokenContext: AccessTokenContext = new AccessTokenContext();
@@ -109,8 +112,10 @@ export const AuthProvider = ({ children }: Props) => {
       await storeObject(USER_CONTEXT, loginUserContext);
       setLoggedinUserContext(loginUserContext);
       
+      setLoading(false)
       return true;
     } catch (error) {
+      setLoading(false)
       throw error;
     }
   };

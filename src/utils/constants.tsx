@@ -11,6 +11,7 @@ export const USER = "user";
 export const USER_CONTEXT="user_context";
 export const ACCESS_TOKENS_CONTEXT= "access_tokens";
 export const CLINIC_CONTEXT="clinic_context";
+export const DOCTORS_LIST="doc_list";
 
 
 

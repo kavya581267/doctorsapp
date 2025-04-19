@@ -22,6 +22,13 @@ import { clinicService } from '@api/clinicService';
 import { Badge } from 'react-native-paper';
 import { convertTo12Hour, formatDateToMonthDay, formatToYYYYMMDD, getFutureDate, getPastDate } from '@utils/utils';
 
+type RouteParams = {
+  params: {
+    edit?: boolean; // or string, depending on your use case
+    bookingDetails?:any 
+  };
+};
+
 const AppointmentsListScreen = () => {
   const navigation = useNavigation();
   const [selected, setSelected] = useState(0);
@@ -82,7 +89,7 @@ const AppointmentsListScreen = () => {
   }, []);
 
   const renderItem = ({ item }) => (
-    <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('PatientMedical',{appointment:item})}>
+    <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('PatientMedical',{edit:true, bookingDetails: item})}>
       <View>
         <Text style={styles.patient}>{item.firstName} {item.lastName}</Text>
         <Text style={styles.doctor}>{'Dr. ' + item.doctorName}</Text>
