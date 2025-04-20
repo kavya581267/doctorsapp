@@ -3,7 +3,7 @@ import { staffService } from "@api/staffService";
 import Back from "@components/Back"
 import { MdLogActivityIndicator } from "@components/MdLogActivityIndicator";
 import { MdLodSnackbar } from "@components/MdLogSnacbar";
-import { useRoute } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import { StyleSheet, Text, View } from "react-native"
 import { Dropdown } from "react-native-element-dropdown";
@@ -13,9 +13,10 @@ import { Avatar, Button, Card, Divider, Icon, TextInput } from "react-native-pap
 
 
 export const StaffProffileScreen = () => {
+    const navigation = useNavigation();
     const route = useRoute();
     const { staffDetails } = route?.params;
-    console.log(staffDetails);
+
     const [isEditing, setIsEditing] = useState(false);
     const [role, setRole] = useState(" ");
     const [startDate, setStartDate] = useState("");
@@ -174,13 +175,26 @@ export const StaffProffileScreen = () => {
                         </Button>
                     </>
                 ) : (
-                    <Button
+                    <>
+                     <Button
                         mode="outlined"
                         icon="pencil"
                         style={styles.actionButton}
                         onPress={toggleEdit}>
                         Edit Profile
                     </Button>
+
+                    {role === "DOCTOR" &&(
+                         <Button
+                         mode="outlined"
+                         icon="calendar"
+                         style={styles.actionButton}
+                         onPress={()=>navigation.navigate("DoctorScheduleScreen",{doctorDetails: staffDetails})}>
+                         Manage Schedule & Exceptions
+                     </Button>
+                    )}
+                    </>
+                   
                 )
             }
 

@@ -75,12 +75,9 @@ const StaffDirectoryScreen = () => {
   const renderStaffCard: ListRenderItem<Staff> = ({ item }) => {
 
     const handlePress = () => {
-      const role = item?.roleName.toLowerCase();
-      if (role === "doctor") {
-        navigation.navigate("DoctorScheduleScreen", { doctorDetails: item });
-      }else{
+    //  const role = item?.roleName.toLowerCase();
         navigation.navigate("StaffProffileScreen", {staffDetails: item});
-      }
+      
     }
 
     return (

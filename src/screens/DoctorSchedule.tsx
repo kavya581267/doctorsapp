@@ -30,7 +30,6 @@ const DoctorScheduleScreen = () => {
 
     const { doctorDetails } = route?.params;
 
-
     const getFixedDays = () => {
         const fixedDays = [DayOfWeek.MONDAY, DayOfWeek.TUESDAY, DayOfWeek.WEDNESDAY,
         DayOfWeek.THURSDAY, DayOfWeek.FRIDAY, DayOfWeek.SATURDAY, DayOfWeek.SUNDAY];
