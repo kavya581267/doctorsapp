@@ -10,6 +10,7 @@ import { Portal, Snackbar, useTheme } from "react-native-paper";
 import { MdLogActivityIndicator } from "@components/MdLogActivityIndicator";
 import { RootStackParamList } from "@components/MainNavigation";
 import { MdLodSnackbar } from "@components/MdLogSnacbar";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 export default function SignIn() {
 
@@ -34,7 +35,7 @@ export default function SignIn() {
     return (
 
         <SafeAreaView style={{ flex: 1 }}>
-            <KeyboardAvoidingView style={{ flex: 1 }}>
+            <KeyboardAwareScrollView style={{ flex: 1 }}>
                     <View style={{ padding: 24, flex: 1 }}>
                         <View style={styles.header}>
                             <Image style={styles.png} source={require("../../assets/logo.png")} />
@@ -77,7 +78,7 @@ export default function SignIn() {
                             <MdLodSnackbar visible={visible} onDismiss={onDismissSnackBar} message={errorMessage} />
                         </View>
                     </View>
-            </KeyboardAvoidingView>
+            </KeyboardAwareScrollView>
             <MdLogActivityIndicator loading={loading} />
         </SafeAreaView>
 

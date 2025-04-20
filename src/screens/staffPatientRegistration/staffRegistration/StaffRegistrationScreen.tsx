@@ -18,6 +18,7 @@ import { StaffRole } from "./StaffRoleStep";
 import { ScrollView } from "react-native-gesture-handler";
 import { RootStackParamList } from "@components/MainNavigation";
 import { MdLodSnackbar } from "@components/MdLogSnacbar";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 
 
@@ -60,7 +61,7 @@ export default function StaffRegistrationScreen() {
       <ScrollView style={{ padding: 15 }}>
         <Back nav={"Mainscreen"}></Back>
         <Spacer height={30} />
-        <View>
+        <KeyboardAwareScrollView>
           <Text style={styles.heading}>Staff Registration</Text>
           <StepIndicator customStyles={stepindicator} stepCount={labels.length} currentPosition={step} labels={labels} />
           <Spacer height={40} />
@@ -68,7 +69,7 @@ export default function StaffRegistrationScreen() {
           {step === 1 && <StaffRole nextStep={nextStep} prevStep={prevStep} formData={formData} setFormData={setFormData} />}
           {step === 2 && <StaffAddress nextStep={nextStep} prevStep={prevStep} formData={formData} setFormData={setFormData} />}
           {step === 3 && <StaffReview prevStep={prevStep} formData={formData} submitForm={submitForm} />}
-        </View>
+        </KeyboardAwareScrollView>
         <MdLogActivityIndicator loading={loading}/>
         <MdLodSnackbar visible={visible} onDismiss={onDismissSnackBar} message={errorMessage}/>
       </ScrollView>

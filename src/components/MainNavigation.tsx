@@ -41,6 +41,10 @@ export type MainScreenRouteParams = {
     tab: string
 };
 
+export type SuccessScreenParams = {
+    screen: string
+};
+
 
 
 export type RootStackParamList = {
@@ -59,7 +63,7 @@ export type RootStackParamList = {
     PatientMedical: undefined;
     InitialNote: undefined;
     ClinicRegistration: undefined;
-    SuccessScreen: undefined;
+    SuccessScreen: SuccessScreenParams;
     ForgetPassword: undefined;
     ResetPasswordScreen: undefined;
     DashboardScreen: undefined;
