@@ -17,12 +17,15 @@ import { AuthContext } from "@context/AuthContext";
 import { StaffRole } from "./StaffRoleStep";
 import { ScrollView } from "react-native-gesture-handler";
 import { RootStackParamList } from "@components/MainNavigation";
+import { MdLodSnackbar } from "@components/MdLogSnacbar";
 
 
 
 export default function StaffRegistrationScreen() {
    const navigation = useNavigation<NavigationProp<RootStackParamList>>();
-   const [errorMessage, setErrorMessage] = useState("some thing went wrong please try again!!");
+   const [errorMessage, setErrorMessage] = useState("");
+   const [visible,setVisible] = useState(false);
+   const onDismissSnackBar = () =>setVisible(false);
   const labels = ["Details","Role", "Address", "Submit"];
   const [formData, setFormData] = useState<StaffRegistration>();
   const [step, setStep] = useState<number>(0);
@@ -37,9 +40,10 @@ export default function StaffRegistrationScreen() {
      const response = await registrationService.registerStaff(formData);
      navigation.navigate("SuccessScreen",{screen:"Mainscreen"});
    }catch(error){
-    setLoading(false);
+    setVisible(true);
     setErrorMessage(error.toString())
    }
+   setLoading(false);
   };
 
   interface StepProps {
@@ -66,6 +70,7 @@ export default function StaffRegistrationScreen() {
           {step === 3 && <StaffReview prevStep={prevStep} formData={formData} submitForm={submitForm} />}
         </View>
         <MdLogActivityIndicator loading={loading}/>
+        <MdLodSnackbar visible={visible} onDismiss={onDismissSnackBar} message={errorMessage}/>
       </ScrollView>
   )
 }
