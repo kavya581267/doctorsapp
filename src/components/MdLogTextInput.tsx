@@ -73,6 +73,7 @@ export default function MdLogTextInput({ label, value, left, right, onTextChange
             }
             <DateTimePicker isVisible={isDatePickerVisible}
                 mode="date"
+                themeVariant="light"
                 onConfirm={handleConfirm}
                 onCancel={hideDatePicker}/>
         </>

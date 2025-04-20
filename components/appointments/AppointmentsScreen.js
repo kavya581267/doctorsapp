@@ -110,6 +110,7 @@ const AppointmentScreen = () => {
               <DateTimePicker
                 value={time}
                 mode="time"
+                themeVariant="light"
                 display={Platform.OS === "ios" ? "spinner" : "default"}
                 onChange={(event, selectedTime) => {
                   setShowTimePicker(false);
