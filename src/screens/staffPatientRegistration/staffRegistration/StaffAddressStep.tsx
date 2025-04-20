@@ -33,7 +33,6 @@ export const StaffAddress: React.FC<StepProps> = ({ nextStep, prevStep, formData
         if (!isAnyFieldsEmpty(["address", "city", "state", "zipCode", "country"], formData)) {
             setVisible(true);
             setErrorMessage("Please fill all required details");
-
         }
         if (formData.emergencyContactPhone) {
             if (!isValidPhone(formData.emergencyContactPhone)) {

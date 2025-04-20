@@ -44,6 +44,7 @@ export const StaffDetails: React.FC<StepProps> = ({ nextStep, formData, setFormD
     const validateFormFields = () => {
 
         if(isAnyFieldsEmpty(["firstName", "lastName", "email", "password", "dateOfBirth", "gender", "phone"], formData)){
+            setVisible(true);
             setErrorMessage("Please fill all the required fields");
         }
         if(!isValidEmail(formData.email)){

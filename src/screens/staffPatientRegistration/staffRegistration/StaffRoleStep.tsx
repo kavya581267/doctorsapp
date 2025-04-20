@@ -23,6 +23,7 @@ export const StaffRole: React.FC<StepProps> = ({ nextStep, prevStep, formData, s
     const [visible, setVisible] = useState(false);
     const onDismissSnackBar = () => setVisible(false);
     const [specialityOptions, setSpecialityOptions] = useState([]);
+    const [errorMessage, setErrorMessage] = useState("");
 
     const fetchSpecialities = async () => {
         try {
@@ -32,9 +33,9 @@ export const StaffRole: React.FC<StepProps> = ({ nextStep, prevStep, formData, s
                 value: speciality.specialty_name,
             }));
             setSpecialityOptions(options);
-          
+
         } catch (error) {
-            //console.error("Error fetching specialities:", error);
+            setErrorMessage(error.toString());
         }
     };
 
@@ -58,21 +59,25 @@ export const StaffRole: React.FC<StepProps> = ({ nextStep, prevStep, formData, s
     }
 
     const validateFormFields = () => {
-        if (!isAnyFieldsEmpty(["role"], formData)) {
-            if (formData?.role === "DOCTOR") {
-                if (formData?.specialties && formData?.specialties?.length === 0) {
-                    setVisible(true);
-                    return;
-                }
-            }
-            setVisible(false);
-            nextStep();
-        } else {
+
+        if (isAnyFieldsEmpty(["role"], formData)) {
             setVisible(true);
+            setErrorMessage("Please fill all the fields");
+            return;
         }
+
+        if(formData?.role === "DOCTOR"){
+            if (isAnyFieldsEmpty(["licenseNumber"], formData) || !formData.specialties
+          || formData.specialties.length === 0 ) {
+                setVisible(true);
+                setErrorMessage("Please fill all the fields");
+                return;
+            } 
+        }
+        nextStep();
     };
 
-  
+
     return (
         <View style={styles.container}>
             <View>
@@ -117,7 +122,7 @@ export const StaffRole: React.FC<StepProps> = ({ nextStep, prevStep, formData, s
                                 placeholderStyle={styles.placeholder}
                                 selectedTextStyle={styles.selectedText}
                                 value={formData?.specialties}
-                                onChange={(item)=>setFormData((prev) => ({ ...prev, specialties: item }))}
+                                onChange={(item) => setFormData((prev) => ({ ...prev, specialties: item }))}
                                 renderLeftIcon={() => (
                                     <View style={styles.icon} >
                                         <Icon source="star-circle-outline" size={24} color="#555" />

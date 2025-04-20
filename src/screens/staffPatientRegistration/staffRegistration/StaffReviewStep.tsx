@@ -1,8 +1,16 @@
 import { SafeAreaView, ScrollView, TouchableOpacity } from "react-native";
 import { Text, View } from "react-native";
 import styles from "@styles/staffPatientRegistrationStyle";
+import { StaffRegistration } from "@api/model/auth/Auth";
 
-export default function StaffReview({ prevStep, formData, submitForm }) {
+ interface Props {
+    prevStep: any;
+    formData: StaffRegistration;
+    submitForm: any
+
+}
+
+export default function StaffReview({ prevStep, formData, submitForm }: Props) {
     const fields = [
         { label: 'Name', value: `${formData.firstName} ${formData.lastName}` },
         { label: 'Email', value: formData.email },
@@ -20,7 +28,7 @@ export default function StaffReview({ prevStep, formData, submitForm }) {
     if (formData.role?.toLowerCase() === 'doctor') {
         fields.push(
             { label: 'License Number', value: formData.licenseNumber },
-            { label: 'Specialties', value: formData.specialties}
+            { label: 'Specialties', value: formData.specialties.join(" ,")}
         );
     }
 
