@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Alert, StyleSheet, TextInput, ScrollView, View } from 'react-native';
+import { Alert, StyleSheet, TextInput, ScrollView, View, Dimensions } from 'react-native';
 import { Button, Text } from 'react-native-paper';
 import Back from '@components/Back';
 import { COLORS } from '@utils/colors';
@@ -127,12 +127,12 @@ export default function BookAppointmentScreen() {
         appUpdate.notes = note;
         appUpdate.reason = reason;
         response = await patientService.updateAppointment(appUpdate, bookingDetails.patientId.toString(),
-        bookingDetails.id.toString())
+          bookingDetails.id.toString())
       }
 
       if (response) {
         Alert.alert(
-          edit? "Appointment Updated": "Appointment Booked",
+          edit ? "Appointment Updated" : "Appointment Booked",
           `For ${response.doctorName} on ${selectedDate}`,
           [{
             text: "OK",
@@ -180,10 +180,10 @@ export default function BookAppointmentScreen() {
     }
     // const patientList =  patientService.getClinicPatients();
   }, [clinicDoctors])
-
+  const { width, height } = Dimensions.get("window");
   return (
     <ScrollView>
-      <View style={styles.container}>
+      <View style={{ padding: 15, backgroundColor: "white", height }}>
         <Back nav='Mainscreen' tab='Appointments' />
         {/* Header */}
 
@@ -332,6 +332,8 @@ export default function BookAppointmentScreen() {
         >
           {edit ? "Update Appointment" : "Book Appointment"}
         </Button>
+        {/* Bottom spacing */}
+        <View style={{ height: 20 }} />
         <MdLodSnackbar visible={visible} message={error} onDismiss={onDismissSnackBar} />
       </View>
       <MdLogActivityIndicator loading={loading} />
@@ -409,7 +411,7 @@ const styles = StyleSheet.create({
   },
   label: {
     fontWeight: '600',
-    marginBottom:5
+    marginBottom: 5
   },
   timeBoxRow: {
     flexDirection: 'row',

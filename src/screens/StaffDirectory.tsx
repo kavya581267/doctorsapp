@@ -78,6 +78,8 @@ const StaffDirectoryScreen = () => {
       const role = item?.roleName.toLowerCase();
       if (role === "doctor") {
         navigation.navigate("DoctorScheduleScreen", { doctorDetails: item });
+      }else{
+        navigation.navigate("StaffProffileScreen", {staffDetails: item});
       }
     }
 

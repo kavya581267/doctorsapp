@@ -30,6 +30,7 @@ import BookAppointmentScreen from '@screens/AppointmentsScreen';
 import PatientMedical from '@screens/patientVitals/PatientMedical';
 import AppointmentsListScreen from '@screens/AppontmentsListScree';
 import { AppointmentListResponse } from '@api/model/appointments/AppointmentListResponse';
+import { StaffProffileScreen } from '@screens/StaffProfileScreen';
 
 export type BookAppointmentScreenRouteParams = {
       edit?: boolean; // or string, depending on your use case
@@ -67,7 +68,8 @@ export type RootStackParamList = {
     ClinicOverview: undefined;
     BookAppointmentScreen: BookAppointmentScreenRouteParams;
     DoctorScheduleScreen: undefined;
-    AppointmentsListScreen:undefined
+    AppointmentsListScreen:undefined;
+    StaffProffileScreen:undefined;
 
 };
 
@@ -106,6 +108,7 @@ export default function MainNavigator() {
                 <Stack.Screen name='DoctorScheduleScreen' component={DoctorScheduleScreen}></Stack.Screen>
                 <Stack.Screen name='BookAppointmentScreen' component={BookAppointmentScreen}></Stack.Screen>
                 <Stack.Screen name='AppointmentsListScreen' component={AppointmentsListScreen}></Stack.Screen>
+                <Stack.Screen name='StaffProffileScreen' component={StaffProffileScreen}></Stack.Screen>
             </Stack.Navigator>
         </NavigationContainer>
     );

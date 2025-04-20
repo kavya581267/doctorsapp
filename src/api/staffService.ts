@@ -1,8 +1,8 @@
-import { GET_CLINIC_STAFF_PATH } from "@utils/constants";
+import { GET_CLINIC_STAFF_PATH, UPDATE_CLINIC_STAFF_PATH } from "@utils/constants";
 import { apiService } from "./apiService";
 import { AdminRegistarationRequest, AdminRegistrationResponse } from "./model/auth/Auth";
 import { ClinicResponse } from "./model/clinic/ClinicResponse";
-import { StaffRequest } from "./model/clinic/StaffRequest";
+import { StaffRequest, StaffUpdateRequest } from "./model/clinic/StaffRequest";
 import { Staff } from "./model/staff/Staff";
 import { replacePlaceholders } from "@utils/utils";
 
@@ -20,8 +20,13 @@ export const staffService = {
         }
     },
 
-    updateClinicStaff: () => {
-
+    updateClinicStaff: async (staffUpdate: StaffUpdateRequest,clinicId: string, userId: string) => {
+      try{
+        const response = await apiService.put(replacePlaceholders(UPDATE_CLINIC_STAFF_PATH,{"clinicId" : clinicId, userId : userId}), staffUpdate);
+        return response;
+      }catch(error){
+          throw error;
+      }
     },
     addClinicStaff: () => {
 

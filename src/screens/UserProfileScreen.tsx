@@ -10,10 +10,10 @@ import { RootStackParamList } from '@components/MainNavigation';
 
 const UserProfileScreen = () => {
     const [isEditing, setIsEditing] = useState(false);
-    const [firstName, setFirstName] = useState("John");
-    const [lastName, setLastName] = useState("Doe")
-    const [email, setEmail] = useState('john.doe@example.com');
-    const [phone, setPhone] = useState('+1 (555) 123-4567');
+    const [firstName, setFirstName] = useState("");
+    const [lastName, setLastName] = useState("")
+    const [email, setEmail] = useState('');
+    const [phone, setPhone] = useState('');
     const [role, setRole] = useState("ADMiN")
     const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
