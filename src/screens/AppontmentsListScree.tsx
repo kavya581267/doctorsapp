@@ -42,9 +42,26 @@ const AppointmentsListScreen = () => {
   };
 
   const editAppointment = (item) => {
-    navigation.navigate("BookAppointmentScreen",{edit: true,  bookingDetails:item});
+    navigation.navigate("BookAppointmentScreen", { edit: true, bookingDetails: item });
   };
 
+  const statusColor = (itemStatus) => {
+    if (itemStatus === "SCHEDULED") {
+      return styles.activeBadgeScheduled;
+    }
+    if (itemStatus === "CONFIRMED") {
+      return styles.activeBadgeConfirmed;
+    }
+    if (itemStatus === "CANCELLED") {
+      return styles.activeBadgeCanceled;
+    }
+    if (itemStatus === "COMPLETED") {
+      return styles.activeBadgeCompleted
+    }
+    if (itemStatus === "NO_SHOW") {
+      return styles.activeBadgeNoshow
+    }
+  }
   const fetchAppointments = async () => {
     const loggedinUserInfo = await getUser();
     let response: AppointmentListResponse[] = [];
@@ -57,16 +74,20 @@ const AppointmentsListScreen = () => {
     const pastFromDate = getPastDate(today, 15);
     const pastToDate = getPastDate(today, 1);
 
+    const gg = () => {
+      return styles.container
+    }
+
     try {
       setLoading(true);
       if (role === Role.DOCTOR) {
-        response = await doctorService.getDoctorAppointments(userId.toString(), fromDate , toDate);
+        response = await doctorService.getDoctorAppointments(userId.toString(), fromDate, toDate);
       } else {
         response = await clinicService.getClinicAppointments(clinicId.toString(), fromDate, toDate);
       }
       setUpcomingAppointments(response);
       if (role === Role.DOCTOR) {
-        response = await doctorService.getDoctorAppointments(userId.toString(), pastFromDate , pastToDate);
+        response = await doctorService.getDoctorAppointments(userId.toString(), pastFromDate, pastToDate);
       } else {
         response = await clinicService.getClinicAppointments(clinicId.toString(), pastFromDate, pastToDate);
       }
@@ -83,7 +104,7 @@ const AppointmentsListScreen = () => {
   }, []);
 
   const renderItem = ({ item }) => (
-    <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('PatientMedical',{ appointment: item})}>
+    <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('PatientMedical', { appointment: item })}>
       <View>
         <Text style={styles.patient}>{item.firstName} {item.lastName}</Text>
         <Text style={styles.doctor}>{'Dr. ' + item.doctorName}</Text>
@@ -97,12 +118,12 @@ const AppointmentsListScreen = () => {
 
       <View style={{ justifyContent: 'space-between' }}>
         <View>
-          <Badge style={item.status === "CANCELLED" ? styles.activeBadgeCanceled : styles.activeBadge}>{item.status}</Badge>
+          <Badge style={statusColor(item.status)}>{item.status}</Badge>
         </View>
         {
           item.status === "CANCELLED" ? "" :
             <View style={styles.actions}>
-              <TouchableOpacity onPress={()=>editAppointment(item)} style={{ marginRight: 25 }}>
+              <TouchableOpacity onPress={() => editAppointment(item)} style={{ marginRight: 25 }}>
                 <Ionicons name="create-outline" size={20} color="#007bff" />
               </TouchableOpacity>
               <TouchableOpacity onPress={() => cancelAppointment(item)}>
@@ -170,7 +191,7 @@ const AppointmentsListScreen = () => {
                     return;
                   }
 
-                  // TODO: Call cancellation API here
+                  // Call cancellation API here
                   try {
                     setLoading(true)
                     const resp = await clinicService.cancelAppointment(selectedAppointment.patientId.toString(),
@@ -241,15 +262,35 @@ const styles = StyleSheet.create({
     color: '#10b981',
     fontWeight: 'bold',
   },
+
   activeBadgeScheduled: {
     marginTop: 4,
-    backgroundColor: '#d1fae5',
-    color: '#10b981',
+   // backgroundColor: '#d1fae5',
+   backgroundColor:"#2196F3",
+    color:  COLORS.white,
+    fontWeight: 'bold',
+  },
+  activeBadgeConfirmed: {
+    marginTop: 4,
+   backgroundColor:"#4CAF50",
+    color:  COLORS.white,
     fontWeight: 'bold',
   },
   activeBadgeCanceled: {
     marginTop: 4,
     backgroundColor: COLORS.red,
+    color: COLORS.white,
+    fontWeight: 'bold',
+  },
+  activeBadgeCompleted: {
+    marginTop: 4,
+    backgroundColor: "#9E9E9E",
+    color: COLORS.white,
+    fontWeight: 'bold',
+  },
+  activeBadgeNoshow: {
+    marginTop: 4,
+    backgroundColor: "#FF9800",
     color: COLORS.white,
     fontWeight: 'bold',
   },
