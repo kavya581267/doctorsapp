@@ -36,10 +36,11 @@ export default function PatientRegistrationScreen() {
       const response = await registrationService.registerPatient(formData);
       navigation.navigate("SuccessScreen",{screen:"Mainscreen"});
     } catch (error) {
-      setLoading(false);
+     
       setVisible(true);
       setErrorMessage(error.toString())
     }
+    setLoading(false);
   };
 
   interface StepProps {
