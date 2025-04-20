@@ -2,9 +2,7 @@
 import { TouchableOpacity, View } from "react-native";
 import styles from "@styles/clinicRegistrationStyles";
 import MdLogTextInput from "@components/MdLogTextInput";
-import { Button, Icon, IconButton, Portal, Snackbar, Text } from "react-native-paper";
-import { useNavigation } from "@react-navigation/native";
-import { COLORS } from "@utils/colors";
+import { Button, Icon, Text } from "react-native-paper";
 import { useState } from "react";
 import { isAnyFieldsEmpty, isValidEmail, isValidPassword, isValidPhone } from "@utils/utils";
 import { AdminRegistarationRequest } from "@api/model/auth/Auth";
@@ -12,21 +10,12 @@ import { AdminRegistarationRequest } from "@api/model/auth/Auth";
 import { Dropdown } from "react-native-element-dropdown";
 import { MdLodSnackbar } from "@components/MdLogSnacbar";
 
-
-
-
-
-
 interface StepProps {
     nextStep?: () => void;
     prevStep?: () => void;
     formData: AdminRegistarationRequest;
     setFormData: React.Dispatch<React.SetStateAction<AdminRegistarationRequest>>;
-
 }
-
-
-
 
 export const AdminDetails: React.FC<StepProps> = ({ nextStep, prevStep, formData, setFormData }) => {
     const [visible, setVisible] = useState(false);
@@ -88,7 +77,7 @@ export const AdminDetails: React.FC<StepProps> = ({ nextStep, prevStep, formData
                     onTextChange={onChangeT}
                     field="lastName"
                 />
-                <MdLogTextInput label="Email"
+                <MdLogTextInput label="Email*"
                     value={formData?.email}
                     left="email"
                     onTextChange={onChangeT}
@@ -133,7 +122,7 @@ export const AdminDetails: React.FC<StepProps> = ({ nextStep, prevStep, formData
                     onTextChange={onChangeT}
                     field="dateOfBirth"
                 />
-                <MdLogTextInput label="Phone"
+                <MdLogTextInput label="Phone*"
                     value={formData?.phone}
                     left="phone"
                     onTextChange={onChangeT}
