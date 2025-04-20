@@ -83,6 +83,7 @@ export const ClinicDetails: React.FC<StepProps> = ({ nextStep, formData, setForm
                     onTextChange={onChangeT}
                     field="clinicPhone"
                     keyboard="phone-pad"
+                    placeHolder="+91XXXXXXXXXX"
                 />
 
             </View>

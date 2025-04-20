@@ -15,10 +15,11 @@ interface MdLogTextInputProps {
     field: string;
     keyboard?: any;
     onpress?: any;
-    secureEntry?: boolean
+    secureEntry?: boolean;
+    placeHolder? : any;
 }
 
-export default function MdLogTextInput({ label, value, left, right, onTextChange, field, keyboard, secureEntry=false }: MdLogTextInputProps) {
+export default function MdLogTextInput({ label, value, left, right, onTextChange, field, keyboard, secureEntry=false ,placeHolder}: MdLogTextInputProps) {
     const [isDatePickerVisible, setDatePickerVisible] = useState(false);
     const showDatePicker = () => setDatePickerVisible(true);
     const hideDatePicker = () => setDatePickerVisible(false);
@@ -40,7 +41,6 @@ export default function MdLogTextInput({ label, value, left, right, onTextChange
                             label={label}
                             value={value}
                             editable={false}
-
                             style={{fontSize:14,backgroundColor:"#F3F4F6FF",borderColor: COLORS.grey,
 
                                 fontWeight:"400", height:40}}
@@ -60,7 +60,7 @@ export default function MdLogTextInput({ label, value, left, right, onTextChange
                         secureTextEntry={secureEntry}
                         keyboardType={keyboard}
                         placeholderTextColor={"grey"}
-
+                        placeholder={placeHolder}
                         style={{fontSize:14,backgroundColor:"#F3F4F6FF",borderColor: COLORS.grey,
 
                             fontWeight:"400", height:40}}

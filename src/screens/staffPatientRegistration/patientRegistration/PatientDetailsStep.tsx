@@ -91,6 +91,7 @@ export const PatientDetails: React.FC<StepProps> = ({ nextStep, formData, setFor
                     left="calendar-month"
                     onTextChange={onChangeT}
                     field="dateOfBirth"
+                    placeHolder="YYYY-MM-DD"
                 />
                 <View style={styles.dropDownContainer}>
                     <Dropdown
@@ -118,6 +119,7 @@ export const PatientDetails: React.FC<StepProps> = ({ nextStep, formData, setFor
                     onTextChange={onChangeT}
                     field="phone"
                     keyboard="phone-pad"
+                    placeHolder="+91XXXXXXXXXX"
                 />
                 <MdLogTextInput
                     label="BloodGroup*"

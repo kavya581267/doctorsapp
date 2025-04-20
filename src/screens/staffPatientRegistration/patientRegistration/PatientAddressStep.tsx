@@ -100,6 +100,7 @@ export const PatientAddress: React.FC<StepProps> = ({ nextStep, prevStep, formDa
                     onTextChange={onChangeT}
                     field="emergencyContactPhone"
                     keyboard="phone-pad"
+                    placeHolder="+91XXXXXXXXXX"
                 />
 
                 <Checkbox.Item

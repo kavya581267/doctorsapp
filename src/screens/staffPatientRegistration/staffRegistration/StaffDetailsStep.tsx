@@ -104,6 +104,7 @@ export const StaffDetails: React.FC<StepProps> = ({ nextStep, formData, setFormD
                     left="calendar-month"
                     onTextChange={onChangeT}
                     field="dateOfBirth"
+                    placeHolder="YYYY-MM-DD"
                 />
                 <View style={styles.dropDownContainer}>
                     <Dropdown
@@ -131,6 +132,7 @@ export const StaffDetails: React.FC<StepProps> = ({ nextStep, formData, setFormD
                     onTextChange={onChangeT}
                     field="phone"
                     keyboard="phone-pad"
+                    placeHolder="+91XXXXXXXXXX"
                 />
             
 

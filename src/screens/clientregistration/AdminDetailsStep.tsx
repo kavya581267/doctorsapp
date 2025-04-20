@@ -121,6 +121,7 @@ export const AdminDetails: React.FC<StepProps> = ({ nextStep, prevStep, formData
                     left="calendar-month"
                     onTextChange={onChangeT}
                     field="dateOfBirth"
+                    placeHolder="YYYY-MM-DD"
                 />
                 <MdLogTextInput label="Phone*"
                     value={formData?.phone}
@@ -128,6 +129,7 @@ export const AdminDetails: React.FC<StepProps> = ({ nextStep, prevStep, formData
                     onTextChange={onChangeT}
                     field="phone"
                     keyboard="phone-pad"
+                    placeHolder="+91XXXXXXXXXX"
                 />
             </View>
 

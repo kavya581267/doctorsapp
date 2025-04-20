@@ -99,6 +99,7 @@ export const StaffAddress: React.FC<StepProps> = ({ nextStep, prevStep, formData
                     onTextChange={onChangeT}
                     field="emergencyContactPhone"
                     keyboard="phone-pad"
+                    placeHolder="+91XXXXXXXXXX"
                 />
 
             </View>
