@@ -14,6 +14,7 @@ import Back from "@components/Back";
 import { AuthContext } from "@context/AuthContext";
 import { MdLodSnackbar } from "@components/MdLogSnacbar";
 import { RootStackParamList } from "@components/MainNavigation";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 
 
@@ -54,7 +55,7 @@ export default function PatientRegistrationScreen() {
 
   return (
    
-    <ScrollView style={{ padding: 15 }}>
+    <KeyboardAwareScrollView style={{ padding: 15 }}>
       <Back nav={"Mainscreen"}></Back>
 
       <Spacer height={30} />
@@ -68,7 +69,7 @@ export default function PatientRegistrationScreen() {
      
       <MdLogActivityIndicator loading={loading} />
       <MdLodSnackbar onDismiss={setVisible} message={errorMessage} visible={visible}/>
-    </ScrollView>
+    </KeyboardAwareScrollView>
   
 
   )

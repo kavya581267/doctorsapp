@@ -17,6 +17,8 @@ import { RootStackParamList } from "@components/MainNavigation";
 import { registrationService } from "@api/registrationService";
 import Spacer from "@components/Spacer";
 import { MdLodSnackbar } from "@components/MdLogSnacbar";
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+
 
 
 
@@ -59,7 +61,7 @@ export default function ClinicRegistration() {
     return (
         <ScrollView>
             <SafeAreaView>
-                <View style={styles.container}>
+                <KeyboardAwareScrollView style={styles.container}>
                     <View style={styles.header}>
                         <Image style={styles.png} source={require("../../../assets/logo.png")} />
                         <Text style={styles.heading}>Clinic Registration</Text>
@@ -77,7 +79,7 @@ export default function ClinicRegistration() {
                             Log In
                         </Button>
                     </View>
-                </View>
+                </KeyboardAwareScrollView>
                 <MdLodSnackbar onDismiss={onDismissSnackBar} visible={visible} message={errorMessage} />
                 <MdLogActivityIndicator loading={loading} />
 
