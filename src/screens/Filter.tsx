@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
-import { Button, Chip } from 'react-native-paper';
+import { Button, Chip, Divider } from 'react-native-paper';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import moment from 'moment';
 
@@ -8,7 +8,7 @@ const statuses = ['SCHEDULED', 'CONFIRMED', 'CANCELLED', "COMPLETED", 'NO_SHOW']
 
 const FilterableAppointments = ({ appointments, onFiltered, fromDate, setFromDate, toDate, setToDate, selectedStatus, setSelectedStatus }) => {
 
-    const [showFromPicker, setShowFromPicker] = useState(false);      
+    const [showFromPicker, setShowFromPicker] = useState(false);
     const [showToPicker, setShowToPicker] = useState(false);
     const applyFilter = () => {
         const filtered = appointments.filter(item => {
@@ -33,9 +33,17 @@ const FilterableAppointments = ({ appointments, onFiltered, fromDate, setFromDat
     };
 
     return (
-        <View style={{ padding: 16 }}>
-            {/* Date Filters */}
-            <View style={{ marginBottom: 10 }}>
+        <View style={{ padding: 5 }}>
+            {/* header */}
+            <View style={{flexDirection:"row",justifyContent:"space-between",alignItems:"center"}}>
+                <Text style={{ marginBottom: 15, fontSize: 16, fontWeight: "500" }}>Filters</Text>
+                <Text style={{ marginBottom: 15, fontSize: 15, fontWeight: "500",color:"grey" }}>X</Text>
+            </View>
+
+            <Divider />
+
+             {/* Date Filters */}
+            <View style={{ marginBottom: 10,marginTop:10 }}>
                 <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", marginBottom: 10 }}>
                     <Text>From:</Text>
                     <TouchableOpacity onPress={() => setShowFromPicker(true)}>
@@ -88,7 +96,7 @@ const FilterableAppointments = ({ appointments, onFiltered, fromDate, setFromDat
                                 if (isSelected) {
                                     setSelectedStatus(prev => prev.filter(s => s !== status));
                                 } else {
-                                   
+
                                     setSelectedStatus(prev => [...prev, status]);
                                 }
                             }}
