@@ -27,6 +27,10 @@ export default function PresentingComplaints({ title, itemList = [] }) {
     setSearchText(""); 
   };
 
+  const clearSearch = () =>{
+    setSearchText("");
+  }
+
   const removeComplaint = (item) => {
     setSelectedItems(selectedItems.filter((selected) => selected !== item));
   };
@@ -47,6 +51,7 @@ export default function PresentingComplaints({ title, itemList = [] }) {
           value={searchText}
           onChangeText={setSearchText}
         />
+        <Button onPress={clearSearch}>X</Button>
       </View>
 
 

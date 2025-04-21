@@ -18,7 +18,6 @@ export default StyleSheet.create({
         borderRadius: 8,
         borderColor: COLORS.grey,
         alignItems: "center",
-        position: "relative"
     },
     icon: {
         marginRight: 10

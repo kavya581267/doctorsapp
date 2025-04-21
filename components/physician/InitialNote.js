@@ -19,7 +19,7 @@ const MedicalFormScreen = () => {
 
     return (
         <View style={styles.container}>
-            <Back nav='PatientMedical'/>
+            <Back nav='Mainscreen' tab='Appointments' />
 
             <View style={styles.header}>          
                 <Text style={styles.headerTitle}>Initial Note</Text>
