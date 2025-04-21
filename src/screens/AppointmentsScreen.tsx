@@ -182,7 +182,7 @@ export default function BookAppointmentScreen() {
   }, [clinicDoctors])
   const { width, height } = Dimensions.get("window");
   return (
-    <ScrollView>
+    <ScrollView style={{flex:1,backgroundColor:"white"}}  contentContainerStyle={{ paddingBottom: 40 }}>
       <View style={{ padding: 15, backgroundColor: "white", height }}>
         <Back nav='Mainscreen' tab='Appointments' />
         {/* Header */}
