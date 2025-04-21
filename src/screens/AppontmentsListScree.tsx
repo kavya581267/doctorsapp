@@ -35,11 +35,15 @@ const AppointmentsListScreen = () => {
   const [showCancelPopup, setShowCancelPopup] = useState(false);
   const [cancelReason, setCancelReason] = useState('');
   const [selectedAppointment, setSelectedAppointment] = useState<AppointmentListResponse | null>(null);
-  const [refresh, setRefresh] = useState(false);
   const [showFilterModal, setShowFilterModal] = useState(false);
   const [filteredAppointments, setFilteredAppointments] = useState<AppointmentListResponse[]>([]);
   const [filtersApplied, setFiltersApplied] = useState(false);
   const [filterTabIndex, setFilterTabIndex] = useState(0);
+
+  //filter screen
+  const [filterFromDate, setFilterFromDate] = useState(new Date());
+  const [filterToDate, setFilterToDate] = useState(new Date());
+  const [filterSelectedStatus, setFilterelectedStatus] = useState([]);
 
   const cancelAppointment = (item: AppointmentListResponse) => {
     setSelectedAppointment(item);
@@ -107,7 +111,7 @@ const AppointmentsListScreen = () => {
   const handleFilterApplied = (filteredData, isFilterActive) => {
     setFilteredAppointments(filteredData);
     setFiltersApplied(isFilterActive);
-    setFilterTabIndex(selected); // Save the tab where filter was applied
+    setFilterTabIndex(selected);
     setShowFilterModal(false);
   };
   const getListData = () => {
@@ -135,7 +139,7 @@ const AppointmentsListScreen = () => {
           <Badge style={statusColor(item.status)}>{item.status}</Badge>
         </View>
         {
-          item.status === "CANCELLED" && (
+          item.status !== "CANCELLED" && (
             <View style={styles.actions}>
               <TouchableOpacity onPress={() => editAppointment(item)} style={{ marginRight: 25 }}>
                 <Ionicons name="create-outline" size={20} color="#007bff" />
@@ -155,7 +159,7 @@ const AppointmentsListScreen = () => {
     <View style={styles.container}>
       <Back />
 
-      <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
+      <View style={{ flexDirection: "row", justifyContent: "space-around", alignItems: "center" }}>
         <TextInput style={styles.searchBar} placeholder="Search patient, doctor or mobile number" />
 
         <TouchableOpacity onPress={() => setShowFilterModal(true)}>
@@ -165,8 +169,8 @@ const AppointmentsListScreen = () => {
           <View
             style={{
               position: 'absolute',
-              top: -2,
-              right: -2,
+              top: 14,
+              right: 8,
               width: 8,
               height: 8,
               borderRadius: 4,
@@ -189,6 +193,12 @@ const AppointmentsListScreen = () => {
           }}
         >
           <FilterableAppointments
+            fromDate={filterFromDate}
+            toDate={filterToDate}
+            setFromDate={setFilterFromDate}
+            setToDate={setFilterToDate}
+            selectedStatus={filterSelectedStatus}
+            setSelectedStatus={setFilterelectedStatus}
             appointments={selected === 0 ? upcomingAppointments : pastAppointments}
             onFiltered={handleFilterApplied} // Pass filter applied handler
           />
@@ -283,6 +293,7 @@ const styles = StyleSheet.create({
     borderColor: '#ccc',
     paddingHorizontal: 12,
     marginBottom: 10,
+    width:"80%"
   },
   tabRow: {
     flexDirection: 'row',
