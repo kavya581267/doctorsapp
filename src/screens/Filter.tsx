@@ -6,10 +6,7 @@ import moment from 'moment';
 
 const statuses = ['SCHEDULED', 'CONFIRMED', 'CANCELLED', "COMPLETED", 'NO_SHOW'];
 
-const FilterableAppointments = ({ appointments, onFiltered }) => {
-    const [fromDate, setFromDate] = useState(new Date());
-    const [toDate, setToDate] = useState(new Date());
-    const [selectedStatus, setSelectedStatus] = useState([]);
+const FilterableAppointments = ({ appointments, onFiltered, fromDate, setFromDate, toDate, setToDate, selectedStatus, setSelectedStatus }) => {
 
     const [showFromPicker, setShowFromPicker] = useState(false);      
     const [showToPicker, setShowToPicker] = useState(false);

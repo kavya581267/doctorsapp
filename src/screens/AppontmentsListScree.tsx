@@ -40,6 +40,11 @@ const AppointmentsListScreen = () => {
   const [filtersApplied, setFiltersApplied] = useState(false);
   const [filterTabIndex, setFilterTabIndex] = useState(0);
 
+  //filter screen
+  const [filterFromDate, setFilterFromDate] = useState(new Date());
+  const [filterToDate, setFilterToDate] = useState(new Date());
+  const [filterSelectedStatus, setFilterelectedStatus] = useState([]);
+
   const cancelAppointment = (item: AppointmentListResponse) => {
     setSelectedAppointment(item);
     setShowCancelPopup(true);
@@ -106,7 +111,7 @@ const AppointmentsListScreen = () => {
   const handleFilterApplied = (filteredData, isFilterActive) => {
     setFilteredAppointments(filteredData);
     setFiltersApplied(isFilterActive);
-    setFilterTabIndex(selected); 
+    setFilterTabIndex(selected);
     setShowFilterModal(false);
   };
   const getListData = () => {
@@ -134,7 +139,7 @@ const AppointmentsListScreen = () => {
           <Badge style={statusColor(item.status)}>{item.status}</Badge>
         </View>
         {
-          item.status === "CANCELLED" && (
+          item.status !== "CANCELLED" && (
             <View style={styles.actions}>
               <TouchableOpacity onPress={() => editAppointment(item)} style={{ marginRight: 25 }}>
                 <Ionicons name="create-outline" size={20} color="#007bff" />
@@ -188,6 +193,12 @@ const AppointmentsListScreen = () => {
           }}
         >
           <FilterableAppointments
+            fromDate={filterFromDate}
+            toDate={filterToDate}
+            setFromDate={setFilterFromDate}
+            setToDate={setFilterToDate}
+            selectedStatus={filterSelectedStatus}
+            setSelectedStatus={setFilterelectedStatus}
             appointments={selected === 0 ? upcomingAppointments : pastAppointments}
             onFiltered={handleFilterApplied} // Pass filter applied handler
           />
@@ -282,6 +293,7 @@ const styles = StyleSheet.create({
     borderColor: '#ccc',
     paddingHorizontal: 12,
     marginBottom: 10,
+    width:400
   },
   tabRow: {
     flexDirection: 'row',
