@@ -34,8 +34,6 @@ export default StyleSheet.create({
 
    
     dropdown: {
-       flexDirection:"row",
-       justifyContent:"space-between",
         backgroundColor: "white",
         borderWidth: 1,
         borderColor: COLORS.grey,
@@ -44,8 +42,11 @@ export default StyleSheet.create({
         marginTop:3,
         marginBottom:3
     },
+    flexrow:{
+       flexDirection:"row",
+       justifyContent:"space-between",
+    },
     dropdownItem: {
-
         paddingVertical: 10,
         paddingHorizontal: 15,
         borderBottomWidth: 1,

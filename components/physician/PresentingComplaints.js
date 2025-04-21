@@ -65,7 +65,7 @@ export default function PresentingComplaints({ title, itemList = [] }) {
       )}
 
       {searchText.length > 0 && filteredItems.length === 0 && (
-        <View style={styles.dropdown}>
+        <View style={[styles.dropdown, styles.flexrow]}>
           <Text style={styles.dropdownItem}>No results found</Text>
           <View> 
             <Button onPress={addNewItem}>Add</Button>
