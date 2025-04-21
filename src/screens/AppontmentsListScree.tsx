@@ -35,7 +35,6 @@ const AppointmentsListScreen = () => {
   const [showCancelPopup, setShowCancelPopup] = useState(false);
   const [cancelReason, setCancelReason] = useState('');
   const [selectedAppointment, setSelectedAppointment] = useState<AppointmentListResponse | null>(null);
-  const [refresh, setRefresh] = useState(false);
   const [showFilterModal, setShowFilterModal] = useState(false);
   const [filteredAppointments, setFilteredAppointments] = useState<AppointmentListResponse[]>([]);
   const [filtersApplied, setFiltersApplied] = useState(false);
@@ -107,7 +106,7 @@ const AppointmentsListScreen = () => {
   const handleFilterApplied = (filteredData, isFilterActive) => {
     setFilteredAppointments(filteredData);
     setFiltersApplied(isFilterActive);
-    setFilterTabIndex(selected); // Save the tab where filter was applied
+    setFilterTabIndex(selected); 
     setShowFilterModal(false);
   };
   const getListData = () => {
@@ -155,7 +154,7 @@ const AppointmentsListScreen = () => {
     <View style={styles.container}>
       <Back />
 
-      <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
+      <View style={{ flexDirection: "row", justifyContent: "space-around", alignItems: "center" }}>
         <TextInput style={styles.searchBar} placeholder="Search patient, doctor or mobile number" />
 
         <TouchableOpacity onPress={() => setShowFilterModal(true)}>
@@ -165,8 +164,8 @@ const AppointmentsListScreen = () => {
           <View
             style={{
               position: 'absolute',
-              top: -2,
-              right: -2,
+              top: 14,
+              right: 8,
               width: 8,
               height: 8,
               borderRadius: 4,
