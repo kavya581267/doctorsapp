@@ -134,7 +134,7 @@ const AppointmentsListScreen = () => {
           <Badge style={statusColor(item.status)}>{item.status}</Badge>
         </View>
         {
-          item.status === "CANCELLED" && (
+          item.status !== "CANCELLED"  && (
             <View style={styles.actions}>
               <TouchableOpacity onPress={() => editAppointment(item)} style={{ marginRight: 25 }}>
                 <Ionicons name="create-outline" size={20} color="#007bff" />
