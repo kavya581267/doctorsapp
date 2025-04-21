@@ -19,9 +19,10 @@ import { AuthContext } from '@context/AuthContext';
 import { Role } from '@api/model/enums';
 import { AppointmentListResponse } from '@api/model/appointments/AppointmentListResponse';
 import { clinicService } from '@api/clinicService';
-import { Badge } from 'react-native-paper';
+import { Badge, Chip, Modal, Portal } from 'react-native-paper';
 import { convertTo12Hour, formatDateToMonthDay, formatToYYYYMMDD, getFutureDate, getPastDate } from '@utils/utils';
 import { RootStackParamList } from '@components/MainNavigation';
+import FilterableAppointments from './Filter';
 
 const AppointmentsListScreen = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
@@ -35,6 +36,10 @@ const AppointmentsListScreen = () => {
   const [cancelReason, setCancelReason] = useState('');
   const [selectedAppointment, setSelectedAppointment] = useState<AppointmentListResponse | null>(null);
   const [refresh, setRefresh] = useState(false);
+  const [showFilterModal, setShowFilterModal] = useState(false);
+  const [filteredAppointments, setFilteredAppointments] = useState<AppointmentListResponse[]>([]);
+  const [filtersApplied, setFiltersApplied] = useState(false);
+  const [filterTabIndex, setFilterTabIndex] = useState(0);
 
   const cancelAppointment = (item: AppointmentListResponse) => {
     setSelectedAppointment(item);
@@ -74,10 +79,6 @@ const AppointmentsListScreen = () => {
     const pastFromDate = getPastDate(today, 15);
     const pastToDate = getPastDate(today, 1);
 
-    const gg = () => {
-      return styles.container
-    }
-
     try {
       setLoading(true);
       if (role === Role.DOCTOR) {
@@ -103,6 +104,19 @@ const AppointmentsListScreen = () => {
     fetchAppointments();
   }, []);
 
+  const handleFilterApplied = (filteredData, isFilterActive) => {
+    setFilteredAppointments(filteredData);
+    setFiltersApplied(isFilterActive);
+    setFilterTabIndex(selected); // Save the tab where filter was applied
+    setShowFilterModal(false);
+  };
+  const getListData = () => {
+    if (filtersApplied && filterTabIndex === selected) {
+      return filteredAppointments;
+    }
+    return selected === 0 ? upcomingAppointments : pastAppointments;
+  };
+
   const renderItem = ({ item }) => (
     <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('PatientMedical', { appointment: item })}>
       <View>
@@ -121,7 +135,7 @@ const AppointmentsListScreen = () => {
           <Badge style={statusColor(item.status)}>{item.status}</Badge>
         </View>
         {
-          item.status === "CANCELLED" ? "" :
+          item.status === "CANCELLED" && (
             <View style={styles.actions}>
               <TouchableOpacity onPress={() => editAppointment(item)} style={{ marginRight: 25 }}>
                 <Ionicons name="create-outline" size={20} color="#007bff" />
@@ -130,6 +144,7 @@ const AppointmentsListScreen = () => {
                 <Ionicons name="close-outline" size={20} color="red" />
               </TouchableOpacity>
             </View>
+          )
         }
 
       </View>
@@ -139,7 +154,47 @@ const AppointmentsListScreen = () => {
   return (
     <View style={styles.container}>
       <Back />
-      <TextInput style={styles.searchBar} placeholder="Search patient, doctor or mobile number" />
+
+      <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
+        <TextInput style={styles.searchBar} placeholder="Search patient, doctor or mobile number" />
+
+        <TouchableOpacity onPress={() => setShowFilterModal(true)}>
+          <Ionicons name="filter-outline" size={24} color="#333" />
+        </TouchableOpacity>
+        {filtersApplied && (
+          <View
+            style={{
+              position: 'absolute',
+              top: -2,
+              right: -2,
+              width: 8,
+              height: 8,
+              borderRadius: 4,
+              backgroundColor: 'red',
+            }}
+          />
+        )}
+      </View>
+
+
+      <Portal>
+        <Modal
+          visible={showFilterModal}
+          onDismiss={() => setShowFilterModal(false)}
+          contentContainerStyle={{
+            backgroundColor: 'white',
+            padding: 20,
+            margin: 20,
+            borderRadius: 10,
+          }}
+        >
+          <FilterableAppointments
+            appointments={selected === 0 ? upcomingAppointments : pastAppointments}
+            onFiltered={handleFilterApplied} // Pass filter applied handler
+          />
+        </Modal>
+      </Portal>
+
       <View style={styles.tabRow}>
         <TouchableOpacity onPress={() => setSelected(0)} style={selected === 0 ? styles.tabSelected : styles.tab}>
           <Text>Upcoming</Text>
@@ -148,12 +203,12 @@ const AppointmentsListScreen = () => {
           <Text>Past</Text>
         </TouchableOpacity>
       </View>
-
       <FlatList
-        data={selected === 0 ? upcomingAppointments : pastAppointments}
+        data={getListData()}
         renderItem={renderItem}
         keyExtractor={(item) => item.id}
       />
+
 
       <TouchableOpacity style={styles.addButton} onPress={() => navigation.navigate('BookAppointmentScreen')}>
         <Text style={styles.addButtonText}>+ Book Appointment</Text>
@@ -265,15 +320,15 @@ const styles = StyleSheet.create({
 
   activeBadgeScheduled: {
     marginTop: 4,
-   // backgroundColor: '#d1fae5',
-   backgroundColor:"#2196F3",
-    color:  COLORS.white,
+    // backgroundColor: '#d1fae5',
+    backgroundColor: "#2196F3",
+    color: COLORS.white,
     fontWeight: 'bold',
   },
   activeBadgeConfirmed: {
     marginTop: 4,
-   backgroundColor:"#4CAF50",
-    color:  COLORS.white,
+    backgroundColor: "#4CAF50",
+    color: COLORS.white,
     fontWeight: 'bold',
   },
   activeBadgeCanceled: {

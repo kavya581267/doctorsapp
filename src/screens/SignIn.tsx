@@ -27,8 +27,9 @@ export default function SignIn() {
             await login(form);
             navigation.navigate('Mainscreen');
         } catch (error) {
-            setErrorMessage(error.toString())
             setVisible(true)
+            setErrorMessage(error.toString())
+            
         }
         setLoading(false);
     }
