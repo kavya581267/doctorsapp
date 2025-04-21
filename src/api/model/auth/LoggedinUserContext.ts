@@ -6,4 +6,5 @@ export class LoggedInUserContext {
   clinicSchedule: string;
   roles: [];
   internalUserId: number;
+  specialityId?:number
 }

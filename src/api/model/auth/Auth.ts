@@ -16,6 +16,7 @@ export interface LoginResponse {
   requiresMfa: boolean;
   clinicId: number;
   doctors: Doctor[];
+  specialityId:number
 }
 
 export class UserInfo {
