@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import PresentingComplaints from './PresentingComplaints';
@@ -7,6 +7,7 @@ import Note from './Note';
 import Back from '@components/Back';
 import { Divider } from 'react-native-paper';
 import { COLORS } from '@utils/colors';
+import { AuthContext } from '@context/AuthContext';
 
 const MedicalFormScreen = () => {
 
@@ -16,6 +17,8 @@ const MedicalFormScreen = () => {
     const medicationsList = ["Paracetamol", "Ibuprofen", "Amoxicillin", "Aspirin", "Metformin"];
     const familyHistoryList = ["Diabetes", "Hypertension", "Heart Disease", "Cancer", "Asthma"];
     const pastMedicalHistoryList = ["Diabetes", "Hypertension", "Stroke", "Tuberculosis", "Arthritis"];
+    
+     const {masterData, setMasterData} =  useContext(AuthContext);
 
     return (
         <View style={styles.container}>

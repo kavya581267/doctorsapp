@@ -12,6 +12,7 @@ export const USER_CONTEXT="user_context";
 export const ACCESS_TOKENS_CONTEXT= "access_tokens";
 export const CLINIC_CONTEXT="clinic_context";
 export const DOCTORS_LIST="doc_list";
+export const MASTER_DATA_CONTEXT = "master_data";
 
 
 
@@ -88,6 +89,8 @@ export const ADMIN_HOME_DASHBOARD_API  ="/auth/admin/home"
 export const DOCTOR_HOME_DASHBOARD_API = "/auth/staff/home"
 
 export const LOGO_URL ="https://www.mdops.com/wp-content/themes/mdops/images/logo.png"
+
+export const MASTER_DATA ="/master/data/{{clinicId}}/{{specialityId}}"
 
 
 //patient

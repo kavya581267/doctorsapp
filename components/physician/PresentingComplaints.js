@@ -5,7 +5,8 @@ import Icon from "react-native-vector-icons/Ionicons";
 import { Button } from "react-native-paper";
 import { COLORS } from "@utils/colors";
 
-export default function PresentingComplaints({ title, itemList = [] }) {
+
+export default function PresentingComplaints({ title, itemList }) {
   const [searchText, setSearchText] = useState("");
   const [selectedItems, setSelectedItems] = useState([]);
   const [itemListState, setItemListState] = useState(itemList);
