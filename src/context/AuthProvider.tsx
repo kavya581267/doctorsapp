@@ -81,7 +81,7 @@ export const AuthProvider = ({ children }: Props) => {
 
   const login = async (loginRequest: LoginRequest) => {
     try {
-      setLoading(true)
+      //setLoading(true)
       const response = await loginService.login(loginRequest);
 
       //legacy to remove
@@ -112,10 +112,10 @@ export const AuthProvider = ({ children }: Props) => {
       await storeObject(USER_CONTEXT, loginUserContext);
       setLoggedinUserContext(loginUserContext);
       
-      setLoading(false)
+      //setLoading(false)
       return true;
     } catch (error) {
-      setLoading(false)
+      //setLoading(false)
       throw error;
     }
   };

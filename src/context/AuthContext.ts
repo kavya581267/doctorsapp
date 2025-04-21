@@ -4,7 +4,7 @@ import React, { createContext, ReactNode } from "react";
 
 
 export interface AuthContextProp {
-    login: (req: LoginRequest) => void;
+    login: (req: LoginRequest) => Promise<any>;
     logout: () => void;
     loading: boolean;
     loggedInUserContext: LoggedInUserContext;
