@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
-import { Button, Chip, Divider } from 'react-native-paper';
+import { Button, Checkbox, Chip, Divider } from 'react-native-paper';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import moment from 'moment';
 
@@ -32,20 +32,37 @@ const FilterableAppointments = ({ appointments, onFiltered, fromDate, setFromDat
         onFiltered(filtered, isFilterActive);
     };
 
+    const toggleStatus = (status) => {
+        if (selectedStatus.includes(status)) {
+            setSelectedStatus(selectedStatus.filter((s) => s !== status));
+        } else {
+            setSelectedStatus([...selectedStatus, status]);
+        }
+    };
+
+    
     return (
         <View style={{ padding: 5 }}>
             {/* header */}
-            <View style={{flexDirection:"row",justifyContent:"space-between",alignItems:"center"}}>
+            <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
                 <Text style={{ marginBottom: 15, fontSize: 16, fontWeight: "500" }}>Filters</Text>
-                <Text style={{ marginBottom: 15, fontSize: 15, fontWeight: "500",color:"grey" }}>X</Text>
+                <TouchableOpacity onPress={() => {
+                    setSelectedStatus([]);
+                    setFromDate(new Date());
+                    setToDate(new Date());
+                    onFiltered([], false);
+                }}>
+                    <Text style={{ marginBottom: 15, fontSize: 15, fontWeight: "500", color: "grey" }}>X</Text>
+                </TouchableOpacity>
+
             </View>
 
             <Divider />
 
-             {/* Date Filters */}
-            <View style={{ marginBottom: 10,marginTop:10 }}>
+            {/* Date Filters */}
+            <View style={{ marginBottom: 10, marginTop: 10 }}>
                 <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", marginBottom: 10 }}>
-                    <Text>From:</Text>
+                    <Text style={{ fontWeight: '400', fontSize: 15, marginBottom: 8 }}>From :</Text>
                     <TouchableOpacity onPress={() => setShowFromPicker(true)}>
                         <Text style={{ padding: 8, borderWidth: 1, borderRadius: 5 }}>{moment(fromDate).format("YYYY-MM-DD")}</Text>
                     </TouchableOpacity>
@@ -63,7 +80,7 @@ const FilterableAppointments = ({ appointments, onFiltered, fromDate, setFromDat
 
 
                 <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
-                    <Text>To:</Text>
+                    <Text style={{ fontWeight: '400', fontSize: 15, marginBottom: 8 }}>To :</Text>
                     <TouchableOpacity onPress={() => setShowToPicker(true)}>
                         <Text style={{ padding: 8, borderWidth: 1, borderRadius: 5 }}>{moment(toDate).format("YYYY-MM-DD")}</Text>
                     </TouchableOpacity>
@@ -84,28 +101,18 @@ const FilterableAppointments = ({ appointments, onFiltered, fromDate, setFromDat
 
 
             {/* Status Filter */}
-            <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginVertical: 10, justifyContent: 'center' }}>
-                {statuses.map(status => {
-                    const isSelected = selectedStatus.includes(status);
-                    return (
-                        <Chip
-                            key={status}
-                            mode="outlined"
-                            selected={isSelected}
-                            onPress={() => {
-                                if (isSelected) {
-                                    setSelectedStatus(prev => prev.filter(s => s !== status));
-                                } else {
-
-                                    setSelectedStatus(prev => [...prev, status]);
-                                }
-                            }}
-                            style={{ marginRight: 8, marginBottom: 8 }}
-                        >
-                            {status}
-                        </Chip>
-                    );
-                })}
+            <Text style={{ fontWeight: '400', fontSize: 15, marginBottom: 8 }}>Status :</Text>
+            <View style={{flexDirection:"row",flexWrap:"wrap",marginBottom:10}}>
+               
+                {statuses.map((status) => (
+                    <View key={status} style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 8 }}>
+                        <Checkbox
+                            status={selectedStatus.includes(status) ? 'checked' : 'unchecked'}
+                            onPress={() => toggleStatus(status)}
+                        />
+                        <Text onPress={() => toggleStatus(status)}>{status}</Text>
+                    </View>
+                ))}
             </View>
 
             {/* Apply Filter */}
@@ -115,7 +122,7 @@ const FilterableAppointments = ({ appointments, onFiltered, fromDate, setFromDat
                     setSelectedStatus([]);
                     setFromDate(new Date());
                     setToDate(new Date());
-                    onFiltered([], false); // Clear filters
+                    onFiltered([], false);
                 }}
                 style={{ marginTop: 10 }}
             >
