@@ -293,7 +293,7 @@ const styles = StyleSheet.create({
     borderColor: '#ccc',
     paddingHorizontal: 12,
     marginBottom: 10,
-    width:400
+    width:"80%"
   },
   tabRow: {
     flexDirection: 'row',
