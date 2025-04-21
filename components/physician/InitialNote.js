@@ -6,6 +6,7 @@ import { useNavigation } from '@react-navigation/native';
 import Note from './Note';
 import Back from '@components/Back';
 import { Divider } from 'react-native-paper';
+import { COLORS } from '@utils/colors';
 
 const MedicalFormScreen = () => {
 
@@ -75,15 +76,13 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     submitButton: {
-
         paddingHorizontal: 12,
         paddingVertical: 6,
         borderRadius: 5,
-        borderWidth: 1,
-        borderColor: "black"
+        backgroundColor:COLORS.primary
     },
     submitText: {
-        color: '#7B1FA2',
+        color: "white",
         fontWeight: 'bold',
     },
     content: {

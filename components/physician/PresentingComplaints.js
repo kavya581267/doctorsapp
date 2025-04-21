@@ -2,27 +2,40 @@ import React, { useState } from "react";
 import { View, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, ScrollView, Keyboard } from "react-native";
 import styles from "../styles/presentingComplaintsStyle";
 import Icon from "react-native-vector-icons/Ionicons";
+import { Button } from "react-native-paper";
+import { COLORS } from "@utils/colors";
 
-export default function PresentingComplaints({title,itemList}) {
+export default function PresentingComplaints({ title, itemList = [] }) {
   const [searchText, setSearchText] = useState("");
-
   const [selectedItems, setSelectedItems] = useState([]);
+  const [itemListState, setItemListState] = useState(itemList);
 
   const addItem = (item) => {
-    
+
     if (!selectedItems.includes(item)) {
-        setSelectedItems([...selectedItems, item]);
+      setSelectedItems([...selectedItems, item]);
     }
-   
+
     setSearchText("")
+  };
+
+  const addNewItem = () => {
+    if (searchText && !itemListState.includes(searchText)) {
+      setItemListState([...itemListState, searchText]); 
+      addItem(searchText); 
+    }
+    setSearchText(""); 
   };
 
   const removeComplaint = (item) => {
     setSelectedItems(selectedItems.filter((selected) => selected !== item));
   };
+  const filteredItems = itemListState.filter((item) =>
+    item.toLowerCase().includes(searchText.toLowerCase())
+  );
 
   return (
-    
+
     <View style={styles.section}>
       <Text style={styles.sectionTitle}>{title}</Text>
 
@@ -36,21 +49,30 @@ export default function PresentingComplaints({title,itemList}) {
         />
       </View>
 
-      {searchText.length > 0 && (
-                <View style={styles.dropdown}>
-                    {itemList
-                        .filter((item) => item.toLowerCase().includes(searchText.toLowerCase()))
-                        .map((item, index) => (
-                            <TouchableOpacity
-                                key={index}
-                                style={styles.dropdownItem}
-                                onPress={() => addItem(item)}
-                            >
-                                <Text style={styles.dropdownText}>{item}</Text>
-                            </TouchableOpacity>
-                        ))}
-                </View>
-            )}
+
+      {searchText.length > 0 && filteredItems.length > 0 && (
+        <View style={styles.dropdown}>
+          {filteredItems.map((item, index) => (
+            <TouchableOpacity
+              key={index}
+              style={styles.dropdownItem}
+              onPress={() => addItem(item)}
+            >
+              <Text style={styles.dropdownText}>{item}</Text>
+            </TouchableOpacity>
+          ))}
+        </View>
+      )}
+
+      {searchText.length > 0 && filteredItems.length === 0 && (
+        <View style={styles.dropdown}>
+          <Text style={styles.dropdownItem}>No results found</Text>
+          <View> 
+            <Button onPress={addNewItem}>Add</Button>
+          </View>
+
+        </View>
+      )}
 
       <ScrollView contentContainerStyle={styles.complaintsBox}>
         {selectedItems.map((item, index) => (
@@ -63,6 +85,6 @@ export default function PresentingComplaints({title,itemList}) {
         ))}
       </ScrollView>
     </View>
-  
+
   );
 }
