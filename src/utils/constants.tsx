@@ -83,7 +83,14 @@ export const REMOVE_DOCTOR_SPECIALTIES_PATH ="/doctors/{{doctorId}}/specialties/
 
 //master data
 export const GET_ALL_SPECIALTIES_PATH ="/specialties";
-
+export const GET_MASTER_DATA_PATH = "/master/data/{clinicId}/{specialityId}";
+export const PRESENTING_COMPLAINTS_PATH = "/master/presenting-complaints";
+export const FAMILY_HISTORY_PATH = "/master/family-history";
+export const PROBLEMS_PATH = "/master/problems";
+export const PAST_MEDICAL_HISTORY_PATH = "/master/past-medical-history";
+export const MEDICATIONS_PATH = "/master/medications";
+export const LAB_TEST_PATH = "/master/lab-tests"
+ 
 //home 
 export const ADMIN_HOME_DASHBOARD_API  ="/auth/admin/home"
 export const DOCTOR_HOME_DASHBOARD_API = "/auth/staff/home"

@@ -48,3 +48,89 @@ export class MasterData {
     problems: Problem[] = []
 }
 
+export class presentingComplaintsRequest {
+    clinicId: number;
+    specialityId: number;
+    name: string;
+}
+
+export class presentingComplaintsResponse {
+    id: number;
+    name: string;
+}
+
+export class FamilyHistoryRequest {
+    clinicId: number;
+    specialityId: number;
+    name: string;
+}
+
+export class FamilyHistoryResponse {
+    id: number;
+    name: string;
+}
+
+export class ProblemsRequest {
+    clinicId: number;
+    specialityId: number;
+    problem: string;
+}
+
+export class ProblemsResponse {
+    id: number;
+    problem: string;
+}
+
+
+export class PastMedicalHistoryRequest {
+    clinicId: number;
+    specialityId: number;
+    name: string;
+}
+
+export class PastMedicalHistoryResponse {
+    id: number;
+    name: string;
+}
+
+export class MedicationsRequest {
+    clinicId: number;
+    specialityId: number;
+    userId: number;
+    medicationName: string;
+    genericName: string;
+    category: string;
+    description: string;
+    dosage: string;
+    dosageUnit: string;
+    dosageForm: string;
+    strength: string;
+    isActive: boolean
+}
+
+export class MedicationsResponse {
+    id: number;
+    medicationName: string;
+    genericName: string;
+    category: string;
+    description: string;
+    dosage: string;
+    dosageUnit: string;
+    dosageForm: string;
+    strength: string;
+}
+
+export class LabTestRequest{
+    clinicId: number;
+    specialityId: number;
+    testName: string;
+    description: string;
+    category: string
+}
+
+export class LabTestResponse{
+    id: number;
+    testName: string;
+    description: string;
+    category: string
+}

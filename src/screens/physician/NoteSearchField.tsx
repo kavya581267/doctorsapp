@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { View, Text, TextInput, TouchableOpacity, ScrollView } from "react-native";
-import styles from "../styles/presentingComplaintsStyle";
+import styles from "@styles/noteSearchFieldStyles";
 import Icon from "react-native-vector-icons/Ionicons";
 import { Button } from "react-native-paper";
 
 
 
-export default function PresentingComplaints({ title, itemList }) {
+export default function NoteSearchField({ title, itemList }) {
   const [searchText, setSearchText] = useState("");
   const [selectedItems, setSelectedItems] = useState([]);
   const [itemListState, setItemListState] = useState(itemList);
