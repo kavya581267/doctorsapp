@@ -15,7 +15,7 @@ import PasMedHistory from './PasMedHistory';
 
 
 const InitialNoteScreen = () => {
-    const { masterData, setMasterData } = useContext(AuthContext);
+    const { masterData, setMasterDataAdapter } = useContext(AuthContext);
    
     console.log(masterData)
     const createPresentingComplaint = async (reqObj: InitialCommonNoteRequest) => {
@@ -24,7 +24,7 @@ const InitialNoteScreen = () => {
             const resp = await doctorService.createPresentingComplaints(reqObj);
             masterData.presentingComplaints.push(resp);
             const newMasterDate = { ...masterData };
-            setMasterData(newMasterDate);
+            await setMasterDataAdapter(newMasterDate);
             return resp;
         } catch (error) {
         }
@@ -36,7 +36,7 @@ const InitialNoteScreen = () => {
             const resp = await doctorService.createPastMedicalHistory(reqObj);
             masterData.pastMedicalHistory.push(resp);
             const newMasterDate = { ...masterData };
-            setMasterData(newMasterDate)
+            await setMasterDataAdapter(newMasterDate)
             return resp;
         } catch (error) {
         }
@@ -47,7 +47,7 @@ const InitialNoteScreen = () => {
             const resp = await doctorService.createFamilyHistory(reqObj);
             masterData.familyHistory.push(resp);
             const newMasterDate = { ...masterData };
-            setMasterData(newMasterDate)
+            await setMasterDataAdapter(newMasterDate)
             return resp;
         } catch (error) {
         }
