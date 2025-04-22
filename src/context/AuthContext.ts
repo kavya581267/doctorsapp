@@ -11,7 +11,7 @@ export interface AuthContextProp {
     loggedInUserContext: LoggedInUserContext;
     clinicDoctors: Doctor[];
     masterData: MasterData;
-    setMasterData: Dispatch<SetStateAction<MasterData>>
+    setMasterDataAdapter: (masterData: MasterData) => Promise<void>
 }
 
 export const AuthContext = createContext<AuthContextProp | undefined>(undefined);

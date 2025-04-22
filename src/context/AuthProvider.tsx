@@ -26,6 +26,11 @@ export const AuthProvider = ({ children }: Props) => {
 
   //check is usercontext exist
 
+  const setMasterDataAdapter = async (md: MasterData) => {
+      await storeObject(MASTER_DATA_CONTEXT, md);
+      setMasterData(md);
+  }
+
   const isLoggedInUserContext = async () => {
     const loggedInUserContext = await getObject<LoggedInUserContext>(USER_CONTEXT);
     const docs = await getObject<Doctor[]>(DOCTORS_LIST)
@@ -143,7 +148,7 @@ export const AuthProvider = ({ children }: Props) => {
   };
 
   return (
-    <AuthContext.Provider value={{ login, logout, loading, loggedInUserContext, clinicDoctors, setMasterData, masterData }}>
+    <AuthContext.Provider value={{ login, logout, loading, loggedInUserContext, clinicDoctors, setMasterDataAdapter , masterData }}>
       {children}
     </AuthContext.Provider>
   )
