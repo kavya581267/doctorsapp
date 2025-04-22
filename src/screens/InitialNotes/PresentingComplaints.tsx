@@ -70,7 +70,7 @@ const PresentingComplaints = ({ title, itemList, addNewItemCommon }: Props) => {
                     placeholder="Search Complaints"
                     style={styles.input}
                     value={searchText}
-                    onChangeText={setSearchText}
+                    onChangeText={(text) => {setSearchText(text)}}
                 />
                 <Button onPress={clearSearch}>X</Button>
             </View>

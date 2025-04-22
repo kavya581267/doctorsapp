@@ -1,7 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { useNavigation } from '@react-navigation/native';
 import Back from '@components/Back';
 import { Divider } from 'react-native-paper';
 import { COLORS } from '@utils/colors';
@@ -17,6 +16,7 @@ import { MdLogActivityIndicator } from '@components/MdLogActivityIndicator';
 const InitialNoteScreen = () => {
     const { masterData, setMasterData } = useContext(AuthContext);
     const [loading, setLoading] = useState(false);
+    console.log(masterData)
     const createPresentingComplaint = async (reqObj: InitialCommonNoteRequest) => {
         try {
             setLoading(true);
