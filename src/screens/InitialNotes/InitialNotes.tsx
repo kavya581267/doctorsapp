@@ -9,6 +9,8 @@ import PresentingComplaints from './PresentingComplaints';
 import Note from './Note';
 import { InitialCommonNoteRequest, Symptom } from '@api/model/doctor/MasterData';
 import { doctorService } from '@api/doctorService';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import PasMedHistory from './PasMedHistory';
 
 
 
@@ -52,7 +54,8 @@ const InitialNoteScreen = () => {
     }
 
     return (
-        <View style={styles.container}>
+        
+        <KeyboardAwareScrollView style={styles.container}>
             <Back nav='Mainscreen' tab='Appointments' />
 
             <View style={styles.header}>
@@ -71,13 +74,13 @@ const InitialNoteScreen = () => {
                 <PresentingComplaints title="Presenting Complaints" addNewItemCommon={createPresentingComplaint} itemList={masterData.presentingComplaints} />
                 <Note title="Personal History" />
 
-                <PresentingComplaints title="Past Medical History" addNewItemCommon={createMedicalHistory} itemList={masterData.pastMedicalHistory} />
+                <PasMedHistory title="Past Medical History" addNewItemCommon={createMedicalHistory} itemList={masterData.pastMedicalHistory} />
                 <Note title="Drug History" />
 
                 <PresentingComplaints title="Family History" addNewItemCommon={createFamilyHistory} itemList={masterData.familyHistory} />
             </ScrollView>
          
-        </View>
+        </KeyboardAwareScrollView>
     )
 
 
