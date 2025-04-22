@@ -13,11 +13,11 @@ type Props = {
 }
 
 
-const PresentingComplaints = ({ title, itemList,  addNewItemCommon}: Props) => {
+const PresentingComplaints = ({ title, itemList, addNewItemCommon }: Props) => {
     const [searchText, setSearchText] = useState("");
     const [itemListState, setItemListState] = useState(itemList);
     const [selectedItems, setSelectedItems] = useState<Symptom[]>([]);
-    const {loggedInUserContext} = useContext(AuthContext)
+    const { loggedInUserContext } = useContext(AuthContext)
 
 
     const clearSearch = () => {
@@ -31,13 +31,12 @@ const PresentingComplaints = ({ title, itemList,  addNewItemCommon}: Props) => {
         if (!selectedItems.includes(item)) {
             setSelectedItems([...selectedItems, item]);
         }
-
         setSearchText("")
     };
 
-    const removeComplaint = (item:Symptom) => {
+    const removeComplaint = (item: Symptom) => {
         setSelectedItems(selectedItems.filter((selected) => selected !== item));
-      };
+    };
 
     const addNewItem = async () => {
         const specialityId = loggedInUserContext.specialityId;
@@ -48,8 +47,11 @@ const PresentingComplaints = ({ title, itemList,  addNewItemCommon}: Props) => {
             name: searchText
         }
         const respItem = await addNewItemCommon(reqObj);
-        addItem(respItem);
-        setSearchText("");
+        if(respItem){
+            addItem(respItem);
+            setSearchText("");
+        }
+
     };
 
     return (

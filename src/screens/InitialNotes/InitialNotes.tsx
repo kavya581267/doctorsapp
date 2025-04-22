@@ -27,13 +27,14 @@ const InitialNoteScreen = () => {
             const resp = await doctorService.createPresentingComplaints(reqObj);
             masterData.presentingComplaints.push(resp);
             const newMasterDate = { ...masterData };
-            setMasterData(newMasterDate)
+            setMasterData(newMasterDate);
             return resp;
         } catch (error) {
             setVisible(true);
             setErrorMessage(error);
         }
         setLoading(false);
+       
     }
 
     const createMedicalHistory = async (reqObj: InitialCommonNoteRequest) => {
@@ -91,8 +92,7 @@ const InitialNoteScreen = () => {
 
                 <PresentingComplaints title="Family History" addNewItemCommon={createFamilyHistory} itemList={masterData.familyHistory} />
             </ScrollView>
-         <MdLogActivityIndicator loading={loading}/>
-         <MdLodSnackbar visible={visible} onDismiss={onDissmissSnackbar} message={errorMessage}/>
+           <MdLogActivityIndicator loading={loading}/>
         </View>
     )
 
