@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet, Dimensions } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Back from '@components/Back';
 import { Divider } from 'react-native-paper';
@@ -11,16 +11,16 @@ import { InitialCommonNoteRequest, Symptom } from '@api/model/doctor/MasterData'
 import { doctorService } from '@api/doctorService';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import PasMedHistory from './PasMedHistory';
-
+const { width, height } = Dimensions.get("window");
 
 
 const InitialNoteScreen = () => {
     const { masterData, setMasterDataAdapter } = useContext(AuthContext);
-   
+
     console.log(masterData)
     const createPresentingComplaint = async (reqObj: InitialCommonNoteRequest) => {
         try {
-           
+
             const resp = await doctorService.createPresentingComplaints(reqObj);
             masterData.presentingComplaints.push(resp);
             const newMasterDate = { ...masterData };
@@ -28,7 +28,7 @@ const InitialNoteScreen = () => {
             return resp;
         } catch (error) {
         }
-       
+
     }
 
     const createMedicalHistory = async (reqObj: InitialCommonNoteRequest) => {
@@ -54,32 +54,34 @@ const InitialNoteScreen = () => {
     }
 
     return (
-        
-        <KeyboardAwareScrollView style={styles.container}>
-            <Back nav='Mainscreen' tab='Appointments' />
+        <KeyboardAwareScrollView>
+            <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: 40 }}>
+                <View style={{height}}>
+                    <Back nav='Mainscreen' tab='Appointments' />
 
-            <View style={styles.header}>
-                <Text style={styles.headerTitle}>Initial Note</Text>
-                <TouchableOpacity style={styles.submitButton}>
-                    <Text style={styles.submitText}>Submit</Text>
-                </TouchableOpacity>
-            </View>
-            <Divider />
-            <ScrollView contentContainerStyle={styles.content}>
-                <View style={styles.userInfo}>
-                    <Icon name="person-circle" size={30} color="gray" />
-                    <Text style={styles.userText}>Sri 36</Text>
+                    <View style={styles.header}>
+                        <Text style={styles.headerTitle}>Initial Note</Text>
+                        <TouchableOpacity style={styles.submitButton}>
+                            <Text style={styles.submitText}>Submit</Text>
+                        </TouchableOpacity>
+                    </View>
+                    <Divider />
+                    <View style={styles.content}>
+                        <View style={styles.userInfo}>
+                            <Icon name="person-circle" size={30} color="gray" />
+                            <Text style={styles.userText}>Sri 36</Text>
+                        </View>
+                        <PresentingComplaints title="Presenting Complaints" addNewItemCommon={createPresentingComplaint} itemList={masterData.presentingComplaints} />
+                        <Note title="Personal History" />
+
+                        <PasMedHistory title="Past Medical History" addNewItemCommon={createMedicalHistory} itemList={masterData.pastMedicalHistory} />
+                        <Note title="Drug History" />
+
+                        <PresentingComplaints title="Family History" addNewItemCommon={createFamilyHistory} itemList={masterData.familyHistory} />
+
+                    </View>
                 </View>
-
-                <PresentingComplaints title="Presenting Complaints" addNewItemCommon={createPresentingComplaint} itemList={masterData.presentingComplaints} />
-                <Note title="Personal History" />
-
-                <PasMedHistory title="Past Medical History" addNewItemCommon={createMedicalHistory} itemList={masterData.pastMedicalHistory} />
-                <Note title="Drug History" />
-
-                <PresentingComplaints title="Family History" addNewItemCommon={createFamilyHistory} itemList={masterData.familyHistory} />
             </ScrollView>
-         
         </KeyboardAwareScrollView>
     )
 
@@ -117,6 +119,7 @@ const styles = StyleSheet.create({
     },
     content: {
         paddingTop: 10,
+        flex: 1
     },
     userInfo: {
         flexDirection: 'row',
