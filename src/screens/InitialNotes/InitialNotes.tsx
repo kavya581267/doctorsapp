@@ -9,17 +9,16 @@ import PresentingComplaints from './PresentingComplaints';
 import Note from './Note';
 import { InitialCommonNoteRequest, Symptom } from '@api/model/doctor/MasterData';
 import { doctorService } from '@api/doctorService';
-import { MdLogActivityIndicator } from '@components/MdLogActivityIndicator';
 
 
 
 const InitialNoteScreen = () => {
     const { masterData, setMasterData } = useContext(AuthContext);
-    const [loading, setLoading] = useState(false);
+   
     console.log(masterData)
     const createPresentingComplaint = async (reqObj: InitialCommonNoteRequest) => {
         try {
-            setLoading(true);
+           
             const resp = await doctorService.createPresentingComplaints(reqObj);
             masterData.presentingComplaints.push(resp);
             const newMasterDate = { ...masterData };
@@ -27,13 +26,11 @@ const InitialNoteScreen = () => {
             return resp;
         } catch (error) {
         }
-        setLoading(false);
        
     }
 
     const createMedicalHistory = async (reqObj: InitialCommonNoteRequest) => {
         try {
-            setLoading(true);
             const resp = await doctorService.createPastMedicalHistory(reqObj);
             masterData.pastMedicalHistory.push(resp);
             const newMasterDate = { ...masterData };
@@ -41,12 +38,10 @@ const InitialNoteScreen = () => {
             return resp;
         } catch (error) {
         }
-        setLoading(false);
     }
 
     const createFamilyHistory = async (reqObj: InitialCommonNoteRequest) => {
         try {
-            setLoading(true);
             const resp = await doctorService.createFamilyHistory(reqObj);
             masterData.familyHistory.push(resp);
             const newMasterDate = { ...masterData };
@@ -54,7 +49,6 @@ const InitialNoteScreen = () => {
             return resp;
         } catch (error) {
         }
-        setLoading(false);
     }
 
     return (
@@ -82,7 +76,7 @@ const InitialNoteScreen = () => {
 
                 <PresentingComplaints title="Family History" addNewItemCommon={createFamilyHistory} itemList={masterData.familyHistory} />
             </ScrollView>
-         <MdLogActivityIndicator loading={loading}/>
+         
         </View>
     )
 

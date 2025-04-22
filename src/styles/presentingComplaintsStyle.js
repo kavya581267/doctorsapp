@@ -33,6 +33,9 @@ export default StyleSheet.create({
 
    
     dropdown: {
+        position: 'relative',
+        zIndex: 1000,
+        width: '100%',
         backgroundColor: "white",
         borderWidth: 1,
         borderColor: COLORS.grey,

@@ -1,11 +1,12 @@
 import React, { useContext, useState } from "react";
-import { View, Text, TextInput, TouchableOpacity, ScrollView } from "react-native";
+import { View, Text, TextInput, TouchableOpacity, ScrollView, Keyboard } from "react-native";
 import styles from "@styles/presentingComplaintsStyle";
 import Icon from "react-native-vector-icons/Ionicons";
 import { Button } from "react-native-paper";
 import { InitialCommonNoteRequest, Symptom } from "@api/model/doctor/MasterData";
 import { AuthContext } from "@context/AuthContext";
 import { MdLodSnackbar } from "@components/MdLogSnacbar";
+import { MdLogActivityIndicator } from "@components/MdLogActivityIndicator";
 
 type Props = {
     title: string
@@ -22,6 +23,7 @@ const PresentingComplaints = ({ title, itemList, addNewItemCommon }: Props) => {
     const [visible, setVisible] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
     const onDissmissSnackbar = () => setVisible(false);
+    const [loading, setLoading] = useState(false);
 
 
     const clearSearch = () => {
@@ -43,6 +45,7 @@ const PresentingComplaints = ({ title, itemList, addNewItemCommon }: Props) => {
     };
 
     const addNewItem = async () => {
+        setLoading(true);
         const specialityId = loggedInUserContext.specialityId;
         const clinicId = loggedInUserContext.clinicDetails.id;
         const reqObj: InitialCommonNoteRequest = {
@@ -54,61 +57,70 @@ const PresentingComplaints = ({ title, itemList, addNewItemCommon }: Props) => {
         if (respItem) {
             addItem(respItem);
             setSearchText("");
-        }else{
+        } else {
             setVisible(true)
             setErrorMessage("Failed to add Item !!")
         }
+        setLoading(false);
     };
+    
 
     return (
-        <View style={styles.section}>
-            <Text style={styles.sectionTitle}>{title}</Text>
-            <View style={styles.inputContainer}>
-                <Icon name="search" size={18} color="gray" style={styles.icon} />
-                <TextInput
-                    placeholder="Search Complaints"
-                    style={styles.input}
-                    value={searchText}
-                    onChangeText={(text) => {setSearchText(text)}}
-                />
-                <Button onPress={clearSearch}>X</Button>
-            </View>
+  
+            <View style={styles.section}>
+                <Text style={styles.sectionTitle}>{title}</Text>
+                <View style={styles.inputContainer}>
+                    <Icon name="search" size={18} color="gray" style={styles.icon} />
+                    <TextInput
+                        placeholder="Search Complaints"
+                        style={styles.input}
+                        value={searchText}
+                        onChangeText={(text) => { setSearchText(text) }}
+                    />
+                    <Button onPress={clearSearch}>X</Button>
+                </View>
 
-            {searchText.length > 0 && filteredItems.length > 0 && (
-                <View style={styles.dropdown}>
-                    {filteredItems.map((item, index) => (
-                        <TouchableOpacity
-                            key={index}
-                            style={styles.dropdownItem}
-                            onPress={() => addItem(item)}
-                        >
-                            <Text style={styles.dropdownText}>{item.name}</Text>
-                        </TouchableOpacity>
+                {searchText.length > 0 && filteredItems.length > 0 && (
+                    <View style={styles.dropdown}>
+                        {filteredItems.map((item, index) => (
+                            <TouchableOpacity
+                                key={index}
+                                style={styles.dropdownItem}
+                                onPress={() => {
+                                    Keyboard.dismiss();
+                                    addItem(item);
+                                }}
+                            >
+                                <Text style={styles.dropdownText}>{item.name}</Text>
+                            </TouchableOpacity>
+                        ))}
+                    </View>
+                )}
+
+                {searchText.length > 0 && filteredItems.length === 0 && (
+                    <View style={[styles.dropdown, styles.flexrow]}>
+                        <Text style={styles.dropdownItem}>No results found</Text>
+                        <View>
+                            <Button onPress={addNewItem}>Add</Button>
+                        </View>
+
+                    </View>
+                )}
+                <ScrollView contentContainerStyle={styles.complaintsBox}>
+                    {selectedItems.map((item, index) => (
+                        <View key={index} style={styles.selectedChip}>
+                            <Text style={styles.selectedText}>{item.name}</Text>
+                            <TouchableOpacity onPress={() => removeComplaint(item)}>
+                                <Icon name="close-circle" size={18} color="white" style={styles.removeIcon} />
+                            </TouchableOpacity>
+                        </View>
                     ))}
-                </View>
-            )}
+                </ScrollView>
 
-            {searchText.length > 0 && filteredItems.length === 0 && (
-                <View style={[styles.dropdown, styles.flexrow]}>
-                    <Text style={styles.dropdownItem}>No results found</Text>
-                    <View>
-                        <Button onPress={addNewItem}>Add</Button>
-                    </View>
-
-                </View>
-            )}
-            <ScrollView contentContainerStyle={styles.complaintsBox}>
-                {selectedItems.map((item, index) => (
-                    <View key={index} style={styles.selectedChip}>
-                        <Text style={styles.selectedText}>{item.name}</Text>
-                        <TouchableOpacity onPress={() => removeComplaint(item)}>
-                            <Icon name="close-circle" size={18} color="white" style={styles.removeIcon} />
-                        </TouchableOpacity>
-                    </View>
-                ))}
-            </ScrollView>
-            <MdLodSnackbar visible={visible} onDismiss={onDissmissSnackbar} message={errorMessage} />
-        </View>
+                <MdLogActivityIndicator loading={loading} />
+                <MdLodSnackbar visible={visible} onDismiss={onDissmissSnackbar} message={errorMessage} />
+            </View>
+       
     )
 
 }
