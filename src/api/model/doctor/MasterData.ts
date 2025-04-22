@@ -48,27 +48,13 @@ export class MasterData {
     problems: Problem[] = []
 }
 
+{/* PresentingComplaints,FamilyHistory, PastMedicalHistory*/ }
 export class InitialCommonNoteRequest {
     clinicId: number;
     specialityId: number;
     name: string;
 }
 
-export class presentingComplaintsResponse {
-    id: number;
-    name: string;
-}
-
-export class FamilyHistoryRequest {
-    clinicId: number;
-    specialityId: number;
-    name: string;
-}
-
-export class FamilyHistoryResponse {
-    id: number;
-    name: string;
-}
 
 export class ProblemsRequest {
     clinicId: number;
@@ -81,17 +67,6 @@ export class ProblemsResponse {
     problem: string;
 }
 
-
-export class PastMedicalHistoryRequest {
-    clinicId: number;
-    specialityId: number;
-    name: string;
-}
-
-export class PastMedicalHistoryResponse {
-    id: number;
-    name: string;
-}
 
 export class MedicationsRequest {
     clinicId: number;

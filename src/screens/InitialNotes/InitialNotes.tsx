@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
@@ -10,34 +10,60 @@ import PresentingComplaints from './PresentingComplaints';
 import Note from './Note';
 import { InitialCommonNoteRequest, Symptom } from '@api/model/doctor/MasterData';
 import { doctorService } from '@api/doctorService';
+import { MdLogActivityIndicator } from '@components/MdLogActivityIndicator';
+import { MdLodSnackbar } from '@components/MdLogSnacbar';
 
 
 
 const InitialNoteScreen = () => {
     const { masterData, setMasterData } = useContext(AuthContext);
-
+    const [loading, setLoading] = useState(false);
+    const [visible, setVisible] = useState(false);
+    const [errorMessage, setErrorMessage] = useState("");
+    const onDissmissSnackbar = () => setVisible(false);
     const createPresentingComplaint = async (reqObj: InitialCommonNoteRequest) => {
-        const resp = await doctorService.createPresentingComplaints(reqObj);
-        masterData.presentingComplaints.push(resp);
-        const newMasterDate = { ...masterData };
-        setMasterData(newMasterDate)
-        return resp;
+        try {
+            setLoading(true);
+            const resp = await doctorService.createPresentingComplaints(reqObj);
+            masterData.presentingComplaints.push(resp);
+            const newMasterDate = { ...masterData };
+            setMasterData(newMasterDate)
+            return resp;
+        } catch (error) {
+            setVisible(true);
+            setErrorMessage(error);
+        }
+        setLoading(false);
     }
 
     const createMedicalHistory = async (reqObj: InitialCommonNoteRequest) => {
-        const resp = await doctorService.createPastMedicalHistory(reqObj);
-        masterData.pastMedicalHistory.push(resp);
-        const newMasterDate = { ...masterData };
-        setMasterData(newMasterDate)
-        return resp;
+        try {
+            setLoading(true);
+            const resp = await doctorService.createPastMedicalHistory(reqObj);
+            masterData.pastMedicalHistory.push(resp);
+            const newMasterDate = { ...masterData };
+            setMasterData(newMasterDate)
+            return resp;
+        } catch (error) {
+            setVisible(true);
+            setErrorMessage(error);
+        }
+        setLoading(false);
     }
 
     const createFamilyHistory = async (reqObj: InitialCommonNoteRequest) => {
-        const resp = await doctorService.createFamilyHistory(reqObj);
-        masterData.familyHistory.push(resp);
-        const newMasterDate = { ...masterData };
-        setMasterData(newMasterDate)
-        return resp;
+        try {
+            setLoading(true);
+            const resp = await doctorService.createFamilyHistory(reqObj);
+            masterData.familyHistory.push(resp);
+            const newMasterDate = { ...masterData };
+            setMasterData(newMasterDate)
+            return resp;
+        } catch (error) {
+            setVisible(true);
+            setErrorMessage(error);
+        }
+        setLoading(false);
     }
 
     return (
@@ -65,7 +91,8 @@ const InitialNoteScreen = () => {
 
                 <PresentingComplaints title="Family History" addNewItemCommon={createFamilyHistory} itemList={masterData.familyHistory} />
             </ScrollView>
-
+         <MdLogActivityIndicator loading={loading}/>
+         <MdLodSnackbar visible={visible} onDismiss={onDissmissSnackbar} message={errorMessage}/>
         </View>
     )
 

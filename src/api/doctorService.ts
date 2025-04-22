@@ -6,7 +6,7 @@ import { replacePlaceholders } from "@utils/utils";
 import { DoctorExceptionRequest } from "./model/doctor/DoctorException";
 import { DoctorSpecialtyRequest } from "./model/doctor/DoctorSpecialtyRequest";
 import { AppointmentListResponse } from "./model/appointments/AppointmentListResponse";
-import { FamilyHistoryRequest, LabTest, Medication, PastMedicalHistoryRequest, presentingComplaintsRequest, ProblemsRequest, Symptom } from "./model/doctor/MasterData";
+import {  LabTest, Medication, InitialCommonNoteRequest, ProblemsRequest, Symptom, ProblemsResponse, MedicationsResponse, LabTestResponse } from "./model/doctor/MasterData";
 
 
 
@@ -105,7 +105,7 @@ export const doctorService = {
     },
 
     //Master Data
-    createPresentingComplaints: async (complaints: presentingComplaintsRequest):Promise<Symptom> => {
+    createPresentingComplaints: async (complaints: InitialCommonNoteRequest):Promise<Symptom> => {
 
         try {
             const response = await apiService.post(PRESENTING_COMPLAINTS_PATH, complaints);
@@ -115,7 +115,7 @@ export const doctorService = {
         }
     },
 
-    createFamilyHistory: async (famHistory: FamilyHistoryRequest) => {
+    createFamilyHistory: async (famHistory: InitialCommonNoteRequest):Promise<Symptom> => {
         try {
             const response = await apiService.post(FAMILY_HISTORY_PATH, famHistory);
             return response.data;
@@ -124,7 +124,7 @@ export const doctorService = {
         }
     },
 
-    createProblems: async (problem: ProblemsRequest) => {
+    createProblems: async (problem: ProblemsRequest):Promise<ProblemsResponse> => {
         try {
             const response = await apiService.post(PROBLEMS_PATH, problem);
             return response.data;
@@ -133,7 +133,7 @@ export const doctorService = {
         }
     },
 
-    createPastMedicalHistory: async (medicalHistory: PastMedicalHistoryRequest) => {
+    createPastMedicalHistory: async (medicalHistory: InitialCommonNoteRequest):Promise<Symptom> => {
         try {
             const response = await apiService.post(PAST_MEDICAL_HISTORY_PATH, medicalHistory);
             return response.data;
@@ -142,7 +142,7 @@ export const doctorService = {
         }
     },
 
-    createMedications: async (medication: Medication) => {
+    createMedications: async (medication: Medication):Promise<MedicationsResponse> => {
         try {
             const response = await apiService.post(MEDICATIONS_PATH, medication);
             return response.data;
@@ -151,7 +151,7 @@ export const doctorService = {
         }
     },
 
-    createLabTest: async (labTest: LabTest) => {
+    createLabTest: async (labTest: LabTest):Promise<LabTestResponse> => {
         try {
             const response = await apiService.post(LAB_TEST_PATH, labTest);
             return response.data;
