@@ -6,7 +6,7 @@ import { replacePlaceholders } from "@utils/utils";
 import { DoctorExceptionRequest } from "./model/doctor/DoctorException";
 import { DoctorSpecialtyRequest } from "./model/doctor/DoctorSpecialtyRequest";
 import { AppointmentListResponse } from "./model/appointments/AppointmentListResponse";
-import { FamilyHistoryRequest, LabTest, Medication, PastMedicalHistoryRequest, presentingComplaintsRequest, ProblemsRequest } from "./model/doctor/MasterData";
+import { FamilyHistoryRequest, LabTest, Medication, PastMedicalHistoryRequest, presentingComplaintsRequest, ProblemsRequest, Symptom } from "./model/doctor/MasterData";
 
 
 
@@ -105,7 +105,7 @@ export const doctorService = {
     },
 
     //Master Data
-    createPresentingComplaints: async (complaints: presentingComplaintsRequest) => {
+    createPresentingComplaints: async (complaints: presentingComplaintsRequest):Promise<Symptom> => {
 
         try {
             const response = await apiService.post(PRESENTING_COMPLAINTS_PATH, complaints);

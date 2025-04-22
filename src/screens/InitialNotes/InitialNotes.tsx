@@ -8,11 +8,37 @@ import { COLORS } from '@utils/colors';
 import { AuthContext } from '@context/AuthContext';
 import PresentingComplaints from './PresentingComplaints';
 import Note from './Note';
+import { InitialCommonNoteRequest, Symptom } from '@api/model/doctor/MasterData';
+import { doctorService } from '@api/doctorService';
 
 
 
 const InitialNoteScreen = () => {
     const { masterData, setMasterData } = useContext(AuthContext);
+
+    const createPresentingComplaint = async (reqObj: InitialCommonNoteRequest) => {
+        const resp = await doctorService.createPresentingComplaints(reqObj);
+        masterData.presentingComplaints.push(resp);
+        const newMasterDate = { ...masterData };
+        setMasterData(newMasterDate)
+        return resp;
+    }
+
+    const createMedicalHistory = async (reqObj: InitialCommonNoteRequest) => {
+        const resp = await doctorService.createPastMedicalHistory(reqObj);
+        masterData.pastMedicalHistory.push(resp);
+        const newMasterDate = { ...masterData };
+        setMasterData(newMasterDate)
+        return resp;
+    }
+
+    const createFamilyHistory = async (reqObj: InitialCommonNoteRequest) => {
+        const resp = await doctorService.createFamilyHistory(reqObj);
+        masterData.familyHistory.push(resp);
+        const newMasterDate = { ...masterData };
+        setMasterData(newMasterDate)
+        return resp;
+    }
 
     return (
         <View style={styles.container}>
@@ -31,15 +57,13 @@ const InitialNoteScreen = () => {
                     <Text style={styles.userText}>Sri 36</Text>
                 </View>
 
-                <PresentingComplaints title="Presenting Complaints" itemList={masterData.presentingComplaints} />
+                <PresentingComplaints title="Presenting Complaints" addNewItemCommon={createPresentingComplaint} itemList={masterData.presentingComplaints} />
                 <Note title="Personal History" />
 
-                <PresentingComplaints title="Past Medical History" itemList={masterData.pastMedicalHistory} />
+                <PresentingComplaints title="Past Medical History" addNewItemCommon={createMedicalHistory} itemList={masterData.pastMedicalHistory} />
                 <Note title="Drug History" />
 
-
-                <PresentingComplaints title="Family History" itemList={masterData.familyHistory} />
-                <PresentingComplaints title="Medications" itemList={[]} />
+                <PresentingComplaints title="Family History" addNewItemCommon={createFamilyHistory} itemList={masterData.familyHistory} />
             </ScrollView>
 
         </View>

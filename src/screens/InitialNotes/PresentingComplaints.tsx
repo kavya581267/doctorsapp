@@ -1,20 +1,23 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { View, Text, TextInput, TouchableOpacity, ScrollView } from "react-native";
 import styles from "@styles/presentingComplaintsStyle";
 import Icon from "react-native-vector-icons/Ionicons";
 import { Button } from "react-native-paper";
-import { Symptom } from "@api/model/doctor/MasterData";
+import { InitialCommonNoteRequest, Symptom } from "@api/model/doctor/MasterData";
+import { AuthContext } from "@context/AuthContext";
 
 type Props = {
     title: string
     itemList: Symptom[]
+    addNewItemCommon: (reqObj: InitialCommonNoteRequest) => Promise<Symptom>
 }
 
 
-const PresentingComplaints = ({ title, itemList }: Props) => {
+const PresentingComplaints = ({ title, itemList,  addNewItemCommon}: Props) => {
     const [searchText, setSearchText] = useState("");
     const [itemListState, setItemListState] = useState(itemList);
     const [selectedItems, setSelectedItems] = useState<Symptom[]>([]);
+    const {loggedInUserContext} = useContext(AuthContext)
 
 
     const clearSearch = () => {
@@ -36,8 +39,16 @@ const PresentingComplaints = ({ title, itemList }: Props) => {
         setSelectedItems(selectedItems.filter((selected) => selected !== item));
       };
 
-    const addNewItem = () => {
-        // add new item to master data
+    const addNewItem = async () => {
+        const specialityId = loggedInUserContext.specialityId;
+        const clinicId = loggedInUserContext.clinicDetails.id;
+        const reqObj: InitialCommonNoteRequest = {
+            specialityId: specialityId,
+            clinicId: clinicId,
+            name: searchText
+        }
+        const respItem = await addNewItemCommon(reqObj);
+        addItem(respItem);
         setSearchText("");
     };
 

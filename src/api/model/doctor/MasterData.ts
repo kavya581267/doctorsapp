@@ -48,7 +48,7 @@ export class MasterData {
     problems: Problem[] = []
 }
 
-export class presentingComplaintsRequest {
+export class InitialCommonNoteRequest {
     clinicId: number;
     specialityId: number;
     name: string;
