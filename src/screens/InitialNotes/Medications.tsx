@@ -3,28 +3,31 @@ import { View, Text, TextInput, TouchableOpacity, ScrollView, Keyboard } from "r
 import styles from "@styles/presentingComplaintsStyle";
 import Icon from "react-native-vector-icons/Ionicons";
 import { Button } from "react-native-paper";
-import { InitialCommonNoteRequest, Symptom } from "@api/model/doctor/MasterData";
+import {  MedicationsRequest, MedicationsResponse } from "@api/model/doctor/MasterData";
 import { AuthContext } from "@context/AuthContext";
 import { MdLodSnackbar } from "@components/MdLogSnacbar";
 import { MdLogActivityIndicator } from "@components/MdLogActivityIndicator";
-import SubField from "./MedicalHistoryPopUp";
+import MedicationsPopUp from "./MedicationsPopUp";
 
 type Props = {
     title: string
-    itemList: Symptom[]
-    addNewItemCommon: (reqObj: InitialCommonNoteRequest) => Promise<Symptom>
+    itemList: MedicationsResponse[]
+    addNewItemCommon: (reqObj: MedicationsRequest) => Promise<MedicationsResponse>
 }
 
-export default function PasMedHistory({ title, itemList, addNewItemCommon }: Props) {
+export default function Medications({ title, itemList, addNewItemCommon }: Props) {
     const [searchText, setSearchText] = useState("");
+    const [dosage,setDosage] = useState("");
+    const [dosageUnit,setDosageUnit] = useState("");
+    const [dosageForm,setDosageForm] = useState("");
     const [itemListState, setItemListState] = useState(itemList);
-    const [selectedItems, setSelectedItems] = useState<Symptom[]>([]);
+    const [selectedItems, setSelectedItems] = useState<MedicationsResponse[]>([]);
     const { loggedInUserContext } = useContext(AuthContext);
     const [visible, setVisible] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
     const onDissmissSnackbar = () => setVisible(false);
     const [loading, setLoading] = useState(false);
-    const [selectedItem, setSelectedItem] = useState<Symptom>();
+    const [selectedItem, setSelectedItem] = useState<MedicationsResponse>();
     const [isVisibleModel, setIsVisibleModel] = useState(false); 
 
 
@@ -32,17 +35,17 @@ export default function PasMedHistory({ title, itemList, addNewItemCommon }: Pro
         setSearchText("");
     }
     const filteredItems = itemListState.filter((item) =>
-        item.name.toLowerCase().includes(searchText.toLowerCase())
+        item.medicationName.toLowerCase().includes(searchText.toLowerCase())
     );
 
-    const addItem = (item: Symptom) => {
+    const addItem = (item: MedicationsResponse) => {
         if (!selectedItems.includes(item)) {
             setSelectedItems([...selectedItems, item]);
         }
         setSearchText("")
     };
 
-    const removeComplaint = (item: Symptom) => {
+    const removeComplaint = (item: MedicationsResponse) => {
         setSelectedItems(selectedItems.filter((selected) => selected !== item));
     };
 
@@ -50,10 +53,15 @@ export default function PasMedHistory({ title, itemList, addNewItemCommon }: Pro
         setLoading(true);
         const specialityId = loggedInUserContext.specialityId;
         const clinicId = loggedInUserContext.clinicDetails.id;
-        const reqObj: InitialCommonNoteRequest = {
+        const userId = loggedInUserContext.userDetails.id;
+        const reqObj: MedicationsRequest = {
             specialityId: specialityId,
             clinicId: clinicId,
-            name: searchText
+            userId: userId,
+            medicationName: searchText,
+            dosage: dosage,
+            dosageUnit: dosageUnit,
+            dosageForm: dosageForm,
         }
         const respItem = await addNewItemCommon(reqObj);
         if (respItem) {
@@ -92,14 +100,14 @@ export default function PasMedHistory({ title, itemList, addNewItemCommon }: Pro
                                     setIsVisibleModel(true);
                                 }}
                             >
-                                <Text style={styles.dropdownText}>{item.name}</Text>
+                                <Text style={styles.dropdownText}>{item.medicationName}</Text>
                             </TouchableOpacity>
                         ))}
 
                     </View>
 
                 )}
-                {selectedItem && <SubField selectedItem={selectedItem} modalVisible={isVisibleModel} onClose={() => setIsVisibleModel(false)}/>}
+                {selectedItem && <MedicationsPopUp selectedItem={selectedItem} modalVisible={isVisibleModel} onClose={() => setIsVisibleModel(false)}/>}
             </View>
 
             {searchText.length > 0 && filteredItems.length === 0 && (
@@ -114,7 +122,7 @@ export default function PasMedHistory({ title, itemList, addNewItemCommon }: Pro
             <ScrollView contentContainerStyle={styles.complaintsBox}>
                 {selectedItems.map((item, index) => (
                     <View key={index} style={styles.selectedChip}>
-                        <Text style={styles.selectedText}>{item.name}</Text>
+                        <Text style={styles.selectedText}>{item.medicationName}</Text>
                         <TouchableOpacity onPress={() => removeComplaint(item)}>
                             <Icon name="close-circle" size={18} color="white" style={styles.removeIcon} />
                         </TouchableOpacity>

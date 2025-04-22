@@ -73,14 +73,14 @@ export class MedicationsRequest {
     specialityId: number;
     userId: number;
     medicationName: string;
-    genericName: string;
-    category: string;
-    description: string;
+    genericName?: string;
+    category?: string;
+    description?: string;
     dosage: string;
     dosageUnit: string;
     dosageForm: string;
-    strength: string;
-    isActive: boolean
+    strength?: string;
+    isActive?: boolean
 }
 
 export class MedicationsResponse {

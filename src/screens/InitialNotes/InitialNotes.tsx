@@ -7,10 +7,11 @@ import { COLORS } from '@utils/colors';
 import { AuthContext } from '@context/AuthContext';
 import PresentingComplaints from './PresentingComplaints';
 import Note from './Note';
-import { InitialCommonNoteRequest, Symptom } from '@api/model/doctor/MasterData';
+import { InitialCommonNoteRequest, MedicationsRequest, Symptom } from '@api/model/doctor/MasterData';
 import { doctorService } from '@api/doctorService';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import PasMedHistory from './PasMedHistory';
+import Medications from './Medications';
 const { width, height } = Dimensions.get("window");
 
 
@@ -53,6 +54,17 @@ const InitialNoteScreen = () => {
         }
     }
 
+    const createMedication = async (reqObj: MedicationsRequest) => {
+        try {
+            const resp = await doctorService.createMedications(reqObj);
+            masterData.medications.push(resp);
+            const newMasterDate = { ...masterData };
+            await setMasterDataAdapter(newMasterDate)
+            return resp;
+        } catch (error) {
+        }
+    }
+
     return (
         <KeyboardAwareScrollView>
             <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: 40 }}>
@@ -76,7 +88,8 @@ const InitialNoteScreen = () => {
 
                         <PasMedHistory title="Past Medical History" addNewItemCommon={createMedicalHistory} itemList={masterData.pastMedicalHistory} />
                         <Note title="Drug History" />
-
+                        <Medications title='Medications' addNewItemCommon={createMedication} itemList={masterData.medications}/>
+                        
                         <PresentingComplaints title="Family History" addNewItemCommon={createFamilyHistory} itemList={masterData.familyHistory} />
 
                     </View>
