@@ -5,6 +5,7 @@ import Icon from "react-native-vector-icons/Ionicons";
 import { Button } from "react-native-paper";
 import { InitialCommonNoteRequest, Symptom } from "@api/model/doctor/MasterData";
 import { AuthContext } from "@context/AuthContext";
+import { MdLodSnackbar } from "@components/MdLogSnacbar";
 
 type Props = {
     title: string
@@ -13,11 +14,14 @@ type Props = {
 }
 
 
-const PresentingComplaints = ({ title, itemList,  addNewItemCommon}: Props) => {
+const PresentingComplaints = ({ title, itemList, addNewItemCommon }: Props) => {
     const [searchText, setSearchText] = useState("");
     const [itemListState, setItemListState] = useState(itemList);
     const [selectedItems, setSelectedItems] = useState<Symptom[]>([]);
-    const {loggedInUserContext} = useContext(AuthContext)
+    const { loggedInUserContext } = useContext(AuthContext);
+    const [visible, setVisible] = useState(false);
+    const [errorMessage, setErrorMessage] = useState("");
+    const onDissmissSnackbar = () => setVisible(false);
 
 
     const clearSearch = () => {
@@ -35,9 +39,9 @@ const PresentingComplaints = ({ title, itemList,  addNewItemCommon}: Props) => {
         setSearchText("")
     };
 
-    const removeComplaint = (item:Symptom) => {
+    const removeComplaint = (item: Symptom) => {
         setSelectedItems(selectedItems.filter((selected) => selected !== item));
-      };
+    };
 
     const addNewItem = async () => {
         const specialityId = loggedInUserContext.specialityId;
@@ -48,8 +52,13 @@ const PresentingComplaints = ({ title, itemList,  addNewItemCommon}: Props) => {
             name: searchText
         }
         const respItem = await addNewItemCommon(reqObj);
-        addItem(respItem);
-        setSearchText("");
+        if (respItem) {
+            addItem(respItem);
+            setSearchText("");
+        }else{
+            setVisible(true)
+            setErrorMessage("Failed to add Item !!")
+        }
     };
 
     return (
@@ -99,7 +108,7 @@ const PresentingComplaints = ({ title, itemList,  addNewItemCommon}: Props) => {
                     </View>
                 ))}
             </ScrollView>
-
+            <MdLodSnackbar visible={visible} onDismiss={onDissmissSnackbar} message={errorMessage} />
         </View>
     )
 
