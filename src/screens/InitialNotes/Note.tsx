@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "../styles/noteStyle";
+import styles from "@styles/noteStyle";
 import { View , Text , TextInput} from "react-native";
 
 export default function Note ({title}) {
