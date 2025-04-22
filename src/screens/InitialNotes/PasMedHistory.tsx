@@ -99,7 +99,7 @@ export default function PasMedHistory({ title, itemList, addNewItemCommon }: Pro
                     </View>
 
                 )}
-                {selectedItem && <SubField selectedItem={selectedItem} modalVisible={isVisibleModel}/>}
+                {selectedItem && <SubField selectedItem={selectedItem} modalVisible={isVisibleModel} onClose={() => setIsVisibleModel(false)}/>}
             </View>
 
             {searchText.length > 0 && filteredItems.length === 0 && (
