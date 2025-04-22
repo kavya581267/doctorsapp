@@ -33,7 +33,7 @@ export const AuthProvider = ({ children }: Props) => {
     if (loggedInUserContext) {
       setLoggedinUserContext(loggedInUserContext);
       setClinicDoctors(docs)
-      setMasterData(masterData);
+      setMasterData(masterdata);
       return true;
     }
       return false;
