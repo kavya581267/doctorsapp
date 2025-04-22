@@ -18,14 +18,10 @@ const PresentingComplaints = ({ title, itemList, addNewItemCommon }: Props) => {
     const [searchText, setSearchText] = useState("");
     const [itemListState, setItemListState] = useState(itemList);
     const [selectedItems, setSelectedItems] = useState<Symptom[]>([]);
-<<<<<<< HEAD
-    const { loggedInUserContext } = useContext(AuthContext)
-=======
     const { loggedInUserContext } = useContext(AuthContext);
     const [visible, setVisible] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
     const onDissmissSnackbar = () => setVisible(false);
->>>>>>> 78c86828ef2ad0f27ee23c1b116f877e66dd8951
 
 
     const clearSearch = () => {
@@ -55,13 +51,6 @@ const PresentingComplaints = ({ title, itemList, addNewItemCommon }: Props) => {
             name: searchText
         }
         const respItem = await addNewItemCommon(reqObj);
-<<<<<<< HEAD
-        if(respItem){
-            addItem(respItem);
-            setSearchText("");
-        }
-
-=======
         if (respItem) {
             addItem(respItem);
             setSearchText("");
@@ -69,7 +58,6 @@ const PresentingComplaints = ({ title, itemList, addNewItemCommon }: Props) => {
             setVisible(true)
             setErrorMessage("Failed to add Item !!")
         }
->>>>>>> 78c86828ef2ad0f27ee23c1b116f877e66dd8951
     };
 
     return (
