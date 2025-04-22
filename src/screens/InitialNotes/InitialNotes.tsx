@@ -10,7 +10,7 @@ import Note from './Note';
 import { InitialCommonNoteRequest, MedicationsRequest, Symptom } from '@api/model/doctor/MasterData';
 import { doctorService } from '@api/doctorService';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import PasMedHistory from './PasMedHistory';
+import PasMedHistory from './MedicalHistory';
 import Medications from './Medications';
 const { width, height } = Dimensions.get("window");
 
