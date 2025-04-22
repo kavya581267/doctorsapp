@@ -29,11 +29,11 @@ export const AuthProvider = ({ children }: Props) => {
   const isLoggedInUserContext = async () => {
     const loggedInUserContext = await getObject<LoggedInUserContext>(USER_CONTEXT);
     const docs = await getObject<Doctor[]>(DOCTORS_LIST)
-    const masterdata = await getObject<MasterData>(MASTER_DATA);
+    const masterdata = await getObject<MasterData>(MASTER_DATA_CONTEXT);
     if (loggedInUserContext) {
       setLoggedinUserContext(loggedInUserContext);
       setClinicDoctors(docs)
-      setMasterData(masterData);
+      setMasterData(masterdata);
       return true;
     }
       return false;

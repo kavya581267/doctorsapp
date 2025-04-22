@@ -18,12 +18,10 @@ const PresentingComplaints = ({ title, itemList, addNewItemCommon }: Props) => {
     const [searchText, setSearchText] = useState("");
     const [itemListState, setItemListState] = useState(itemList);
     const [selectedItems, setSelectedItems] = useState<Symptom[]>([]);
-
     const { loggedInUserContext } = useContext(AuthContext);
     const [visible, setVisible] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
     const onDissmissSnackbar = () => setVisible(false);
-
 
 
     const clearSearch = () => {
@@ -53,7 +51,6 @@ const PresentingComplaints = ({ title, itemList, addNewItemCommon }: Props) => {
             name: searchText
         }
         const respItem = await addNewItemCommon(reqObj);
-
         if (respItem) {
             addItem(respItem);
             setSearchText("");
@@ -61,7 +58,6 @@ const PresentingComplaints = ({ title, itemList, addNewItemCommon }: Props) => {
             setVisible(true)
             setErrorMessage("Failed to add Item !!")
         }
-
     };
 
     return (
@@ -73,7 +69,7 @@ const PresentingComplaints = ({ title, itemList, addNewItemCommon }: Props) => {
                     placeholder="Search Complaints"
                     style={styles.input}
                     value={searchText}
-                    onChangeText={setSearchText}
+                    onChangeText={(text) => {setSearchText(text)}}
                 />
                 <Button onPress={clearSearch}>X</Button>
             </View>
