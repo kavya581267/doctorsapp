@@ -82,13 +82,7 @@ const InitialNoteScreen = () => {
 
                 <PresentingComplaints title="Family History" addNewItemCommon={createFamilyHistory} itemList={masterData.familyHistory} />
             </ScrollView>
-<<<<<<< HEAD
-
          <MdLogActivityIndicator loading={loading}/>
-
-=======
-         <MdLogActivityIndicator loading={loading}/>
->>>>>>> 5d60d287675f45b95c40234ffce921f6aef3f3c1
         </View>
     )
 
