@@ -11,16 +11,12 @@ import Note from './Note';
 import { InitialCommonNoteRequest, Symptom } from '@api/model/doctor/MasterData';
 import { doctorService } from '@api/doctorService';
 import { MdLogActivityIndicator } from '@components/MdLogActivityIndicator';
-import { MdLodSnackbar } from '@components/MdLogSnacbar';
 
 
 
 const InitialNoteScreen = () => {
     const { masterData, setMasterData } = useContext(AuthContext);
     const [loading, setLoading] = useState(false);
-    const [visible, setVisible] = useState(false);
-    const [errorMessage, setErrorMessage] = useState("");
-    const onDissmissSnackbar = () => setVisible(false);
     const createPresentingComplaint = async (reqObj: InitialCommonNoteRequest) => {
         try {
             setLoading(true);
@@ -30,8 +26,6 @@ const InitialNoteScreen = () => {
             setMasterData(newMasterDate);
             return resp;
         } catch (error) {
-            setVisible(true);
-            setErrorMessage(error);
         }
         setLoading(false);
        
@@ -46,8 +40,6 @@ const InitialNoteScreen = () => {
             setMasterData(newMasterDate)
             return resp;
         } catch (error) {
-            setVisible(true);
-            setErrorMessage(error);
         }
         setLoading(false);
     }
@@ -61,8 +53,6 @@ const InitialNoteScreen = () => {
             setMasterData(newMasterDate)
             return resp;
         } catch (error) {
-            setVisible(true);
-            setErrorMessage(error);
         }
         setLoading(false);
     }
@@ -92,7 +82,11 @@ const InitialNoteScreen = () => {
 
                 <PresentingComplaints title="Family History" addNewItemCommon={createFamilyHistory} itemList={masterData.familyHistory} />
             </ScrollView>
+<<<<<<< HEAD
            <MdLogActivityIndicator loading={loading}/>
+=======
+         <MdLogActivityIndicator loading={loading}/>
+>>>>>>> 78c86828ef2ad0f27ee23c1b116f877e66dd8951
         </View>
     )
 

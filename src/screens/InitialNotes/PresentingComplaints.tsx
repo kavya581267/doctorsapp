@@ -5,6 +5,7 @@ import Icon from "react-native-vector-icons/Ionicons";
 import { Button } from "react-native-paper";
 import { InitialCommonNoteRequest, Symptom } from "@api/model/doctor/MasterData";
 import { AuthContext } from "@context/AuthContext";
+import { MdLodSnackbar } from "@components/MdLogSnacbar";
 
 type Props = {
     title: string
@@ -17,7 +18,14 @@ const PresentingComplaints = ({ title, itemList, addNewItemCommon }: Props) => {
     const [searchText, setSearchText] = useState("");
     const [itemListState, setItemListState] = useState(itemList);
     const [selectedItems, setSelectedItems] = useState<Symptom[]>([]);
+<<<<<<< HEAD
     const { loggedInUserContext } = useContext(AuthContext)
+=======
+    const { loggedInUserContext } = useContext(AuthContext);
+    const [visible, setVisible] = useState(false);
+    const [errorMessage, setErrorMessage] = useState("");
+    const onDissmissSnackbar = () => setVisible(false);
+>>>>>>> 78c86828ef2ad0f27ee23c1b116f877e66dd8951
 
 
     const clearSearch = () => {
@@ -47,11 +55,21 @@ const PresentingComplaints = ({ title, itemList, addNewItemCommon }: Props) => {
             name: searchText
         }
         const respItem = await addNewItemCommon(reqObj);
+<<<<<<< HEAD
         if(respItem){
             addItem(respItem);
             setSearchText("");
         }
 
+=======
+        if (respItem) {
+            addItem(respItem);
+            setSearchText("");
+        }else{
+            setVisible(true)
+            setErrorMessage("Failed to add Item !!")
+        }
+>>>>>>> 78c86828ef2ad0f27ee23c1b116f877e66dd8951
     };
 
     return (
@@ -101,7 +119,7 @@ const PresentingComplaints = ({ title, itemList, addNewItemCommon }: Props) => {
                     </View>
                 ))}
             </ScrollView>
-
+            <MdLodSnackbar visible={visible} onDismiss={onDissmissSnackbar} message={errorMessage} />
         </View>
     )
 
