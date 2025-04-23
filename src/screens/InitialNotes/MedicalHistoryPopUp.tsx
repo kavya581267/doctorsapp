@@ -12,7 +12,7 @@ type Props = {
 };
 const MedicalHistoryPopUp: React.FC<Props> = ({ selectedItem, modalVisible, onClose, onSave }) => {
     const [duration, setDuration] = useState('');
-    const [unit, setUnit] = useState('day');
+    const [unit, setUnit] = useState('days');
     const [startDate, setStartDate] = useState('-');
 
 console.log(selectedItem);
@@ -26,13 +26,13 @@ console.log(selectedItem);
         const now = new Date();
         let pastDate;
 
-        if (unit === 'day') {
+        if (unit === 'days') {
             pastDate = new Date();
             pastDate.setDate(now.getDate() - num);
-        } else if (unit === 'month') {
+        } else if (unit === 'months') {
             pastDate = new Date();
             pastDate.setMonth(now.getMonth() - num);
-        } else if (unit === 'year') {
+        } else if (unit === 'years') {
             pastDate = new Date();
             pastDate.setFullYear(now.getFullYear() - num);
         }
@@ -58,7 +58,7 @@ console.log(selectedItem);
         item.type = unit;
         onSave(item);
         onClose();
-        console.log('Saved:', { duration, unit, startDate });
+       
     };
 
 
@@ -83,7 +83,7 @@ console.log(selectedItem);
                                 </View>
 
                                 <View style={styles.unitSelector}>
-                                    {['day', 'month', 'year'].map((item) => (
+                                    {['days', 'months', 'years'].map((item) => (
                                         <Button
                                             key={item}
                                             mode={unit === item ? 'contained' : 'outlined'}
