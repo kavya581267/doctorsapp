@@ -40,6 +40,10 @@ export type SuccessScreenParams = {
     screen: string
 };
 
+export type PatientMedicalParams = {
+    appointment: AppointmentListResponse
+}
+
 
 
 export type RootStackParamList = {
@@ -52,7 +56,7 @@ export type RootStackParamList = {
     ClinicScheduleScreen: undefined;
     Appointments: undefined;
     PatientDetails: undefined;
-    PatientMedical: undefined;
+    PatientMedical: PatientMedicalParams;
     InitialNote: undefined;
     ClinicRegistration: undefined;
     SuccessScreen: SuccessScreenParams;

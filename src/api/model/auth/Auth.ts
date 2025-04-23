@@ -24,7 +24,7 @@ export class UserInfo {
   username: string = "";
   firstName: string = "";
   lastName: string = "";
-  roles: string[] = [];
+  roles: Role[] = [];
   internalUserId: number;
 }
 

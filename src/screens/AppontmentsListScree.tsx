@@ -216,13 +216,13 @@ const AppointmentsListScreen = () => {
           <Text>Past</Text>
         </TouchableOpacity>
       </View>
-      <FlatList
+      <FlatList<AppointmentListResponse>
         data={getListData()}
         renderItem={renderItem}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item.id.toString()}
       />
 
-
+   
       <TouchableOpacity style={styles.addButton} onPress={() => navigation.navigate('BookAppointmentScreen')}>
         <Text style={styles.addButtonText}>+ Book Appointment</Text>
       </TouchableOpacity>

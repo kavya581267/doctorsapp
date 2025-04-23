@@ -1,16 +1,20 @@
 import React, { useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, ScrollView } from "react-native";
 import Entypo from '@expo/vector-icons/Entypo';
-import { NavigationProp, useNavigation, useRoute } from "@react-navigation/native";
+import { NavigationProp, RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import Vitals from "./Vitals";
 import ActionSheetMore from "./ActionSheetMore";
 import styles from "styles/patientMedicalStyle";
 import Back from "@components/Back";
-import { RootStackParamList } from "@components/MainNavigation";
+import { PatientMedicalParams, RootStackParamList } from "@components/MainNavigation";
+
+type RoueParams = {
+    params : PatientMedicalParams
+}
 
 
 export default function PatientMedical() {
-    const route = useRoute();
+    const route = useRoute<RouteProp<RoueParams>>();
     const { appointment } = route.params;
     const [showVitals, setShowVitals] = useState(false);
     const navigation = useNavigation<NavigationProp<RootStackParamList>>();
