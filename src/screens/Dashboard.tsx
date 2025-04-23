@@ -12,6 +12,7 @@ import { CLINIC_CONTEXT } from '@utils/constants';
 import { getUser } from '@utils/loadContextDetails';
 import EmptyListScreen from '@components/Empty';
 import { RootStackParamList } from '@components/MainNavigation';
+import { MdLodSnackbar } from '@components/MdLogSnacbar';
 const { width, height } = Dimensions.get("window");
 
 export default function DashboardScreen() {
@@ -23,6 +24,9 @@ export default function DashboardScreen() {
     const [appointmentsToday, setTodaysAppointments] = useState([]);
     const [quickActions, setQuickActions] = useState([]);
     const [role, setRole] = useState<string>("");
+    const [error, setError] = useState("");
+      const [visible, setVisible] = useState(false);
+    const onDismissSnackBar = () => setVisible(false);
 
     const allQuickActions = [
         {
@@ -91,7 +95,8 @@ export default function DashboardScreen() {
         
 
         } catch (error) {
-            console.error("Error loading dashboard:", error);
+            setVisible(true)
+            setError(error.toString())
         }
         setLoading(false);
     };
@@ -184,6 +189,7 @@ export default function DashboardScreen() {
                 <View style={{ height: 80 }} />
             </View>
             <MdLogActivityIndicator loading={loading} />
+            <MdLodSnackbar visible={visible} message={error} onDismiss={onDismissSnackBar} />
         </ScrollView>
     );
 }
