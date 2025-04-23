@@ -19,7 +19,6 @@ const { width, height } = Dimensions.get("window");
 const InitialNoteScreen = () => {
     const { masterData, setMasterDataAdapter } = useContext(AuthContext);
 
-    console.log(masterData)
     const createPresentingComplaint = async (reqObj: InitialCommonNoteRequest) => {
         try {
             const resp = await doctorService.createPresentingComplaints(reqObj);

@@ -17,6 +17,7 @@ type Props = {
     nav?: string,
     loading?: boolean
     tab?: string
+    onClick? : () => void
 }
 
 export default function Back({ nav, loading = false, tab = undefined }: Props) {
