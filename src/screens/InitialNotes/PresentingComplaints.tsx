@@ -1,129 +1,135 @@
 import React, { useContext, useState } from "react";
-import { View, Text, TextInput, TouchableOpacity, ScrollView, Keyboard } from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import styles from "@styles/presentingComplaintsStyle";
+import { Dropdown, MultiSelect } from "react-native-element-dropdown";
+import AntDesign from "react-native-vector-icons/AntDesign";
 import Icon from "react-native-vector-icons/Ionicons";
 import { Button } from "react-native-paper";
 import { InitialCommonNoteRequest, Symptom } from "@api/model/doctor/MasterData";
 import { AuthContext } from "@context/AuthContext";
 import { MdLodSnackbar } from "@components/MdLogSnacbar";
 import { MdLogActivityIndicator } from "@components/MdLogActivityIndicator";
+import { ScrollView } from "react-native-gesture-handler";
 
 type Props = {
-    title: string
-    itemList: Symptom[]
-    addNewItemCommon: (reqObj: InitialCommonNoteRequest) => Promise<Symptom>
-}
-
+    title: string;
+    itemList: Symptom[];
+    addNewItemCommon: (reqObj: InitialCommonNoteRequest) => Promise<Symptom>;
+};
 
 const PresentingComplaints = ({ title, itemList, addNewItemCommon }: Props) => {
-    const [searchText, setSearchText] = useState("");
-    const [itemListState, setItemListState] = useState(itemList);
-    const [selectedItems, setSelectedItems] = useState<Symptom[]>([]);
     const { loggedInUserContext } = useContext(AuthContext);
+    const [selectedItems, setSelectedItems] = useState<Symptom[]>([]);
+    const [searchText, setSearchText] = useState("");
+    const [isFocus, setIsFocus] = useState(false);
+    const [loading, setLoading] = useState(false);
     const [visible, setVisible] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
-    const onDissmissSnackbar = () => setVisible(false);
-    const [loading, setLoading] = useState(false);
 
+    const onDismissSnackbar = () => setVisible(false);
 
-    const clearSearch = () => {
-        setSearchText("");
-    }
-    const filteredItems = itemListState.filter((item) =>
-        item.name.toLowerCase().includes(searchText.toLowerCase())
-    );
+    const dropdownData = itemList.map((item) => ({
+        label: item.name,
+        value: item.name,
+        id: item.id,
+    }));
 
-    const addItem = (item: Symptom) => {
-        if (!selectedItems.includes(item)) {
-            setSelectedItems([...selectedItems, item]);
+    const handleAddNewItem = async () => {
+        try {
+            setLoading(true);
+            const reqObj: InitialCommonNoteRequest = {
+                specialityId: loggedInUserContext.specialityId,
+                clinicId: loggedInUserContext.clinicDetails.id,
+                name: searchText,
+            };
+            const newItem = await addNewItemCommon(reqObj);
+            if (newItem) {
+                setSelectedItems([...selectedItems, newItem]);
+                setSearchText("");
+                setIsFocus(false);
+            } else {
+                setErrorMessage("Failed to add item!");
+                setVisible(true);
+            }
+        } finally {
+            setLoading(false);
         }
-        setSearchText("")
+    };
+
+    const handleChange = (values: string[]) => {
+        const selected = dropdownData
+            .filter((item) => values.includes(item.value))
+            .map((item) => ({ id: item.id, name: item.label }));
+        setSelectedItems(selected);
     };
 
     const removeComplaint = (item: Symptom) => {
-        setSelectedItems(selectedItems.filter((selected) => selected !== item));
+        setSelectedItems(selectedItems.filter((i) => i.id !== item.id));
     };
 
-    const addNewItem = async () => {
-        setLoading(true);
-        const specialityId = loggedInUserContext.specialityId;
-        const clinicId = loggedInUserContext.clinicDetails.id;
-        const reqObj: InitialCommonNoteRequest = {
-            specialityId: specialityId,
-            clinicId: clinicId,
-            name: searchText
-        }
-        const respItem = await addNewItemCommon(reqObj);
-        if (respItem) {
-            addItem(respItem);
-            setSearchText("");
-        } else {
-            setVisible(true)
-            setErrorMessage("Failed to add Item !!")
-        }
-        setLoading(false);
-    };
-    
+    const renderItem = item => {
+        return (
+          <View>
+            <Text style={styles.selectedTextStyle}>{item.label}</Text>
+            <AntDesign style={styles.icon} color="black" name="Safety" size={20} />
+          </View>
+        );
+      };
 
     return (
-  
-            <View style={styles.section}>
-                <Text style={styles.sectionTitle}>{title}</Text>
-                <View style={styles.inputContainer}>
-                    <Icon name="search" size={18} color="gray" style={styles.icon} />
-                    <TextInput
-                        placeholder="Search Complaints"
-                        style={styles.input}
-                        value={searchText}
-                        onChangeText={(text) => { setSearchText(text) }}
-                    />
-                    <Button onPress={clearSearch}>X</Button>
-                </View>
+        <View style={styles.section}>
+            <Text style={styles.sectionTitle}>{title}</Text>
 
-                {searchText.length > 0 && filteredItems.length > 0 && (
-                    <View style={styles.dropdown}>
-                        {filteredItems.map((item, index) => (
-                            <TouchableOpacity
-                                key={index}
-                                style={styles.dropdownItem}
-                                onPress={() => {
-                                    Keyboard.dismiss();
-                                    addItem(item);
-                                }}
-                            >
-                                <Text style={styles.dropdownText}>{item.name}</Text>
-                            </TouchableOpacity>
-                        ))}
-                    </View>
-                )}
 
-                {searchText.length > 0 && filteredItems.length === 0 && (
-                    <View style={[styles.dropdown, styles.flexrow]}>
-                        <Text style={styles.dropdownItem}>No results found</Text>
-                        <View>
-                            <Button onPress={addNewItem}>Add</Button>
-                        </View>
-
-                    </View>
-                )}
-                <ScrollView contentContainerStyle={styles.complaintsBox}>
+            <View style={styles.dropdownRow}>
+                <MultiSelect
+                    style={[styles.dropdown, isFocus && { borderColor: "blue" }]}
+                    placeholderStyle={styles.placeholderStyle}
+                    selectedTextStyle={styles.selectedTextStyle}
+                    inputSearchStyle={styles.inputSearchStyle}
+                    iconStyle={styles.iconStyle}
+                    data={dropdownData}
+                    search
+                    maxHeight={300}
+                    labelField="label"
+                    valueField="value"
+                    placeholder={!isFocus ? "Select complaints" : "..."}
+                    searchPlaceholder="Search..."
+                    value={selectedItems.map((item) => item.name)}
+                    onFocus={() => setIsFocus(true)}
+                    onBlur={() => setIsFocus(false)}
+                    onChange={(items: any[]) => {
+                        handleChange(items);
+                    }}
+                    renderSelectedItem={(item, unSelect) => (
+                        <></>
+                      )}
+                    onChangeText={setSearchText}
+                    renderLeftIcon={() => (
+                        <Icon name="search" size={20} color="black" style={styles.icon} />
+                    )}
+                />
+                <TouchableOpacity onPress={handleAddNewItem} >
+                   <Text>Add</Text>
+                </TouchableOpacity>
+            </View>
+            <ScrollView contentContainerStyle={styles.complaintsBox}>
                     {selectedItems.map((item, index) => (
                         <View key={index} style={styles.selectedChip}>
-                            <Text style={styles.selectedText}>{item.name}</Text>
+                            <Text>{item.name}</Text>
                             <TouchableOpacity onPress={() => removeComplaint(item)}>
-                                <Icon name="close-circle" size={18} color="white" style={styles.removeIcon} />
+                                <Icon name="close-circle" size={18} color="grey" style={styles.removeIcon} />
                             </TouchableOpacity>
                         </View>
                     ))}
                 </ScrollView>
 
-                <MdLogActivityIndicator loading={loading} />
-                <MdLodSnackbar visible={visible} onDismiss={onDissmissSnackbar} message={errorMessage} />
-            </View>
-       
-    )
 
-}
 
+            <MdLogActivityIndicator loading={loading} />
+            <MdLodSnackbar visible={visible} onDismiss={onDismissSnackbar} message={errorMessage} />
+        </View>
+    );
+};
 
 export default PresentingComplaints;

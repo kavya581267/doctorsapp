@@ -19,9 +19,7 @@ export default StyleSheet.create({
         borderColor: COLORS.grey,
         alignItems: "center",
     },
-    icon: {
-        marginRight: 10
-    },
+ 
     input: {
         height: 40,
         flex: 1
@@ -35,14 +33,15 @@ export default StyleSheet.create({
     dropdown: {
         position: 'relative',
         zIndex: 1000,
-        width: '100%',
+        width: '85%',
         backgroundColor: "white",
         borderWidth: 1,
         borderColor: COLORS.grey,
         borderRadius: 8,
         maxHeight: 150, 
         marginTop:3,
-        marginBottom:3
+        marginBottom:3,
+        height:40
     },
     flexrow:{
        flexDirection:"row",
@@ -69,20 +68,57 @@ export default StyleSheet.create({
         flexDirection: "row",
         flexWrap: "wrap",
     },
-    selectedChip: {
-        backgroundColor: COLORS.primary,
-        paddingVertical: 5,
+ 
+    dropdownRow: {
+        flexDirection: "row",
+        justifyContent:"space-between",
+        alignItems:"center"
+      },
+    
+      chipsContainer: {
+        flexDirection: "row",
+        flexWrap: "wrap",
+        marginTop: 10,
+        gap: 8,
+      },
+      selectedChip: {
+        flexDirection: "row",
+       borderWidth:1,
+       borderColor:"grey",
         paddingHorizontal: 10,
-        borderRadius: 15,
-        marginRight: 5,
-        marginBottom: 5,
-        flexDirection:"row"
-    },
-    selectedText: {
-        color: "white",
-        fontSize: 14,
-    },
-    removeIcon:{
-      marginLeft: 5,
-    }
+        paddingVertical: 5,
+        borderRadius: 20,
+       margin:5
+      },
+    
+      removeIcon: {
+        marginLeft: 3,
+      },
+      inputSearchStyle: {
+        height: 40,
+        fontSize: 16,
+        color: "#000",
+      },
+      
+      placeholderStyle: {
+        fontSize: 16,
+        color: "#888",
+      },
+      
+      selectedTextStyle: {
+        fontSize: 16,
+        color: "#000",
+      },
+      
+      iconStyle: {
+        width: 20,
+        height: 20,
+      },
+      
+      icon: {
+        marginLeft: 5,
+        marginRight:10
+      },
+      
+      
 });
