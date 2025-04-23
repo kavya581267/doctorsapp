@@ -9,15 +9,22 @@ import { MdLogActivityIndicator } from "@components/MdLogActivityIndicator";
 import { Dropdown } from "react-native-element-dropdown";
 import MedicalHistoryPopUp from "./MedicalHistoryPopUp";
 
+export class MedicalHistoryNote extends Symptom {
+    howlong: number
+    type:string
+}
+
 type Props = {
     title: string;
     itemList: Symptom[];
     addNewItemCommon: (reqObj: InitialCommonNoteRequest) => Promise<Symptom>;
 };
 
+
+
 export default function PasMedHistory({ title, itemList, addNewItemCommon }: Props) {
     const [searchText, setSearchText] = useState("");
-    const [selectedItems, setSelectedItems] = useState<Symptom[]>([]);
+    const [selectedItems, setSelectedItems] = useState<MedicalHistoryNote[]>([]);
     const { loggedInUserContext } = useContext(AuthContext);
     const [visible, setVisible] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
@@ -34,7 +41,7 @@ export default function PasMedHistory({ title, itemList, addNewItemCommon }: Pro
         id: item.id,
     }));
 
-    const addItem = (item: Symptom) => {
+    const addItem = (item: MedicalHistoryNote) => {
         if (!selectedItems.some((selected) => selected.id === item.id)) {
             setSelectedItems((prevItems) => [...prevItems, item]);
         }
@@ -71,7 +78,6 @@ export default function PasMedHistory({ title, itemList, addNewItemCommon }: Pro
     const handleChange = (value: string) => {
         const selectedItem = itemList.find((item) => item.name === value);
         if (selectedItem) {
-          addItem(selectedItem); 
           setIsVisibleModel(true);
           setSelectedModelItem(selectedItem)
         }
@@ -107,20 +113,22 @@ export default function PasMedHistory({ title, itemList, addNewItemCommon }: Pro
                 <TouchableOpacity onPress={addNewItem}>
                     <Text>Add</Text>
                 </TouchableOpacity>
-                {selectedItems.length > 0 && (
+                {isVisibleModel   && (
                     <MedicalHistoryPopUp
                         selectedItem={selectedModelItem}
                         modalVisible={isVisibleModel}
+                        onSave = {(item) => addItem(item)}
                         onClose={() => setIsVisibleModel(false)}
                     />)}
             </View>
 
-            {/* Display selected items below */}
+          
+           
             <ScrollView contentContainerStyle={styles.complaintsBox}>
                 {selectedItems.length > 0 && (
                     selectedItems.map((item, index) => (
                         <View key={index} style={styles.selectedChip}>
-                            <Text>{item.name}</Text>
+                            <Text>{item.name +" for "+ item.howlong + " "+item.type}</Text>
                             <TouchableOpacity onPress={() => remove(item)}>
                                 <Icon name="close-circle" size={18} color="grey" style={styles.removeIcon} />
                             </TouchableOpacity>

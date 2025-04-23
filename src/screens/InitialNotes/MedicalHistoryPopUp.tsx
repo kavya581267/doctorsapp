@@ -2,13 +2,15 @@ import { Symptom } from '@api/model/doctor/MasterData';
 import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import { Modal, Portal, Text, TextInput, Button, Card, ToggleButton, Divider } from 'react-native-paper';
+import { MedicalHistoryNote } from './MedicalHistory';
 
 type Props = {
     selectedItem: Symptom;
     modalVisible: boolean;
     onClose: () => void;
+    onSave: (item: MedicalHistoryNote) => void;
 };
-const MedicalHistoryPopUp: React.FC<Props> = ({ selectedItem, modalVisible, onClose }) => {
+const MedicalHistoryPopUp: React.FC<Props> = ({ selectedItem, modalVisible, onClose, onSave }) => {
     const [duration, setDuration] = useState('');
     const [unit, setUnit] = useState('day');
     const [startDate, setStartDate] = useState('-');
@@ -49,7 +51,13 @@ console.log(selectedItem);
     };
 
     const handleSave = () => {
-
+        const item = new MedicalHistoryNote();
+        item.id = selectedItem.id;
+        item.name = selectedItem.name;
+        item.howlong = Number(duration);
+        item.type = unit;
+        onSave(item);
+        onClose();
         console.log('Saved:', { duration, unit, startDate });
     };
 
