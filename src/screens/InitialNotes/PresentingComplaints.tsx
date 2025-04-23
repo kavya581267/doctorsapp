@@ -67,14 +67,6 @@ const PresentingComplaints = ({ title, itemList, addNewItemCommon }: Props) => {
         setSelectedItems(selectedItems.filter((i) => i.id !== item.id));
     };
 
-    const renderItem = item => {
-        return (
-          <View>
-            <Text style={styles.selectedTextStyle}>{item.label}</Text>
-            <AntDesign style={styles.icon} color="black" name="Safety" size={20} />
-          </View>
-        );
-      };
 
     return (
         <View style={styles.section}>
@@ -123,8 +115,6 @@ const PresentingComplaints = ({ title, itemList, addNewItemCommon }: Props) => {
                         </View>
                     ))}
                 </ScrollView>
-
-
 
             <MdLogActivityIndicator loading={loading} />
             <MdLodSnackbar visible={visible} onDismiss={onDismissSnackbar} message={errorMessage} />
