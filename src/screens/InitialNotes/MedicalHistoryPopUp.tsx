@@ -8,12 +8,12 @@ type Props = {
     modalVisible: boolean;
     onClose: () => void;
 };
-const SubField: React.FC<Props> = ({ selectedItem, modalVisible, onClose }) => {
+const MedicalHistoryPopUp: React.FC<Props> = ({ selectedItem, modalVisible, onClose }) => {
     const [duration, setDuration] = useState('');
     const [unit, setUnit] = useState('day');
     const [startDate, setStartDate] = useState('-');
 
-
+console.log(selectedItem);
     const calculateStartDate = () => {
         const num = parseInt(duration);
         if (!duration || isNaN(num)) {
@@ -104,7 +104,7 @@ const SubField: React.FC<Props> = ({ selectedItem, modalVisible, onClose }) => {
     );
 };
 
-export default SubField;
+export default MedicalHistoryPopUp;
 
 const styles = StyleSheet.create({
     modalContainer: {
