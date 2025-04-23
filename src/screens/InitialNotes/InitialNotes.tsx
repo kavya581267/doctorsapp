@@ -7,11 +7,12 @@ import { COLORS } from '@utils/colors';
 import { AuthContext } from '@context/AuthContext';
 import PresentingComplaints from './PresentingComplaints';
 import Note from './Note';
-import { InitialCommonNoteRequest, MedicationsRequest, Symptom } from '@api/model/doctor/MasterData';
+import { InitialCommonNoteRequest, MedicationsRequest, ProblemsRequest, Symptom } from '@api/model/doctor/MasterData';
 import { doctorService } from '@api/doctorService';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import PasMedHistory from './MedicalHistory';
 import Medications from './Medications';
+import Problems from './Problems';
 const { width, height } = Dimensions.get("window");
 
 
@@ -21,7 +22,6 @@ const InitialNoteScreen = () => {
     console.log(masterData)
     const createPresentingComplaint = async (reqObj: InitialCommonNoteRequest) => {
         try {
-
             const resp = await doctorService.createPresentingComplaints(reqObj);
             masterData.presentingComplaints.push(resp);
             const newMasterDate = { ...masterData };
@@ -29,7 +29,17 @@ const InitialNoteScreen = () => {
             return resp;
         } catch (error) {
         }
+    }
 
+    const createProblems = async (reqObj: ProblemsRequest) => {
+        try {
+            const resp = await doctorService.createProblems(reqObj);
+            masterData.problems.push(resp);
+            const newMasterDate = { ...masterData };
+            await setMasterDataAdapter(newMasterDate);
+            return resp;
+        } catch (error) {
+        }
     }
 
     const createMedicalHistory = async (reqObj: InitialCommonNoteRequest) => {
@@ -67,8 +77,8 @@ const InitialNoteScreen = () => {
 
     return (
         <KeyboardAwareScrollView>
-            <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: 40 }}>
-                <View style={{height}}>
+            <ScrollView style={styles.container}>
+                <View style={{height:height+200}}>
                     <Back nav='Mainscreen' tab='Appointments' />
 
                     <View style={styles.header}>
@@ -84,14 +94,11 @@ const InitialNoteScreen = () => {
                             <Text style={styles.userText}>Sri 36</Text>
                         </View>
                         <PresentingComplaints title="Presenting Complaints" addNewItemCommon={createPresentingComplaint} itemList={masterData.presentingComplaints} />
-                        <Note title="Personal History" />
-
-                        <PasMedHistory title="Past Medical History" addNewItemCommon={createMedicalHistory} itemList={masterData.pastMedicalHistory} />
-                        <Note title="Drug History" />
-                        <Medications title='Medications' addNewItemCommon={createMedication} itemList={masterData.medications}/>
-                        
                         <PresentingComplaints title="Family History" addNewItemCommon={createFamilyHistory} itemList={masterData.familyHistory} />
-
+                        <Problems title='Problems' addNewItemCommon={createProblems} itemList={masterData.problems}/>
+                        <PasMedHistory title="Past Medical History" addNewItemCommon={createMedicalHistory} itemList={masterData.pastMedicalHistory} />               
+                        <Medications title='Medications' addNewItemCommon={createMedication} itemList={masterData.medications}/>
+                         {/*labtest */}
                     </View>
                 </View>
             </ScrollView>
