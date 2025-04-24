@@ -89,7 +89,7 @@ const InitialNoteScreen = () => {
     return (
         <KeyboardAwareScrollView>
             <ScrollView style={styles.container}>
-                <View style={{height:height+200}}>
+                <View style={{height:height+700}}>
                     <Back nav='Mainscreen' tab='Appointments' />
 
                     <View style={styles.header}>
