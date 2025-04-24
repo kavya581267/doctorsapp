@@ -1,15 +1,15 @@
 import React, { useContext, useState } from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet, Modal, TextInput, Button } from "react-native";
 import styles from "@styles/presentingComplaintsStyle";
 import { Dropdown, MultiSelect } from "react-native-element-dropdown";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import Icon from "react-native-vector-icons/Ionicons";
-import { Button } from "react-native-paper";
 import { InitialCommonNoteRequest, Symptom } from "@api/model/doctor/MasterData";
 import { AuthContext } from "@context/AuthContext";
 import { MdLodSnackbar } from "@components/MdLogSnacbar";
 import { MdLogActivityIndicator } from "@components/MdLogActivityIndicator";
 import { ScrollView } from "react-native-gesture-handler";
+import { Divider } from "react-native-paper";
 
 type Props = {
     title: string;
@@ -25,6 +25,9 @@ const PresentingComplaints = ({ title, itemList, addNewItemCommon }: Props) => {
     const [loading, setLoading] = useState(false);
     const [visible, setVisible] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
+
+    const [modalVisible, setModalVisible] = useState(false);
+    const [complaintText, setComplaintText] = useState('');
 
     const onDismissSnackbar = () => setVisible(false);
 
@@ -95,27 +98,56 @@ const PresentingComplaints = ({ title, itemList, addNewItemCommon }: Props) => {
                     }}
                     renderSelectedItem={(item, unSelect) => (
                         <></>
-                      )}
+                    )}
                     onChangeText={setSearchText}
                     renderLeftIcon={() => (
                         <Icon name="search" size={20} color="black" style={styles.icon} />
                     )}
                 />
-                <TouchableOpacity onPress={handleAddNewItem} >
-                   <Text>Add</Text>
+                <TouchableOpacity onPress={()=> setModalVisible(true)} >
+                    <Text>Add</Text>
                 </TouchableOpacity>
             </View>
             <ScrollView contentContainerStyle={styles.complaintsBox}>
-                    {selectedItems.map((item, index) => (
-                        <View key={index} style={styles.selectedChip}>
-                            <Text>{item.name}</Text>
-                            <TouchableOpacity onPress={() => removeComplaint(item)}>
-                                <Icon name="close-circle" size={18} color="grey" style={styles.removeIcon} />
-                            </TouchableOpacity>
+                {selectedItems.map((item, index) => (
+                    <View key={index} style={styles.selectedChip}>
+                        <Text>{item.name}</Text>
+                        <TouchableOpacity onPress={() => removeComplaint(item)}>
+                            <Icon name="close-circle" size={18} color="grey" style={styles.removeIcon} />
+                        </TouchableOpacity>
+                    </View>
+                ))}
+            </ScrollView>
+            {/* Modal */}
+            <Modal
+                visible={modalVisible}
+                animationType="slide"
+                transparent
+                onRequestClose={() => setModalVisible(false)}
+            >
+                <View style={styles.modalOverlay}>
+                    <View style={styles.modalContainer}>
+                        <Text style={styles.heading}>Add {title}</Text>
+                        <Divider style={{marginBottom:20}}/>
+                        <TextInput
+                            style={styles.input1}
+                            value={complaintText}
+                            onChangeText={setComplaintText}
+                            placeholder="Enter name"
+                        />
+                      <Divider style={{marginBottom:20}}/>
+                        <View style={styles.buttonRow}>
+                            <Button title="Cancel" onPress={() => setModalVisible(false)} />
+                            <Button title="Create" onPress={() => {
+                                // Handle create action here
+                                console.log('Complaint:', complaintText);
+                                setModalVisible(false);
+                                setComplaintText('');
+                            }} />
                         </View>
-                    ))}
-                </ScrollView>
-
+                    </View>
+                </View>
+            </Modal>
             <MdLogActivityIndicator loading={loading} />
             <MdLodSnackbar visible={visible} onDismiss={onDismissSnackbar} message={errorMessage} />
         </View>

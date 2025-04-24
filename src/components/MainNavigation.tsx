@@ -8,7 +8,6 @@ import SignIn from '@screens/SignIn';
 import SuccessScreen from '@screens/SuccessScreen';
 import ForgetPassword from '@screens/passwordReset/ForgetPasswordScreen';
 import ResetPasswordScreen from '@screens/passwordReset/ResetPasswordScreen';
-import Mainscreen from '../../components/admin/Mainscreen';
 import LoadingScreen from '../../components/LoadingScreen';
 import StaffRegistrationScreen from '@screens/staffPatientRegistration/staffRegistration/StaffRegistrationScreen';
 import PatientRegistrationScreen from '@screens/staffPatientRegistration/patientRegistration/PatientRegistrationScreen';
@@ -26,6 +25,7 @@ import { StaffProffileScreen } from '@screens/StaffProfileScreen';
 import InitialNoteScreen from '@screens/InitialNotes/InitialNotes';
 import PatientDetails from '../../components/admin/PatientDetails';
 import PatientDirectoryScreen from '@screens/PatientsDirectory';
+import Mainscreen from './Mainscreen';
 
 export type BookAppointmentScreenRouteParams = {
       edit?: boolean; // or string, depending on your use case
@@ -40,6 +40,10 @@ export type SuccessScreenParams = {
     screen: string
 };
 
+export type PatientMedicalParams = {
+    appointment: AppointmentListResponse
+}
+
 
 
 export type RootStackParamList = {
@@ -52,7 +56,7 @@ export type RootStackParamList = {
     ClinicScheduleScreen: undefined;
     Appointments: undefined;
     PatientDetails: undefined;
-    PatientMedical: undefined;
+    PatientMedical: PatientMedicalParams;
     InitialNote: undefined;
     ClinicRegistration: undefined;
     SuccessScreen: SuccessScreenParams;

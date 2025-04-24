@@ -118,4 +118,37 @@ export default StyleSheet.create({
     marginLeft: 3,
   },
 
+  modalOverlay: {
+    flex: 1,
+    justifyContent: 'center',
+    backgroundColor: 'rgba(0,0,0,0.5)',
+  },
+  modalContainer: {
+    margin: 20,
+    padding: 20,
+    borderRadius: 10,
+    backgroundColor: 'white',
+    elevation: 5,
+  },
+  heading: {
+    fontSize: 20,
+    marginBottom: 15,
+    fontWeight: 'bold',
+  },
+  label: {
+    fontSize: 16,
+    marginBottom: 5,
+  },
+  input1: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 5,
+    marginBottom: 20,
+    padding: 10,
+  },
+  buttonRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+
 });

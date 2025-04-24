@@ -115,3 +115,4 @@ export const UPDATE_APPOINTMENT ="/patients/{{patient_id}}/appointments/{{appoin
 //vitals
 export const GET_PATIENT_VITALS = "/patients/{{patient_id}}/vitals";
 export const CREATE_PATIENT_VITALS = "/patients/{{patient_id}}/vitals";
+export const GET_FACT_SHEET = "/patients/{{patient_id}}"

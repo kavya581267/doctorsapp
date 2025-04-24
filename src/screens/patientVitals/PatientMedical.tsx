@@ -1,19 +1,29 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, ScrollView } from "react-native";
 import Entypo from '@expo/vector-icons/Entypo';
-import { NavigationProp, useNavigation, useRoute } from "@react-navigation/native";
+import { NavigationProp, RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import Vitals from "./Vitals";
 import ActionSheetMore from "./ActionSheetMore";
 import styles from "styles/patientMedicalStyle";
 import Back from "@components/Back";
-import { RootStackParamList } from "@components/MainNavigation";
+import { PatientMedicalParams, RootStackParamList } from "@components/MainNavigation";
+import { patientService } from "@api/patientService";
+import { Vital } from "@api/model/patient/PatientModels";
+import { MdLogActivityIndicator } from "@components/MdLogActivityIndicator";
+
+type RoueParams = {
+    params : PatientMedicalParams
+}
 
 
 export default function PatientMedical() {
-    const route = useRoute();
+    const route = useRoute<RouteProp<RoueParams>>();
     const { appointment } = route.params;
     const [showVitals, setShowVitals] = useState(false);
     const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+    const [loading, setLoading] = useState(true);
+    const [appointmetVital, setAppointmetVital] = useState<Vital | undefined>(undefined);
+
 
     function calculateAge(dob) {
         const birthDate = new Date(dob);
@@ -31,6 +41,23 @@ export default function PatientMedical() {
     }
 
     const age = calculateAge(appointment.dateOfBirth)
+    const load = async () => {
+        setLoading(true);
+        const factSheetData = await patientService.fetchFactSheet(appointment.patientId.toString());
+        const vital =  factSheetData.vitals.find((i) => i.appointment_id === appointment.id);
+        setAppointmetVital(vital)
+        setLoading(false);
+    }
+
+    useEffect(()=> {
+          load()
+    },[])
+
+    if(loading){
+        return(
+            <MdLogActivityIndicator loading={loading}/>
+        )
+    }
 
     return (
 
@@ -64,11 +91,7 @@ export default function PatientMedical() {
                             </TouchableOpacity>
                         </View>
                     </View>
-                    {
-                        showVitals && (
-                            <Vitals ></Vitals>
-                        )
-                    }
+                    <Vitals vitals={appointmetVital} ></Vitals>
                 </View>
             </View>
             <View style={styles.bottomContainer}>

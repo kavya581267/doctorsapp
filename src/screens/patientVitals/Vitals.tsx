@@ -1,31 +1,34 @@
 import React, { useContext, useEffect, useState } from "react";
 import { StyleSheet, View, Text, TextInput, TouchableOpacity } from "react-native";
 import styles from "@styles/vitalsStyle";
-import { AppointmentResponse, VitalsRequest, VitalsResponse } from '@api/model/patient/PatientModels';
+import { AppointmentResponse, Vital, VitalsRequest, VitalsResponse } from '@api/model/patient/PatientModels';
 import { useRoute } from "@react-navigation/native";
 import { apiService } from "@api/apiService";
 import { patientService } from "@api/patientService";
 import { AuthContext } from "@context/AuthContext";
 
-export default function Vitals() {
+type Props = {
+    vitals: Vital
+}
+
+export default function Vitals(props: Props) {
     const [height, setHeight] = useState("");
     const [Weight, setWeight] = useState("");
     const [oxygenSaturation, setOxygenSaturation] = useState("");
     const [respiratoryRate, setRespiratoryRate] = useState("");
     const [temperature, setTemperature] = useState("");
-    const [bloodPressureSystolic,setBloodPressureSystolic] = useState("");
-    const [bloodPressureDiastolic,setBloodPressureDiastolic] = useState("");
-    const [heartRate,setHeartRate] = useState("");
-    const [isUpdate,setIsUpdate] = useState(false);
+    const [bloodPressureSystolic, setBloodPressureSystolic] = useState("");
+    const [bloodPressureDiastolic, setBloodPressureDiastolic] = useState("");
+    const [heartRate, setHeartRate] = useState("");
+    const [isUpdate, setIsUpdate] = useState(false);
     const [loading, setLoading] = useState(true);
     const route = useRoute();
     const { appointment } = route.params;
-    console.log(route)
-    const {loggedInUserContext} = useContext(AuthContext);
+    const { loggedInUserContext } = useContext(AuthContext);
 
     const storeVitals = async () => {
         const vitalsPayload = new VitalsRequest();
-       vitalsPayload.clinicId = loggedInUserContext.clinicDetails.id;
+        vitalsPayload.clinicId = loggedInUserContext.clinicDetails.id;
         vitalsPayload.temperature = parseInt(temperature);
         vitalsPayload.height = parseInt(height);
         vitalsPayload.weight = parseInt(Weight);
@@ -33,42 +36,31 @@ export default function Vitals() {
         vitalsPayload.respiratoryRate = parseInt(respiratoryRate);
         vitalsPayload.oxygenSaturation = parseInt(oxygenSaturation);
         vitalsPayload.bloodPressureSystolic = parseInt(bloodPressureSystolic);
-        vitalsPayload.bloodPressureDiastolic = parseInt(bloodPressureDiastolic);    
+        vitalsPayload.bloodPressureDiastolic = parseInt(bloodPressureDiastolic);
         vitalsPayload.appointmentId = appointment.id;
-        try{
-           const res = patientService.recordPatientVitals(vitalsPayload,appointment.patientId);
-           return res;
-        }catch(error){
+        try {
+            const res = patientService.recordPatientVitals(vitalsPayload, appointment.patientId);
+            return res;
+        } catch (error) {
 
         }
     }
 
 
-    const fetchVitals = async () => {
+    const fetchVitals = () => {
         try {
-            
-            setLoading(true);
-            const data = await patientService.getPatientVitals(appointment.patientId);
-            let appointmentVital: VitalsResponse = undefined;
-            for(let i =0; i<data.length;i++){
-                if(data[i].appointmentId === appointment.id){
-                    appointmentVital = data[i];
-                    break;
-                }
-            } 
-            if(appointmentVital !== undefined){
+            let appointmentVital: Vital = props.vitals;
+            if (appointmentVital !== undefined) {
                 setTemperature(appointmentVital.temperature.toString());
-                setBloodPressureSystolic(appointmentVital.bloodPressureSystolic.toString());
-                setBloodPressureDiastolic(appointmentVital.bloodPressureDiastolic.toString());
-                setHeartRate(appointmentVital.heartRate.toString());
-                setRespiratoryRate(appointmentVital.respiratoryRate.toString());
-                setOxygenSaturation(appointmentVital.oxygenSaturation.toString());
-               setHeight(appointmentVital.height.toString());
-               setWeight(appointmentVital.weight.toString());   
-
-               setIsUpdate(true);
+                setBloodPressureSystolic(appointmentVital.blood_pressure_systolic.toString());
+                setBloodPressureDiastolic(appointmentVital.blood_pressure_diastolic.toString());
+                setHeartRate(appointmentVital.heart_rate.toString());
+                setRespiratoryRate(appointmentVital.respiratory_rate.toString());
+                setOxygenSaturation(appointmentVital.oxygen_saturation.toString());
+                setHeight(appointmentVital.height.toString());
+                setWeight(appointmentVital.weight.toString());
+                setIsUpdate(true);
             }
-
         } catch (error) {
             console.error("Error fetching vitals:", error);
         }
@@ -83,38 +75,47 @@ export default function Vitals() {
     return (
         <View style={styles.vitalsContainer}>
             <View style={{ flexDirection: "row" }}>
-                <Text style={styles.inputText}>Height (cms)</Text>
-                <TextInput style={styles.input} keyboardType="numeric" value={height} onChangeText={setHeight}></TextInput>
-            </View>
-            <View style={{ flexDirection: "row" }}>
-                <Text style={styles.inputText}>Weight (kgs)</Text>
-                <TextInput style={styles.input} keyboardType="numeric" value={Weight} onChangeText={setWeight}></TextInput>
-            </View>
-            <View style={{ flexDirection: "row" }}>
-                <Text style={styles.inputText}>Temperature</Text>
-                <TextInput style={styles.input} keyboardType="numeric" value={temperature} onChangeText={setTemperature}></TextInput>
-            </View>
-            <View style={{ flexDirection: "row" }}>
-                <Text style={styles.inputText}>Blood Pressure Systolic</Text>
-                <TextInput style={styles.input} keyboardType="numeric" value={bloodPressureSystolic} onChangeText={setBloodPressureSystolic}></TextInput>
+                <Text style={styles.inputText}>Height (cms): </Text>
+                {
+                    isUpdate ? <Text>{height}</Text> : <TextInput style={styles.input} keyboardType="numeric" value={height} onChangeText={setHeight}></TextInput>
+                }
 
             </View>
             <View style={{ flexDirection: "row" }}>
-                <Text style={styles.inputText}>Blood Pressure Diastolic</Text>
-                <TextInput style={styles.input} keyboardType="numeric" value={bloodPressureDiastolic} onChangeText={setBloodPressureDiastolic}></TextInput>
+                <Text style={styles.inputText}>Weight (kgs): </Text>
+                {isUpdate ? <Text>{Weight}</Text> : <TextInput style={styles.input} keyboardType="numeric" value={Weight} onChangeText={setWeight} />}
             </View>
+
             <View style={{ flexDirection: "row" }}>
-                <Text style={styles.inputText}>HeartRate</Text>
-                <TextInput style={styles.input} keyboardType="numeric" value={heartRate} onChangeText={setHeartRate}></TextInput>
+                <Text style={styles.inputText}>Temperature: </Text>
+                {isUpdate ? <Text>{temperature}</Text> : <TextInput style={styles.input} keyboardType="numeric" value={temperature} onChangeText={setTemperature} />}
             </View>
+
             <View style={{ flexDirection: "row" }}>
-                <Text style={styles.inputText} >Respiratory Rate</Text>
-                <TextInput style={styles.input} keyboardType="numeric" value={respiratoryRate} onChangeText={setRespiratoryRate}></TextInput>
+                <Text style={styles.inputText}>Blood Pressure Systolic: </Text>
+                {isUpdate ? <Text>{bloodPressureSystolic}</Text> : <TextInput style={styles.input} keyboardType="numeric" value={bloodPressureSystolic} onChangeText={setBloodPressureSystolic} />}
             </View>
+
             <View style={{ flexDirection: "row" }}>
-                <Text style={styles.inputText}>Oxygen Saturation </Text>
-                <TextInput style={styles.input} keyboardType="numeric" value={oxygenSaturation} onChangeText={(text) => setOxygenSaturation(text)}></TextInput>
+                <Text style={styles.inputText}>Blood Pressure Diastolic: </Text>
+                {isUpdate ? <Text>{bloodPressureDiastolic}</Text> : <TextInput style={styles.input} keyboardType="numeric" value={bloodPressureDiastolic} onChangeText={setBloodPressureDiastolic} />}
             </View>
+
+            <View style={{ flexDirection: "row" }}>
+                <Text style={styles.inputText}>Heart Rate: </Text>
+                {isUpdate ? <Text>{heartRate}</Text> : <TextInput style={styles.input} keyboardType="numeric" value={heartRate} onChangeText={setHeartRate} />}
+            </View>
+
+            <View style={{ flexDirection: "row" }}>
+                <Text style={styles.inputText}>Respiratory Rate: </Text>
+                {isUpdate ? <Text>{respiratoryRate}</Text> : <TextInput style={styles.input} keyboardType="numeric" value={respiratoryRate} onChangeText={setRespiratoryRate} />}
+            </View>
+
+            <View style={{ flexDirection: "row" }}>
+                <Text style={styles.inputText}>Oxygen Saturation: </Text>
+                {isUpdate ? <Text>{oxygenSaturation}</Text> : <TextInput style={styles.input} keyboardType="numeric" value={oxygenSaturation} onChangeText={setOxygenSaturation} />}
+            </View>
+
             <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
                 <View>
                     <TouchableOpacity style={styles.Btn}>

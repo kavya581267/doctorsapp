@@ -119,6 +119,7 @@ export const AuthProvider = ({ children }: Props) => {
       loginUserContext.clinicDetails = clinicDashboardResp.clinic;
       loginUserContext.userDetails = clinicDashboardResp.adminDetails;
       loginUserContext.specialityId = response.specialityId;
+      loginUserContext.roles = [...response.user.roles];
       await storeObject(USER_CONTEXT, loginUserContext);
       setLoggedinUserContext(loginUserContext);
 
