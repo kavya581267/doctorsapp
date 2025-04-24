@@ -8,7 +8,6 @@ import SignIn from '@screens/SignIn';
 import SuccessScreen from '@screens/SuccessScreen';
 import ForgetPassword from '@screens/passwordReset/ForgetPasswordScreen';
 import ResetPasswordScreen from '@screens/passwordReset/ResetPasswordScreen';
-import LoadingScreen from '../../components/LoadingScreen';
 import StaffRegistrationScreen from '@screens/staffPatientRegistration/staffRegistration/StaffRegistrationScreen';
 import PatientRegistrationScreen from '@screens/staffPatientRegistration/patientRegistration/PatientRegistrationScreen';
 import ClinicScheduleScreen from '@screens/ClinicSchedule';
@@ -23,11 +22,11 @@ import AppointmentsListScreen from '@screens/AppontmentsListScree';
 import { AppointmentListResponse } from '@api/model/appointments/AppointmentListResponse';
 import { StaffProffileScreen } from '@screens/StaffProfileScreen';
 import InitialNoteScreen from '@screens/InitialNotes/InitialNotes';
-import PatientDetails from '../../components/admin/PatientDetails';
 import PatientDirectoryScreen from '@screens/PatientsDirectory';
 import Mainscreen from './Mainscreen';
 import { FaceSheet } from '@api/model/patient/PatientModels';
 import LabTestScreen from '@screens/patientVitals/LabTestScreen';
+import LoadingScreen from './LoadingScreen';
 
 export type BookAppointmentScreenRouteParams = {
       edit?: boolean; // or string, depending on your use case
@@ -59,7 +58,6 @@ export type RootStackParamList = {
     PatientRegistration: undefined;
     ClinicScheduleScreen: undefined;
     Appointments: undefined;
-    PatientDetails: undefined;
     PatientMedical: PatientMedicalParams;
     InitialNote: InitialNotesParams;
     ClinicRegistration: undefined;
@@ -98,7 +96,6 @@ export default function MainNavigator() {
                 <Stack.Screen name='ClinicScheduleScreen' component={ClinicScheduleScreen}></Stack.Screen>
                 <Stack.Screen name="ClinicOverview" component={ClinicOverview} />
                 <Stack.Screen name='PatientDirectoryScreen' component={PatientDirectoryScreen} />
-                <Stack.Screen name='PatientDetails' component={PatientDetails} />
                 <Stack.Screen name='PatientMedical' component={PatientMedical} />
                 <Stack.Screen name='InitialNote' component={InitialNoteScreen} />
                 <Stack.Screen name='ClinicRegistration' component={ClinicRegistration} />
