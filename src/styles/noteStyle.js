@@ -16,7 +16,7 @@ export default StyleSheet.create({
         borderWidth: 1,
         borderColor: COLORS.grey,
         borderRadius: 8,
-        minHeight: 60,
+        minHeight: 100,
         padding: 8,
     },
 })
