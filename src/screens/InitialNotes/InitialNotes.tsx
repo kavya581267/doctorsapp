@@ -106,7 +106,7 @@ const InitialNoteScreen = () => {
                         <PresentingComplaints title="Family History" addNewItemCommon={createFamilyHistory} itemList={masterData.familyHistory} />
                         <Problems title='Problems' addNewItemCommon={createProblems} itemList={masterData.problems}/>
                         <PasMedHistory title="Past Medical History" addNewItemCommon={createMedicalHistory} itemList={masterData.pastMedicalHistory} />               
-                        <Medications title='Medications' addNewItemCommon={createMedication} itemList={masterData.medications}/>
+                        <Medications title='Medications' addNewItemCommon={createMedicalHistory} itemList={masterData.pastMedicalHistory}/>
                          {/*labtest */}
                     </View>
                 </View>
