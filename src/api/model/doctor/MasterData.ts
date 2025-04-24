@@ -76,9 +76,9 @@ export class MedicationsRequest {
     genericName?: string;
     category?: string;
     description?: string;
-    dosage: string;
-    dosageUnit: string;
-    dosageForm: string;
+    dosage?: string;
+    dosageUnit?: string;
+    dosageForm?: string;
     strength?: string;
     isActive?: boolean
 }
@@ -86,13 +86,13 @@ export class MedicationsRequest {
 export class MedicationsResponse {
     id: number;
     medicationName: string;
-    genericName: string;
-    category: string;
-    description: string;
-    dosage: string;
-    dosageUnit: string;
-    dosageForm: string;
-    strength: string;
+    genericName?: string;
+    category?: string;
+    description?: string;
+    dosage?: string;
+    dosageUnit?: string;
+    dosageForm?: string;
+    strength?: string;
 }
 
 export class LabTestRequest{

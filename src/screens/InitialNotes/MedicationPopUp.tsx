@@ -1,19 +1,23 @@
-import { MedicationsResponse } from '@api/model/doctor/MasterData';
+
 import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, TouchableWithoutFeedback, Keyboard } from 'react-native';
-import { Modal, Portal, Text, TextInput, Button, Card, Divider } from 'react-native-paper';
+import { Modal, Portal, Text, TextInput, Button, Card, ToggleButton, Divider } from 'react-native-paper';
+import { MedicalHistoryNote } from './MedicalHistory';
+import { MedicationsResponse } from '@api/model/doctor/MasterData';
+
 
 type Props = {
     selectedItem: MedicationsResponse;
     modalVisible: boolean;
     onClose: () => void;
+    onSave: (item: MedicalHistoryNote) => void;
 };
-const MedicationsPopUp: React.FC<Props> = ({ selectedItem, modalVisible, onClose }) => {
+const MedicationPopUp: React.FC<Props> = ({ selectedItem, modalVisible, onClose, onSave }) => {
     const [duration, setDuration] = useState('');
-    const [unit, setUnit] = useState('day');
+    const [unit, setUnit] = useState('days');
     const [startDate, setStartDate] = useState('-');
 
-
+console.log(selectedItem);
     const calculateStartDate = () => {
         const num = parseInt(duration);
         if (!duration || isNaN(num)) {
@@ -24,13 +28,13 @@ const MedicationsPopUp: React.FC<Props> = ({ selectedItem, modalVisible, onClose
         const now = new Date();
         let pastDate;
 
-        if (unit === 'day') {
+        if (unit === 'days') {
             pastDate = new Date();
             pastDate.setDate(now.getDate() - num);
-        } else if (unit === 'month') {
+        } else if (unit === 'months') {
             pastDate = new Date();
             pastDate.setMonth(now.getMonth() - num);
-        } else if (unit === 'year') {
+        } else if (unit === 'years') {
             pastDate = new Date();
             pastDate.setFullYear(now.getFullYear() - num);
         }
@@ -49,8 +53,14 @@ const MedicationsPopUp: React.FC<Props> = ({ selectedItem, modalVisible, onClose
     };
 
     const handleSave = () => {
-
-        console.log('Saved:', { duration, unit, startDate });
+        const item = new MedicalHistoryNote();
+        item.id = selectedItem.id;
+        item.name = selectedItem.medicationName;
+        item.howlong = Number(duration);
+        item.type = unit;
+        onSave(item);
+        onClose();
+       
     };
 
 
@@ -75,7 +85,7 @@ const MedicationsPopUp: React.FC<Props> = ({ selectedItem, modalVisible, onClose
                                 </View>
 
                                 <View style={styles.unitSelector}>
-                                    {['day', 'month', 'year'].map((item) => (
+                                    {['days', 'months', 'years'].map((item) => (
                                         <Button
                                             key={item}
                                             mode={unit === item ? 'contained' : 'outlined'}
@@ -104,7 +114,7 @@ const MedicationsPopUp: React.FC<Props> = ({ selectedItem, modalVisible, onClose
     );
 };
 
-export default MedicationsPopUp;
+export default MedicationPopUp;
 
 const styles = StyleSheet.create({
     modalContainer: {

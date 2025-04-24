@@ -1,7 +1,7 @@
 import { Gender } from "../enums";
 
 export interface MedicationResponse {
-    id: string;
+    id: number;
     clinicId: string;
     patientId: string;
     medicationId: string;
@@ -148,13 +148,18 @@ export class VitalsResponse {
 }
 
 export interface MedicationRequest {
-    clinicId: string;
-    medicationId: string;
-    dosage: string;
-    frequency: string;
-    startDate: string;
-    endDate: string;
-    instructions: string;
+    clinicId: number;
+    specialityId: number;
+    userId: number;
+    medicationName: string;
+    genericName?:string;
+    category?:string;
+    description?:string;
+    dosage?: string;
+    dosageUnit?: string;
+    dosageForm?: string;
+    strength?: string;
+    isActive?: boolean;
   }
   
   export interface LabTestUpdateRequest {
