@@ -1,8 +1,8 @@
 import { Symptom } from '@api/model/doctor/MasterData';
-import React, { useEffect, useState } from 'react';
+import React, {  useState } from 'react';
 import { View, StyleSheet, TouchableWithoutFeedback, Keyboard, TouchableOpacity } from 'react-native';
-import { Modal, Portal, Text, TextInput, Button, Card, ToggleButton, Divider, Checkbox, Icon } from 'react-native-paper';
-import { MedicalHistoryNote } from './MedicalHistory';
+import { Modal, Portal, Text, TextInput, Button, Card, Divider} from 'react-native-paper';
+import { MedicalHistoryNote } from './Medications';
 import { COLORS } from '@utils/colors';
 import { Dropdown } from 'react-native-element-dropdown';
 import stylesp from "@styles/presentingComplaintsStyle";
@@ -17,9 +17,9 @@ const MedicationsPopUp: React.FC<Props> = ({ selectedItem, modalVisible, onClose
     const [beforeFood, setBeforeFood] = useState(true);
     const [timing, setTiming] = useState({ M: false, A: false, N: false });
     const [duration, setDuration] = useState('');
-      const [isFocus, setIsFocus] = useState(false);
-      const [route,setRoute] = useState("");
-      const[selectedRoute,setSelectedRoute] = useState("");
+    const [isFocus, setIsFocus] = useState(false);
+    const [selectedRoute, setSelectedRoute] = useState("");
+    const [selectedFrequency, setSelectedFrequency] = useState("")
 
 
 
@@ -34,37 +34,40 @@ const MedicationsPopUp: React.FC<Props> = ({ selectedItem, modalVisible, onClose
         item.id = selectedItem.id;
         item.name = selectedItem.name;
         item.howlong = Number(duration);
+        item.food = beforeFood;
+        item.type = timing;
+        item.frequency = selectedFrequency;
+        item.route = selectedRoute;
         onSave(item);
         onClose();
-
     };
 
     const routes = [
-        { label: "as directed", value: "as_directed" },
+        { label: "as directed", value: "as directed" },
         { label: "subcutaneous", value: "subcutaneous" },
         { label: "inject, intramuscular", value: "intramuscular" },
         { label: "intravenous", value: "intravenous" },
-        { label: "by mouth", value: "oral" },
+        { label: "by mouth", value: "by mouth" },
         { label: "inhale", value: "inhale" },
         { label: "intraperitoneal", value: "intraperitoneal" },
     ];
 
     const freq = [
         { label: "Daily", value: "Daily" },
-        { label: "In the morning", value: "In_the_morning" },
+        { label: "In the morning", value: "In the morning" },
         { label: "At Bedtime", value: "At_Bedtime" },
-        { label: "Every Other Day", value: "Every_Other_Day" },
-        { label: "Weekly Once", value: "Weekly_Once" },
-        { label: "Weekly Twice", value: "Weekly_Twice" },
-        { label: "Every 4 weeks", value: "Every_4_weeks" },
+        { label: "Every Other Day", value: "Every Other Day" },
+        { label: "Weekly Once", value: "Weekly Once" },
+        { label: "Weekly Twice", value: "Weekly Twice" },
+        { label: "Every 4 weeks", value: "Every 4 weeks" },
     ];
 
-      const handleChange = (value: string) => {
+    const handleChange = (value: string) => {
         const selectedItem = routes.find((item) => item.value === value);
         if (selectedItem) {
-          setSelectedRoute(selectedItem)
+            setSelectedRoute(selectedItem)
         }
-      };
+    };
 
 
     return (
@@ -137,33 +140,33 @@ const MedicationsPopUp: React.FC<Props> = ({ selectedItem, modalVisible, onClose
                                     placeholderStyle={stylesp.placeholderStyle}
                                     selectedTextStyle={stylesp.selectedTextStyle}
                                     iconStyle={stylesp.iconStyle}
-                                    data={freq}    
+                                    data={freq}
                                     maxHeight={300}
                                     labelField="label"
                                     valueField="value"
-                                    placeholder={!isFocus ? "Frequency" : "..."}  
-                                    value={route}
+                                    placeholder={!isFocus ? "Frequency" : "..."}
+                                    value={selectedFrequency}
                                     onFocus={() => setIsFocus(true)}
                                     onBlur={() => setIsFocus(false)}
-                                    onChange={(item) => handleChange(item.value)}
-                                  
+                                    onChange={(item) => setSelectedFrequency(item.value)}
+
                                 />
 
                                 <Dropdown
                                     style={[stylesp.dropdown, isFocus && { borderColor: "blue" }]}
                                     placeholderStyle={stylesp.placeholderStyle}
-                                    selectedTextStyle={stylesp.selectedTextStyle}                      
+                                    selectedTextStyle={stylesp.selectedTextStyle}
                                     iconStyle={stylesp.iconStyle}
-                                    data={routes}                           
+                                    data={routes}
                                     maxHeight={300}
                                     labelField="label"
                                     valueField="value"
-                                    placeholder={!isFocus ? "Route" : "..."}                         
-                                    value={route}
+                                    placeholder={!isFocus ? "Route" : "..."}
+                                    value={selectedRoute}
                                     onFocus={() => setIsFocus(true)}
                                     onBlur={() => setIsFocus(false)}
-                                    onChange={(item) => handleChange(item.value)}
-                                  
+                                    onChange={(item) => setSelectedRoute(item.value)}
+
                                 />
                             </View>
 
@@ -206,20 +209,6 @@ const styles = StyleSheet.create({
         marginTop: 8,
         fontSize: 16,
         marginRight: 5
-    },
-    unitSelector: {
-        flexDirection: 'row',
-    },
-    unitButton: {
-        marginHorizontal: 2,
-    },
-    startDateBox: {
-        marginTop: 20,
-        padding: 10,
-
-    },
-    startDateText: {
-        fontSize: 16,
     },
 
     actions: {
@@ -279,6 +268,6 @@ const styles = StyleSheet.create({
     toggleTextSelected: {
         color: '#fff',
     },
-   
+
 
 });

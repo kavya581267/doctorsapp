@@ -5,14 +5,15 @@ import Icon from "react-native-vector-icons/Ionicons";
 import { InitialCommonNoteRequest, Symptom } from "@api/model/doctor/MasterData";
 import { AuthContext } from "@context/AuthContext";
 import { MdLodSnackbar } from "@components/MdLogSnacbar";
-import { MdLogActivityIndicator } from "@components/MdLogActivityIndicator";
 import { Dropdown } from "react-native-element-dropdown";
-import MedicalHistoryPopUp from "./MedicalHistoryPopUp";
 import MedicationsPopUp from "./MedicationsPopUp";
 
 export class MedicalHistoryNote extends Symptom {
     howlong: number
-    type:string
+    type: { M: false, A: false, N: false }
+    food:boolean
+    frequency: string
+    route: string
 }
 
 type Props = {
@@ -84,6 +85,11 @@ export default function PasMedHistory({ title, itemList, addNewItemCommon,setLoa
         }
       };
 
+      const formatTiming = (timing: { M: boolean; A: boolean; N: boolean }) => {
+        return `${timing.M ? 1 : 0}-${timing.A ? 1 : 0}-${timing.N ? 1 : 0}`;
+      };
+      
+    
     return (
         <View style={styles.section}>
             <Text style={styles.sectionTitle}>{title}</Text>
@@ -129,7 +135,7 @@ export default function PasMedHistory({ title, itemList, addNewItemCommon,setLoa
                 {selectedItems.length > 0 && (
                     selectedItems.map((item, index) => (
                         <View key={index} style={styles.selectedChip}>
-                            <Text>{item.name +" for "+ item.howlong + " "+item.type}</Text>
+                            <Text>{item.name +","+" "+ formatTiming(item.type)+" " + (item.food ? "Before food" : "After food") + " for " + item.howlong +" "+"days"+" "+item.frequency +" "+ item.route}</Text>
                             <TouchableOpacity onPress={() => remove(item)}>
                                 <Icon name="close-circle" size={18} color="grey" style={styles.removeIcon} />
                             </TouchableOpacity>
