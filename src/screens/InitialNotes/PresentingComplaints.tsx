@@ -43,7 +43,7 @@ const PresentingComplaints = ({ title, itemList, addNewItemCommon }: Props) => {
             const reqObj: InitialCommonNoteRequest = {
                 specialityId: loggedInUserContext.specialityId,
                 clinicId: loggedInUserContext.clinicDetails.id,
-                name: searchText,
+                name: complaintText,
             };
             const newItem = await addNewItemCommon(reqObj);
             if (newItem) {
@@ -140,6 +140,7 @@ const PresentingComplaints = ({ title, itemList, addNewItemCommon }: Props) => {
                             <Button title="Cancel" onPress={() => setModalVisible(false)} />
                             <Button title="Create" onPress={() => {
                                 // Handle create action here
+                                handleAddNewItem()
                                 console.log('Complaint:', complaintText);
                                 setModalVisible(false);
                                 setComplaintText('');

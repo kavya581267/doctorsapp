@@ -26,6 +26,7 @@ import InitialNoteScreen from '@screens/InitialNotes/InitialNotes';
 import PatientDetails from '../../components/admin/PatientDetails';
 import PatientDirectoryScreen from '@screens/PatientsDirectory';
 import Mainscreen from './Mainscreen';
+import { FaceSheet } from '@api/model/patient/PatientModels';
 
 export type BookAppointmentScreenRouteParams = {
       edit?: boolean; // or string, depending on your use case
@@ -43,7 +44,9 @@ export type SuccessScreenParams = {
 export type PatientMedicalParams = {
     appointment: AppointmentListResponse
 }
-
+export type InitialNotesParams = {
+    facesheet: FaceSheet
+}
 
 
 export type RootStackParamList = {
@@ -57,7 +60,7 @@ export type RootStackParamList = {
     Appointments: undefined;
     PatientDetails: undefined;
     PatientMedical: PatientMedicalParams;
-    InitialNote: undefined;
+    InitialNote: InitialNotesParams;
     ClinicRegistration: undefined;
     SuccessScreen: SuccessScreenParams;
     ForgetPassword: undefined;

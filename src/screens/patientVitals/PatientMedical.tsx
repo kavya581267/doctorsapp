@@ -8,7 +8,7 @@ import styles from "styles/patientMedicalStyle";
 import Back from "@components/Back";
 import { PatientMedicalParams, RootStackParamList } from "@components/MainNavigation";
 import { patientService } from "@api/patientService";
-import { Vital } from "@api/model/patient/PatientModels";
+import { FaceSheet, Vital } from "@api/model/patient/PatientModels";
 import { MdLogActivityIndicator } from "@components/MdLogActivityIndicator";
 
 type RoueParams = {
@@ -23,6 +23,7 @@ export default function PatientMedical() {
     const navigation = useNavigation<NavigationProp<RootStackParamList>>();
     const [loading, setLoading] = useState(true);
     const [appointmetVital, setAppointmetVital] = useState<Vital | undefined>(undefined);
+    const [factSheetData, setFaceSheet] = useState<FaceSheet | undefined>(undefined)
 
 
     function calculateAge(dob) {
@@ -46,6 +47,7 @@ export default function PatientMedical() {
         const factSheetData = await patientService.fetchFactSheet(appointment.patientId.toString());
         const vital =  factSheetData.vitals.find((i) => i.appointment_id === appointment.id);
         setAppointmetVital(vital)
+        setFaceSheet(factSheetData)
         setLoading(false);
     }
 
@@ -79,6 +81,7 @@ export default function PatientMedical() {
                             <Text><Text style={{ fontWeight: 'bold' }}>Age:  </Text>{age}</Text>
                         </View>
                         <Text><Text style={{ fontWeight: 'bold' }}>Doctor:  </Text>{appointment.doctorName}</Text>
+                        <Text><Text style={{ fontWeight: 'bold' }}>MRN:  </Text>#{factSheetData?.patient?.mrn}</Text>
                     </View>
                     <View style={styles.divider} />
                     <View style={styles.vitalsContainer}>
@@ -101,7 +104,7 @@ export default function PatientMedical() {
                 </View>
 
                 <View style={{ width: "40%" }}>
-                    <TouchableOpacity style={styles.noteButton} onPress={() => navigation.navigate("InitialNote")}>
+                    <TouchableOpacity style={styles.noteButton} onPress={() => navigation.navigate("InitialNote", {facesheet: factSheetData})}>
                         <Text style={styles.noteBtnStyle}>Initial Note</Text>
                     </TouchableOpacity>
                 </View>

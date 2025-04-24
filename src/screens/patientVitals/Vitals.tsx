@@ -115,20 +115,23 @@ export default function Vitals(props: Props) {
                 <Text style={styles.inputText}>Oxygen Saturation: </Text>
                 {isUpdate ? <Text>{oxygenSaturation}</Text> : <TextInput style={styles.input} keyboardType="numeric" value={oxygenSaturation} onChangeText={setOxygenSaturation} />}
             </View>
+            {
+                !isUpdate && <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+                    <View>
+                        <TouchableOpacity style={styles.Btn}>
+                            <Text style={styles.btnText}>Cancel</Text>
+                        </TouchableOpacity>
+                    </View>
+                    <View>
+                        <TouchableOpacity style={styles.Btnupdate} onPress={storeVitals}>
+                            <Text style={styles.updatebtnText}>{isUpdate ? "Update" : "Create"}</Text>
+                        </TouchableOpacity>
+                    </View>
 
-            <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-                <View>
-                    <TouchableOpacity style={styles.Btn}>
-                        <Text style={styles.btnText}>Cancel</Text>
-                    </TouchableOpacity>
                 </View>
-                <View>
-                    <TouchableOpacity style={styles.Btnupdate} onPress={storeVitals}>
-                        <Text style={styles.updatebtnText}>{isUpdate ? "Update" : "Create"}</Text>
-                    </TouchableOpacity>
-                </View>
+            }
 
-            </View>
+
         </View>
     )
 }

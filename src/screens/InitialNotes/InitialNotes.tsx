@@ -13,11 +13,21 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import PasMedHistory from './MedicalHistory';
 import Medications from './Medications';
 import Problems from './Problems';
+import { RouteProp, useRoute } from '@react-navigation/native';
+import { InitialNotesParams } from '@components/MainNavigation';
 const { width, height } = Dimensions.get("window");
+
+
+type RouteParams = {
+    params : InitialNotesParams
+}
+
 
 
 const InitialNoteScreen = () => {
     const { masterData, setMasterDataAdapter } = useContext(AuthContext);
+    const route = useRoute<RouteProp<RouteParams>>()
+    const {facesheet} = route.params;
 
     const createPresentingComplaint = async (reqObj: InitialCommonNoteRequest) => {
         try {
@@ -90,7 +100,7 @@ const InitialNoteScreen = () => {
                     <View style={styles.content}>
                         <View style={styles.userInfo}>
                             <Icon name="person-circle" size={30} color="gray" />
-                            <Text style={styles.userText}>Sri 36</Text>
+                            <Text style={styles.userText}>{facesheet?.patient?.firstName}</Text>
                         </View>
                         <PresentingComplaints title="Presenting Complaints" addNewItemCommon={createPresentingComplaint} itemList={masterData.presentingComplaints} />
                         <PresentingComplaints title="Family History" addNewItemCommon={createFamilyHistory} itemList={masterData.familyHistory} />
