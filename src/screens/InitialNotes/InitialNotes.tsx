@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet, Dimensions } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Back from '@components/Back';
@@ -86,6 +86,15 @@ const InitialNoteScreen = () => {
         }
     }
 
+    async function fetchInitialNote() {
+          
+    }
+
+
+    useEffect(()=>{
+       fetchInitialNote();
+    },[])
+
     return (
         <KeyboardAwareScrollView>
             <ScrollView style={styles.container}>
@@ -170,3 +179,5 @@ const styles = StyleSheet.create({
 
 
 export default InitialNoteScreen;
+
+

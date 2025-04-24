@@ -274,3 +274,13 @@ export interface FaceSheet {
   problems: string[]
   vitals: Vital[]
 }
+
+export type NoteType = 'INITIAL' | 'FOLLOW_UP';
+
+export class CreateInitialNoteRequest {
+  clinicId: number;
+  doctorId: number;
+  appointmentId?: number;
+  noteType: NoteType;
+  noteId?: number;
+}

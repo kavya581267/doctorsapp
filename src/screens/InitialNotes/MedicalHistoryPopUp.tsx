@@ -1,9 +1,10 @@
-import {  Symptom } from '@api/model/doctor/MasterData';
+import { Symptom } from '@api/model/doctor/MasterData';
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import { View, StyleSheet, TouchableWithoutFeedback, Keyboard, TouchableOpacity } from 'react-native';
 import { Modal, Portal, Text, TextInput, Button, Card, ToggleButton, Divider } from 'react-native-paper';
 import { MedicalHistoryNote } from './MedicalHistory';
 import { formatToYYYYMMDD } from '@utils/utils';
+import SegmentedToggle from '@components/SegmentedToggle';
 
 type Props = {
     selectedItem: Symptom;
@@ -13,10 +14,10 @@ type Props = {
 };
 const MedicalHistoryPopUp: React.FC<Props> = ({ selectedItem, modalVisible, onClose, onSave }) => {
     const [duration, setDuration] = useState('0');
-    const [unit, setUnit] = useState('days');
+    const [unit, setUnit] = useState('Days');
     const [startDate, setStartDate] = useState(formatToYYYYMMDD(new Date()));
 
-console.log(selectedItem);
+    console.log(selectedItem);
     const calculateStartDate = () => {
         const num = parseInt(duration);
         const now = new Date();
@@ -25,16 +26,16 @@ console.log(selectedItem);
             return;
         }
 
-       
+
         let pastDate;
 
-        if (unit === 'days') {
+        if (unit === 'Days') {
             pastDate = new Date();
             pastDate.setDate(now.getDate() - num);
-        } else if (unit === 'months') {
+        } else if (unit === 'Months') {
             pastDate = new Date();
             pastDate.setMonth(now.getMonth() - num);
-        } else if (unit === 'years') {
+        } else if (unit === 'Years') {
             pastDate = new Date();
             pastDate.setFullYear(now.getFullYear() - num);
         }
@@ -52,6 +53,7 @@ console.log(selectedItem);
         onClose();
     };
 
+
     const handleSave = () => {
         const item = new MedicalHistoryNote();
         item.id = selectedItem.id;
@@ -60,7 +62,7 @@ console.log(selectedItem);
         item.type = unit;
         onSave(item);
         onClose();
-       
+
     };
 
 
@@ -85,25 +87,18 @@ console.log(selectedItem);
                                     />
                                 </View>
 
-                                <View style={styles.unitSelector}>
-                                    {['days', 'months', 'years'].map((item) => (
-                                        <Button
-                                            key={item}
-                                            mode={unit === item ? 'contained' : 'outlined'}
-                                            onPress={() => setUnit(item)}
-                                            style={styles.unitButton}
-                                        >
-                                            {item.charAt(0).toUpperCase() + item.slice(1)}
-                                        </Button>
-                                    ))}
-                                </View>
+                                <SegmentedToggle
+                                    options={['Days', 'Months', 'Years']}
+                                    onSelect={(item) => setUnit(item)}
+                                    defaultIndex={0}
+                                />
                             </View>
 
                             <View style={styles.startDateBox}>
                                 <Text style={styles.startDateText}>Start Date: {startDate}</Text>
                             </View>
 
-                            <Divider/>
+                            <Divider />
 
                             <View style={styles.actions}>
                                 <Button onPress={handleCancel} mode="outlined">Cancel</Button>
@@ -137,7 +132,7 @@ const styles = StyleSheet.create({
         marginBottom: 20
     },
     input: {
-        width: 80,
+        width: 180,
         height: 40
     },
     label: {
@@ -146,14 +141,14 @@ const styles = StyleSheet.create({
     },
     unitSelector: {
         flexDirection: 'row',
-        justifyContent:"space-around"
+        justifyContent: "space-around"
     },
     unitButton: {
         marginHorizontal: 2,
     },
     startDateBox: {
         marginTop: 20,
-        marginBottom:20
+        marginBottom: 20
 
     },
     startDateText: {
