@@ -45,8 +45,8 @@ export default function PasMedHistory({ title, itemList, addNewItemCommon, setLo
     const [formulation, setFormulation] = useState('');
 
     const dropdownData = itemList.map((item) => ({
-        label: item.medicationName,
-        value: item.medicationName,
+        label: item.medicationName + " "+item.dosage+item.dosageUnit +" "+item.dosageForm,
+        value: item.medicationName + " "+item.dosage+item.dosageUnit +" "+item.dosageForm,
         id: item.id,
     }));
 
@@ -89,8 +89,8 @@ export default function PasMedHistory({ title, itemList, addNewItemCommon, setLo
         setLoading(false);
     };
 
-    const handleChange = (value: string) => {
-        const selectedItem = itemList.find((item) => item.medicationName === value);
+    const handleChange = (id: number) => {
+        const selectedItem = itemList.find((item) => item.id === id);
         if (selectedItem) {
             setIsVisibleModel(true);
             setSelectedModelItem(selectedItem)
@@ -118,7 +118,7 @@ export default function PasMedHistory({ title, itemList, addNewItemCommon, setLo
                     value={sel}
                     onFocus={() => setIsFocus(true)}
                     onBlur={() => setIsFocus(false)}
-                    onChange={(item) => handleChange(item.value)}
+                    onChange={(item) => handleChange(item.id)}
                     renderLeftIcon={() => (
                         <Icon name="search" size={20} color="black" style={styles.icon} />
                     )}
