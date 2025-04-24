@@ -1,12 +1,13 @@
 import React, { useContext, useState } from "react";
-import { View, Text, TouchableOpacity, ScrollView } from "react-native";
+import { View, Text, TouchableOpacity, ScrollView, Modal, TextInput, Button } from "react-native";
 import styles from "@styles/presentingComplaintsStyle";
 import Icon from "react-native-vector-icons/Ionicons";
-import { InitialCommonNoteRequest, Symptom } from "@api/model/doctor/MasterData";
+import { InitialCommonNoteRequest, Medication, MedicationsRequest, MedicationsResponse, Symptom } from "@api/model/doctor/MasterData";
 import { AuthContext } from "@context/AuthContext";
 import { MdLodSnackbar } from "@components/MdLogSnacbar";
 import { Dropdown } from "react-native-element-dropdown";
 import MedicationsPopUp from "./MedicationsPopUp";
+import { Divider } from "react-native-paper";
 
 export class MedicalHistoryNote extends Symptom {
     howlong: number
@@ -18,14 +19,14 @@ export class MedicalHistoryNote extends Symptom {
 
 type Props = {
     title: string;
-    itemList: Symptom[];
-    addNewItemCommon: (reqObj: InitialCommonNoteRequest) => Promise<Symptom>;
-    setLoading: (load:boolean) => void
+    itemList: Medication[];
+    addNewItemCommon: (reqObj: MedicationsRequest) => Promise<MedicationsResponse>;
+    setLoading: (load: boolean) => void
 };
 
 
 
-export default function PasMedHistory({ title, itemList, addNewItemCommon,setLoading }: Props) {
+export default function PasMedHistory({ title, itemList, addNewItemCommon, setLoading }: Props) {
     const [searchText, setSearchText] = useState("");
     const [selectedItems, setSelectedItems] = useState<MedicalHistoryNote[]>([]);
     const { loggedInUserContext } = useContext(AuthContext);
@@ -35,11 +36,18 @@ export default function PasMedHistory({ title, itemList, addNewItemCommon,setLoa
     const [isFocus, setIsFocus] = useState(false);
     const [sel, setSel] = useState<string>();
     const [isVisibleModel, setIsVisibleModel] = useState(false);
-    const [selectedModelItem, setSelectedModelItem] = useState<Symptom>()
+    const [selectedModelItem, setSelectedModelItem] = useState<Medication>()
+
+
+    const [modalVisible, setModalVisible] = useState(false);
+    const [complaintText, setComplaintText] = useState('');
+    const [dosage, setDosage] = useState('');
+    const [unit, setunit] = useState('');
+    const [formulation, setFormulation] = useState('');
 
     const dropdownData = itemList.map((item) => ({
-        label: item.name,
-        value: item.name,
+        label: item.medicationName + " "+item.dosage+item.dosageUnit +" "+item.dosageForm,
+        value: item.medicationName + " "+item.dosage+item.dosageUnit +" "+item.dosageForm,
         id: item.id,
     }));
 
@@ -61,14 +69,19 @@ export default function PasMedHistory({ title, itemList, addNewItemCommon,setLoa
         setLoading(true);
         const specialityId = loggedInUserContext.specialityId;
         const clinicId = loggedInUserContext.clinicDetails.id;
-        const reqObj: InitialCommonNoteRequest = {
+        const userId = loggedInUserContext.userDetails.id;
+        const reqObj: MedicationsRequest = {
             specialityId: specialityId,
             clinicId: clinicId,
-            name: searchText,
+            medicationName: complaintText,
+            userId:userId,
+            dosage: dosage,
+            dosageUnit: unit,
+            dosageForm:formulation  
         };
         const respItem = await addNewItemCommon(reqObj);
         if (respItem) {
-            addItem(respItem);
+            //addItem(respItem);
             setSearchText("");
         } else {
             setVisible(true);
@@ -77,13 +90,13 @@ export default function PasMedHistory({ title, itemList, addNewItemCommon,setLoa
         setLoading(false);
     };
 
-    const handleChange = (value: string) => {
-        const selectedItem = itemList.find((item) => item.name === value);
+    const handleChange = (id: number) => {
+        const selectedItem = itemList.find((item) => item.id === id);
         if (selectedItem) {
-          setIsVisibleModel(true);
-          setSelectedModelItem(selectedItem)
+            setIsVisibleModel(true);
+            setSelectedModelItem(selectedItem)
         }
-      };
+    };
 
       const formatTiming = (timing: { M: boolean; A: boolean; N: boolean }) => {
         return `${timing.M ? 1 : 0}-${timing.A ? 1 : 0}-${timing.N ? 1 : 0}`;
@@ -111,26 +124,26 @@ export default function PasMedHistory({ title, itemList, addNewItemCommon,setLoa
                     value={sel}
                     onFocus={() => setIsFocus(true)}
                     onBlur={() => setIsFocus(false)}
-                    onChange={(item) => handleChange(item.value)}
+                    onChange={(item) => handleChange(item.id)}
                     renderLeftIcon={() => (
                         <Icon name="search" size={20} color="black" style={styles.icon} />
                     )}
                 />
 
-                <TouchableOpacity onPress={addNewItem}>
+                <TouchableOpacity onPress={() => setModalVisible(true)}>
                     <Text>Add</Text>
                 </TouchableOpacity>
-                {isVisibleModel   && (
+                {isVisibleModel && (
                     <MedicationsPopUp
                         selectedItem={selectedModelItem}
                         modalVisible={isVisibleModel}
-                        onSave = {(item) => addItem(item)}
+                        onSave={(item) => addItem(item)}
                         onClose={() => setIsVisibleModel(false)}
                     />)}
             </View>
 
-          
-           
+
+
             <ScrollView contentContainerStyle={styles.complaintsBox}>
                 {selectedItems.length > 0 && (
                     selectedItems.map((item, index) => (
@@ -144,6 +157,55 @@ export default function PasMedHistory({ title, itemList, addNewItemCommon,setLoa
                 )
                 }
             </ScrollView>
+            <Modal
+                visible={modalVisible}
+                animationType="slide"
+                transparent
+                onRequestClose={() => setModalVisible(false)}
+            >
+                <View style={styles.modalOverlay}>
+                    <View style={styles.modalContainer}>
+                        <Text style={styles.heading}>Add {title}</Text>
+                        <Divider style={{ marginBottom: 20 }} />
+                        <TextInput
+                            style={styles.input1}
+                            value={complaintText}
+                            onChangeText={setComplaintText}
+                            placeholder="Enter name"
+                        />
+                        <View style={{flexDirection:"row", justifyContent:"space-between"}}>
+                            <TextInput
+                                style={{...styles.input1, width:"30%"}}
+                                value={dosage}
+                                onChangeText={setDosage}
+                                placeholder="Dosage"
+                            />
+                            <TextInput
+                                style={{...styles.input1, width:"30%"}}
+                                value={unit}
+                                onChangeText={setunit}
+                                placeholder="Unit"
+                            />
+                            <TextInput
+                                style={{...styles.input1, width:"30%"}}
+                                value={formulation}
+                                onChangeText={setFormulation}
+                                placeholder="Formulation"
+                            />
+                        </View>
+                        <Divider style={{ marginBottom: 20 }} />
+                        <View style={styles.buttonRow}>
+                            <Button title="Cancel" onPress={() => setModalVisible(false)} />
+                            <Button title="Create" onPress={() => {
+                                // Handle create action here
+                                addNewItem()
+                                setModalVisible(false);
+                                setComplaintText('');
+                            }} />
+                        </View>
+                    </View>
+                </View>
+            </Modal>
             <MdLodSnackbar visible={visible} onDismiss={onDissmissSnackbar} message={errorMessage} />
         </View>
     );

@@ -110,7 +110,7 @@ const InitialNoteScreen = () => {
                         <PresentingComplaints setLoading={setLoading} title="Family History" addNewItemCommon={createFamilyHistory} itemList={masterData.familyHistory} />
                         <Problems setLoading={setLoading}  title='Problems' addNewItemCommon={createProblems} itemList={masterData.problems}/>
                         <PasMedHistory setLoading={setLoading} title="Past Medical History" addNewItemCommon={createMedicalHistory} itemList={masterData.pastMedicalHistory} /> 
-                        <Medications setLoading={setLoading} title='Medications' addNewItemCommon={createMedicalHistory} itemList={masterData.pastMedicalHistory}/>             
+                        <Medications setLoading={setLoading} title='Medications' addNewItemCommon={createMedication} itemList={masterData.medications}/>             
                          {/*labtest */}
                     </View>
                 </View>
