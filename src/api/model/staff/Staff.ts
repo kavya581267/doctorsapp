@@ -1,7 +1,7 @@
 export interface Staff {
     id: number;
     clinicId: number;
-    userId: string;
+    userId: number;
     roleName: string;
     firstName: string;
     lastName: string;

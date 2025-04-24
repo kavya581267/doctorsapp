@@ -107,7 +107,7 @@ const StaffDirectoryScreen = () => {
 
         <FlatList<Staff>
           data={staff}
-          keyExtractor={(item) => item.id.toString()}
+          keyExtractor={(item) => item.userId.toString()}
           renderItem={renderStaffCard}
         />
         <TouchableOpacity style={styles.addButton} onPress={() => navigation.navigate("StaffRegistrationScreen")}>

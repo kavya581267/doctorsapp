@@ -22,7 +22,7 @@ export default function ActionSheetMore() {
                 } else if (buttonIndex === 1) {
                     console.log("Past Notes selected")
                 } else if (buttonIndex === 2) {
-                    console.log("Record lab results selected")
+                    navigation.navigate("LabTestScreen");
                 } else if (buttonIndex === 3) {
                     console.log("Patient Readings selected");
                 } else if (buttonIndex === 4) {

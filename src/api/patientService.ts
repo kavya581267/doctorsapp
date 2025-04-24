@@ -1,11 +1,11 @@
-import { CREATE_DOCTO_APPOINTMENT, CREATE_PATIENT_VITALS, GET_CLINIC_PATIENTS_PATH, GET_CLINIC_STAFF_PATH, UPDATE_APPOINTMENT } from "@utils/constants";
+import { CREATE_DOCTO_APPOINTMENT, CREATE_INITIAL_NOTE, CREATE_PATIENT_VITALS, GET_CLINIC_PATIENTS_PATH, GET_CLINIC_STAFF_PATH, GET_FACT_SHEET, UPDATE_APPOINTMENT } from "@utils/constants";
 import { apiService } from "./apiService";
 import { AdminRegistarationRequest, AdminRegistrationResponse } from "./model/auth/Auth";
 import { ClinicResponse } from "./model/clinic/ClinicResponse";
 import { StaffRequest } from "./model/clinic/StaffRequest";
 import { Staff } from "./model/staff/Staff";
 import { replacePlaceholders } from "@utils/utils";
-import { AppointmentRequest, AppointmentResponse, AppointmentUpdateRequest, PatientResponse, VitalsRequest, VitalsResponse } from "./model/patient/PatientModels";
+import { AppointmentRequest, AppointmentResponse, AppointmentUpdateRequest, CreateInitialNoteRequest, CreateInitialNoteResponse, FaceSheet, PatientResponse, VitalsRequest, VitalsResponse } from "./model/patient/PatientModels";
 
 
 
@@ -71,5 +71,23 @@ export const patientService = {
         } catch (error) {
             throw error
         }
+    },
+
+    fetchFactSheet: async (patientId: string): Promise<FaceSheet> => {
+        try {
+            const resp = await apiService.get(replacePlaceholders(GET_FACT_SHEET, { "patient_id": patientId }),"")
+            return resp.data;
+        } catch (error) {
+            throw error
+        }
+    },
+    createInitialNote: async (patientId: string, body: CreateInitialNoteRequest): Promise<CreateInitialNoteResponse> => {
+        try {
+            const resp = await apiService.get(replacePlaceholders(CREATE_INITIAL_NOTE, { "patient_id": patientId }),body)
+            return resp.data;
+        } catch (error) {
+            throw error
+        }
     }
+
 };

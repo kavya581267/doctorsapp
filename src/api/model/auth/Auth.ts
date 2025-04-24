@@ -16,6 +16,7 @@ export interface LoginResponse {
   requiresMfa: boolean;
   clinicId: number;
   doctors: Doctor[];
+  specialityId:number
 }
 
 export class UserInfo {
@@ -23,7 +24,7 @@ export class UserInfo {
   username: string = "";
   firstName: string = "";
   lastName: string = "";
-  roles: string[] = [];
+  roles: Role[] = [];
   internalUserId: number;
 }
 

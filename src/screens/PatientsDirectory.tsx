@@ -72,16 +72,17 @@ const PatientDirectoryScreen = () => {
   }
 
 
-
   const renderStaffCard: ListRenderItem<PatientResponse> = ({ item }) => (
+    
     <TouchableOpacity style={styles.card}>
       <Avatar.Text size={60} label={getAvatarName(item?.firstName, item?.lastName)} />
       <View style={styles.cardContent}>
-        <Text style={styles.name}>{item.firstName}</Text>
+        <Text style={styles.name}>{item.firstName} </Text>
         <Text style={styles.role}>{item.lastName}</Text>
         <Text style={styles.role}>{item.phone}</Text>
       </View>
       <Text style={[styles.status, item.isActive ? styles.active : styles.onLeave]}>
+        
         {item.isActive ? "Active" : "InActive"}
       </Text>
     </TouchableOpacity>

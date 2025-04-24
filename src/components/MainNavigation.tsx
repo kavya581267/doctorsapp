@@ -8,16 +8,6 @@ import SignIn from '@screens/SignIn';
 import SuccessScreen from '@screens/SuccessScreen';
 import ForgetPassword from '@screens/passwordReset/ForgetPasswordScreen';
 import ResetPasswordScreen from '@screens/passwordReset/ResetPasswordScreen';
-import Mainscreen from '../../components/admin/Mainscreen';
-import PatientRegistration from '../../components/registration/PatientRegistration';
-import Appointments from '../../components/admin/Appointments';
-import DoctorList from '../../components/admin/DoctorList';
-import BookAppointment from '../../components/admin/BookAppointment';
-import PatientsList from '../../components/admin/PatientsList';
-import PatientDetails from '../../components/admin/PatientDetails';
-
-import MedicalFormScreen from '../../components/physician/InitialNote';
-import LoadingScreen from '../../components/LoadingScreen';
 import StaffRegistrationScreen from '@screens/staffPatientRegistration/staffRegistration/StaffRegistrationScreen';
 import PatientRegistrationScreen from '@screens/staffPatientRegistration/patientRegistration/PatientRegistrationScreen';
 import ClinicScheduleScreen from '@screens/ClinicSchedule';
@@ -31,6 +21,12 @@ import PatientMedical from '@screens/patientVitals/PatientMedical';
 import AppointmentsListScreen from '@screens/AppontmentsListScree';
 import { AppointmentListResponse } from '@api/model/appointments/AppointmentListResponse';
 import { StaffProffileScreen } from '@screens/StaffProfileScreen';
+import InitialNoteScreen from '@screens/InitialNotes/InitialNotes';
+import PatientDirectoryScreen from '@screens/PatientsDirectory';
+import Mainscreen from './Mainscreen';
+import { AppointmentResponse, FaceSheet } from '@api/model/patient/PatientModels';
+import LabTestScreen from '@screens/patientVitals/LabTestScreen';
+import LoadingScreen from './LoadingScreen';
 
 export type BookAppointmentScreenRouteParams = {
       edit?: boolean; // or string, depending on your use case
@@ -45,6 +41,13 @@ export type SuccessScreenParams = {
     screen: string
 };
 
+export type PatientMedicalParams = {
+    appointment: AppointmentListResponse
+}
+export type InitialNotesParams = {
+    facesheet: FaceSheet
+    appointment: AppointmentListResponse
+}
 
 
 export type RootStackParamList = {
@@ -56,12 +59,8 @@ export type RootStackParamList = {
     PatientRegistration: undefined;
     ClinicScheduleScreen: undefined;
     Appointments: undefined;
-    DoctorList: undefined;
-    BookAppointment: undefined;
-    PatientsList: undefined;
-    PatientDetails: undefined;
-    PatientMedical: undefined;
-    InitialNote: undefined;
+    PatientMedical: PatientMedicalParams;
+    InitialNote: InitialNotesParams;
     ClinicRegistration: undefined;
     SuccessScreen: SuccessScreenParams;
     ForgetPassword: undefined;
@@ -74,6 +73,8 @@ export type RootStackParamList = {
     DoctorScheduleScreen: undefined;
     AppointmentsListScreen:undefined;
     StaffProffileScreen:undefined;
+    PatientDirectoryScreen:undefined;
+    LabTestScreen:undefined;
 
 };
 
@@ -93,16 +94,11 @@ export default function MainNavigator() {
                 <Stack.Screen name="UserProfileScreen" component={UserProfileScreen} />
                 <Stack.Screen name="StaffRegistrationScreen" component={StaffRegistrationScreen}></Stack.Screen>
                 <Stack.Screen name='PatientRegistrationScreen' component={PatientRegistrationScreen}></Stack.Screen>
-                <Stack.Screen name="PatientRegistration" component={PatientRegistration}></Stack.Screen>
                 <Stack.Screen name='ClinicScheduleScreen' component={ClinicScheduleScreen}></Stack.Screen>
                 <Stack.Screen name="ClinicOverview" component={ClinicOverview} />
-                <Stack.Screen name="Appointments" component={Appointments}></Stack.Screen>
-                <Stack.Screen name='DoctorList' component={DoctorList} />
-                <Stack.Screen name='BookAppointment' component={BookAppointment} />
-                <Stack.Screen name='PatientsList' component={PatientsList} />
-                <Stack.Screen name='PatientDetails' component={PatientDetails} />
+                <Stack.Screen name='PatientDirectoryScreen' component={PatientDirectoryScreen} />
                 <Stack.Screen name='PatientMedical' component={PatientMedical} />
-                <Stack.Screen name='InitialNote' component={MedicalFormScreen} />
+                <Stack.Screen name='InitialNote' component={InitialNoteScreen} />
                 <Stack.Screen name='ClinicRegistration' component={ClinicRegistration} />
                 <Stack.Screen name='SuccessScreen' component={SuccessScreen} />
                 <Stack.Screen name='ForgetPassword' component={ForgetPassword} />
@@ -113,6 +109,7 @@ export default function MainNavigator() {
                 <Stack.Screen name='BookAppointmentScreen' component={BookAppointmentScreen}></Stack.Screen>
                 <Stack.Screen name='AppointmentsListScreen' component={AppointmentsListScreen}></Stack.Screen>
                 <Stack.Screen name='StaffProffileScreen' component={StaffProffileScreen}></Stack.Screen>
+                <Stack.Screen name='LabTestScreen' component={LabTestScreen}></Stack.Screen>
             </Stack.Navigator>
         </NavigationContainer>
     );

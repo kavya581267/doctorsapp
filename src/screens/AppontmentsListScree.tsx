@@ -162,22 +162,25 @@ const AppointmentsListScreen = () => {
       <View style={{ flexDirection: "row", justifyContent: "space-around", alignItems: "center" }}>
         <TextInput style={styles.searchBar} placeholder="Search patient, doctor or mobile number" />
 
-        <TouchableOpacity onPress={() => setShowFilterModal(true)}>
-          <Ionicons name="filter-outline" size={24} color="#333" />
-        </TouchableOpacity>
-        {filtersApplied && (
-          <View
-            style={{
-              position: 'absolute',
-              top: 14,
-              right: 8,
-              width: 8,
-              height: 8,
-              borderRadius: 4,
-              backgroundColor: 'red',
-            }}
-          />
-        )}
+        <View style={{ position: 'relative' }}>
+          <TouchableOpacity onPress={() => setShowFilterModal(true)}>
+            <Ionicons name="filter-outline" size={24} color="#333" />
+          </TouchableOpacity>
+
+          {filtersApplied && (
+            <View
+              style={{
+                position: 'absolute',
+                top: 2,
+                right: 0,
+                width: 8,
+                height: 8,
+                borderRadius: 4,
+                backgroundColor: 'red',
+              }}
+            />
+          )}
+        </View>
       </View>
 
 
@@ -213,13 +216,13 @@ const AppointmentsListScreen = () => {
           <Text>Past</Text>
         </TouchableOpacity>
       </View>
-      <FlatList
+      <FlatList<AppointmentListResponse>
         data={getListData()}
         renderItem={renderItem}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item.id.toString()}
       />
 
-
+   
       <TouchableOpacity style={styles.addButton} onPress={() => navigation.navigate('BookAppointmentScreen')}>
         <Text style={styles.addButtonText}>+ Book Appointment</Text>
       </TouchableOpacity>
@@ -293,7 +296,7 @@ const styles = StyleSheet.create({
     borderColor: '#ccc',
     paddingHorizontal: 12,
     marginBottom: 10,
-    width:"80%"
+    width: "80%"
   },
   tabRow: {
     flexDirection: 'row',

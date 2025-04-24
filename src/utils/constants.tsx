@@ -12,6 +12,7 @@ export const USER_CONTEXT="user_context";
 export const ACCESS_TOKENS_CONTEXT= "access_tokens";
 export const CLINIC_CONTEXT="clinic_context";
 export const DOCTORS_LIST="doc_list";
+export const MASTER_DATA_CONTEXT = "master_data";
 
 
 
@@ -82,12 +83,21 @@ export const REMOVE_DOCTOR_SPECIALTIES_PATH ="/doctors/{{doctorId}}/specialties/
 
 //master data
 export const GET_ALL_SPECIALTIES_PATH ="/specialties";
-
+export const GET_MASTER_DATA_PATH = "/master/data/{clinicId}/{specialityId}";
+export const PRESENTING_COMPLAINTS_PATH = "/master/presenting-complaints";
+export const FAMILY_HISTORY_PATH = "/master/family-history";
+export const PROBLEMS_PATH = "/master/problems";
+export const PAST_MEDICAL_HISTORY_PATH = "/master/past-medical-history";
+export const MEDICATIONS_PATH = "/master/medications";
+export const LAB_TEST_PATH = "/master/lab-tests"
+ 
 //home 
 export const ADMIN_HOME_DASHBOARD_API  ="/auth/admin/home"
 export const DOCTOR_HOME_DASHBOARD_API = "/auth/staff/home"
 
 export const LOGO_URL ="https://www.mdops.com/wp-content/themes/mdops/images/logo.png"
+
+export const MASTER_DATA ="/master/data/{{clinicId}}/{{specialityId}}"
 
 
 //patient
@@ -105,3 +115,8 @@ export const UPDATE_APPOINTMENT ="/patients/{{patient_id}}/appointments/{{appoin
 //vitals
 export const GET_PATIENT_VITALS = "/patients/{{patient_id}}/vitals";
 export const CREATE_PATIENT_VITALS = "/patients/{{patient_id}}/vitals";
+export const GET_FACT_SHEET = "/patients/{{patient_id}}"
+
+
+//notes
+export const CREATE_INITIAL_NOTE = "/patients/{{patient_id}}/notes"

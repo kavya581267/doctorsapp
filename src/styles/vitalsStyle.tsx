@@ -4,7 +4,7 @@ import { COLORS } from "@utils/colors";
 export default StyleSheet.create({
     vitalsContainer: {
          padding: 10,
-        marginTop: 10,
+         marginTop: 10,
     },
     vitalsText: {
         fontSize: 16,

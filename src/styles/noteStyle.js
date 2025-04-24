@@ -1,5 +1,5 @@
+import { COLORS } from "@utils/colors";
 import { StyleSheet } from "react-native";
-import { COLORS } from "../constants/colors";
 
 
 export default StyleSheet.create({
@@ -16,7 +16,7 @@ export default StyleSheet.create({
         borderWidth: 1,
         borderColor: COLORS.grey,
         borderRadius: 8,
-        minHeight: 60,
+        minHeight: 100,
         padding: 8,
     },
 })
