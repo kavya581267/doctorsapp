@@ -98,7 +98,7 @@ const InitialNoteScreen = () => {
     return (
         <KeyboardAwareScrollView>
             <ScrollView style={styles.container}>
-                <View style={{height:height+200}}>
+                <View style={{height:height+700}}>
                     <Back nav='Mainscreen' tab='Appointments' />
 
                     <View style={styles.header}>
@@ -119,7 +119,10 @@ const InitialNoteScreen = () => {
                         <PresentingComplaints setLoading={setLoading} title="Family History" addNewItemCommon={createFamilyHistory} itemList={masterData.familyHistory} />
                         <Problems setLoading={setLoading}  title='Problems' addNewItemCommon={createProblems} itemList={masterData.problems}/>
                         <PasMedHistory setLoading={setLoading} title="Past Medical History" addNewItemCommon={createMedicalHistory} itemList={masterData.pastMedicalHistory} /> 
-                        <Medications setLoading={setLoading} title='Medications' addNewItemCommon={createMedication} itemList={masterData.medications}/>             
+                        <Medications setLoading={setLoading} title='Medications' addNewItemCommon={createMedication} itemList={masterData.medications}/>  
+                        <Note title="Physical Examination"/>  
+                        <Note title="Diet"/>       
+                        <Note title="Exercise"/> 
                          {/*labtest */}
                     </View>
                 </View>
