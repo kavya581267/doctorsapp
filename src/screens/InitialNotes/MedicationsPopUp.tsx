@@ -1,57 +1,70 @@
-import { MedicationsResponse } from '@api/model/doctor/MasterData';
+import { Symptom } from '@api/model/doctor/MasterData';
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, TouchableWithoutFeedback, Keyboard } from 'react-native';
-import { Modal, Portal, Text, TextInput, Button, Card, Divider } from 'react-native-paper';
+import { View, StyleSheet, TouchableWithoutFeedback, Keyboard, TouchableOpacity } from 'react-native';
+import { Modal, Portal, Text, TextInput, Button, Card, ToggleButton, Divider, Checkbox, Icon } from 'react-native-paper';
+import { MedicalHistoryNote } from './MedicalHistory';
+import { COLORS } from '@utils/colors';
+import { Dropdown } from 'react-native-element-dropdown';
+import stylesp from "@styles/presentingComplaintsStyle";
 
 type Props = {
-    selectedItem: MedicationsResponse;
+    selectedItem: Symptom;
     modalVisible: boolean;
     onClose: () => void;
+    onSave: (item: MedicalHistoryNote) => void;
 };
-const MedicationsPopUp: React.FC<Props> = ({ selectedItem, modalVisible, onClose }) => {
+const MedicationsPopUp: React.FC<Props> = ({ selectedItem, modalVisible, onClose, onSave }) => {
+    const [beforeFood, setBeforeFood] = useState(true);
+    const [timing, setTiming] = useState({ M: false, A: false, N: false });
     const [duration, setDuration] = useState('');
-    const [unit, setUnit] = useState('day');
-    const [startDate, setStartDate] = useState('-');
+      const [isFocus, setIsFocus] = useState(false);
+      const [route,setRoute] = useState("");
+      const[selectedRoute,setSelectedRoute] = useState("");
 
 
-    const calculateStartDate = () => {
-        const num = parseInt(duration);
-        if (!duration || isNaN(num)) {
-            setStartDate('-');
-            return;
-        }
 
-        const now = new Date();
-        let pastDate;
-
-        if (unit === 'day') {
-            pastDate = new Date();
-            pastDate.setDate(now.getDate() - num);
-        } else if (unit === 'month') {
-            pastDate = new Date();
-            pastDate.setMonth(now.getMonth() - num);
-        } else if (unit === 'year') {
-            pastDate = new Date();
-            pastDate.setFullYear(now.getFullYear() - num);
-        }
-
-        setStartDate(pastDate.toDateString());
-    };
-
-    useEffect(() => {
-        calculateStartDate();
-    }, [duration, unit]);
 
     const handleCancel = () => {
         setDuration('');
-        setStartDate('-');
         onClose();
     };
 
     const handleSave = () => {
+        const item = new MedicalHistoryNote();
+        item.id = selectedItem.id;
+        item.name = selectedItem.name;
+        item.howlong = Number(duration);
+        onSave(item);
+        onClose();
 
-        console.log('Saved:', { duration, unit, startDate });
     };
+
+    const routes = [
+        { label: "as directed", value: "as_directed" },
+        { label: "subcutaneous", value: "subcutaneous" },
+        { label: "inject, intramuscular", value: "intramuscular" },
+        { label: "intravenous", value: "intravenous" },
+        { label: "by mouth", value: "oral" },
+        { label: "inhale", value: "inhale" },
+        { label: "intraperitoneal", value: "intraperitoneal" },
+    ];
+
+    const freq = [
+        { label: "Daily", value: "Daily" },
+        { label: "In the morning", value: "In_the_morning" },
+        { label: "At Bedtime", value: "At_Bedtime" },
+        { label: "Every Other Day", value: "Every_Other_Day" },
+        { label: "Weekly Once", value: "Weekly_Once" },
+        { label: "Weekly Twice", value: "Weekly_Twice" },
+        { label: "Every 4 weeks", value: "Every_4_weeks" },
+    ];
+
+      const handleChange = (value: string) => {
+        const selectedItem = routes.find((item) => item.value === value);
+        if (selectedItem) {
+          setSelectedRoute(selectedItem)
+        }
+      };
 
 
     return (
@@ -59,12 +72,54 @@ const MedicationsPopUp: React.FC<Props> = ({ selectedItem, modalVisible, onClose
             <Modal visible={modalVisible} contentContainerStyle={styles.modalContainer}>
                 <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                     <View>
-                        <Card.Title title={selectedItem.medicationName} titleStyle={styles.title} />
+                        <Card.Title title={selectedItem.name} titleStyle={styles.title} />
                         <Divider />
+                        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+                            <View style={styles.foodToggle}>
+                                {['Before', 'After'].map(option => {
+                                    const selected = beforeFood === (option === 'Before');
+                                    return (
+                                        <TouchableOpacity
+                                            key={option}
+                                            style={[styles.toggleButton, selected && styles.toggleButtonSelected]}
+                                            onPress={() => setBeforeFood(option === 'Before')}
+                                        >
+                                            <Text style={[styles.toggleText, selected && styles.toggleTextSelected]}>
+                                                {option}
+                                            </Text>
+                                        </TouchableOpacity>
+                                    );
+                                })}
+                            </View>
+
+                            <View style={styles.timingRow}>
+                                {['M', 'A', 'N'].map(time => (
+                                    <TouchableOpacity
+                                        key={time}
+                                        style={[
+                                            styles.timeBox,
+                                            timing[time] && styles.timeBoxSelected
+                                        ]}
+                                        onPress={() =>
+                                            setTiming(prev => ({ ...prev, [time]: !prev[time] }))
+                                        }
+                                    >
+                                        <Text
+                                            style={[
+                                                styles.timeText,
+                                                timing[time] && styles.timeTextSelected
+                                            ]}
+                                        >
+                                            {time}
+                                        </Text>
+                                    </TouchableOpacity>
+                                ))}
+                            </View>
+                        </View>
                         <View style={{ padding: 10 }}>
                             <View>
                                 <View style={styles.row}>
-                                    <Text style={styles.label}>For How Long :</Text>
+                                    <Text style={styles.label}>For </Text>
                                     <TextInput
                                         mode="outlined"
                                         style={styles.input}
@@ -72,25 +127,46 @@ const MedicationsPopUp: React.FC<Props> = ({ selectedItem, modalVisible, onClose
                                         onChangeText={setDuration}
                                         keyboardType="numeric"
                                     />
-                                </View>
-
-                                <View style={styles.unitSelector}>
-                                    {['day', 'month', 'year'].map((item) => (
-                                        <Button
-                                            key={item}
-                                            mode={unit === item ? 'contained' : 'outlined'}
-                                            onPress={() => setUnit(item)}
-                                            style={styles.unitButton}
-                                        >
-                                            {item.charAt(0).toUpperCase() + item.slice(1)}
-                                        </Button>
-                                    ))}
+                                    <Text style={styles.label}>days </Text>
                                 </View>
                             </View>
 
-                            <View style={styles.startDateBox}>
-                                <Text style={styles.startDateText}>Start Date: {startDate}</Text>
+                            <View>
+                                <Dropdown
+                                    style={[stylesp.dropdown, isFocus && { borderColor: "blue" }]}
+                                    placeholderStyle={stylesp.placeholderStyle}
+                                    selectedTextStyle={stylesp.selectedTextStyle}
+                                    iconStyle={stylesp.iconStyle}
+                                    data={freq}    
+                                    maxHeight={300}
+                                    labelField="label"
+                                    valueField="value"
+                                    placeholder={!isFocus ? "Frequency" : "..."}  
+                                    value={route}
+                                    onFocus={() => setIsFocus(true)}
+                                    onBlur={() => setIsFocus(false)}
+                                    onChange={(item) => handleChange(item.value)}
+                                  
+                                />
+
+                                <Dropdown
+                                    style={[stylesp.dropdown, isFocus && { borderColor: "blue" }]}
+                                    placeholderStyle={stylesp.placeholderStyle}
+                                    selectedTextStyle={stylesp.selectedTextStyle}                      
+                                    iconStyle={stylesp.iconStyle}
+                                    data={routes}                           
+                                    maxHeight={300}
+                                    labelField="label"
+                                    valueField="value"
+                                    placeholder={!isFocus ? "Route" : "..."}                         
+                                    value={route}
+                                    onFocus={() => setIsFocus(true)}
+                                    onBlur={() => setIsFocus(false)}
+                                    onChange={(item) => handleChange(item.value)}
+                                  
+                                />
                             </View>
+
 
                             <View style={styles.actions}>
                                 <Button onPress={handleCancel} mode="outlined">Cancel</Button>
@@ -120,7 +196,6 @@ const styles = StyleSheet.create({
     },
     row: {
         flexDirection: 'row',
-        justifyContent: "space-between",
         marginBottom: 30
     },
     input: {
@@ -130,6 +205,7 @@ const styles = StyleSheet.create({
     label: {
         marginTop: 8,
         fontSize: 16,
+        marginRight: 5
     },
     unitSelector: {
         flexDirection: 'row',
@@ -158,5 +234,51 @@ const styles = StyleSheet.create({
     },
 
 
+
+
+
+    foodToggle: {
+        flexDirection: 'row',
+        marginVertical: 10,
+    },
+    timingRow: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        marginVertical: 10,
+    },
+    timeBox: {
+        padding: 10,
+        borderRadius: 6,
+        backgroundColor: '#eee',
+        marginHorizontal: 5,
+    },
+    timeBoxSelected: {
+        backgroundColor: COLORS.primary,
+    },
+    timeText: {
+        color: '#333',
+        fontWeight: 'bold',
+    },
+    timeTextSelected: {
+        color: '#fff',
+    },
+    toggleButton: {
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+        borderRadius: 20,
+        marginHorizontal: 5,
+        backgroundColor: '#eee',
+    },
+    toggleButtonSelected: {
+        backgroundColor: COLORS.primary,
+    },
+    toggleText: {
+        color: "#333",
+        fontWeight: '600',
+    },
+    toggleTextSelected: {
+        color: '#fff',
+    },
+   
 
 });

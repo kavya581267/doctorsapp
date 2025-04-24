@@ -104,6 +104,8 @@ const InitialNoteScreen = () => {
                             <Icon name="person-circle" size={30} color="gray" />
                             <Text style={styles.userText}>{facesheet?.patient?.firstName}</Text>
                         </View>
+            
+                        <Medications title='Medications' addNewItemCommon={createMedicalHistory} itemList={masterData.pastMedicalHistory}/>
                         <PresentingComplaints setLoading={setLoading} title="Presenting Complaints" addNewItemCommon={createPresentingComplaint} itemList={masterData.presentingComplaints} />
                         <PresentingComplaints setLoading={setLoading} title="Family History" addNewItemCommon={createFamilyHistory} itemList={masterData.familyHistory} />
                         <Problems setLoading={setLoading}  title='Problems' addNewItemCommon={createProblems} itemList={masterData.problems}/>

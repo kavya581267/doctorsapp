@@ -27,7 +27,7 @@ export default StyleSheet.create({
     maxHeight: 150,
     marginTop: 3,
     marginBottom: 3,
-    height: 40
+    height: 40,
   },
   inputSearchStyle: {
     height: 40,
@@ -38,6 +38,7 @@ export default StyleSheet.create({
   placeholderStyle: {
     fontSize: 16,
     color: "#888",
+    marginLeft:10
   },
 
   selectedTextStyle: {
