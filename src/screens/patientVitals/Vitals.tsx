@@ -6,6 +6,7 @@ import { useRoute } from "@react-navigation/native";
 import { apiService } from "@api/apiService";
 import { patientService } from "@api/patientService";
 import { AuthContext } from "@context/AuthContext";
+import { Entypo } from "@expo/vector-icons";
 
 type Props = {
     vitals: Vital
@@ -50,15 +51,15 @@ export default function Vitals(props: Props) {
     const fetchVitals = () => {
         try {
             let appointmentVital: Vital = props.vitals;
-            if (appointmentVital !== undefined) {
-                setTemperature(appointmentVital.temperature.toString());
-                setBloodPressureSystolic(appointmentVital.blood_pressure_systolic.toString());
-                setBloodPressureDiastolic(appointmentVital.blood_pressure_diastolic.toString());
-                setHeartRate(appointmentVital.heart_rate.toString());
-                setRespiratoryRate(appointmentVital.respiratory_rate.toString());
-                setOxygenSaturation(appointmentVital.oxygen_saturation.toString());
-                setHeight(appointmentVital.height.toString());
-                setWeight(appointmentVital.weight.toString());
+            if (appointmentVital) {
+                setTemperature(appointmentVital.temperature?.toString());
+                setBloodPressureSystolic(appointmentVital.blood_pressure_systolic?.toString());
+                setBloodPressureDiastolic(appointmentVital.blood_pressure_diastolic?.toString());
+                setHeartRate(appointmentVital.heart_rate?.toString());
+                setRespiratoryRate(appointmentVital.respiratory_rate?.toString());
+                setOxygenSaturation(appointmentVital.oxygen_saturation?.toString());
+                setHeight(appointmentVital.height?.toString());
+                setWeight(appointmentVital.weight?.toString());
                 setIsUpdate(true);
             }
         } catch (error) {
@@ -74,6 +75,19 @@ export default function Vitals(props: Props) {
 
     return (
         <View style={styles.vitalsContainer}>
+            <View style={{justifyContent:"space-between",flexDirection:"row"}}>
+                <View>
+                    <Text style={{
+                        fontWeight: "700",
+                        fontSize: 16
+                    }}>Vitals:</Text>
+                </View>
+                <View>
+                    <TouchableOpacity onPress={() => setIsUpdate(prev => !prev)}>
+                        <Entypo name="edit" size={24} color="black" />
+                    </TouchableOpacity>
+                </View>
+            </View>
             <View style={{ flexDirection: "row" }}>
                 <Text style={styles.inputText}>Height (cms): </Text>
                 {
