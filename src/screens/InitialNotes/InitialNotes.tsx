@@ -23,6 +23,7 @@ const { width, height } = Dimensions.get("window");
 
 type RouteParams = {
     params : InitialNotesParams
+
 }
 
 
@@ -30,7 +31,7 @@ type RouteParams = {
 const InitialNoteScreen = () => {
     const { masterData, setMasterDataAdapter } = useContext(AuthContext);
     const route = useRoute<RouteProp<RouteParams>>()
-    const {facesheet} = route.params;
+    const {facesheet, appointment} = route.params;
     const [loading, setLoading] = useState(false);
 
 
@@ -91,12 +92,22 @@ const InitialNoteScreen = () => {
 
     async function fetchInitialNote() {
          const reqBody = new CreateInitialNoteRequest();
-         await patientService.createInitialNote(facesheet?.patient?.id.toString(),reqBody)
+         reqBody.appointmentId = appointment.id;
+         reqBody.clinicId = appointment.clinicId;
+         reqBody.doctorId= appointment.doctorId;
+         reqBody.noteType = facesheet.newAppointment ? "INITIAL":"FOLLOW_UP"
+         try{
+            setLoading(true)
+            const initialNote = await patientService.createInitialNote(facesheet?.patient?.id.toString(),reqBody);
+         }catch(error){
+             
+         }
+         setLoading(false)
     }
 
 
     useEffect(()=>{
-       fetchInitialNote();
+       //fetchInitialNote();
     },[])
 
     return (

@@ -100,7 +100,7 @@ export default function PatientMedical() {
                 {
                     user && user.roles.find((role) => role === Role.DOCTOR) &&
                     <View style={{ width: "40%" }}>
-                        <TouchableOpacity style={styles.noteButton} onPress={() => navigation.navigate("InitialNote", { facesheet: factSheetData })}>
+                        <TouchableOpacity style={styles.noteButton} onPress={() => navigation.navigate("InitialNote", { facesheet: factSheetData, appointment: appointment })}>
                             <Text style={styles.noteBtnStyle}>Initial Note</Text>
                         </TouchableOpacity>
                     </View>
