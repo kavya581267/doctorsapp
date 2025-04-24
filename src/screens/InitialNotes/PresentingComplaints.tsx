@@ -15,14 +15,14 @@ type Props = {
     title: string;
     itemList: Symptom[];
     addNewItemCommon: (reqObj: InitialCommonNoteRequest) => Promise<Symptom>;
+    setLoading: (load:boolean) => void
 };
 
-const PresentingComplaints = ({ title, itemList, addNewItemCommon }: Props) => {
+const PresentingComplaints = ({ title, itemList, addNewItemCommon, setLoading }: Props) => {
     const { loggedInUserContext } = useContext(AuthContext);
     const [selectedItems, setSelectedItems] = useState<Symptom[]>([]);
     const [searchText, setSearchText] = useState("");
     const [isFocus, setIsFocus] = useState(false);
-    const [loading, setLoading] = useState(false);
     const [visible, setVisible] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
 
@@ -149,7 +149,6 @@ const PresentingComplaints = ({ title, itemList, addNewItemCommon }: Props) => {
                     </View>
                 </View>
             </Modal>
-            <MdLogActivityIndicator loading={loading} />
             <MdLodSnackbar visible={visible} onDismiss={onDismissSnackbar} message={errorMessage} />
         </View>
     );

@@ -1,28 +1,30 @@
 import React, { useContext, useState } from "react";
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity, Button, TextInput, Modal } from "react-native";
 import styles from "@styles/presentingComplaintsStyle";
 import {  MultiSelect } from "react-native-element-dropdown";
 import Icon from "react-native-vector-icons/Ionicons";
 import {  Problem, ProblemsRequest } from "@api/model/doctor/MasterData";
 import { AuthContext } from "@context/AuthContext";
 import { MdLodSnackbar } from "@components/MdLogSnacbar";
-import { MdLogActivityIndicator } from "@components/MdLogActivityIndicator";
 import { ScrollView } from "react-native-gesture-handler";
+import { Divider } from "react-native-paper";
 
 type Props = {
     title: string;
     itemList: Problem[];
     addNewItemCommon: (reqObj: ProblemsRequest) => Promise<Problem>;
+    setLoading: (load:boolean) => void
 };
 
-const Problems = ({ title, itemList, addNewItemCommon }: Props) => {
+const Problems = ({ title, itemList, addNewItemCommon, setLoading }: Props) => {
     const { loggedInUserContext } = useContext(AuthContext);
     const [selectedItems, setSelectedItems] = useState<Problem[]>([]);
     const [searchText, setSearchText] = useState("");
     const [isFocus, setIsFocus] = useState(false);
-    const [loading, setLoading] = useState(false);
     const [visible, setVisible] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
+     const [modalVisible, setModalVisible] = useState(false);
+    const [complaintText, setComplaintText] = useState('');
 
     const onDismissSnackbar = () => setVisible(false);
 
@@ -38,7 +40,7 @@ const Problems = ({ title, itemList, addNewItemCommon }: Props) => {
             const reqObj: ProblemsRequest = {
                 specialityId: loggedInUserContext.specialityId,
                 clinicId: loggedInUserContext.clinicDetails.id,
-                problem: searchText,
+                problem: complaintText,
             };
             const newItem = await addNewItemCommon(reqObj);
             if (newItem) {
@@ -57,7 +59,7 @@ const Problems = ({ title, itemList, addNewItemCommon }: Props) => {
     const handleChange = (values: string[]) => {
         const selected = dropdownData
             .filter((item) => values.includes(item.value))
-            .map((item) => ({ id: item.id, name: item.label }));
+            .map((item) => ({ id: item.id, problem: item.label }));
         setSelectedItems(selected);
     };
 
@@ -99,7 +101,7 @@ const Problems = ({ title, itemList, addNewItemCommon }: Props) => {
                         <Icon name="search" size={20} color="black" style={styles.icon} />
                     )}
                 />
-                <TouchableOpacity onPress={handleAddNewItem} >
+                <TouchableOpacity onPress={()=> setModalVisible(true)} >
                    <Text>Add</Text>
                 </TouchableOpacity>
             </View>
@@ -113,8 +115,35 @@ const Problems = ({ title, itemList, addNewItemCommon }: Props) => {
                         </View>
                     ))}
                 </ScrollView>
-
-            <MdLogActivityIndicator loading={loading} />
+                <Modal
+                visible={modalVisible}
+                animationType="slide"
+                transparent
+                onRequestClose={() => setModalVisible(false)}
+            >
+                <View style={styles.modalOverlay}>
+                    <View style={styles.modalContainer}>
+                        <Text style={styles.heading}>Add {title}</Text>
+                        <Divider style={{marginBottom:20}}/>
+                        <TextInput
+                            style={styles.input1}
+                            value={complaintText}
+                            onChangeText={setComplaintText}
+                            placeholder="Enter problem"
+                        />
+                      <Divider style={{marginBottom:20}}/>
+                        <View style={styles.buttonRow}>
+                            <Button title="Cancel" onPress={() => setModalVisible(false)} />
+                            <Button title="Create" onPress={() => {
+                                // Handle create action here
+                                handleAddNewItem()
+                                setModalVisible(false);
+                                setComplaintText('');
+                            }} />
+                        </View>
+                    </View>
+                </View>
+            </Modal>
             <MdLodSnackbar visible={visible} onDismiss={onDismissSnackbar} message={errorMessage} />
         </View>
     );

@@ -15,6 +15,7 @@ import Medications from './Medications';
 import Problems from './Problems';
 import { RouteProp, useRoute } from '@react-navigation/native';
 import { InitialNotesParams } from '@components/MainNavigation';
+import { MdLogActivityIndicator } from '@components/MdLogActivityIndicator';
 const { width, height } = Dimensions.get("window");
 
 
@@ -28,6 +29,7 @@ const InitialNoteScreen = () => {
     const { masterData, setMasterDataAdapter } = useContext(AuthContext);
     const route = useRoute<RouteProp<RouteParams>>()
     const {facesheet} = route.params;
+    const [loading, setLoading] = useState(false)
 
     const createPresentingComplaint = async (reqObj: InitialCommonNoteRequest) => {
         try {
@@ -102,14 +104,15 @@ const InitialNoteScreen = () => {
                             <Icon name="person-circle" size={30} color="gray" />
                             <Text style={styles.userText}>{facesheet?.patient?.firstName}</Text>
                         </View>
-                        <PresentingComplaints title="Presenting Complaints" addNewItemCommon={createPresentingComplaint} itemList={masterData.presentingComplaints} />
-                        <PresentingComplaints title="Family History" addNewItemCommon={createFamilyHistory} itemList={masterData.familyHistory} />
-                        <Problems title='Problems' addNewItemCommon={createProblems} itemList={masterData.problems}/>
-                        <PasMedHistory title="Past Medical History" addNewItemCommon={createMedicalHistory} itemList={masterData.pastMedicalHistory} />               
+                        <PresentingComplaints setLoading={setLoading} title="Presenting Complaints" addNewItemCommon={createPresentingComplaint} itemList={masterData.presentingComplaints} />
+                        <PresentingComplaints setLoading={setLoading} title="Family History" addNewItemCommon={createFamilyHistory} itemList={masterData.familyHistory} />
+                        <Problems setLoading={setLoading}  title='Problems' addNewItemCommon={createProblems} itemList={masterData.problems}/>
+                        <PasMedHistory setLoading={setLoading} title="Past Medical History" addNewItemCommon={createMedicalHistory} itemList={masterData.pastMedicalHistory} />               
                         <Medications title='Medications' addNewItemCommon={createMedication} itemList={masterData.medications}/>
                          {/*labtest */}
                     </View>
                 </View>
+                <MdLogActivityIndicator loading={loading} />
             </ScrollView>
         </KeyboardAwareScrollView>
     )

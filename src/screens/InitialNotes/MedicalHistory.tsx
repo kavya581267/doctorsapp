@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { View, Text, TouchableOpacity, ScrollView } from "react-native";
+import { View, Text, TouchableOpacity, Button, TextInput, Modal } from "react-native";
 import styles from "@styles/presentingComplaintsStyle";
 import Icon from "react-native-vector-icons/Ionicons";
 import { InitialCommonNoteRequest, Symptom } from "@api/model/doctor/MasterData";
@@ -9,31 +9,37 @@ import { MdLogActivityIndicator } from "@components/MdLogActivityIndicator";
 import { Dropdown } from "react-native-element-dropdown";
 import MedicalHistoryPopUp from "./MedicalHistoryPopUp";
 
+import { ScrollView } from "react-native-gesture-handler";
+import { Divider } from "react-native-paper";
+
 export class MedicalHistoryNote extends Symptom {
     howlong: number
-    type:string
+    type: string
 }
 
 type Props = {
     title: string;
     itemList: Symptom[];
     addNewItemCommon: (reqObj: InitialCommonNoteRequest) => Promise<Symptom>;
+    setLoading: (load:boolean) => void
 };
 
 
 
-export default function PasMedHistory({ title, itemList, addNewItemCommon }: Props) {
+export default function PasMedHistory({ title, itemList, addNewItemCommon, setLoading }: Props) {
     const [searchText, setSearchText] = useState("");
     const [selectedItems, setSelectedItems] = useState<MedicalHistoryNote[]>([]);
     const { loggedInUserContext } = useContext(AuthContext);
     const [visible, setVisible] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
     const onDissmissSnackbar = () => setVisible(false);
-    const [loading, setLoading] = useState(false);
     const [isFocus, setIsFocus] = useState(false);
     const [sel, setSel] = useState<string>();
     const [isVisibleModel, setIsVisibleModel] = useState(false);
     const [selectedModelItem, setSelectedModelItem] = useState<Symptom>()
+
+    const [modalVisible, setModalVisible] = useState(false);
+    const [complaintText, setComplaintText] = useState('');
 
     const dropdownData = itemList.map((item) => ({
         label: item.name,
@@ -62,11 +68,10 @@ export default function PasMedHistory({ title, itemList, addNewItemCommon }: Pro
         const reqObj: InitialCommonNoteRequest = {
             specialityId: specialityId,
             clinicId: clinicId,
-            name: searchText,
+            name: complaintText,
         };
         const respItem = await addNewItemCommon(reqObj);
         if (respItem) {
-            addItem(respItem);
             setSearchText("");
         } else {
             setVisible(true);
@@ -78,10 +83,10 @@ export default function PasMedHistory({ title, itemList, addNewItemCommon }: Pro
     const handleChange = (value: string) => {
         const selectedItem = itemList.find((item) => item.name === value);
         if (selectedItem) {
-          setIsVisibleModel(true);
-          setSelectedModelItem(selectedItem)
+            setIsVisibleModel(true);
+            setSelectedModelItem(selectedItem)
         }
-      };
+    };
 
     return (
         <View style={styles.section}>
@@ -110,25 +115,25 @@ export default function PasMedHistory({ title, itemList, addNewItemCommon }: Pro
                     )}
                 />
 
-                <TouchableOpacity onPress={addNewItem}>
+                <TouchableOpacity onPress={()=>setModalVisible(true)}>
                     <Text>Add</Text>
                 </TouchableOpacity>
-                {isVisibleModel   && (
+                {isVisibleModel && (
                     <MedicalHistoryPopUp
                         selectedItem={selectedModelItem}
                         modalVisible={isVisibleModel}
-                        onSave = {(item) => addItem(item)}
+                        onSave={(item) => addItem(item)}
                         onClose={() => setIsVisibleModel(false)}
                     />)}
             </View>
 
-          
-           
+
+
             <ScrollView contentContainerStyle={styles.complaintsBox}>
                 {selectedItems.length > 0 && (
                     selectedItems.map((item, index) => (
                         <View key={index} style={styles.selectedChip}>
-                            <Text>{item.name +" for "+ item.howlong + " "+item.type}</Text>
+                            <Text>{item.name + " for " + item.howlong + " " + item.type}</Text>
                             <TouchableOpacity onPress={() => remove(item)}>
                                 <Icon name="close-circle" size={18} color="grey" style={styles.removeIcon} />
                             </TouchableOpacity>
@@ -137,8 +142,35 @@ export default function PasMedHistory({ title, itemList, addNewItemCommon }: Pro
                 )
                 }
             </ScrollView>
-
-            <MdLogActivityIndicator loading={loading} />
+            <Modal
+                visible={modalVisible}
+                animationType="slide"
+                transparent
+                onRequestClose={() => setModalVisible(false)}
+            >
+                <View style={styles.modalOverlay}>
+                    <View style={styles.modalContainer}>
+                        <Text style={styles.heading}>Add {title}</Text>
+                        <Divider style={{ marginBottom: 20 }} />
+                        <TextInput
+                            style={styles.input1}
+                            value={complaintText}
+                            onChangeText={setComplaintText}
+                            placeholder="Enter name"
+                        />
+                        <Divider style={{ marginBottom: 20 }} />
+                        <View style={styles.buttonRow}>
+                            <Button title="Cancel" onPress={() => setModalVisible(false)} />
+                            <Button title="Create" onPress={() => {
+                                // Handle create action here
+                                addNewItem()
+                                setModalVisible(false);
+                                setComplaintText('');
+                            }} />
+                        </View>
+                    </View>
+                </View>
+            </Modal>
             <MdLodSnackbar visible={visible} onDismiss={onDissmissSnackbar} message={errorMessage} />
         </View>
     );
