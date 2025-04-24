@@ -105,12 +105,12 @@ const InitialNoteScreen = () => {
                             <Text style={styles.userText}>{facesheet?.patient?.firstName}</Text>
                         </View>
             
-                        <Medications title='Medications' addNewItemCommon={createMedicalHistory} itemList={masterData.pastMedicalHistory}/>
+                        
                         <PresentingComplaints setLoading={setLoading} title="Presenting Complaints" addNewItemCommon={createPresentingComplaint} itemList={masterData.presentingComplaints} />
                         <PresentingComplaints setLoading={setLoading} title="Family History" addNewItemCommon={createFamilyHistory} itemList={masterData.familyHistory} />
                         <Problems setLoading={setLoading}  title='Problems' addNewItemCommon={createProblems} itemList={masterData.problems}/>
-                        <PasMedHistory setLoading={setLoading} title="Past Medical History" addNewItemCommon={createMedicalHistory} itemList={masterData.pastMedicalHistory} />               
-                        <Medications title='Medications' addNewItemCommon={createMedication} itemList={masterData.medications}/>
+                        <PasMedHistory setLoading={setLoading} title="Past Medical History" addNewItemCommon={createMedicalHistory} itemList={masterData.pastMedicalHistory} /> 
+                        <Medications setLoading={setLoading} title='Medications' addNewItemCommon={createMedicalHistory} itemList={masterData.pastMedicalHistory}/>             
                          {/*labtest */}
                     </View>
                 </View>

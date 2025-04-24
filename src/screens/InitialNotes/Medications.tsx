@@ -19,18 +19,18 @@ type Props = {
     title: string;
     itemList: Symptom[];
     addNewItemCommon: (reqObj: InitialCommonNoteRequest) => Promise<Symptom>;
+    setLoading: (load:boolean) => void
 };
 
 
 
-export default function PasMedHistory({ title, itemList, addNewItemCommon }: Props) {
+export default function PasMedHistory({ title, itemList, addNewItemCommon,setLoading }: Props) {
     const [searchText, setSearchText] = useState("");
     const [selectedItems, setSelectedItems] = useState<MedicalHistoryNote[]>([]);
     const { loggedInUserContext } = useContext(AuthContext);
     const [visible, setVisible] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
     const onDissmissSnackbar = () => setVisible(false);
-    const [loading, setLoading] = useState(false);
     const [isFocus, setIsFocus] = useState(false);
     const [sel, setSel] = useState<string>();
     const [isVisibleModel, setIsVisibleModel] = useState(false);
@@ -138,8 +138,6 @@ export default function PasMedHistory({ title, itemList, addNewItemCommon }: Pro
                 )
                 }
             </ScrollView>
-
-            <MdLogActivityIndicator loading={loading} />
             <MdLodSnackbar visible={visible} onDismiss={onDissmissSnackbar} message={errorMessage} />
         </View>
     );
