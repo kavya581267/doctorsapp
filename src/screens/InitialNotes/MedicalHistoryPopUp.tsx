@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import { Modal, Portal, Text, TextInput, Button, Card, ToggleButton, Divider } from 'react-native-paper';
 import { MedicalHistoryNote } from './MedicalHistory';
+import { formatToYYYYMMDD } from '@utils/utils';
 
 type Props = {
     selectedItem: Symptom;
@@ -11,19 +12,20 @@ type Props = {
     onSave: (item: MedicalHistoryNote) => void;
 };
 const MedicalHistoryPopUp: React.FC<Props> = ({ selectedItem, modalVisible, onClose, onSave }) => {
-    const [duration, setDuration] = useState('');
+    const [duration, setDuration] = useState('0');
     const [unit, setUnit] = useState('days');
-    const [startDate, setStartDate] = useState('-');
+    const [startDate, setStartDate] = useState(formatToYYYYMMDD(new Date()));
 
 console.log(selectedItem);
     const calculateStartDate = () => {
         const num = parseInt(duration);
+        const now = new Date();
         if (!duration || isNaN(num)) {
             setStartDate('-');
             return;
         }
 
-        const now = new Date();
+       
         let pastDate;
 
         if (unit === 'days') {
@@ -37,7 +39,7 @@ console.log(selectedItem);
             pastDate.setFullYear(now.getFullYear() - num);
         }
 
-        setStartDate(pastDate.toDateString());
+        setStartDate(formatToYYYYMMDD(pastDate));
     };
 
     useEffect(() => {
@@ -101,6 +103,8 @@ console.log(selectedItem);
                                 <Text style={styles.startDateText}>Start Date: {startDate}</Text>
                             </View>
 
+                            <Divider/>
+
                             <View style={styles.actions}>
                                 <Button onPress={handleCancel} mode="outlined">Cancel</Button>
                                 <Button onPress={handleSave} mode="contained" style={styles.saveBtn}>Save</Button>
@@ -130,7 +134,7 @@ const styles = StyleSheet.create({
     row: {
         flexDirection: 'row',
         justifyContent: "space-between",
-        marginBottom: 30
+        marginBottom: 20
     },
     input: {
         width: 80,
@@ -142,13 +146,14 @@ const styles = StyleSheet.create({
     },
     unitSelector: {
         flexDirection: 'row',
+        justifyContent:"space-around"
     },
     unitButton: {
         marginHorizontal: 2,
     },
     startDateBox: {
         marginTop: 20,
-        padding: 10,
+        marginBottom:20
 
     },
     startDateText: {
