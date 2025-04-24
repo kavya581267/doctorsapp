@@ -53,7 +53,7 @@ console.log(selectedItem);
     const handleSave = () => {
         const item = new MedicalHistoryNote();
         item.id = selectedItem.id;
-        item.name = selectedItem.medicationName;
+        item.name = selectedItem.name;
         item.howlong = Number(duration);
         item.type = unit;
         onSave(item);
@@ -67,7 +67,7 @@ console.log(selectedItem);
             <Modal visible={modalVisible} contentContainerStyle={styles.modalContainer}>
                 <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                     <View>
-                        <Card.Title title={selectedItem.medicationName} titleStyle={styles.title} />
+                        <Card.Title title={selectedItem.name} titleStyle={styles.title} />
                         <Divider />
                         <View style={{ padding: 10 }}>
                             <View>
