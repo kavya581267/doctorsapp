@@ -11,7 +11,7 @@ import { Divider } from "react-native-paper";
 
 export class MedicalHistoryNote extends Symptom {
     howlong: number
-    type: { M: false, A: false, N: false }
+    type: any
     food:boolean
     frequency: string
     route: string

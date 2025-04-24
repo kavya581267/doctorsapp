@@ -32,7 +32,7 @@ const MedicationsPopUp: React.FC<Props> = ({ selectedItem, modalVisible, onClose
     const handleSave = () => {
         const item = new MedicalHistoryNote();
         item.id = selectedItem.id;
-        item.name = selectedItem.name;
+        item.name = selectedItem.medicationName;
         item.howlong = Number(duration);
         item.food = beforeFood;
         item.type = timing;
@@ -122,15 +122,16 @@ const MedicationsPopUp: React.FC<Props> = ({ selectedItem, modalVisible, onClose
                         <View style={{ padding: 10 }}>
                             <View>
                                 <View style={styles.row}>
-                                    <Text style={styles.label}>For </Text>
+                                    <Text style={{...styles.label, paddingRight:5}}>For </Text>
                                     <TextInput
                                         mode="outlined"
                                         style={styles.input}
                                         value={duration}
                                         onChangeText={setDuration}
                                         keyboardType="numeric"
+                                        placeholder='0'
                                     />
-                                    <Text style={styles.label}>days </Text>
+                                    <Text style={{...styles.label, paddingLeft:5}}>days </Text>
                                 </View>
                             </View>
 

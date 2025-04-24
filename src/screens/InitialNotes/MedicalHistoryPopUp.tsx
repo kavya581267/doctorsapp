@@ -79,6 +79,7 @@ console.log(selectedItem);
                                         value={duration}
                                         onChangeText={setDuration}
                                         keyboardType="numeric"
+                                        placeholder='0'
                                     />
                                 </View>
 
