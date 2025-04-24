@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet, Dimensions } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Back from '@components/Back';
@@ -16,6 +16,8 @@ import Problems from './Problems';
 import { RouteProp, useRoute } from '@react-navigation/native';
 import { InitialNotesParams } from '@components/MainNavigation';
 import { MdLogActivityIndicator } from '@components/MdLogActivityIndicator';
+import { patientService } from '@api/patientService';
+import { CreateInitialNoteRequest } from '@api/model/patient/PatientModels';
 const { width, height } = Dimensions.get("window");
 
 
@@ -29,7 +31,8 @@ const InitialNoteScreen = () => {
     const { masterData, setMasterDataAdapter } = useContext(AuthContext);
     const route = useRoute<RouteProp<RouteParams>>()
     const {facesheet} = route.params;
-    const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState(false);
+
 
     const createPresentingComplaint = async (reqObj: InitialCommonNoteRequest) => {
         try {
@@ -85,6 +88,16 @@ const InitialNoteScreen = () => {
         } catch (error) {
         }
     }
+
+    async function fetchInitialNote() {
+         const reqBody = new CreateInitialNoteRequest();
+         await patientService.createInitialNote(facesheet?.patient?.id.toString(),reqBody)
+    }
+
+
+    useEffect(()=>{
+       fetchInitialNote();
+    },[])
 
     return (
         <KeyboardAwareScrollView>
@@ -173,3 +186,5 @@ const styles = StyleSheet.create({
 
 
 export default InitialNoteScreen;
+
+

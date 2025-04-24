@@ -274,3 +274,44 @@ export interface FaceSheet {
   problems: string[]
   vitals: Vital[]
 }
+
+export type NoteType = 'INITIAL' | 'FOLLOW_UP';
+
+export class CreateInitialNoteRequest {
+  clinicId: number;
+  doctorId: number;
+  appointmentId?: number;
+  noteType: NoteType;
+  noteId?: number;
+}
+
+export interface CreateInitialNoteResponse{
+    id: number;
+    clinicId: number;
+    patientId: number;
+    doctorId: number;
+    doctorName: string;
+    appointmentId: number;
+    noteType: NoteType;
+    createdAt: string; // ISO timestamp
+    updatedAt: string;
+    noteHistoryId: number;
+    drugHistory: string;
+    familyHistory: string;
+    investigations: string;
+    pastMedicalHistory: string;
+    personalHistory: string;
+    presentingComplaints: string;
+    systemicExamination: string;
+    physicalExamination: string;
+    diet: string;
+    exercise: string;
+    visitDx: string;
+    vitals: any[]; // Replace `any` with a specific type if known
+    medications: any[]; // Replace with type if known
+    problems: any[]; // Replace with type if known
+    filed: boolean;
+    nextVisitDate?: string;
+    filedTimestamp?: string;
+  }
+

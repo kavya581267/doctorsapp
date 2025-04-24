@@ -1,11 +1,12 @@
 import { Medication, Symptom } from '@api/model/doctor/MasterData';
 import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, TouchableWithoutFeedback, Keyboard, TouchableOpacity } from 'react-native';
-import { Modal, Portal, Text, TextInput, Button, Card, Divider} from 'react-native-paper';
+import { Modal, Portal, Text, TextInput, Button, Card, Divider } from 'react-native-paper';
 import { MedicalHistoryNote } from './Medications';
 import { COLORS } from '@utils/colors';
 import { Dropdown } from 'react-native-element-dropdown';
 import stylesp from "@styles/presentingComplaintsStyle";
+import SegmentedToggle from '@components/SegmentedToggle';
 
 type Props = {
     selectedItem: Medication;
@@ -76,27 +77,17 @@ const MedicationsPopUp: React.FC<Props> = ({ selectedItem, modalVisible, onClose
                 <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                     <View>
                         <Card.Title title={selectedItem.medicationName} titleStyle={styles.title} />
-                        <Divider />
-                        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-                            <View style={styles.foodToggle}>
-                                {['Before', 'After'].map(option => {
-                                    const selected = beforeFood === (option === 'Before');
-                                    return (
-                                        <TouchableOpacity
-                                            key={option}
-                                            style={[styles.toggleButton, selected && styles.toggleButtonSelected]}
-                                            onPress={() => setBeforeFood(option === 'Before')}
-                                        >
-                                            <Text style={[styles.toggleText, selected && styles.toggleTextSelected]}>
-                                                {option}
-                                            </Text>
-                                        </TouchableOpacity>
-                                    );
-                                })}
-                            </View>
+                        <Divider style={{ marginBottom: 10 }} />
+                        <SegmentedToggle
+                            options={['Before', 'After']}
+                            onSelect={(item) => { item === 'Before' ? setBeforeFood(true) : setBeforeFood(false) }}
+                            defaultIndex={0}
+                        />
 
+
+                        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
                             <View style={styles.timingRow}>
-                                {['M', 'A', 'N'].map(time => (
+                                {['Morning', 'After noon', 'Night'].map(time => (
                                     <TouchableOpacity
                                         key={time}
                                         style={[
@@ -105,8 +96,7 @@ const MedicationsPopUp: React.FC<Props> = ({ selectedItem, modalVisible, onClose
                                         ]}
                                         onPress={() =>
                                             setTiming(prev => ({ ...prev, [time]: !prev[time] }))
-                                        }
-                                    >
+                                        }>
                                         <Text
                                             style={[
                                                 styles.timeText,
@@ -119,10 +109,11 @@ const MedicationsPopUp: React.FC<Props> = ({ selectedItem, modalVisible, onClose
                                 ))}
                             </View>
                         </View>
-                        <View style={{ padding: 10 }}>
+
+                        <View style={{ padding: 5 }}>
                             <View>
                                 <View style={styles.row}>
-                                    <Text style={{...styles.label, paddingRight:5}}>For </Text>
+                                    <Text style={{ ...styles.label, paddingRight: 5 }}>For </Text>
                                     <TextInput
                                         mode="outlined"
                                         style={styles.input}
@@ -131,7 +122,7 @@ const MedicationsPopUp: React.FC<Props> = ({ selectedItem, modalVisible, onClose
                                         keyboardType="numeric"
                                         placeholder='0'
                                     />
-                                    <Text style={{...styles.label, paddingLeft:5}}>days </Text>
+                                    <Text style={{ ...styles.label, paddingLeft: 10 }}>days </Text>
                                 </View>
                             </View>
 
@@ -150,8 +141,7 @@ const MedicationsPopUp: React.FC<Props> = ({ selectedItem, modalVisible, onClose
                                     onFocus={() => setIsFocus(true)}
                                     onBlur={() => setIsFocus(false)}
                                     onChange={(item) => setSelectedFrequency(item.value)}
-
-                                />
+                                    />
 
                                 <Dropdown
                                     style={[stylesp.dropdown, isFocus && { borderColor: "blue" }]}
@@ -167,10 +157,10 @@ const MedicationsPopUp: React.FC<Props> = ({ selectedItem, modalVisible, onClose
                                     onFocus={() => setIsFocus(true)}
                                     onBlur={() => setIsFocus(false)}
                                     onChange={(item) => setSelectedRoute(item.value)}
-
-                                />
+                                    />
                             </View>
 
+                            <Divider style={{marginTop:10}}/>
 
                             <View style={styles.actions}>
                                 <Button onPress={handleCancel} mode="outlined">Cancel</Button>
@@ -200,7 +190,7 @@ const styles = StyleSheet.create({
     },
     row: {
         flexDirection: 'row',
-        marginBottom: 30
+        marginBottom: 10
     },
     input: {
         width: 80,
