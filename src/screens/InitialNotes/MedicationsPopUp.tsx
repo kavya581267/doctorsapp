@@ -1,4 +1,4 @@
-import { Symptom } from '@api/model/doctor/MasterData';
+import { Medication, Symptom } from '@api/model/doctor/MasterData';
 import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, TouchableWithoutFeedback, Keyboard, TouchableOpacity } from 'react-native';
 import { Modal, Portal, Text, TextInput, Button, Card, ToggleButton, Divider, Checkbox, Icon } from 'react-native-paper';
@@ -8,7 +8,7 @@ import { Dropdown } from 'react-native-element-dropdown';
 import stylesp from "@styles/presentingComplaintsStyle";
 
 type Props = {
-    selectedItem: Symptom;
+    selectedItem: Medication;
     modalVisible: boolean;
     onClose: () => void;
     onSave: (item: MedicalHistoryNote) => void;
@@ -72,7 +72,7 @@ const MedicationsPopUp: React.FC<Props> = ({ selectedItem, modalVisible, onClose
             <Modal visible={modalVisible} contentContainerStyle={styles.modalContainer}>
                 <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                     <View>
-                        <Card.Title title={selectedItem.name} titleStyle={styles.title} />
+                        <Card.Title title={selectedItem.medicationName} titleStyle={styles.title} />
                         <Divider />
                         <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
                             <View style={styles.foodToggle}>
