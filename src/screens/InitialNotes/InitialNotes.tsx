@@ -7,7 +7,7 @@ import { COLORS } from '@utils/colors';
 import { AuthContext } from '@context/AuthContext';
 import PresentingComplaints from './PresentingComplaints';
 import Note from './Note';
-import { InitialCommonNoteRequest, MedicationsRequest, ProblemsRequest, Symptom } from '@api/model/doctor/MasterData';
+import { InitialCommonNoteRequest, LabTestRequest, MedicationsRequest, ProblemsRequest, Symptom } from '@api/model/doctor/MasterData';
 import { doctorService } from '@api/doctorService';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import PasMedHistory from './MedicalHistory';
@@ -18,6 +18,7 @@ import { InitialNotesParams } from '@components/MainNavigation';
 import { MdLogActivityIndicator } from '@components/MdLogActivityIndicator';
 import { patientService } from '@api/patientService';
 import { CreateInitialNoteRequest } from '@api/model/patient/PatientModels';
+import Investigation from './Investigation';
 const { width, height } = Dimensions.get("window");
 
 
@@ -90,6 +91,17 @@ const InitialNoteScreen = () => {
         }
     }
 
+    const createInvestigation = async (reqObj: LabTestRequest) => {
+        try {
+            const resp = await doctorService.createLabTest(reqObj);
+            masterData.labResults.push(resp);
+            const newMasterDate = { ...masterData };
+            await setMasterDataAdapter(newMasterDate)
+            return resp;
+        } catch (error) {
+        }
+    }
+
     async function fetchInitialNote() {
          const reqBody = new CreateInitialNoteRequest();
          reqBody.appointmentId = appointment.id;
@@ -138,6 +150,7 @@ const InitialNoteScreen = () => {
                         <Note title="Physical Examination"/>  
                         <Note title="Diet"/>       
                         <Note title="Exercise"/> 
+                        <Investigation setLoading={setLoading} title="Investigation" addNewItemCommon={createInvestigation} itemList={masterData.labResults} /> 
                          {/*labtest */}
                     </View>
                 </View>

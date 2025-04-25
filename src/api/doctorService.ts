@@ -6,7 +6,7 @@ import { replacePlaceholders } from "@utils/utils";
 import { DoctorExceptionRequest } from "./model/doctor/DoctorException";
 import { DoctorSpecialtyRequest } from "./model/doctor/DoctorSpecialtyRequest";
 import { AppointmentListResponse } from "./model/appointments/AppointmentListResponse";
-import {  LabTest, Medication, InitialCommonNoteRequest, ProblemsRequest, Symptom, ProblemsResponse, MedicationsResponse, LabTestResponse, MedicationsRequest } from "./model/doctor/MasterData";
+import {  LabTest, Medication, InitialCommonNoteRequest, ProblemsRequest, Symptom, ProblemsResponse, MedicationsResponse, LabTestResponse, MedicationsRequest, LabTestRequest } from "./model/doctor/MasterData";
 
 
 
@@ -151,7 +151,7 @@ export const doctorService = {
         }
     },
 
-    createLabTest: async (labTest: LabTest):Promise<LabTestResponse> => {
+    createLabTest: async (labTest: LabTestRequest):Promise<LabTestResponse> => {
         try {
             const response = await apiService.post(LAB_TEST_PATH, labTest);
             return response.data;
