@@ -3,7 +3,7 @@ import { COLORS } from "@utils/colors";
 
 export default StyleSheet.create({
     patientContainer: {
-        borderWidth: 2,
+       
         borderColor: COLORS.grey,
         borderRadius: 10,
         height: "85%",
