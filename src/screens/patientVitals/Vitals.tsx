@@ -80,7 +80,7 @@ export default function Vitals(props: Props) {
                     <Text style={{
                         fontWeight: "700",
                         fontSize: 16
-                    }}>Vitals:</Text>
+                    }}>💓 Vitals:</Text>
                 </View>
                 <View>
                     <TouchableOpacity onPress={() => setIsUpdate(prev => !prev)}>

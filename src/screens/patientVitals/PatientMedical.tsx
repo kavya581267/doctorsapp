@@ -12,6 +12,7 @@ import { MdLogActivityIndicator } from "@components/MdLogActivityIndicator";
 import { getUser } from "@utils/loadContextDetails";
 import { UserInfo } from "@api/model/auth/Auth";
 import { Role } from "@api/model/enums";
+import HealthOverviewScreen from "@screens/InitialNotes/HealthOverview";
 
 type RoueParams = {
     params: PatientMedicalParams
@@ -29,7 +30,7 @@ export default function PatientMedical() {
 
 
 
-    function calculateAge(dob:string) {
+    function calculateAge(dob: string) {
         const birthDate = new Date(dob);
         const today = new Date();
 
@@ -90,6 +91,27 @@ export default function PatientMedical() {
                     </View>
                     <View style={styles.divider} />
                     <Vitals vitals={appointmetVital} ></Vitals>
+                    {
+                        <View style={{ marginTop: 20 }}>
+                            <Text style={{ fontWeight: "700", fontSize: 16 }}>💊 Medications</Text>
+                            {factSheetData?.medications.map((item, key) => <Text>{item}</Text>)}
+                        </View>
+                    }
+
+                    {
+                        <View style={{ marginTop: 20 }}>
+                            <Text style={{ fontWeight: "700", fontSize: 16 }}>🔁 Medication History</Text>
+                            {factSheetData?.problems.map((item, key) => <Text>{item}</Text>)}
+                        </View>
+                    }
+
+                    {
+                        <View style={{ marginTop: 20 }}>
+                            <Text style={{ fontWeight: "700", fontSize: 16 }}>🔬 Lab Results</Text>
+                            {factSheetData?.labResults.map((item, key) => <Text>{item}</Text>)}
+                        </View>
+                    }
+
                 </View>
             </View>
             <View style={styles.bottomContainer}>

@@ -140,17 +140,16 @@ const InitialNoteScreen = () => {
                             <Icon name="person-circle" size={30} color="gray" />
                             <Text style={styles.userText}>{facesheet?.patient?.firstName}</Text>
                         </View>
-            
-                        
+
                         <PresentingComplaints setLoading={setLoading} title="Presenting Complaints" addNewItemCommon={createPresentingComplaint} itemList={masterData.presentingComplaints} />
                         <PresentingComplaints setLoading={setLoading} title="Family History" addNewItemCommon={createFamilyHistory} itemList={masterData.familyHistory} />
                         <Problems setLoading={setLoading}  title='Problems' addNewItemCommon={createProblems} itemList={masterData.problems}/>
+                        <Investigation setLoading={setLoading} title="Investigation" addNewItemCommon={createInvestigation} itemList={masterData.labResults} /> 
                         <PasMedHistory setLoading={setLoading} title="Past Medical History" addNewItemCommon={createMedicalHistory} itemList={masterData.pastMedicalHistory} /> 
                         <Medications setLoading={setLoading} title='Medications' addNewItemCommon={createMedication} itemList={masterData.medications}/>  
                         <Note title="Physical Examination"/>  
                         <Note title="Diet"/>       
                         <Note title="Exercise"/> 
-                        <Investigation setLoading={setLoading} title="Investigation" addNewItemCommon={createInvestigation} itemList={masterData.labResults} /> 
                          {/*labtest */}
                     </View>
                 </View>
