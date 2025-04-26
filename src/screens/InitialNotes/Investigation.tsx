@@ -2,32 +2,32 @@ import React, { useContext, useEffect, useState } from "react";
 import { View, Text, TouchableOpacity, Button, TextInput, Modal } from "react-native";
 import styles from "@styles/presentingComplaintsStyle";
 import Icon from "react-native-vector-icons/Ionicons";
-import { InitialCommonNoteRequest, Symptom } from "@api/model/doctor/MasterData";
+import {  LabTestRequest, LabTestResponse } from "@api/model/doctor/MasterData";
 import { AuthContext } from "@context/AuthContext";
 import { MdLodSnackbar } from "@components/MdLogSnacbar";
 import { Dropdown } from "react-native-element-dropdown";
-import MedicalHistoryPopUp from "./MedicalHistoryPopUp";
 
 import { ScrollView } from "react-native-gesture-handler";
 import { Divider } from "react-native-paper";
+import InvestigationPopUp from "./InestigationPopUp";
 
-export class MedicalHistoryNote extends Symptom {
+export class MedicalHistoryNote extends LabTestResponse {
     howlong: number
-    type: string
+    date: string
 }
 
 type Props = {
     title: string;
-    itemList: Symptom[];
-    addNewItemCommon: (reqObj: InitialCommonNoteRequest) => Promise<Symptom>;
-    setLoading: (load: boolean) => void
+    itemList: LabTestResponse[];
+    addNewItemCommon: (reqObj: LabTestRequest) => Promise<LabTestResponse>;
+    setLoading: (load:boolean) => void
     noteSectionString: string
-    setNoteSectionString: (note: string) => void
+    setNoteSectionString: (note:string) => void
 };
 
 
 
-export default function PasMedHistory({ title, itemList, addNewItemCommon, setLoading, noteSectionString, setNoteSectionString }: Props) {
+export default function Investigation({ title, itemList, addNewItemCommon, setLoading, noteSectionString, setNoteSectionString}: Props) {
     const [searchText, setSearchText] = useState("");
     const [selectedItems, setSelectedItems] = useState<MedicalHistoryNote[]>([]);
     const { loggedInUserContext } = useContext(AuthContext);
@@ -37,14 +37,14 @@ export default function PasMedHistory({ title, itemList, addNewItemCommon, setLo
     const [isFocus, setIsFocus] = useState(false);
     const [sel, setSel] = useState<string>();
     const [isVisibleModel, setIsVisibleModel] = useState(false);
-    const [selectedModelItem, setSelectedModelItem] = useState<Symptom>()
+    const [selectedModelItem, setSelectedModelItem] = useState<LabTestResponse>()
 
     const [modalVisible, setModalVisible] = useState(false);
     const [complaintText, setComplaintText] = useState('');
 
     const dropdownData = itemList.map((item) => ({
-        label: item.name,
-        value: item.name,
+        label: item.testName,
+        value: item.testName,
         id: item.id,
     }));
 
@@ -56,7 +56,7 @@ export default function PasMedHistory({ title, itemList, addNewItemCommon, setLo
         setSel("");
     };
 
-    const remove = (item: Symptom) => {
+    const remove = (item: MedicalHistoryNote) => {
         setSelectedItems((prevItems) =>
             prevItems.filter((selected) => selected.id !== item.id)
         );
@@ -66,10 +66,12 @@ export default function PasMedHistory({ title, itemList, addNewItemCommon, setLo
         setLoading(true);
         const specialityId = loggedInUserContext.specialityId;
         const clinicId = loggedInUserContext.clinicDetails.id;
-        const reqObj: InitialCommonNoteRequest = {
+        const reqObj: LabTestRequest = {
             specialityId: specialityId,
             clinicId: clinicId,
-            name: complaintText,
+            testName: complaintText,
+            description:"",
+            category:""
         };
         const respItem = await addNewItemCommon(reqObj);
         if (respItem) {
@@ -81,23 +83,24 @@ export default function PasMedHistory({ title, itemList, addNewItemCommon, setLo
         setLoading(false);
     };
 
-    const handleChange = (value: string) => {
-        const selectedItem = itemList.find((item) => item.name === value);
+    const handleChange = (id: number) => {
+        const selectedItem = itemList.find((item) => item.id === id);
         if (selectedItem) {
             setIsVisibleModel(true);
             setSelectedModelItem(selectedItem)
         }
     };
 
+
     const updateNoteString = () => {
-        let noteString = selectedItems.map((item) => item.name + " for " + item.howlong + " " + item.type)
+        let noteString = selectedItems.map((item) => item.testName + " - " + "need report by " + item.date)
         .join(", ");
         setNoteSectionString(noteString)
     }
 
-    useEffect(() => {
+    useEffect(()=>{
         updateNoteString()
-    }, [selectedItems])
+    },[selectedItems])
 
     return (
         <View style={styles.section}>
@@ -120,17 +123,17 @@ export default function PasMedHistory({ title, itemList, addNewItemCommon, setLo
                     value={sel}
                     onFocus={() => setIsFocus(true)}
                     onBlur={() => setIsFocus(false)}
-                    onChange={(item) => handleChange(item.value)}
+                    onChange={(item) => handleChange(item.id)}
                     renderLeftIcon={() => (
                         <Icon name="search" size={20} color="black" style={styles.icon} />
                     )}
                 />
 
-                <TouchableOpacity onPress={() => setModalVisible(true)}>
+                <TouchableOpacity onPress={()=>setModalVisible(true)}>
                     <Text>Add</Text>
                 </TouchableOpacity>
                 {isVisibleModel && (
-                    <MedicalHistoryPopUp
+                    <InvestigationPopUp
                         selectedItem={selectedModelItem}
                         modalVisible={isVisibleModel}
                         onSave={(item) => addItem(item)}
@@ -144,7 +147,7 @@ export default function PasMedHistory({ title, itemList, addNewItemCommon, setLo
                 {selectedItems.length > 0 && (
                     selectedItems.map((item, index) => (
                         <View key={index} style={styles.selectedChip}>
-                            <Text>{item.name + " for " + item.howlong + " " + item.type}</Text>
+                            <Text>{item.testName + " - " + "need report by " + item.date}</Text>
                             <TouchableOpacity onPress={() => remove(item)}>
                                 <Icon name="close-circle" size={18} color="grey" style={styles.removeIcon} />
                             </TouchableOpacity>
@@ -167,7 +170,7 @@ export default function PasMedHistory({ title, itemList, addNewItemCommon, setLo
                             style={styles.input1}
                             value={complaintText}
                             onChangeText={setComplaintText}
-                            placeholder="Enter name"
+                            placeholder="Prescribes"
                         />
                         <Divider style={{ marginBottom: 20 }} />
                         <View style={styles.buttonRow}>

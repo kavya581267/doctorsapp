@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet, Dimensions } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet, Dimensions, Button } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Back from '@components/Back';
 import { Divider } from 'react-native-paper';
@@ -7,7 +7,7 @@ import { COLORS } from '@utils/colors';
 import { AuthContext } from '@context/AuthContext';
 import PresentingComplaints from './PresentingComplaints';
 import Note from './Note';
-import { InitialCommonNoteRequest, MedicationsRequest, ProblemsRequest, Symptom } from '@api/model/doctor/MasterData';
+import { InitialCommonNoteRequest, LabTestRequest, MedicationsRequest, ProblemsRequest, Symptom } from '@api/model/doctor/MasterData';
 import { doctorService } from '@api/doctorService';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import PasMedHistory from './MedicalHistory';
@@ -17,12 +17,13 @@ import { RouteProp, useRoute } from '@react-navigation/native';
 import { InitialNotesParams } from '@components/MainNavigation';
 import { MdLogActivityIndicator } from '@components/MdLogActivityIndicator';
 import { patientService } from '@api/patientService';
-import { CreateInitialNoteRequest } from '@api/model/patient/PatientModels';
+import { CreateInitialNoteRequest, CreateInitialNoteResponse, UpdateNoteRequest } from '@api/model/patient/PatientModels';
+import Investigation from './Investigation';
 const { width, height } = Dimensions.get("window");
 
 
 type RouteParams = {
-    params : InitialNotesParams
+    params: InitialNotesParams
 
 }
 
@@ -31,8 +32,21 @@ type RouteParams = {
 const InitialNoteScreen = () => {
     const { masterData, setMasterDataAdapter } = useContext(AuthContext);
     const route = useRoute<RouteProp<RouteParams>>()
-    const {facesheet, appointment} = route.params;
+    const { facesheet, appointment } = route.params;
     const [loading, setLoading] = useState(false);
+    const [note, setNote] = useState<CreateInitialNoteResponse>();
+    //
+    const [presentingComplaints, setPresntingComplaints] = useState("");
+    const [familyHistory, setFamilyHistory] = useState("");
+    const [pastMedicalHistory, setPastMedicalHistory] = useState("");
+    const [personalHistory, setPersonalHistory] = useState("");
+    const [investigations, setInvestigations] = useState("");
+    const [drugHistory, setDrugHistory] = useState("");
+    const [systemicExamination, setSystemicExamination] = useState("");
+    const [physicalExamination, setPhysicalExamination] = useState("");
+    const [diet, setDiet] = useState("");
+    const [exercise, setExercise] = useState("");
+    const [visitDx, setVisitDx] = useState("");
 
 
     const createPresentingComplaint = async (reqObj: InitialCommonNoteRequest) => {
@@ -90,60 +104,122 @@ const InitialNoteScreen = () => {
         }
     }
 
+    const createInvestigation = async (reqObj: LabTestRequest) => {
+        try {
+            const resp = await doctorService.createLabTest(reqObj);
+            masterData.labResults.push(resp);
+            const newMasterDate = { ...masterData };
+            await setMasterDataAdapter(newMasterDate)
+            return resp;
+        } catch (error) {
+        }
+    }
+
     async function fetchInitialNote() {
-         const reqBody = new CreateInitialNoteRequest();
-         reqBody.appointmentId = appointment.id;
-         reqBody.clinicId = appointment.clinicId;
-         reqBody.doctorId= appointment.doctorId;
-         reqBody.noteType = facesheet.newAppointment ? "INITIAL":"FOLLOW_UP"
-         try{
+        const reqBody = new CreateInitialNoteRequest();
+        reqBody.appointmentId = appointment.id;
+        reqBody.clinicId = appointment.clinicId;
+        reqBody.doctorId = appointment.doctorId;
+        reqBody.noteType = facesheet.newAppointment ? "INITIAL" : "FOLLOW_UP"
+        try {
             setLoading(true)
-            const initialNote = await patientService.createInitialNote(facesheet?.patient?.id.toString(),reqBody);
-         }catch(error){
-             
-         }
-         setLoading(false)
+            const initialNote = await patientService.createInitialNote(facesheet?.patient?.id.toString(), reqBody);
+            setNote(initialNote);
+        } catch (error) {
+
+        }
+        setLoading(false)
+    }
+
+    const handleSave = async () => {
+           const updateNoteReq = new UpdateNoteRequest()
+           updateNoteReq.clinicId = note.clinicId.toString();
+           updateNoteReq.diet = diet;
+           updateNoteReq.doctorId = note.doctorId.toString();
+           updateNoteReq.drugHistory = drugHistory;
+           updateNoteReq.exercise = exercise;
+           updateNoteReq.familyHistory = familyHistory;
+           updateNoteReq.investigations = investigations;
+           updateNoteReq.pastMedicalHistory = pastMedicalHistory;
+           updateNoteReq.personalHistory = personalHistory;
+           updateNoteReq.physicalExamination = physicalExamination;
+           updateNoteReq.presentingComplaints = presentingComplaints;
+           updateNoteReq.systemicExamination = systemicExamination;
+           updateNoteReq.visitDx = visitDx;
+           try{
+            setLoading(true)
+             const savedNote = await patientService.updateInitialNote(facesheet?.patient?.id,note.id, updateNoteReq);
+             console.log(savedNote);
+           }catch(error){
+           }
+           setLoading(false)
     }
 
 
-    useEffect(()=>{
-       //fetchInitialNote();
-    },[])
+    useEffect(() => {
+        fetchInitialNote();
+    }, [])
 
     return (
-        <KeyboardAwareScrollView>
-            <ScrollView style={styles.container}>
-                <View style={{height:height+700}}>
-                    <Back nav='Mainscreen' tab='Appointments' />
-
-                    <View style={styles.header}>
-                        <Text style={styles.headerTitle}>Initial Note</Text>
-                        <TouchableOpacity style={styles.submitButton}>
-                            <Text style={styles.submitText}>Submit</Text>
-                        </TouchableOpacity>
-                    </View>
-                    <Divider />
+        <>
+            <View style={styles.container}>
+                <Back nav='Mainscreen' tab='Appointments' />
+                <View style={styles.header}>
+                    <Text style={styles.headerTitle}>Initial Note</Text>
+                    <TouchableOpacity style={styles.submitButton} onPress={handleSave}>
+                        <Text style={styles.submitText}>Save</Text>
+                    </TouchableOpacity>
+                </View>
+                <Divider />
+                <KeyboardAwareScrollView>
                     <View style={styles.content}>
                         <View style={styles.userInfo}>
                             <Icon name="person-circle" size={30} color="gray" />
                             <Text style={styles.userText}>{facesheet?.patient?.firstName}</Text>
                         </View>
-            
+
+                        <PresentingComplaints noteSectionString={presentingComplaints} setNoteSectionString={setPresntingComplaints} setLoading={setLoading} title="Presenting Complaints"
+                            addNewItemCommon={createPresentingComplaint} itemList={masterData.presentingComplaints} />
                         
-                        <PresentingComplaints setLoading={setLoading} title="Presenting Complaints" addNewItemCommon={createPresentingComplaint} itemList={masterData.presentingComplaints} />
-                        <PresentingComplaints setLoading={setLoading} title="Family History" addNewItemCommon={createFamilyHistory} itemList={masterData.familyHistory} />
-                        <Problems setLoading={setLoading}  title='Problems' addNewItemCommon={createProblems} itemList={masterData.problems}/>
-                        <PasMedHistory setLoading={setLoading} title="Past Medical History" addNewItemCommon={createMedicalHistory} itemList={masterData.pastMedicalHistory} /> 
-                        <Medications setLoading={setLoading} title='Medications' addNewItemCommon={createMedication} itemList={masterData.medications}/>  
-                        <Note title="Physical Examination"/>  
-                        <Note title="Diet"/>       
-                        <Note title="Exercise"/> 
-                         {/*labtest */}
+                        <Note setNoteSectionString={setPersonalHistory} title="Personal History" />
+                        <PasMedHistory noteSectionString={pastMedicalHistory} setNoteSectionString={setPastMedicalHistory} setLoading={setLoading} title="Past Medical History" addNewItemCommon={createMedicalHistory} itemList={masterData.pastMedicalHistory} />
+                        <Note setNoteSectionString={setDrugHistory} title="Drug History" />
+
+                        <PresentingComplaints noteSectionString={familyHistory} setNoteSectionString={setFamilyHistory} setLoading={setLoading} title="Family History"
+                            addNewItemCommon={createFamilyHistory} itemList={masterData.familyHistory} />
+
+                        {
+                            // vitals
+                        }
+                        <Note setNoteSectionString={setSystemicExamination} title="Systemic Examination" />
+                        <Problems noteSectionString={personalHistory} setNoteSectionString={setPersonalHistory} setLoading={setLoading} title='Problems'
+                            addNewItemCommon={createProblems} itemList={masterData.problems} />
+                        <Investigation noteSectionString={investigations} setNoteSectionString={setInvestigations} setLoading={setLoading} title="Investigation" addNewItemCommon={createInvestigation} itemList={masterData.labResults} />
+                        <Medications noteSectionString={drugHistory} setNoteSectionString={setDrugHistory} setLoading={setLoading} title='Medications' addNewItemCommon={createMedication} itemList={masterData.medications} />
+                        <Note setNoteSectionString={setPhysicalExamination} title="Physical Examination" />
+                        <Note setNoteSectionString={setDiet} title="Diet" />
+                        <Note setNoteSectionString={setExercise} title="Exercise" />
+                        {/*labtest */}
                     </View>
-                </View>
-                <MdLogActivityIndicator loading={loading} />
-            </ScrollView>
-        </KeyboardAwareScrollView>
+                </KeyboardAwareScrollView>
+            </View>
+            <MdLogActivityIndicator loading={loading} />
+            <View>
+                <TouchableOpacity style={{
+                    backgroundColor: COLORS.secondary,
+                    paddingVertical: 14,
+                    borderRadius: 12,
+                    alignItems: 'center',
+                    marginBottom: 5
+                }}>
+                    <Text style={{
+                        color: '#fff',
+                        fontSize: 16,
+                        fontWeight: '600',
+                    }}>Submit</Text>
+                </TouchableOpacity>
+            </View>
+        </>
     )
 
 

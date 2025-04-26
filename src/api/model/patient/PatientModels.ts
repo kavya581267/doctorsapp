@@ -315,3 +315,19 @@ export interface CreateInitialNoteResponse{
     filedTimestamp?: string;
   }
 
+  export class UpdateNoteRequest {
+      clinicId: string;
+      doctorId: string;
+      drugHistory: string;
+      familyHistory: string;
+      investigations: string;
+      pastMedicalHistory: string;
+      personalHistory: string;
+      presentingComplaints: string;
+      systemicExamination: string;
+      physicalExamination: string;
+      diet: string;
+      exercise: string;
+      visitDx: string;
+  }
+
