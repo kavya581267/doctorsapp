@@ -15,7 +15,9 @@ import { Role } from "@api/model/enums";
 import HealthOverviewScreen from "@screens/InitialNotes/HealthOverview";
 import FabMenuScreen from "./FAB";
 import { ScrollView } from "react-native-gesture-handler";
-import { MaterialIcons } from "@expo/vector-icons";
+import { Feather, MaterialIcons } from "@expo/vector-icons";
+import VitalsCard from "./ViewVital";
+import { COLORS } from "@utils/colors";
 
 type RoueParams = {
     params: PatientMedicalParams
@@ -28,10 +30,14 @@ export default function PatientMedical() {
     const navigation = useNavigation<NavigationProp<RootStackParamList>>();
     const [loading, setLoading] = useState(true);
     const [appointmetVital, setAppointmetVital] = useState<Vital | undefined>(undefined);
-    const [factSheetData, setFaceSheet] = useState<FaceSheet | undefined>(undefined)
+    const [faceSheetData, setFaceSheet] = useState<FaceSheet | undefined>(undefined)
     const [user, SetUser] = useState<UserInfo>(undefined);
 
 
+    const formatKey = (key) => {
+        // Make keys more readable (optional enhancement)
+        return key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+    };
 
     function calculateAge(dob: string) {
         const birthDate = new Date(dob);
@@ -54,17 +60,17 @@ export default function PatientMedical() {
         const userDetails = await getUser();
         SetUser(userDetails);
         const factSheetData = await patientService.fetchFactSheet(appointment.patientId.toString());
-        const vital = factSheetData.vitals.find((i) => i.appointment_id === appointment.id);
+        const vital = factSheetData.vitals && factSheetData.vitals.length > 0 && factSheetData.vitals[0];
         setAppointmetVital(vital)
         setFaceSheet(factSheetData)
         setLoading(false);
     }
 
-    const fabPress = (screen:string) => {
-        if(screen === "initial_note"){
-            navigation.navigate("InitialNote",{appointment:appointment,facesheet:factSheetData})
+    const fabPress = (screen: string) => {
+        if (screen === "initial_note") {
+            navigation.navigate("InitialNote", { appointment: appointment, facesheet: faceSheetData })
         }
-        if(screen === "lab_results"){
+        if (screen === "lab_results") {
             navigation.navigate("LabTestScreen")
         }
     }
@@ -81,7 +87,7 @@ export default function PatientMedical() {
 
     return (
 
-        <View style={{ padding: 10, height:"100%" }}>
+        <View style={{ padding: 10, height: "100%" }}>
             <Back nav="Mainscreen" tab="Appointments" />
             <ScrollView>
                 <View style={styles.patientContainer}>
@@ -99,45 +105,59 @@ export default function PatientMedical() {
                                 <Text><Text style={{ fontWeight: 'bold' }}>Age:  </Text>{age}</Text>
                             </View>
                             <Text><Text style={{ fontWeight: 'bold' }}>Doctor:  </Text>{appointment.doctorName}</Text>
-                            <Text><Text style={{ fontWeight: 'bold' }}>MRN:  </Text>#{factSheetData?.patient?.mrn}</Text>
+                            <Text><Text style={{ fontWeight: 'bold' }}>MRN:  </Text>#{faceSheetData?.patient?.mrn}</Text>
                         </View>
                         <View style={styles.divider} />
-                        <Vitals vitals={appointmetVital} ></Vitals>
+                        <View style={{ flex: 1, flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginTop: 10 }}>
+                            <Text style={{
+                                fontSize: 15,
+                                fontWeight: 'bold',
+                                color: '#ff4d6d',
+                            }}>💓 Vitals:</Text>
+                            {
+                                !faceSheetData?.vitals || faceSheetData?.vitals.length === 0 &&
+                                <TouchableOpacity style={{ flexDirection: "row" }}>
+                                    <Text style={{ color: COLORS.primary }}> <Feather name="plus" size={20} color={COLORS.primary} /> Add</Text>
+                                </TouchableOpacity>
+                            }
+
+                            {
+                                faceSheetData?.vitals && faceSheetData?.vitals.length > 0 &&
+                                <TouchableOpacity style={{ flexDirection: "row" }}>
+                                    <Text style={{ color: COLORS.primary, fontWeight: "500" }}> <Feather name="edit" size={15} color={COLORS.primary} /> Edit</Text>
+                                </TouchableOpacity>
+                            }
+
+                        </View>
                         {
+                            faceSheetData?.vitals && faceSheetData?.vitals.length > 0 &&
+                            <View style={{ marginTop: 10 }}>
+                                <VitalsCard vitals={faceSheetData?.vitals[0]} />
+                            </View>
+                        }
+                        {
+                            faceSheetData?.medications && faceSheetData?.medications.length > 0 &&
                             <View style={{ marginTop: 20 }}>
                                 <Text style={{ fontWeight: "700", fontSize: 16 }}>💊 Medications</Text>
-                                {factSheetData?.medications.map((item, key) => <Text>{item}</Text>)}
+                                {faceSheetData?.medications.map((item, key) => <Text>{item}</Text>)}
                             </View>
                         }
 
                         {
-                            <View style={{ marginTop: 20 }}>
-                                <Text style={{ fontWeight: "700", fontSize: 16 }}>🔁 Medication History</Text>
-                                {factSheetData?.problems.map((item, key) => <Text>{item}</Text>)}
-                            </View>
-                        }
-
-                        {
+                            faceSheetData?.labResults && faceSheetData?.labResults.length > 0 &&
                             <View style={{ marginTop: 20 }}>
                                 <Text style={{ fontWeight: "700", fontSize: 16 }}>🔬 Lab Results</Text>
-                                {factSheetData?.labResults.map((item, key) => <Text>{item}</Text>)}
+                                {faceSheetData?.labResults.map((item, key) => <Text>{item}</Text>)}
                             </View>
                         }
 
                         {
+                            faceSheetData?.problems && faceSheetData?.problems.length > 0 &&
                             <View style={{ marginTop: 20 }}>
-                                <Text style={{ fontWeight: "700", fontSize: 16 }}>🔁 Medication History</Text>
-                                {factSheetData?.problems.map((item, key) => <Text>{item}</Text>)}
+                                <Text style={{ fontWeight: "700", fontSize: 16 }}>🔬 Problems</Text>
+                                {faceSheetData?.problems.map((item, key) => <Text>{item}</Text>)}
                             </View>
                         }
-
-                        {
-                            <View style={{ marginTop: 20 }}>
-                                <Text style={{ fontWeight: "700", fontSize: 16 }}>🔬 Lab Results</Text>
-                                {factSheetData?.labResults.map((item, key) => <Text>{item}</Text>)}
-                            </View>
-                        }
-
 
 
 
@@ -145,7 +165,19 @@ export default function PatientMedical() {
                 </View>
 
             </ScrollView>
-            <FabMenuScreen  action={actions} onPress={fabPress}/>
+            <TouchableOpacity style={{
+                backgroundColor: COLORS.primary,
+                paddingVertical: 14,
+                borderRadius: 12,
+                alignItems: 'center'
+            }}>
+                <Text style={{
+                    color: '#fff',
+                    fontSize: 16,
+                    fontWeight: '600',
+                }}>+ Initial Note</Text>
+            </TouchableOpacity>
+            <FabMenuScreen action={actions} onPress={fabPress} />
         </View>
 
     )
@@ -171,28 +203,22 @@ const actions = [
         position: 3
     },
     {
-        text: "Initial Note",
-        icon: <MaterialIcons name='note' size={20} color="#fff" />,
-        name: "initial_note",
-        position: 4
-    },
-    {
         text: "Patient Readings",
         icon: <MaterialIcons name="monitor-heart" size={20} color="#fff" />,
         name: "patient_readings",
-        position: 5
+        position: 4
     },
     {
         text: "Home",
         icon: <MaterialIcons name="home" size={20} color="#fff" />,
         name: "home",
-        position: 6
+        position: 5
     },
     {
         text: "Cancel",
         icon: <MaterialIcons name="cancel" size={20} color="#fff" />,
         name: "cancel",
-        position: 7,
+        position: 6,
         color: "#f44336"
     }
 ];
