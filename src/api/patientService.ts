@@ -5,7 +5,7 @@ import { ClinicResponse } from "./model/clinic/ClinicResponse";
 import { StaffRequest } from "./model/clinic/StaffRequest";
 import { Staff } from "./model/staff/Staff";
 import { replacePlaceholders } from "@utils/utils";
-import { AppointmentRequest, AppointmentResponse, AppointmentUpdateRequest, CreateInitialNoteRequest, CreateInitialNoteResponse, FaceSheet, PatientResponse, VitalsRequest, VitalsResponse } from "./model/patient/PatientModels";
+import { AppointmentRequest, AppointmentResponse, AppointmentUpdateRequest, CreateInitialNoteRequest, CreateInitialNoteResponse, FaceSheet, PatientResponse, UpdateNoteRequest, VitalsRequest, VitalsResponse } from "./model/patient/PatientModels";
 
 
 
@@ -90,9 +90,9 @@ export const patientService = {
         }
     },
 
-    updateInitialNote: async (patientId: string,noteId:string, body: CreateInitialNoteRequest): Promise<CreateInitialNoteResponse> => {
+    updateInitialNote: async (patientId: string,noteId:number, body: UpdateNoteRequest): Promise<CreateInitialNoteResponse> => {
         try {
-            const resp = await apiService.post(replacePlaceholders(UPDATE_INITIAL_NOTE, { "patient_id": patientId, "note_id":noteId }),body)
+            const resp = await apiService.put(replacePlaceholders(UPDATE_INITIAL_NOTE, { "patient_id": patientId, "note_id":noteId }),body)
             return resp.data;
         } catch (error) {
             throw error

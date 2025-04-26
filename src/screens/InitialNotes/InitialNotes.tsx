@@ -17,7 +17,7 @@ import { RouteProp, useRoute } from '@react-navigation/native';
 import { InitialNotesParams } from '@components/MainNavigation';
 import { MdLogActivityIndicator } from '@components/MdLogActivityIndicator';
 import { patientService } from '@api/patientService';
-import { CreateInitialNoteRequest, CreateInitialNoteResponse } from '@api/model/patient/PatientModels';
+import { CreateInitialNoteRequest, CreateInitialNoteResponse, UpdateNoteRequest } from '@api/model/patient/PatientModels';
 import Investigation from './Investigation';
 const { width, height } = Dimensions.get("window");
 
@@ -132,8 +132,27 @@ const InitialNoteScreen = () => {
     }
 
     const handleSave = async () => {
-        console.log(presentingComplaints);
-        console.log(familyHistory);
+           const updateNoteReq = new UpdateNoteRequest()
+           updateNoteReq.clinicId = note.clinicId.toString();
+           updateNoteReq.diet = diet;
+           updateNoteReq.doctorId = note.doctorId.toString();
+           updateNoteReq.drugHistory = drugHistory;
+           updateNoteReq.exercise = exercise;
+           updateNoteReq.familyHistory = familyHistory;
+           updateNoteReq.investigations = investigations;
+           updateNoteReq.pastMedicalHistory = pastMedicalHistory;
+           updateNoteReq.personalHistory = personalHistory;
+           updateNoteReq.physicalExamination = physicalExamination;
+           updateNoteReq.presentingComplaints = presentingComplaints;
+           updateNoteReq.systemicExamination = systemicExamination;
+           updateNoteReq.visitDx = visitDx;
+           try{
+            setLoading(true)
+             const savedNote = await patientService.updateInitialNote(facesheet?.patient?.id,note.id, updateNoteReq);
+             console.log(savedNote);
+           }catch(error){
+           }
+           setLoading(false)
     }
 
 
