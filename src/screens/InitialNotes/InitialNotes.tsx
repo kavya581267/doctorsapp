@@ -162,9 +162,9 @@ const InitialNoteScreen = () => {
                         <PresentingComplaints noteSectionString={presentingComplaints} setNoteSectionString={setPresntingComplaints} setLoading={setLoading} title="Presenting Complaints"
                             addNewItemCommon={createPresentingComplaint} itemList={masterData.presentingComplaints} />
                         
-                        <Note title="Personal History" />
+                        <Note setNoteSectionString={setPersonalHistory} title="Personal History" />
                         <PasMedHistory noteSectionString={pastMedicalHistory} setNoteSectionString={setPastMedicalHistory} setLoading={setLoading} title="Past Medical History" addNewItemCommon={createMedicalHistory} itemList={masterData.pastMedicalHistory} />
-                        <Note title="Drug History" />
+                        <Note setNoteSectionString={setDrugHistory} title="Drug History" />
 
                         <PresentingComplaints noteSectionString={familyHistory} setNoteSectionString={setFamilyHistory} setLoading={setLoading} title="Family History"
                             addNewItemCommon={createFamilyHistory} itemList={masterData.familyHistory} />
@@ -172,14 +172,14 @@ const InitialNoteScreen = () => {
                         {
                             // vitals
                         }
-                        <Note title="Systemic Examination" />
+                        <Note setNoteSectionString={setSystemicExamination} title="Systemic Examination" />
                         <Problems noteSectionString={personalHistory} setNoteSectionString={setPersonalHistory} setLoading={setLoading} title='Problems'
                             addNewItemCommon={createProblems} itemList={masterData.problems} />
                         <Investigation noteSectionString={investigations} setNoteSectionString={setInvestigations} setLoading={setLoading} title="Investigation" addNewItemCommon={createInvestigation} itemList={masterData.labResults} />
                         <Medications noteSectionString={drugHistory} setNoteSectionString={setDrugHistory} setLoading={setLoading} title='Medications' addNewItemCommon={createMedication} itemList={masterData.medications} />
-                        <Note title="Physical Examination" />
-                        <Note title="Diet" />
-                        <Note title="Exercise" />
+                        <Note setNoteSectionString={setPhysicalExamination} title="Physical Examination" />
+                        <Note setNoteSectionString={setDiet} title="Diet" />
+                        <Note setNoteSectionString={setExercise} title="Exercise" />
                         {/*labtest */}
                     </View>
                 </KeyboardAwareScrollView>

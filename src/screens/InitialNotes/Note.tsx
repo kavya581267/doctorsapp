@@ -4,11 +4,10 @@ import { View , Text , TextInput} from "react-native";
 
 type Props = {
     title: string
-    noteSectionString: string
     setNoteSectionString: (note:string) => void
 }
 
-export default function Note ({title, noteSectionString, setNoteSectionString}:Props) {
+export default function Note ({title, setNoteSectionString}:Props) {
 
     const[val, setValue] = useState("")
 
