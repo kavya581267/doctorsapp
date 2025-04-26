@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { View, Text, TouchableOpacity, StyleSheet, Modal, TextInput, Button } from "react-native";
 import styles from "@styles/presentingComplaintsStyle";
 import { Dropdown, MultiSelect } from "react-native-element-dropdown";
@@ -15,10 +15,12 @@ type Props = {
     title: string;
     itemList: Symptom[];
     addNewItemCommon: (reqObj: InitialCommonNoteRequest) => Promise<Symptom>;
-    setLoading: (load:boolean) => void
+    setLoading: (load:boolean) => void;
+    noteSectionString: string
+    setNoteSectionString: (note:string) => void
 };
 
-const PresentingComplaints = ({ title, itemList, addNewItemCommon, setLoading }: Props) => {
+const PresentingComplaints = ({ title, itemList, addNewItemCommon, setLoading, noteSectionString, setNoteSectionString }: Props) => {
     const { loggedInUserContext } = useContext(AuthContext);
     const [selectedItems, setSelectedItems] = useState<Symptom[]>([]);
     const [searchText, setSearchText] = useState("");
@@ -36,6 +38,12 @@ const PresentingComplaints = ({ title, itemList, addNewItemCommon, setLoading }:
         value: item.name,
         id: item.id,
     }));
+
+    const updateNoteString = () => {
+        let noteString = selectedItems.map((item) => item.name)
+        .join(", ");
+        setNoteSectionString(noteString)
+    }
 
     const handleAddNewItem = async () => {
         try {
@@ -69,6 +77,10 @@ const PresentingComplaints = ({ title, itemList, addNewItemCommon, setLoading }:
     const removeComplaint = (item: Symptom) => {
         setSelectedItems(selectedItems.filter((i) => i.id !== item.id));
     };
+
+    useEffect(()=>{
+       updateNoteString()
+    },[selectedItems])
 
 
     return (

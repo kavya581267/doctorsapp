@@ -1,12 +1,20 @@
-import React from "react";
+import React, { useState } from "react";
 import styles from "@styles/noteStyle";
 import { View , Text , TextInput} from "react-native";
 
-export default function Note ({title}) {
+type Props = {
+    title: string
+    setNoteSectionString: (note:string) => void
+}
+
+export default function Note ({title, setNoteSectionString}:Props) {
+
+    const[val, setValue] = useState("")
+
     return (
         <View style={styles.section}>
             <Text style={styles.sectionTitle}>{title}</Text>
-            <TextInput multiline={true} style={styles.box}>
+            <TextInput onChangeText={setNoteSectionString} multiline={true} style={styles.box}>
             </TextInput>
         </View>
     )

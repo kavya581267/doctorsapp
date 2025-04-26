@@ -23,7 +23,7 @@ export class LabTest {
     category: string | null;
 }
 
-class LabObservation {
+export class LabObservation {
     id: number;
     labTestId: number;
     observation: string;
@@ -40,7 +40,7 @@ class LabObservation {
 
 export class MasterData {
     familyHistory: Symptom[] = []
-    labResults: LabObservation[] = []
+    labResults: LabTestResponse[] = []
     labTests: LabTest[] = []
     medications: Medication[] = []
     pastMedicalHistory: Symptom[] = []
