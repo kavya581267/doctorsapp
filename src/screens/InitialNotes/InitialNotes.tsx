@@ -17,8 +17,9 @@ import { RouteProp, useRoute } from '@react-navigation/native';
 import { InitialNotesParams } from '@components/MainNavigation';
 import { MdLogActivityIndicator } from '@components/MdLogActivityIndicator';
 import { patientService } from '@api/patientService';
-import { CreateInitialNoteRequest, CreateInitialNoteResponse, UpdateNoteRequest } from '@api/model/patient/PatientModels';
+import { CreateInitialNoteRequest, CreateInitialNoteResponse, FileNoteRequest, UpdateNoteRequest } from '@api/model/patient/PatientModels';
 import Investigation from './Investigation';
+import { formatToYYYYMMDD, getFutureDate } from '@utils/utils';
 const { width, height } = Dimensions.get("window");
 
 
@@ -155,6 +156,22 @@ const InitialNoteScreen = () => {
            setLoading(false)
     }
 
+    const fileNote = async () => {
+        const fileNote = new FileNoteRequest()
+        fileNote.clinicId = note.clinicId;
+        fileNote.doctorId = note.doctorId;
+        fileNote.nextVisitDate = getFutureDate(new Date(), 10);
+        setLoading(true)
+        try{
+            const resp = await patientService.fileInitialNote(facesheet.patient.id,note.id,fileNote);
+            console.log(resp);
+        }catch(error){
+
+        }
+        setLoading(false)
+       
+    }
+
 
     useEffect(() => {
         fetchInitialNote();
@@ -209,7 +226,7 @@ const InitialNoteScreen = () => {
             </View>
             <MdLogActivityIndicator loading={loading} />
             <View>
-                <TouchableOpacity style={{
+                <TouchableOpacity onPress={fileNote} style={{
                     backgroundColor: COLORS.secondary,
                     paddingVertical: 14,
                     borderRadius: 12,
