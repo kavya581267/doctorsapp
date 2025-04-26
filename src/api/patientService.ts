@@ -83,7 +83,7 @@ export const patientService = {
     },
     createInitialNote: async (patientId: string, body: CreateInitialNoteRequest): Promise<CreateInitialNoteResponse> => {
         try {
-            const resp = await apiService.get(replacePlaceholders(CREATE_INITIAL_NOTE, { "patient_id": patientId }),body)
+            const resp = await apiService.post(replacePlaceholders(CREATE_INITIAL_NOTE, { "patient_id": patientId }),body)
             return resp.data;
         } catch (error) {
             throw error
