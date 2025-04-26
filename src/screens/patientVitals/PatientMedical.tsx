@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, TouchableOpacity, Alert } from "react-native";
 import { NavigationProp, RouteProp, useNavigation, useRoute } from "@react-navigation/native";
-import Vitals from "./Vitals";
-import ActionSheetMore from "./ActionSheetMore";
 import styles from "styles/patientMedicalStyle";
 import Back from "@components/Back";
 import { PatientMedicalParams, RootStackParamList } from "@components/MainNavigation";
@@ -19,6 +17,7 @@ import { Feather, MaterialIcons } from "@expo/vector-icons";
 import VitalsCard from "./ViewVital";
 import { COLORS } from "@utils/colors";
 import CustomModal from "@components/MdLogModel";
+import { MdLodSnackbar } from "@components/MdLogSnacbar";
 
 type RoueParams = {
     params: PatientMedicalParams
@@ -35,6 +34,8 @@ export default function PatientMedical() {
     const [user, SetUser] = useState<UserInfo>(undefined);
     const [visiblemodal, setShowModal] = useState(false);
     const [updateVitals, setUpdateVitals] = useState(false);
+    const [error, setErrorMessage] = useState("Failed to load!!")
+    const [showError, setShowError] = useState(false)
 
     const vital: Record<string, string> = {
         'Height (cms)': '',
@@ -122,7 +123,8 @@ export default function PatientMedical() {
             setShowModal(false)
             await load()
         } catch (error) {
-
+            setShowError(true);
+            setErrorMessage(error.toString())
         }
         setLoading(false)
     }
@@ -242,6 +244,7 @@ export default function PatientMedical() {
                     fontWeight: '600',
                 }}>+ Initial Note</Text>
             </TouchableOpacity>
+            <MdLodSnackbar visible={showError} message={error} onDismiss={() => setShowError(false)} />
             <FabMenuScreen action={actions} onPress={fabPress} />
         </View>
 

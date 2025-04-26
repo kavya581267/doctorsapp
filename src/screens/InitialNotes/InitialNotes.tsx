@@ -192,8 +192,12 @@ const InitialNoteScreen = () => {
                             // vitals
                         }
                         <Note setNoteSectionString={setSystemicExamination} title="Systemic Examination" />
-                        <Problems noteSectionString={personalHistory} setNoteSectionString={setPersonalHistory} setLoading={setLoading} title='Problems'
+                      {
+                        /*
+                          <Problems noteSectionString={personalHistory} setNoteSectionString={setPersonalHistory} setLoading={setLoading} title='Problems'
                             addNewItemCommon={createProblems} itemList={masterData.problems} />
+                        */
+                      }
                         <Investigation noteSectionString={investigations} setNoteSectionString={setInvestigations} setLoading={setLoading} title="Investigation" addNewItemCommon={createInvestigation} itemList={masterData.labResults} />
                         <Medications noteSectionString={drugHistory} setNoteSectionString={setDrugHistory} setLoading={setLoading} title='Medications' addNewItemCommon={createMedication} itemList={masterData.medications} />
                         <Note setNoteSectionString={setPhysicalExamination} title="Physical Examination" />
