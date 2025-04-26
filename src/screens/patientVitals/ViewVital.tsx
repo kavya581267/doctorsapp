@@ -8,7 +8,7 @@ type Props = {
 
 const VitalsCard = ({vitals}:Props) => {
   return (
-    <View style={styles.card}>
+    <View>
       <View style={styles.row}>
         <Text style={styles.label}>Height (cms):</Text>
         <Text style={styles.value}>{vitals.height}</Text>

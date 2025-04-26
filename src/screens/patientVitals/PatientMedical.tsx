@@ -7,7 +7,7 @@ import styles from "styles/patientMedicalStyle";
 import Back from "@components/Back";
 import { PatientMedicalParams, RootStackParamList } from "@components/MainNavigation";
 import { patientService } from "@api/patientService";
-import { FaceSheet, Vital } from "@api/model/patient/PatientModels";
+import { FaceSheet, Vital, VitalsRequest } from "@api/model/patient/PatientModels";
 import { MdLogActivityIndicator } from "@components/MdLogActivityIndicator";
 import { getUser } from "@utils/loadContextDetails";
 import { UserInfo } from "@api/model/auth/Auth";
@@ -18,6 +18,7 @@ import { ScrollView } from "react-native-gesture-handler";
 import { Feather, MaterialIcons } from "@expo/vector-icons";
 import VitalsCard from "./ViewVital";
 import { COLORS } from "@utils/colors";
+import CustomModal from "@components/MdLogModel";
 
 type RoueParams = {
     params: PatientMedicalParams
@@ -32,6 +33,21 @@ export default function PatientMedical() {
     const [appointmetVital, setAppointmetVital] = useState<Vital | undefined>(undefined);
     const [faceSheetData, setFaceSheet] = useState<FaceSheet | undefined>(undefined)
     const [user, SetUser] = useState<UserInfo>(undefined);
+    const [visiblemodal, setShowModal] = useState(false);
+    const [updateVitals, setUpdateVitals] = useState(false);
+
+    const vital: Record<string, string> = {
+        'Height (cms)': '',
+        'Weight (kgs)': '',
+        'Temperature': '',
+        'Blood Pressure Systolic': '',
+        'Blood Pressure Diastolic': '',
+        'Heart Rate': '',
+        'Respiratory Rate': '',
+        'Oxygen Saturation': '',
+      };
+      
+    const [vitalRecord, setVitalsRecord] = useState<Record<string, string>>(vital);
 
 
     const formatKey = (key) => {
@@ -60,7 +76,7 @@ export default function PatientMedical() {
         const userDetails = await getUser();
         SetUser(userDetails);
         const factSheetData = await patientService.fetchFactSheet(appointment.patientId.toString());
-        const vital = factSheetData.vitals && factSheetData.vitals.length > 0 && factSheetData.vitals[0];
+        const vital = factSheetData.vitals && factSheetData.vitals.find((v) => v.appointment_id === appointment.id);
         setAppointmetVital(vital)
         setFaceSheet(factSheetData)
         setLoading(false);
@@ -73,6 +89,58 @@ export default function PatientMedical() {
         if (screen === "lab_results") {
             navigation.navigate("LabTestScreen")
         }
+    }
+    const fields = [
+        'Height (cms)',
+        'Weight (kgs)',
+        'Temperature',
+        'Blood Pressure Systolic',
+        'Blood Pressure Diastolic',
+        'Heart Rate',
+        'Respiratory Rate',
+        'Oxygen Saturation',
+    ];
+    const storeVitals = async (vital: Record<string, string>) => {
+        try {
+            setLoading(true);
+            const vitalsPayload = new VitalsRequest();
+            vitalsPayload.clinicId = parseInt(faceSheetData.patient.clinicId);
+            vitalsPayload.temperature = parseInt(vital[fields[2]]);
+            vitalsPayload.height = parseInt(vital[fields[0]]);
+            vitalsPayload.weight = parseInt(vital[fields[1]]);
+            vitalsPayload.heartRate = parseInt(vital[fields[5]]);
+            vitalsPayload.respiratoryRate = parseInt(vital[fields[6]]);
+            vitalsPayload.oxygenSaturation = parseInt(vital[fields[7]]);
+            vitalsPayload.bloodPressureSystolic = parseInt(vital[fields[3]]);
+            vitalsPayload.bloodPressureDiastolic = parseInt(vital[fields[4]]);
+            vitalsPayload.appointmentId = appointment.id.toString();
+            if(!updateVitals){
+                const res = await patientService.recordPatientVitals(vitalsPayload, faceSheetData.patient.id);
+            }else{
+                //update
+            }
+            setShowModal(false)
+            await load()
+        } catch (error) {
+
+        }
+        setLoading(false)
+    }
+
+    const editVitalsPress = () => {
+        setShowModal(true);
+        setUpdateVitals(true);
+        const vital: Record<string, string> = {
+            'Height (cms)': appointmetVital.height.toString(),
+            'Weight (kgs)': appointmetVital.weight.toString(),
+            'Temperature': appointmetVital.temperature.toString(),
+            'Blood Pressure Systolic': appointmetVital.blood_pressure_systolic.toString(),
+            'Blood Pressure Diastolic': appointmetVital.blood_pressure_systolic.toString(),
+            'Heart Rate': appointmetVital.heart_rate.toString(),
+            'Respiratory Rate': appointmetVital.respiratory_rate.toString(),
+            'Oxygen Saturation': appointmetVital.oxygen_saturation.toString()
+        };
+        setVitalsRecord(vital)
     }
 
     useEffect(() => {
@@ -115,24 +183,24 @@ export default function PatientMedical() {
                                 color: '#ff4d6d',
                             }}>💓 Vitals:</Text>
                             {
-                                !faceSheetData?.vitals || faceSheetData?.vitals.length === 0 &&
-                                <TouchableOpacity style={{ flexDirection: "row" }}>
+                                !appointmetVital &&
+                                <TouchableOpacity style={{ flexDirection: "row" }} onPress={() => setShowModal(true)}>
                                     <Text style={{ color: COLORS.primary }}> <Feather name="plus" size={20} color={COLORS.primary} /> Add</Text>
                                 </TouchableOpacity>
                             }
 
                             {
-                                faceSheetData?.vitals && faceSheetData?.vitals.length > 0 &&
-                                <TouchableOpacity style={{ flexDirection: "row" }}>
+                                appointmetVital &&
+                                <TouchableOpacity style={{ flexDirection: "row" }} onPress={editVitalsPress}>
                                     <Text style={{ color: COLORS.primary, fontWeight: "500" }}> <Feather name="edit" size={15} color={COLORS.primary} /> Edit</Text>
                                 </TouchableOpacity>
                             }
 
                         </View>
                         {
-                            faceSheetData?.vitals && faceSheetData?.vitals.length > 0 &&
+                            appointmetVital &&
                             <View style={{ marginTop: 10 }}>
-                                <VitalsCard vitals={faceSheetData?.vitals[0]} />
+                                <VitalsCard vitals={appointmetVital} />
                             </View>
                         }
                         {
@@ -158,19 +226,16 @@ export default function PatientMedical() {
                                 {faceSheetData?.problems.map((item, key) => <Text>{item}</Text>)}
                             </View>
                         }
-
-
-
                     </View>
                 </View>
-
+                <CustomModal values={vitalRecord} title="💓 Add Vitals" fields={fields} visible={visiblemodal} onCancel={() => setShowModal(false)} onSave={storeVitals} />
             </ScrollView>
             <TouchableOpacity style={{
                 backgroundColor: COLORS.primary,
                 paddingVertical: 14,
                 borderRadius: 12,
                 alignItems: 'center'
-            }}>
+            }} onPress={() => navigation.navigate("InitialNote", { appointment: appointment, facesheet: faceSheetData })}>
                 <Text style={{
                     color: '#fff',
                     fontSize: 16,
@@ -182,6 +247,7 @@ export default function PatientMedical() {
 
     )
 }
+
 
 const actions = [
     {
