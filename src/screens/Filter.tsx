@@ -3,6 +3,7 @@ import { Text, TouchableOpacity, View } from 'react-native';
 import { Button, Checkbox, Chip, Divider } from 'react-native-paper';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import moment from 'moment';
+import { COLORS } from '@utils/colors';
 
 const statuses = ['SCHEDULED', 'CONFIRMED', 'CANCELLED', "COMPLETED", 'NO_SHOW'];
 
@@ -40,7 +41,7 @@ const FilterableAppointments = ({ appointments, onFiltered, fromDate, setFromDat
         }
     };
 
-    
+
     return (
         <View style={{ padding: 5 }}>
             {/* header */}
@@ -63,7 +64,7 @@ const FilterableAppointments = ({ appointments, onFiltered, fromDate, setFromDat
             <View style={{ marginBottom: 10, marginTop: 10 }}>
                 <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", marginBottom: 10 }}>
                     <Text style={{ fontWeight: '400', fontSize: 15, marginBottom: 8 }}>From :</Text>
-                    <TouchableOpacity onPress={() => setShowFromPicker(true)}>
+                    <TouchableOpacity style={{ width: "60%" }} onPress={() => setShowFromPicker(true)}>
                         <Text style={{ padding: 8, borderWidth: 1, borderRadius: 5 }}>{moment(fromDate).format("YYYY-MM-DD")}</Text>
                     </TouchableOpacity>
                     <DateTimePickerModal
@@ -81,7 +82,7 @@ const FilterableAppointments = ({ appointments, onFiltered, fromDate, setFromDat
 
                 <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
                     <Text style={{ fontWeight: '400', fontSize: 15, marginBottom: 8 }}>To :</Text>
-                    <TouchableOpacity onPress={() => setShowToPicker(true)}>
+                    <TouchableOpacity style={{ width: "60%" }} onPress={() => setShowToPicker(true)}>
                         <Text style={{ padding: 8, borderWidth: 1, borderRadius: 5 }}>{moment(toDate).format("YYYY-MM-DD")}</Text>
                     </TouchableOpacity>
                     <DateTimePickerModal
@@ -102,8 +103,8 @@ const FilterableAppointments = ({ appointments, onFiltered, fromDate, setFromDat
 
             {/* Status Filter */}
             <Text style={{ fontWeight: '400', fontSize: 15, marginBottom: 8 }}>Status :</Text>
-            <View style={{flexDirection:"row",flexWrap:"wrap",marginBottom:10}}>
-               
+            <View style={{ flexDirection: "row", flexWrap: "wrap", marginBottom: 10, justifyContent: "flex-start", alignItems: "center" }}>
+
                 {statuses.map((status) => (
                     <View key={status} style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 8 }}>
                         <Checkbox
@@ -116,7 +117,7 @@ const FilterableAppointments = ({ appointments, onFiltered, fromDate, setFromDat
             </View>
 
             {/* Apply Filter */}
-            <Button onPress={applyFilter} mode='outlined'>Apply Filters</Button>
+            <Button textColor={COLORS.white} style={{ backgroundColor: COLORS.secondary, borderRadius: 8, borderWidth: 0 }} onPress={applyFilter} mode='outlined'>Apply Filters</Button>
             <Button
                 onPress={() => {
                     setSelectedStatus([]);
@@ -124,7 +125,7 @@ const FilterableAppointments = ({ appointments, onFiltered, fromDate, setFromDat
                     setToDate(new Date());
                     onFiltered([], false);
                 }}
-                style={{ marginTop: 10 }}
+                style={{ marginTop: 10, borderRadius: 8, borderWidth: 1, borderColor:COLORS.red }}
             >
                 Reset Filters
             </Button>
