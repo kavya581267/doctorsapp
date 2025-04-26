@@ -22,11 +22,13 @@ type Props = {
     itemList: Medication[];
     addNewItemCommon: (reqObj: MedicationsRequest) => Promise<MedicationsResponse>;
     setLoading: (load: boolean) => void
+    noteSectionString: string
+    setNoteSectionString: (note: string) => void
 };
 
 
 
-export default function PasMedHistory({ title, itemList, addNewItemCommon, setLoading }: Props) {
+export default function PasMedHistory({ title, itemList, addNewItemCommon, setLoading, noteSectionString, setNoteSectionString }: Props) {
     const [searchText, setSearchText] = useState("");
     const [selectedItems, setSelectedItems] = useState<MedicalHistoryNote[]>([]);
     const { loggedInUserContext } = useContext(AuthContext);
@@ -102,6 +104,15 @@ export default function PasMedHistory({ title, itemList, addNewItemCommon, setLo
         return `${timing.M ? 1 : 0}-${timing.A ? 1 : 0}-${timing.N ? 1 : 0}`;
       };
       
+      const updateNoteString = () => {
+              let noteString = selectedItems.map((item) => item.name + " for " + item.howlong + " " + item.type)
+              .join(", ");
+              setNoteSectionString(noteString)
+          }
+      
+          useEffect(() => {
+              updateNoteString()
+          }, [selectedItems])
     
     return (
         <View style={styles.section}>

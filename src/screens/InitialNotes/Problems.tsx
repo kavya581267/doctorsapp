@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { View, Text, TouchableOpacity, Button, TextInput, Modal } from "react-native";
 import styles from "@styles/presentingComplaintsStyle";
 import {  MultiSelect } from "react-native-element-dropdown";
@@ -14,9 +14,11 @@ type Props = {
     itemList: Problem[];
     addNewItemCommon: (reqObj: ProblemsRequest) => Promise<Problem>;
     setLoading: (load:boolean) => void
+    noteSectionString: string
+    setNoteSectionString: (note:string) => void
 };
 
-const Problems = ({ title, itemList, addNewItemCommon, setLoading }: Props) => {
+const Problems = ({ title, itemList, addNewItemCommon, setLoading, noteSectionString, setNoteSectionString }: Props) => {
     const { loggedInUserContext } = useContext(AuthContext);
     const [selectedItems, setSelectedItems] = useState<Problem[]>([]);
     const [searchText, setSearchText] = useState("");
@@ -66,6 +68,16 @@ const Problems = ({ title, itemList, addNewItemCommon, setLoading }: Props) => {
     const removeComplaint = (item: Problem) => {
         setSelectedItems(selectedItems.filter((i) => i.id !== item.id));
     };
+
+    const updateNoteString = () => {
+        let noteString = selectedItems.map((item) => item.problem)
+        .join(", ");
+        setNoteSectionString(noteString)
+    }
+
+    useEffect(()=>{
+        updateNoteString()
+    },[selectedItems])
 
 
     return (

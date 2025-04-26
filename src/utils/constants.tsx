@@ -120,3 +120,4 @@ export const GET_FACT_SHEET = "/patients/{{patient_id}}"
 
 //notes
 export const CREATE_INITIAL_NOTE = "/patients/{{patient_id}}/notes"
+export const UPDATE_INITIAL_NOTE= "/patients/{{patient_id}}/notes/{{note_id}}"

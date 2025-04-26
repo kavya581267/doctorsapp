@@ -1,11 +1,10 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { View, Text, TouchableOpacity, Button, TextInput, Modal } from "react-native";
 import styles from "@styles/presentingComplaintsStyle";
 import Icon from "react-native-vector-icons/Ionicons";
 import { InitialCommonNoteRequest, Symptom } from "@api/model/doctor/MasterData";
 import { AuthContext } from "@context/AuthContext";
 import { MdLodSnackbar } from "@components/MdLogSnacbar";
-import { MdLogActivityIndicator } from "@components/MdLogActivityIndicator";
 import { Dropdown } from "react-native-element-dropdown";
 import MedicalHistoryPopUp from "./MedicalHistoryPopUp";
 
@@ -21,12 +20,14 @@ type Props = {
     title: string;
     itemList: Symptom[];
     addNewItemCommon: (reqObj: InitialCommonNoteRequest) => Promise<Symptom>;
-    setLoading: (load:boolean) => void
+    setLoading: (load: boolean) => void
+    noteSectionString: string
+    setNoteSectionString: (note: string) => void
 };
 
 
 
-export default function PasMedHistory({ title, itemList, addNewItemCommon, setLoading }: Props) {
+export default function PasMedHistory({ title, itemList, addNewItemCommon, setLoading, noteSectionString, setNoteSectionString }: Props) {
     const [searchText, setSearchText] = useState("");
     const [selectedItems, setSelectedItems] = useState<MedicalHistoryNote[]>([]);
     const { loggedInUserContext } = useContext(AuthContext);
@@ -88,6 +89,16 @@ export default function PasMedHistory({ title, itemList, addNewItemCommon, setLo
         }
     };
 
+    const updateNoteString = () => {
+        let noteString = selectedItems.map((item) => item.name + " for " + item.howlong + " " + item.type)
+        .join(", ");
+        setNoteSectionString(noteString)
+    }
+
+    useEffect(() => {
+        updateNoteString()
+    }, [selectedItems])
+
     return (
         <View style={styles.section}>
             <Text style={styles.sectionTitle}>{title}</Text>
@@ -115,7 +126,7 @@ export default function PasMedHistory({ title, itemList, addNewItemCommon, setLo
                     )}
                 />
 
-                <TouchableOpacity onPress={()=>setModalVisible(true)}>
+                <TouchableOpacity onPress={() => setModalVisible(true)}>
                     <Text>Add</Text>
                 </TouchableOpacity>
                 {isVisibleModel && (

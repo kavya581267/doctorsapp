@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { View, Text, TouchableOpacity, Button, TextInput, Modal } from "react-native";
 import styles from "@styles/presentingComplaintsStyle";
 import Icon from "react-native-vector-icons/Ionicons";
@@ -21,11 +21,13 @@ type Props = {
     itemList: LabTestResponse[];
     addNewItemCommon: (reqObj: LabTestRequest) => Promise<LabTestResponse>;
     setLoading: (load:boolean) => void
+    noteSectionString: string
+    setNoteSectionString: (note:string) => void
 };
 
 
 
-export default function Investigation({ title, itemList, addNewItemCommon, setLoading }: Props) {
+export default function Investigation({ title, itemList, addNewItemCommon, setLoading, noteSectionString, setNoteSectionString}: Props) {
     const [searchText, setSearchText] = useState("");
     const [selectedItems, setSelectedItems] = useState<MedicalHistoryNote[]>([]);
     const { loggedInUserContext } = useContext(AuthContext);
@@ -88,6 +90,17 @@ export default function Investigation({ title, itemList, addNewItemCommon, setLo
             setSelectedModelItem(selectedItem)
         }
     };
+
+
+    const updateNoteString = () => {
+        let noteString = selectedItems.map((item) => item.testName + " - " + "need report by " + item.date)
+        .join(", ");
+        setNoteSectionString(noteString)
+    }
+
+    useEffect(()=>{
+        updateNoteString()
+    },[selectedItems])
 
     return (
         <View style={styles.section}>

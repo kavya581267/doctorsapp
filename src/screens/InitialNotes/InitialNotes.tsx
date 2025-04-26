@@ -34,7 +34,19 @@ const InitialNoteScreen = () => {
     const route = useRoute<RouteProp<RouteParams>>()
     const { facesheet, appointment } = route.params;
     const [loading, setLoading] = useState(false);
-    const [note, setNote] = useState<CreateInitialNoteResponse>()
+    const [note, setNote] = useState<CreateInitialNoteResponse>();
+    //
+    const [presentingComplaints, setPresntingComplaints] = useState("");
+    const [familyHistory, setFamilyHistory] = useState("");
+    const [pastMedicalHistory, setPastMedicalHistory] = useState("");
+    const [personalHistory, setPersonalHistory] = useState("");
+    const [investigations, setInvestigations] = useState("");
+    const [drugHistory, setDrugHistory] = useState("");
+    const [systemicExamination, setSystemicExamination] = useState("");
+    const [physicalExamination, setPhysicalExamination] = useState("");
+    const [diet, setDiet] = useState("");
+    const [exercise, setExercise] = useState("");
+    const [visitDx, setVisitDx] = useState("");
 
 
     const createPresentingComplaint = async (reqObj: InitialCommonNoteRequest) => {
@@ -119,6 +131,11 @@ const InitialNoteScreen = () => {
         setLoading(false)
     }
 
+    const handleSave = async () => {
+        console.log(presentingComplaints);
+        console.log(familyHistory);
+    }
+
 
     useEffect(() => {
         fetchInitialNote();
@@ -130,7 +147,7 @@ const InitialNoteScreen = () => {
                 <Back nav='Mainscreen' tab='Appointments' />
                 <View style={styles.header}>
                     <Text style={styles.headerTitle}>Initial Note</Text>
-                    <TouchableOpacity style={styles.submitButton}>
+                    <TouchableOpacity style={styles.submitButton} onPress={handleSave}>
                         <Text style={styles.submitText}>Save</Text>
                     </TouchableOpacity>
                 </View>
@@ -142,12 +159,15 @@ const InitialNoteScreen = () => {
                             <Text style={styles.userText}>{facesheet?.patient?.firstName}</Text>
                         </View>
 
-                        <PresentingComplaints setLoading={setLoading} title="Presenting Complaints" addNewItemCommon={createPresentingComplaint} itemList={masterData.presentingComplaints} />
-                        <PresentingComplaints setLoading={setLoading} title="Family History" addNewItemCommon={createFamilyHistory} itemList={masterData.familyHistory} />
-                        <Problems setLoading={setLoading} title='Problems' addNewItemCommon={createProblems} itemList={masterData.problems} />
-                        <Investigation setLoading={setLoading} title="Investigation" addNewItemCommon={createInvestigation} itemList={masterData.labResults} />
-                        <PasMedHistory setLoading={setLoading} title="Past Medical History" addNewItemCommon={createMedicalHistory} itemList={masterData.pastMedicalHistory} />
-                        <Medications setLoading={setLoading} title='Medications' addNewItemCommon={createMedication} itemList={masterData.medications} />
+                        <PresentingComplaints noteSectionString={presentingComplaints} setNoteSectionString={setPresntingComplaints} setLoading={setLoading} title="Presenting Complaints"
+                            addNewItemCommon={createPresentingComplaint} itemList={masterData.presentingComplaints} />
+                        <PresentingComplaints noteSectionString={familyHistory} setNoteSectionString={setFamilyHistory} setLoading={setLoading} title="Family History"
+                            addNewItemCommon={createFamilyHistory} itemList={masterData.familyHistory} />
+                        <Problems noteSectionString={personalHistory} setNoteSectionString={setPersonalHistory} setLoading={setLoading} title='Problems'
+                            addNewItemCommon={createProblems} itemList={masterData.problems} />
+                        <Investigation noteSectionString={investigations} setNoteSectionString={setInvestigations} setLoading={setLoading} title="Investigation" addNewItemCommon={createInvestigation} itemList={masterData.labResults} />
+                        <PasMedHistory noteSectionString={pastMedicalHistory} setNoteSectionString={setPastMedicalHistory} setLoading={setLoading} title="Past Medical History" addNewItemCommon={createMedicalHistory} itemList={masterData.pastMedicalHistory} />
+                        <Medications noteSectionString={drugHistory} setNoteSectionString={setDrugHistory} setLoading={setLoading} title='Medications' addNewItemCommon={createMedication} itemList={masterData.medications} />
                         <Note title="Physical Examination" />
                         <Note title="Diet" />
                         <Note title="Exercise" />
@@ -162,7 +182,7 @@ const InitialNoteScreen = () => {
                     paddingVertical: 14,
                     borderRadius: 12,
                     alignItems: 'center',
-                    marginBottom:5
+                    marginBottom: 5
                 }}>
                     <Text style={{
                         color: '#fff',
