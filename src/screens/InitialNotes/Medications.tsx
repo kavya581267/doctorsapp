@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { View, Text, TouchableOpacity, ScrollView, Modal, TextInput, Button } from "react-native";
 import styles from "@styles/presentingComplaintsStyle";
 import Icon from "react-native-vector-icons/Ionicons";

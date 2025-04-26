@@ -161,12 +161,21 @@ const InitialNoteScreen = () => {
 
                         <PresentingComplaints noteSectionString={presentingComplaints} setNoteSectionString={setPresntingComplaints} setLoading={setLoading} title="Presenting Complaints"
                             addNewItemCommon={createPresentingComplaint} itemList={masterData.presentingComplaints} />
+                        
+                        <Note title="Personal History" />
+                        <PasMedHistory noteSectionString={pastMedicalHistory} setNoteSectionString={setPastMedicalHistory} setLoading={setLoading} title="Past Medical History" addNewItemCommon={createMedicalHistory} itemList={masterData.pastMedicalHistory} />
+                        <Note title="Drug History" />
+
                         <PresentingComplaints noteSectionString={familyHistory} setNoteSectionString={setFamilyHistory} setLoading={setLoading} title="Family History"
                             addNewItemCommon={createFamilyHistory} itemList={masterData.familyHistory} />
+
+                        {
+                            // vitals
+                        }
+                        <Note title="Systemic Examination" />
                         <Problems noteSectionString={personalHistory} setNoteSectionString={setPersonalHistory} setLoading={setLoading} title='Problems'
                             addNewItemCommon={createProblems} itemList={masterData.problems} />
                         <Investigation noteSectionString={investigations} setNoteSectionString={setInvestigations} setLoading={setLoading} title="Investigation" addNewItemCommon={createInvestigation} itemList={masterData.labResults} />
-                        <PasMedHistory noteSectionString={pastMedicalHistory} setNoteSectionString={setPastMedicalHistory} setLoading={setLoading} title="Past Medical History" addNewItemCommon={createMedicalHistory} itemList={masterData.pastMedicalHistory} />
                         <Medications noteSectionString={drugHistory} setNoteSectionString={setDrugHistory} setLoading={setLoading} title='Medications' addNewItemCommon={createMedication} itemList={masterData.medications} />
                         <Note title="Physical Examination" />
                         <Note title="Diet" />
