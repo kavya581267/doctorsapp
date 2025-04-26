@@ -11,7 +11,7 @@ const VitalsCard = ({vitals}:Props) => {
     <View>
       <View style={styles.row}>
         <Text style={styles.label}>Height (cms):</Text>
-        <Text style={styles.value}>{vitals.height}</Text>
+        <Text style={styles.value}>{vitals.height} </Text>
       </View>
       <View style={styles.row}>
         <Text style={styles.label}>Weight (kgs):</Text>

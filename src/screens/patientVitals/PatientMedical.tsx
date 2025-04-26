@@ -46,8 +46,8 @@ export default function PatientMedical() {
         'Heart Rate': '',
         'Respiratory Rate': '',
         'Oxygen Saturation': '',
-      };
-      
+    };
+
     const [vitalRecord, setVitalsRecord] = useState<Record<string, string>>(vital);
 
 
@@ -115,9 +115,9 @@ export default function PatientMedical() {
             vitalsPayload.bloodPressureSystolic = parseInt(vital[fields[3]]);
             vitalsPayload.bloodPressureDiastolic = parseInt(vital[fields[4]]);
             vitalsPayload.appointmentId = appointment.id.toString();
-            if(!updateVitals){
+            if (!updateVitals) {
                 const res = await patientService.recordPatientVitals(vitalsPayload, faceSheetData.patient.id);
-            }else{
+            } else {
                 //update
             }
             setShowModal(false)
@@ -178,6 +178,9 @@ export default function PatientMedical() {
                             <Text><Text style={{ fontWeight: 'bold' }}>MRN:  </Text>#{faceSheetData?.patient?.mrn}</Text>
                         </View>
                         <View style={styles.divider} />
+                        {
+                            //Vitals 
+                        }
                         <View style={{ flex: 1, flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginTop: 10 }}>
                             <Text style={{
                                 fontSize: 15,
@@ -205,12 +208,41 @@ export default function PatientMedical() {
                                 <VitalsCard vitals={appointmetVital} />
                             </View>
                         }
+
+                        {
+                            //Vitals  end , Medications start
+                        }
+
+                        <View style={{ flex: 1, flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginTop: 20 }}>
+                            <Text style={{
+                                fontSize: 15,
+                                fontWeight: 'bold',
+                                color: '#ff4d6d',
+                            }}>💊 Medications:</Text>
+                            {
+                                !appointmetVital &&
+                                <TouchableOpacity style={{ flexDirection: "row" }} onPress={() => setShowModal(true)}>
+                                    <Text style={{ color: COLORS.primary }}> <Feather name="plus" size={20} color={COLORS.primary} /> Add</Text>
+                                </TouchableOpacity>
+                            }
+
+                            {
+                                appointmetVital &&
+                                <TouchableOpacity style={{ flexDirection: "row" }} onPress={editVitalsPress}>
+                                    <Text style={{ color: COLORS.primary, fontWeight: "500" }}> <Feather name="edit" size={15} color={COLORS.primary} /> Edit</Text>
+                                </TouchableOpacity>
+                            }
+
+                        </View>
                         {
                             faceSheetData?.medications && faceSheetData?.medications.length > 0 &&
-                            <View style={{ marginTop: 20 }}>
-                                <Text style={{ fontWeight: "700", fontSize: 16 }}>💊 Medications</Text>
+                            <View style={{ marginTop: 10 }}>
                                 {faceSheetData?.medications.map((item, key) => <Text>{item}</Text>)}
                             </View>
+                        }
+
+                        {
+                            // Medications end, 
                         }
 
                         {
