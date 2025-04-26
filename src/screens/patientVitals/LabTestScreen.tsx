@@ -1,4 +1,5 @@
 import Back from '@components/Back';
+import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { View, Text, FlatList, TouchableOpacity, StyleSheet, SafeAreaView } from 'react-native';
 
@@ -17,9 +18,14 @@ const labTests = [
 ];
 
 const LabTestScreen = () => {
+  const navigation = useNavigation();
   const handlePress = (testName) => {
     console.log('Selected Test:', testName);
      // navigation.navigate('TestDetails', { testName });
+     if(testName === "Lipid Profile"){
+      navigation.navigate("LipidProfileScreen");
+     }
+     
   };
 
   return (
