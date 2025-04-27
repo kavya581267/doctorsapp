@@ -28,6 +28,7 @@ import { AppointmentResponse, FaceSheet } from '@api/model/patient/PatientModels
 import LabTestScreen from '@screens/patientVitals/LabTestScreen';
 import LoadingScreen from './LoadingScreen';
 import LipidProfileScreen from '@screens/patientVitals/LipidProfileScreen';
+import InProgressNotes from '@screens/InProgressNotes';
 
 export type BookAppointmentScreenRouteParams = {
       edit?: boolean; // or string, depending on your use case
@@ -77,6 +78,7 @@ export type RootStackParamList = {
     PatientDirectoryScreen:undefined;
     LabTestScreen:undefined;
     LipidProfileScreen:undefined;
+    InProgressNotes:undefined;
 };
 
 export default function MainNavigator() {
@@ -112,6 +114,7 @@ export default function MainNavigator() {
                 <Stack.Screen name='StaffProffileScreen' component={StaffProffileScreen}></Stack.Screen>
                 <Stack.Screen name='LabTestScreen' component={LabTestScreen}></Stack.Screen>
                 <Stack.Screen name='LipidProfileScreen' component={LipidProfileScreen}></Stack.Screen>
+                <Stack.Screen name='InProgressNotes' component={InProgressNotes}></Stack.Screen>
             </Stack.Navigator>
         </NavigationContainer>
     );
