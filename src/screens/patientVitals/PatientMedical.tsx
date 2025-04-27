@@ -16,6 +16,7 @@ import VitalsCard from "./ViewVital";
 import { COLORS } from "@utils/colors";
 import CustomModal from "@components/MdLogModel";
 import { MdLodSnackbar } from "@components/MdLogSnacbar";
+import { Role } from "@api/model/enums";
 
 type RoueParams = {
     params: PatientMedicalParams
@@ -221,6 +222,9 @@ export default function PatientMedical() {
                         {
                             //Vitals  end , Medications start
                         }
+                        {
+
+                        }
 
                         <View style={{ flex: 1, flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginTop: 20 }}>
                             <Text style={{
@@ -228,15 +232,9 @@ export default function PatientMedical() {
                                 fontWeight: 'bold',
                                 color: '#ff4d6d',
                             }}>💊 Medications:</Text>
-                            {
-                                !appointmetVital &&
-                                <TouchableOpacity style={{ flexDirection: "row" }} onPress={() => navigation.navigate("CreatePatientMedication")}>
-                                    <Text style={{ color: COLORS.primary }}> <Feather name="plus" size={20} color={COLORS.primary} /> Add</Text>
-                                </TouchableOpacity>
-                            }
 
                             {
-                                appointmetVital &&
+                                !appointmetVital && user.roles && user.roles.find((role) => role === Role.DOCTOR) &&
                                 <TouchableOpacity style={{ flexDirection: "row" }} onPress={() => navigation.navigate("CreatePatientMedication", { appointment: appointment })}>
                                     <Text style={{ color: COLORS.primary, fontWeight: "500" }}> <Feather name="edit" size={15} color={COLORS.primary} /> Edit</Text>
                                 </TouchableOpacity>
@@ -251,13 +249,28 @@ export default function PatientMedical() {
                         }
 
                         {
-                            // Medications end, 
+                            // Medications end, lab
                         }
+
+                        <View style={{ flex: 1, flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginTop: 20 }}>
+                            <Text style={{
+                                fontSize: 15,
+                                fontWeight: 'bold',
+                                color: '#ff4d6d',
+                            }}>🔬 Lab Results:</Text>
+
+                            {
+                                !appointmetVital && user.roles && user.roles.find((role) => role !== Role.DOCTOR && role !== Role.ADMIN) &&
+                                <TouchableOpacity style={{ flexDirection: "row" }} onPress={() => {}}>
+                                    <Text style={{ color: COLORS.primary, fontWeight: "500" }}> <Feather name="edit" size={15} color={COLORS.primary} /> Edit</Text>
+                                </TouchableOpacity>
+                            }
+
+                        </View>
 
                         {
                             faceSheetData?.labResults && faceSheetData?.labResults.length > 0 &&
                             <View style={{ marginTop: 20 }}>
-                                <Text style={{ fontWeight: "700", fontSize: 16 }}>🔬 Lab Results</Text>
                                 {faceSheetData?.labResults.map((item, key) => <Text>{item}</Text>)}
                             </View>
                         }
@@ -273,18 +286,21 @@ export default function PatientMedical() {
                 </View>
                 <CustomModal values={vitalRecord} title="💓 Add Vitals" fields={fields} visible={visiblemodal} onCancel={() => setShowModal(false)} onSave={storeVitals} />
             </ScrollView>
-            <TouchableOpacity style={{
-                backgroundColor: COLORS.primary,
-                paddingVertical: 14,
-                borderRadius: 12,
-                alignItems: 'center'
-            }} onPress={() => navigation.navigate("InitialNote", { appointment: appointment, facesheet: faceSheetData })}>
-                <Text style={{
-                    color: '#fff',
-                    fontSize: 16,
-                    fontWeight: '600',
-                }}>+ Initial Note</Text>
-            </TouchableOpacity>
+            {
+                user.roles && user.roles.find((role) => role === Role.DOCTOR) &&
+                <TouchableOpacity style={{
+                    backgroundColor: COLORS.primary,
+                    paddingVertical: 14,
+                    borderRadius: 12,
+                    alignItems: 'center'
+                }} onPress={() => navigation.navigate("InitialNote", { appointment: appointment, facesheet: faceSheetData })}>
+                    <Text style={{
+                        color: '#fff',
+                        fontSize: 16,
+                        fontWeight: '600',
+                    }}>+ Initial Note</Text>
+                </TouchableOpacity>
+            }
             <MdLodSnackbar visible={showError} message={error} onDismiss={() => setShowError(false)} />
             <FabMenuScreen action={actions} onPress={fabPress} />
         </View>
@@ -298,38 +314,43 @@ const actions = [
         text: "Medications",
         icon: <MaterialIcons name="medication" size={20} color="#fff" />,
         name: "medications",
-        position: 1
-    },
-    {
-        text: "Past Notes",
-        icon: <MaterialIcons name="notes" size={20} color="#fff" />,
-        name: "past_notes",
-        position: 2
+        position: 1,
+        textColor: COLORS.white,
+        textBackground: COLORS.secondary
     },
     {
         text: "Record Lab Results",
         icon: <MaterialIcons name="science" size={20} color="#fff" />,
         name: "lab_results",
-        position: 3
+        position: 3,
+        textColor: COLORS.white,
+        textBackground: COLORS.secondary
     },
     {
         text: "Patient Readings",
         icon: <MaterialIcons name="monitor-heart" size={20} color="#fff" />,
         name: "patient_readings",
-        position: 4
+        position: 4,
+        textColor: COLORS.white,
+        textBackground: COLORS.secondary
     },
     {
         text: "Home",
         icon: <MaterialIcons name="home" size={20} color="#fff" />,
         name: "home",
-        position: 5
+        position: 5,
+        textColor: COLORS.white,
+        textBackground: COLORS.secondary
     },
     {
         text: "Cancel",
         icon: <MaterialIcons name="cancel" size={20} color="#fff" />,
         name: "cancel",
         position: 6,
-        color: "#f44336"
+        color: "#f44336",
+
+        textColor: COLORS.white,
+        textBackground: COLORS.red
     }
 ];
 

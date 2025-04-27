@@ -12,7 +12,7 @@ const InProgressNotes = () => {
 
     const [values, setValues] = useState({});
     const [loading, setLoading] = useState(false);
-    const { loggedInUserContext} = useContext(AuthContext)
+    const { loggedInUserContext } = useContext(AuthContext)
 
     const fields = [
         {
@@ -27,35 +27,35 @@ const InProgressNotes = () => {
             "gender": "Female",
             "status": "Follow Up",
             "MrNo": "388394",
-             "visitDate": "22/04/2025"
+            "visitDate": "22/04/2025"
         },
         {
             "name": "john",
             "gender": "Male",
             "status": "Initia Note",
             "MrNo": "73828392",
-             "visitDate": "24/04/2025"
+            "visitDate": "24/04/2025"
         },
         {
             "name": "kavya",
             "gender": "Female",
             "status": "Follow Up",
             "MrNo": "7237837",
-             "visitDate": "21/04/2025"
+            "visitDate": "21/04/2025"
         },
         {
             "name": "kavya",
             "gender": "Female",
             "status": "Initia Note",
             "MrNo": "928392",
-             "visitDate": "27/04/2025"
+            "visitDate": "27/04/2025"
         },
         {
             "name": "john",
             "gender": "Male",
             "status": "Initia Note",
             "MrNo": "83829238",
-             "visitDate": "26/04/2025"
+            "visitDate": "26/04/2025"
         }
     ]
 
@@ -85,34 +85,38 @@ const InProgressNotes = () => {
     // }
     const loadNotes = async () => {
         setLoading(true)
-        const resp = await patientService.getDoctorInprogressNotes(loggedInUserContext.clinicDetails.id)
-        console.log(resp);
+        try {
+            const resp = await patientService.getDoctorInprogressNotes(loggedInUserContext.clinicDetails.id)
+            console.log(resp);
+        } catch (error) {
+
+        }
         setLoading(false)
     }
-    useEffect(()=>{
+    useEffect(() => {
         loadNotes()
-    },[])
+    }, [])
 
     return (
         <ScrollView >
             <View style={styles.container}>
-            <Back nav='LabTestScreen'/>
-            <Text style={styles.title}>InProgress Notes</Text>
-           
-            {fields.map((item) => (
-                <View key={item.MrNo} style={styles.card}>
-                    <View style={[styles.row,styles.margin]}>
-                        <Text style={styles.label}>{item.name}, {item.gender}</Text>   
-                        <Text style={styles.status}><Text style={{color:"black"}}>MrNo: </Text>{item.MrNo}</Text> 
-                    </View>
-                    <View style={styles.row}>
-                        <Text style={styles.status}>{item.status}</Text>
-                        <Text style={styles.status}><Text style={{color:"black"}}>Visit Date: </Text>{item.visitDate}</Text>
-                    </View>
+                <Back nav='Mainscreen' tab='Appointments' />
+                <Text style={styles.title}>InProgress Notes</Text>
 
-                   
-                </View>
-            ))}
+                {fields.map((item) => (
+                    <View key={item.MrNo} style={styles.card}>
+                        <View style={[styles.row, styles.margin]}>
+                            <Text style={styles.label}>{item.name}, {item.gender}</Text>
+                            <Text style={styles.status}><Text style={{ color: "black" }}>MrNo: </Text>{item.MrNo}</Text>
+                        </View>
+                        <View style={styles.row}>
+                            <Text style={styles.status}>{item.status}</Text>
+                            <Text style={styles.status}><Text style={{ color: "black" }}>Visit Date: </Text>{item.visitDate}</Text>
+                        </View>
+
+
+                    </View>
+                ))}
             </View>
             <MdLogActivityIndicator loading={loading} />
         </ScrollView>
@@ -122,7 +126,7 @@ const InProgressNotes = () => {
 const styles = StyleSheet.create({
     container: {
         padding: 10,
-       
+
     },
     title: {
         fontSize: 22,
@@ -153,13 +157,13 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: '500',
     },
-    status:{
-      fontSize:15,
-      fontWeight:"400",
-      color:"green"
+    status: {
+        fontSize: 15,
+        fontWeight: "400",
+        color: "green"
     },
-    margin:{
-        marginBottom:10
+    margin: {
+        marginBottom: 10
     }
 
 });
