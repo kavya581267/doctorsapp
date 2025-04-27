@@ -11,6 +11,7 @@ import { MdLogActivityIndicator } from "@components/MdLogActivityIndicator";
 import { RootStackParamList } from "@components/MainNavigation";
 import { MdLodSnackbar } from "@components/MdLogSnacbar";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import Footer from "@components/Footer";
 
 export default function SignIn() {
 
@@ -80,6 +81,7 @@ export default function SignIn() {
                         </View>
                     </View>
             </KeyboardAwareScrollView>
+            <Footer color="black"/>
             <MdLogActivityIndicator loading={loading} />
         </SafeAreaView>
 
