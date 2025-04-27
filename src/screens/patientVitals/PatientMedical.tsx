@@ -5,12 +5,10 @@ import styles from "styles/patientMedicalStyle";
 import Back from "@components/Back";
 import { PatientMedicalParams, RootStackParamList } from "@components/MainNavigation";
 import { patientService } from "@api/patientService";
-import { FaceSheet, Vital, VitalsRequest } from "@api/model/patient/PatientModels";
+import { FaceSheet, PatientMedication, Vital, VitalsRequest } from "@api/model/patient/PatientModels";
 import { MdLogActivityIndicator } from "@components/MdLogActivityIndicator";
 import { getUser } from "@utils/loadContextDetails";
 import { UserInfo } from "@api/model/auth/Auth";
-import { Role } from "@api/model/enums";
-import HealthOverviewScreen from "@screens/InitialNotes/HealthOverview";
 import FabMenuScreen from "./FAB";
 import { ScrollView } from "react-native-gesture-handler";
 import { Feather, MaterialIcons } from "@expo/vector-icons";
@@ -21,6 +19,14 @@ import { MdLodSnackbar } from "@components/MdLogSnacbar";
 
 type RoueParams = {
     params: PatientMedicalParams
+}
+
+export const createPatientMedication = async (reqObj: PatientMedication, medicationId: string, appointmentId: string) => {
+    try {
+        const resp = await patientService.createPatientMedication(appointmentId, medicationId, reqObj);
+        return resp;
+    } catch (error) {
+    }
 }
 
 
@@ -35,7 +41,9 @@ export default function PatientMedical() {
     const [visiblemodal, setShowModal] = useState(false);
     const [updateVitals, setUpdateVitals] = useState(false);
     const [error, setErrorMessage] = useState("Failed to load!!")
-    const [showError, setShowError] = useState(false)
+    const [showError, setShowError] = useState(false);
+    const [patientMedications, setPatientMedication] = useState<PatientMedication[]>([])
+
 
     const vital: Record<string, string> = {
         'Height (cms)': '',
@@ -78,6 +86,7 @@ export default function PatientMedical() {
         SetUser(userDetails);
         const factSheetData = await patientService.fetchFactSheet(appointment.patientId.toString());
         const vital = factSheetData.vitals && factSheetData.vitals.find((v) => v.appointment_id === appointment.id);
+        setPatientMedication([...factSheetData.medications])
         setAppointmetVital(vital)
         setFaceSheet(factSheetData)
         setLoading(false);
@@ -221,14 +230,14 @@ export default function PatientMedical() {
                             }}>💊 Medications:</Text>
                             {
                                 !appointmetVital &&
-                                <TouchableOpacity style={{ flexDirection: "row" }} onPress={() => setShowModal(true)}>
+                                <TouchableOpacity style={{ flexDirection: "row" }} onPress={() => navigation.navigate("CreatePatientMedication")}>
                                     <Text style={{ color: COLORS.primary }}> <Feather name="plus" size={20} color={COLORS.primary} /> Add</Text>
                                 </TouchableOpacity>
                             }
 
                             {
                                 appointmetVital &&
-                                <TouchableOpacity style={{ flexDirection: "row" }} onPress={editVitalsPress}>
+                                <TouchableOpacity style={{ flexDirection: "row" }} onPress={() => navigation.navigate("CreatePatientMedication", { appointment: appointment })}>
                                     <Text style={{ color: COLORS.primary, fontWeight: "500" }}> <Feather name="edit" size={15} color={COLORS.primary} /> Edit</Text>
                                 </TouchableOpacity>
                             }
@@ -237,7 +246,7 @@ export default function PatientMedical() {
                         {
                             faceSheetData?.medications && faceSheetData?.medications.length > 0 &&
                             <View style={{ marginTop: 10 }}>
-                                {faceSheetData?.medications.map((item, key) => <Text>{item}</Text>)}
+                                {faceSheetData?.medications.map((item, key) => <Text>{item.medicationName}</Text>)}
                             </View>
                         }
 

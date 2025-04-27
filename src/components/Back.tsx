@@ -17,10 +17,11 @@ type Props = {
     nav?: string,
     loading?: boolean
     tab?: string
-    onClick? : () => void
+    onClick? : () => void,
+    routeParam?: any
 }
 
-export default function Back({ nav, loading = false, tab = undefined }: Props) {
+export default function Back({ nav, loading = false, tab = undefined, routeParam= {} }: Props) {
     const navigation = useNavigation<NavigationProp<RootStackParamList>>();
     const route = useRoute();
     const [clinicName, setClinicName] = useState("");
@@ -49,7 +50,7 @@ export default function Back({ nav, loading = false, tab = undefined }: Props) {
         <View>
             <View style={styles.header}>
                 <View style={{ alignItems: "center", justifyContent: "center", width: logoWidth, flexDirection: "row" }}>
-                    {nav ? <AntDesign name="arrowleft" style={{ marginLeft: 35 }} size={24} color="black" onPress={() => navigation.navigate(nav, { tab: tab })} /> :
+                    {nav ? <AntDesign name="arrowleft" style={{ marginLeft: 35 }} size={24} color="black" onPress={() => navigation.navigate(nav, {...routeParam, tab})} /> :
                         ""}
                         <Image
                             source={require('../../assets/logo.png')}

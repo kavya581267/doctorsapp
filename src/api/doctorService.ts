@@ -10,7 +10,6 @@ import {  LabTest, Medication, InitialCommonNoteRequest, ProblemsRequest, Sympto
 
 
 
-export const DOCTOR_ID = "456"
 
 export const doctorService = {
 

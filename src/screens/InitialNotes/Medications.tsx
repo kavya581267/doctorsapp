@@ -2,17 +2,18 @@ import React, { useContext, useEffect, useState } from "react";
 import { View, Text, TouchableOpacity, ScrollView, Modal, TextInput, Button } from "react-native";
 import styles from "@styles/presentingComplaintsStyle";
 import Icon from "react-native-vector-icons/Ionicons";
-import { InitialCommonNoteRequest, Medication, MedicationsRequest, MedicationsResponse, Symptom } from "@api/model/doctor/MasterData";
+import { Medication, MedicationsRequest, MedicationsResponse, Symptom } from "@api/model/doctor/MasterData";
 import { AuthContext } from "@context/AuthContext";
 import { MdLodSnackbar } from "@components/MdLogSnacbar";
 import { Dropdown } from "react-native-element-dropdown";
 import MedicationsPopUp from "./MedicationsPopUp";
 import { Divider } from "react-native-paper";
+import { PatientMedication } from "@api/model/patient/PatientModels";
 
 export class MedicalHistoryNote extends Symptom {
     howlong: number
     type: any
-    food:boolean
+    food: boolean
     frequency: string
     route: string
 }
@@ -22,15 +23,15 @@ type Props = {
     itemList: Medication[];
     addNewItemCommon: (reqObj: MedicationsRequest) => Promise<MedicationsResponse>;
     setLoading: (load: boolean) => void
-    noteSectionString: string
-    setNoteSectionString: (note: string) => void
+    patientMedications: PatientMedication[]
+    setPatientMedications: (patientMedications: PatientMedication[]) => void
 };
 
 
 
-export default function PasMedHistory({ title, itemList, addNewItemCommon, setLoading, noteSectionString, setNoteSectionString }: Props) {
+export default function MedicationScreen({ title, itemList, addNewItemCommon, setLoading, patientMedications, setPatientMedications }: Props) {
     const [searchText, setSearchText] = useState("");
-    const [selectedItems, setSelectedItems] = useState<MedicalHistoryNote[]>([]);
+    const [selectedItems, setSelectedItems] = useState<PatientMedication[]>([]);
     const { loggedInUserContext } = useContext(AuthContext);
     const [visible, setVisible] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
@@ -48,20 +49,20 @@ export default function PasMedHistory({ title, itemList, addNewItemCommon, setLo
     const [formulation, setFormulation] = useState('');
 
     const dropdownData = itemList.map((item) => ({
-        label: item.medicationName + " "+item.dosage+item.dosageUnit +" "+item.dosageForm,
-        value: item.medicationName + " "+item.dosage+item.dosageUnit +" "+item.dosageForm,
+        label: item.medicationName + " " + item.dosage + item.dosageUnit + " " + item.dosageForm,
+        value: item.medicationName + " " + item.dosage + item.dosageUnit + " " + item.dosageForm,
         id: item.id,
     }));
 
     const addItem = (item: MedicalHistoryNote) => {
         if (!selectedItems.some((selected) => selected.id === item.id)) {
-            setSelectedItems((prevItems) => [...prevItems, item]);
+            //setSelectedItems((prevItems) => [...prevItems, item]);
         }
         setSearchText("");
         setSel("");
     };
 
-    const remove = (item: Symptom) => {
+    const remove = (item: PatientMedication) => {
         setSelectedItems((prevItems) =>
             prevItems.filter((selected) => selected.id !== item.id)
         );
@@ -76,10 +77,10 @@ export default function PasMedHistory({ title, itemList, addNewItemCommon, setLo
             specialityId: specialityId,
             clinicId: clinicId,
             medicationName: complaintText,
-            userId:userId,
+            userId: userId,
             dosage: dosage,
             dosageUnit: unit,
-            dosageForm:formulation  
+            dosageForm: formulation
         };
         const respItem = await addNewItemCommon(reqObj);
         if (respItem) {
@@ -100,20 +101,18 @@ export default function PasMedHistory({ title, itemList, addNewItemCommon, setLo
         }
     };
 
-      const formatTiming = (timing: { M: boolean; A: boolean; N: boolean }) => {
+    const formatTiming = (timing: { M: boolean; A: boolean; N: boolean }) => {
         return `${timing.M ? 1 : 0}-${timing.A ? 1 : 0}-${timing.N ? 1 : 0}`;
-      };
-      
-      const updateNoteString = () => {
-              let noteString = selectedItems.map((item) => item.name + " for " + item.howlong + " " + item.type)
-              .join(", ");
-              setNoteSectionString(noteString)
-          }
-      
-          useEffect(() => {
-              updateNoteString()
-          }, [selectedItems])
-    
+    };
+
+    const updateNoteString = () => {
+        
+    }
+
+    useEffect(() => {
+        updateNoteString()
+    }, [selectedItems])
+
     return (
         <View style={styles.section}>
             <Text style={styles.sectionTitle}>{title}</Text>
@@ -159,7 +158,7 @@ export default function PasMedHistory({ title, itemList, addNewItemCommon, setLo
                 {selectedItems.length > 0 && (
                     selectedItems.map((item, index) => (
                         <View key={index} style={styles.selectedChip}>
-                            <Text>{item.name +","+" "+ formatTiming(item.type)+" " + (item.food ? "Before food" : "After food") + " for " + item.howlong +" "+"days"+" "+item.frequency +" "+ item.route}</Text>
+                            <Text>{item.medicationName + " " + item.dosage + ", " + item.frequency }</Text>
                             <TouchableOpacity onPress={() => remove(item)}>
                                 <Icon name="close-circle" size={18} color="grey" style={styles.removeIcon} />
                             </TouchableOpacity>
@@ -184,21 +183,21 @@ export default function PasMedHistory({ title, itemList, addNewItemCommon, setLo
                             onChangeText={setComplaintText}
                             placeholder="Enter name"
                         />
-                        <View style={{flexDirection:"row", justifyContent:"space-between"}}>
+                        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
                             <TextInput
-                                style={{...styles.input1, width:"30%"}}
+                                style={{ ...styles.input1, width: "30%" }}
                                 value={dosage}
                                 onChangeText={setDosage}
                                 placeholder="Dosage"
                             />
                             <TextInput
-                                style={{...styles.input1, width:"30%"}}
+                                style={{ ...styles.input1, width: "30%" }}
                                 value={unit}
                                 onChangeText={setunit}
                                 placeholder="Unit"
                             />
                             <TextInput
-                                style={{...styles.input1, width:"30%"}}
+                                style={{ ...styles.input1, width: "30%" }}
                                 value={formulation}
                                 onChangeText={setFormulation}
                                 placeholder="Formulation"

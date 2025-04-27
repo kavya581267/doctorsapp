@@ -147,14 +147,22 @@ export class VitalsResponse {
   updatedAt: string;
 }
 
-export interface MedicationRequest {
-  clinicId: string;
-  medicationId: string;
+export interface PatientMedication {
+  id: number;
+  medicationId: number;
+  medicationName: string;
+  genericName: string | null;
   dosage: string;
   frequency: string;
+  instructions: string | null;
+  prescribedByName: string;
   startDate: string;
-  endDate: string;
-  instructions: string;
+  endDate: string | null;
+  status: string;
+  patientId: number;
+  clinicId: number;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface LabTestUpdateRequest {
@@ -268,7 +276,7 @@ export interface Vital {
 export interface FaceSheet {
   hasAppointment: boolean
   labResults: string[]
-  medications: string[]
+  medications: PatientMedication[]
   newAppointment: true
   patient: PatientResponse
   problems: string[]
