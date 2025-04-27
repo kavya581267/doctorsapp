@@ -1,13 +1,18 @@
+import { patientService } from '@api/patientService';
 import Back from '@components/Back';
+import { MdLogActivityIndicator } from '@components/MdLogActivityIndicator';
+import { AuthContext } from '@context/AuthContext';
+import { AuthProvider } from '@context/AuthProvider';
 import { COLORS } from '@utils/colors';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { View, Text, ScrollView, StyleSheet } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
 
 const InProgressNotes = () => {
 
     const [values, setValues] = useState({});
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
+    const { loggedInUserContext} = useContext(AuthContext)
 
     const fields = [
         {
@@ -78,6 +83,15 @@ const InProgressNotes = () => {
     //if (loading) {
     //  return <ActivityIndicator style={{ marginTop: 50 }} />;
     // }
+    const loadNotes = async () => {
+        setLoading(true)
+        const resp = await patientService.getDoctorInprogressNotes(loggedInUserContext.clinicDetails.id)
+        console.log(resp);
+        setLoading(false)
+    }
+    useEffect(()=>{
+        loadNotes()
+    },[])
 
     return (
         <ScrollView >
@@ -100,6 +114,7 @@ const InProgressNotes = () => {
                 </View>
             ))}
             </View>
+            <MdLogActivityIndicator loading={loading} />
         </ScrollView>
     );
 };

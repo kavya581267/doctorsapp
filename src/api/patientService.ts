@@ -1,4 +1,4 @@
-import { CREATE_DOCTO_APPOINTMENT, CREATE_INITIAL_NOTE, CREATE_PATIENT_VITALS, FILE_NOTE, GET_CLINIC_PATIENTS_PATH, GET_CLINIC_STAFF_PATH, GET_FACT_SHEET, UPDATE_APPOINTMENT, UPDATE_INITIAL_NOTE } from "@utils/constants";
+import { CREATE_DOCTO_APPOINTMENT, CREATE_INITIAL_NOTE, CREATE_PATIENT_VITALS, DOCTOR_INPROGRESS_NOTES, FILE_NOTE, GET_CLINIC_PATIENTS_PATH, GET_CLINIC_STAFF_PATH, GET_FACT_SHEET, UPDATE_APPOINTMENT, UPDATE_INITIAL_NOTE } from "@utils/constants";
 import { apiService } from "./apiService";
 import { AdminRegistarationRequest, AdminRegistrationResponse } from "./model/auth/Auth";
 import { ClinicResponse } from "./model/clinic/ClinicResponse";
@@ -101,6 +101,14 @@ export const patientService = {
     fileInitialNote: async (patientId: string,noteId:number, body: FileNoteRequest): Promise<CreateInitialNoteResponse> => {
         try {
             const resp = await apiService.put(replacePlaceholders(FILE_NOTE, { "patient_id": patientId, "note_id":noteId }),body)
+            return resp.data;
+        } catch (error) {
+            throw error
+        }
+    },
+    getDoctorInprogressNotes: async (clinicId:number) => {
+        try {
+            const resp = await apiService.get(DOCTOR_INPROGRESS_NOTES, {clinicId: clinicId, field:false})
             return resp.data;
         } catch (error) {
             throw error
