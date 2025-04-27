@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, TouchableOpacity, Alert } from "react-native";
 import { NavigationProp, RouteProp, useNavigation, useRoute } from "@react-navigation/native";
-import Vitals from "./Vitals";
-import ActionSheetMore from "./ActionSheetMore";
 import styles from "styles/patientMedicalStyle";
 import Back from "@components/Back";
 import { PatientMedicalParams, RootStackParamList } from "@components/MainNavigation";
 import { patientService } from "@api/patientService";
-import { FaceSheet, Vital } from "@api/model/patient/PatientModels";
+import { FaceSheet, Vital, VitalsRequest } from "@api/model/patient/PatientModels";
 import { MdLogActivityIndicator } from "@components/MdLogActivityIndicator";
 import { getUser } from "@utils/loadContextDetails";
 import { UserInfo } from "@api/model/auth/Auth";
@@ -15,7 +13,11 @@ import { Role } from "@api/model/enums";
 import HealthOverviewScreen from "@screens/InitialNotes/HealthOverview";
 import FabMenuScreen from "./FAB";
 import { ScrollView } from "react-native-gesture-handler";
-import { MaterialIcons } from "@expo/vector-icons";
+import { Feather, MaterialIcons } from "@expo/vector-icons";
+import VitalsCard from "./ViewVital";
+import { COLORS } from "@utils/colors";
+import CustomModal from "@components/MdLogModel";
+import { MdLodSnackbar } from "@components/MdLogSnacbar";
 
 type RoueParams = {
     params: PatientMedicalParams
@@ -28,10 +30,31 @@ export default function PatientMedical() {
     const navigation = useNavigation<NavigationProp<RootStackParamList>>();
     const [loading, setLoading] = useState(true);
     const [appointmetVital, setAppointmetVital] = useState<Vital | undefined>(undefined);
-    const [factSheetData, setFaceSheet] = useState<FaceSheet | undefined>(undefined)
+    const [faceSheetData, setFaceSheet] = useState<FaceSheet | undefined>(undefined)
     const [user, SetUser] = useState<UserInfo>(undefined);
+    const [visiblemodal, setShowModal] = useState(false);
+    const [updateVitals, setUpdateVitals] = useState(false);
+    const [error, setErrorMessage] = useState("Failed to load!!")
+    const [showError, setShowError] = useState(false)
+
+    const vital: Record<string, string> = {
+        'Height (cms)': '',
+        'Weight (kgs)': '',
+        'Temperature': '',
+        'Blood Pressure Systolic': '',
+        'Blood Pressure Diastolic': '',
+        'Heart Rate': '',
+        'Respiratory Rate': '',
+        'Oxygen Saturation': '',
+    };
+
+    const [vitalRecord, setVitalsRecord] = useState<Record<string, string>>(vital);
 
 
+    const formatKey = (key) => {
+        // Make keys more readable (optional enhancement)
+        return key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+    };
 
     function calculateAge(dob: string) {
         const birthDate = new Date(dob);
@@ -54,19 +77,72 @@ export default function PatientMedical() {
         const userDetails = await getUser();
         SetUser(userDetails);
         const factSheetData = await patientService.fetchFactSheet(appointment.patientId.toString());
-        const vital = factSheetData.vitals.find((i) => i.appointment_id === appointment.id);
+        const vital = factSheetData.vitals && factSheetData.vitals.find((v) => v.appointment_id === appointment.id);
         setAppointmetVital(vital)
         setFaceSheet(factSheetData)
         setLoading(false);
     }
 
-    const fabPress = (screen:string) => {
-        if(screen === "initial_note"){
-            navigation.navigate("InitialNote",{appointment:appointment,facesheet:factSheetData})
+    const fabPress = (screen: string) => {
+        if (screen === "initial_note") {
+            navigation.navigate("InitialNote", { appointment: appointment, facesheet: faceSheetData })
         }
-        if(screen === "lab_results"){
+        if (screen === "lab_results") {
             navigation.navigate("LabTestScreen")
         }
+    }
+    const fields = [
+        'Height (cms)',
+        'Weight (kgs)',
+        'Temperature',
+        'Blood Pressure Systolic',
+        'Blood Pressure Diastolic',
+        'Heart Rate',
+        'Respiratory Rate',
+        'Oxygen Saturation',
+    ];
+    const storeVitals = async (vital: Record<string, string>) => {
+        try {
+            setLoading(true);
+            const vitalsPayload = new VitalsRequest();
+            vitalsPayload.clinicId = parseInt(faceSheetData.patient.clinicId);
+            vitalsPayload.temperature = parseInt(vital[fields[2]]);
+            vitalsPayload.height = parseInt(vital[fields[0]]);
+            vitalsPayload.weight = parseInt(vital[fields[1]]);
+            vitalsPayload.heartRate = parseInt(vital[fields[5]]);
+            vitalsPayload.respiratoryRate = parseInt(vital[fields[6]]);
+            vitalsPayload.oxygenSaturation = parseInt(vital[fields[7]]);
+            vitalsPayload.bloodPressureSystolic = parseInt(vital[fields[3]]);
+            vitalsPayload.bloodPressureDiastolic = parseInt(vital[fields[4]]);
+            vitalsPayload.appointmentId = appointment.id.toString();
+            if (!updateVitals) {
+                const res = await patientService.recordPatientVitals(vitalsPayload, faceSheetData.patient.id);
+            } else {
+                //update
+            }
+            setShowModal(false)
+            await load()
+        } catch (error) {
+            setShowError(true);
+            setErrorMessage(error.toString())
+        }
+        setLoading(false)
+    }
+
+    const editVitalsPress = () => {
+        setShowModal(true);
+        setUpdateVitals(true);
+        const vital: Record<string, string> = {
+            'Height (cms)': appointmetVital.height.toString(),
+            'Weight (kgs)': appointmetVital.weight.toString(),
+            'Temperature': appointmetVital.temperature.toString(),
+            'Blood Pressure Systolic': appointmetVital.blood_pressure_systolic.toString(),
+            'Blood Pressure Diastolic': appointmetVital.blood_pressure_systolic.toString(),
+            'Heart Rate': appointmetVital.heart_rate.toString(),
+            'Respiratory Rate': appointmetVital.respiratory_rate.toString(),
+            'Oxygen Saturation': appointmetVital.oxygen_saturation.toString()
+        };
+        setVitalsRecord(vital)
     }
 
     useEffect(() => {
@@ -81,7 +157,7 @@ export default function PatientMedical() {
 
     return (
 
-        <View style={{ padding: 10, height:"100%" }}>
+        <View style={{ padding: 10, height: "100%" }}>
             <Back nav="Mainscreen" tab="Appointments" />
             <ScrollView>
                 <View style={styles.patientContainer}>
@@ -99,57 +175,114 @@ export default function PatientMedical() {
                                 <Text><Text style={{ fontWeight: 'bold' }}>Age:  </Text>{age}</Text>
                             </View>
                             <Text><Text style={{ fontWeight: 'bold' }}>Doctor:  </Text>{appointment.doctorName}</Text>
-                            <Text><Text style={{ fontWeight: 'bold' }}>MRN:  </Text>#{factSheetData?.patient?.mrn}</Text>
+                            <Text><Text style={{ fontWeight: 'bold' }}>MRN:  </Text>#{faceSheetData?.patient?.mrn}</Text>
                         </View>
                         <View style={styles.divider} />
-                        <Vitals vitals={appointmetVital} ></Vitals>
                         {
-                            <View style={{ marginTop: 20 }}>
-                                <Text style={{ fontWeight: "700", fontSize: 16 }}>💊 Medications</Text>
-                                {factSheetData?.medications.map((item, key) => <Text>{item}</Text>)}
+                            //Vitals 
+                        }
+                        <View style={{ flex: 1, flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginTop: 10 }}>
+                            <Text style={{
+                                fontSize: 15,
+                                fontWeight: 'bold',
+                                color: '#ff4d6d',
+                            }}>💓 Vitals:</Text>
+                            {
+                                !appointmetVital &&
+                                <TouchableOpacity style={{ flexDirection: "row" }} onPress={() => setShowModal(true)}>
+                                    <Text style={{ color: COLORS.primary }}> <Feather name="plus" size={20} color={COLORS.primary} /> Add</Text>
+                                </TouchableOpacity>
+                            }
+
+                            {
+                                appointmetVital &&
+                                <TouchableOpacity style={{ flexDirection: "row" }} onPress={editVitalsPress}>
+                                    <Text style={{ color: COLORS.primary, fontWeight: "500" }}> <Feather name="edit" size={15} color={COLORS.primary} /> Edit</Text>
+                                </TouchableOpacity>
+                            }
+
+                        </View>
+                        {
+                            appointmetVital &&
+                            <View style={{ marginTop: 10 }}>
+                                <VitalsCard vitals={appointmetVital} />
                             </View>
                         }
 
                         {
-                            <View style={{ marginTop: 20 }}>
-                                <Text style={{ fontWeight: "700", fontSize: 16 }}>🔁 Medication History</Text>
-                                {factSheetData?.problems.map((item, key) => <Text>{item}</Text>)}
+                            //Vitals  end , Medications start
+                        }
+
+                        <View style={{ flex: 1, flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginTop: 20 }}>
+                            <Text style={{
+                                fontSize: 15,
+                                fontWeight: 'bold',
+                                color: '#ff4d6d',
+                            }}>💊 Medications:</Text>
+                            {
+                                !appointmetVital &&
+                                <TouchableOpacity style={{ flexDirection: "row" }} onPress={() => setShowModal(true)}>
+                                    <Text style={{ color: COLORS.primary }}> <Feather name="plus" size={20} color={COLORS.primary} /> Add</Text>
+                                </TouchableOpacity>
+                            }
+
+                            {
+                                appointmetVital &&
+                                <TouchableOpacity style={{ flexDirection: "row" }} onPress={editVitalsPress}>
+                                    <Text style={{ color: COLORS.primary, fontWeight: "500" }}> <Feather name="edit" size={15} color={COLORS.primary} /> Edit</Text>
+                                </TouchableOpacity>
+                            }
+
+                        </View>
+                        {
+                            faceSheetData?.medications && faceSheetData?.medications.length > 0 &&
+                            <View style={{ marginTop: 10 }}>
+                                {faceSheetData?.medications.map((item, key) => <Text>{item}</Text>)}
                             </View>
                         }
 
                         {
+                            // Medications end, 
+                        }
+
+                        {
+                            faceSheetData?.labResults && faceSheetData?.labResults.length > 0 &&
                             <View style={{ marginTop: 20 }}>
                                 <Text style={{ fontWeight: "700", fontSize: 16 }}>🔬 Lab Results</Text>
-                                {factSheetData?.labResults.map((item, key) => <Text>{item}</Text>)}
+                                {faceSheetData?.labResults.map((item, key) => <Text>{item}</Text>)}
                             </View>
                         }
 
                         {
+                            faceSheetData?.problems && faceSheetData?.problems.length > 0 &&
                             <View style={{ marginTop: 20 }}>
-                                <Text style={{ fontWeight: "700", fontSize: 16 }}>🔁 Medication History</Text>
-                                {factSheetData?.problems.map((item, key) => <Text>{item}</Text>)}
+                                <Text style={{ fontWeight: "700", fontSize: 16 }}>🔬 Problems</Text>
+                                {faceSheetData?.problems.map((item, key) => <Text>{item}</Text>)}
                             </View>
                         }
-
-                        {
-                            <View style={{ marginTop: 20 }}>
-                                <Text style={{ fontWeight: "700", fontSize: 16 }}>🔬 Lab Results</Text>
-                                {factSheetData?.labResults.map((item, key) => <Text>{item}</Text>)}
-                            </View>
-                        }
-
-
-
-
                     </View>
                 </View>
-
+                <CustomModal values={vitalRecord} title="💓 Add Vitals" fields={fields} visible={visiblemodal} onCancel={() => setShowModal(false)} onSave={storeVitals} />
             </ScrollView>
-            <FabMenuScreen  action={actions} onPress={fabPress}/>
+            <TouchableOpacity style={{
+                backgroundColor: COLORS.primary,
+                paddingVertical: 14,
+                borderRadius: 12,
+                alignItems: 'center'
+            }} onPress={() => navigation.navigate("InitialNote", { appointment: appointment, facesheet: faceSheetData })}>
+                <Text style={{
+                    color: '#fff',
+                    fontSize: 16,
+                    fontWeight: '600',
+                }}>+ Initial Note</Text>
+            </TouchableOpacity>
+            <MdLodSnackbar visible={showError} message={error} onDismiss={() => setShowError(false)} />
+            <FabMenuScreen action={actions} onPress={fabPress} />
         </View>
 
     )
 }
+
 
 const actions = [
     {
@@ -171,28 +304,22 @@ const actions = [
         position: 3
     },
     {
-        text: "Initial Note",
-        icon: <MaterialIcons name='note' size={20} color="#fff" />,
-        name: "initial_note",
-        position: 4
-    },
-    {
         text: "Patient Readings",
         icon: <MaterialIcons name="monitor-heart" size={20} color="#fff" />,
         name: "patient_readings",
-        position: 5
+        position: 4
     },
     {
         text: "Home",
         icon: <MaterialIcons name="home" size={20} color="#fff" />,
         name: "home",
-        position: 6
+        position: 5
     },
     {
         text: "Cancel",
         icon: <MaterialIcons name="cancel" size={20} color="#fff" />,
         name: "cancel",
-        position: 7,
+        position: 6,
         color: "#f44336"
     }
 ];

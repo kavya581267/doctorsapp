@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
     container: {
         backgroundColor: "#fff",
         position: 'absolute',
-        bottom: 30,
+        bottom: 60,
         right: 20,
     }
 });

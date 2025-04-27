@@ -331,3 +331,10 @@ export interface CreateInitialNoteResponse{
       visitDx: string;
   }
 
+
+  export class FileNoteRequest {
+    clinicId: number;
+    doctorId: number;
+    filed?: boolean = true
+    nextVisitDate: string
+}

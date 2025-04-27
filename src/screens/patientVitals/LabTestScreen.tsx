@@ -5,6 +5,7 @@ import { View, Text, FlatList, TouchableOpacity, StyleSheet, SafeAreaView } from
 
 
 const labTests = [
+  "inProgress",
   'FBS',
   'PPBS',
   'HbA1c',
@@ -24,6 +25,9 @@ const LabTestScreen = () => {
      // navigation.navigate('TestDetails', { testName });
      if(testName === "Lipid Profile"){
       navigation.navigate("LipidProfileScreen");
+     }
+     if(testName === "inProgress"){
+      navigation.navigate("InProgressNotes");
      }
      
   };
