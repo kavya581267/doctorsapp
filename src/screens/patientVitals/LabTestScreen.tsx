@@ -1,6 +1,9 @@
+import { LabTest } from '@api/model/doctor/MasterData';
 import Back from '@components/Back';
+import { AuthContext } from '@context/AuthContext';
+import { AuthProvider } from '@context/AuthProvider';
 import { useNavigation } from '@react-navigation/native';
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { View, Text, FlatList, TouchableOpacity, StyleSheet, SafeAreaView } from 'react-native';
 
 
@@ -19,10 +22,16 @@ const labTests = [
 
 const LabTestScreen = () => {
   const navigation = useNavigation();
-  const handlePress = (testName) => {
-    console.log('Selected Test:', testName);
+  const {masterData} = useContext(AuthContext)
+  const [labTest, setLabtests] = useState([...masterData.labTests])
+
+  useEffect(()=>{
+      console.log(labTest)
+  },[])
+  const handlePress = (item:LabTest) => {
+    console.log( item);
      // navigation.navigate('TestDetails', { testName });
-     if(testName === "Lipid Profile"){
+     if(item.testName === "Lipid Profile"){
       navigation.navigate("LipidProfileScreen");
      }
      
@@ -33,11 +42,11 @@ const LabTestScreen = () => {
         <Back nav='Mainscreen' tab='Appointments'/>
         <Text style={styles.headerTitle}>Select Lab Test</Text>
       <FlatList
-        data={labTests}
-        keyExtractor={(item) => item}
+        data={labTest}
+        keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
           <TouchableOpacity style={styles.item} onPress={() => handlePress(item)}>
-            <Text style={styles.itemText}>{item}</Text>
+            <Text style={styles.itemText}>{item.testName}</Text>
           </TouchableOpacity>
         )}
       />
