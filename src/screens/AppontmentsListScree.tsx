@@ -45,6 +45,12 @@ const AppointmentsListScreen = () => {
   const [filterFromDate, setFilterFromDate] = useState(new Date());
   const [filterToDate, setFilterToDate] = useState(new Date());
   const [filterSelectedStatus, setFilterelectedStatus] = useState([]);
+  const [searchText, setSearchText] = useState("");
+
+  //filterApp
+  const [filteredUpcomingApp, setFfilteredUpcomingApp] = useState<AppointmentListResponse | null>(null);
+  const [filteredPastApp, setFfilteredPastApp] = useState<AppointmentListResponse | null>(null);
+
 
   const cancelAppointment = (item: AppointmentListResponse) => {
     setSelectedAppointment(item);
@@ -115,6 +121,20 @@ const AppointmentsListScreen = () => {
     setLoading(false);
   };
 
+  const filter = () =>{
+    const filteredPast = getListData().filter((app) =>
+      app.firstName.toLowerCase().includes(searchText.toLowerCase()) ||
+      app.lastName.toLowerCase().includes(searchText.toLowerCase()) ||
+      app.doctorName.toLowerCase().includes(searchText.toLowerCase()) ||
+      app.id.toString().toLowerCase().includes(searchText.toLowerCase())
+    );
+    return filteredPast;
+  }
+
+  const onSearchTextChange = (text:string) => {
+     setSearchText(text);
+  }
+
   useEffect(() => {
     fetchAppointments();
   }, []);
@@ -171,7 +191,7 @@ const AppointmentsListScreen = () => {
       <Back />
 
       <View style={{ flexDirection: "row", justifyContent: "space-around", alignItems: "center" }}>
-        <TextInput style={styles.searchBar} placeholder="Search patient, doctor or mobile number" />
+        <TextInput value={searchText} onChangeText={onSearchTextChange} style={styles.searchBar} placeholder="Search patient, doctor or mobile number" />
 
         <View style={{ position: 'relative' }}>
           <TouchableOpacity onPress={() => setShowFilterModal(true)}>
@@ -228,7 +248,7 @@ const AppointmentsListScreen = () => {
         </TouchableOpacity>
       </View>
       <FlatList<AppointmentListResponse>
-        data={getListData()}
+        data={filter()}
         renderItem={renderItem}
         keyExtractor={(item) => item.id.toString()}
       />

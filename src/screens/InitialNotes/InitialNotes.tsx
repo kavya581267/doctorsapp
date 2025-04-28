@@ -20,6 +20,7 @@ import { patientService } from '@api/patientService';
 import { CreateInitialNoteRequest, CreateInitialNoteResponse, CreatePatientMedication, FileNoteRequest, PatientMedication, UpdateNoteRequest, UpdatePatientMedication } from '@api/model/patient/PatientModels';
 import Investigation from './Investigation';
 import { formatToYYYYMMDD, getFutureDate } from '@utils/utils';
+import { MdLodSnackbar } from '@components/MdLogSnacbar';
 const { width, height } = Dimensions.get("window");
 
 
@@ -50,6 +51,9 @@ const InitialNoteScreen = () => {
     const [visitDx, setVisitDx] = useState("");
     const [patientMedications, setPatientMedication] = useState<PatientMedication[]>([...facesheet.medications])
 
+    const [shoeError, setShowError] = useState(false)
+    const [error, setError] = useState("");
+
 
     const createPresentingComplaint = async (reqObj: InitialCommonNoteRequest) => {
         try {
@@ -78,13 +82,16 @@ const InitialNoteScreen = () => {
         patientMedication.clinicId = appointment.clinicId.toString();
         patientMedication.appointmentId = appointment.id.toString();
         patientMedication.medicationId = medicationId;
+        setLoading(true)
         try {
             //const resp = await patientService.createPatientMedication(appointment.patientId.toString(), medicationId,patientMedication);
             const resp = await patientService.updatePatientMedication(appointment.patientId.toString(),patientMedication);
             return resp;
         } catch (error) {
-            
+            setShowError(true)
+            setError(error.toString())
         }
+        setLoading(false)
     }
 
     const createMedicalHistory = async (reqObj: InitialCommonNoteRequest) => {
@@ -242,6 +249,7 @@ const InitialNoteScreen = () => {
                 </KeyboardAwareScrollView>
             </View>
             <MdLogActivityIndicator loading={loading} />
+            <MdLodSnackbar message={error} visible={shoeError} onDismiss={() => setShowError(false)} />
             <View>
                 <TouchableOpacity onPress={fileNote} style={{
                     backgroundColor: COLORS.secondary,
