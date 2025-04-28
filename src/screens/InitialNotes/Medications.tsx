@@ -10,6 +10,7 @@ import MedicationsPopUp from "./MedicationsPopUp";
 import { Divider } from "react-native-paper";
 import { CreatePatientMedication, PatientMedication, UpdatePatientMedication } from "@api/model/patient/PatientModels";
 import { patientService } from "@api/patientService";
+import { getPatientMedicationString } from "@utils/utils";
 
 export class MedicalHistoryNote extends Symptom {
     howlong: number
@@ -33,7 +34,7 @@ type Props = {
 
 export default function MedicationScreen({ title, itemList, addNewItemCommon, setLoading, patientMedications, createPatientMedication, patientId }: Props) {
     const [searchText, setSearchText] = useState("");
-    const [selectedItems, setSelectedItems] = useState<PatientMedication[]>([]);
+    const [selectedItems, setSelectedItems] = useState<PatientMedication[]>([...patientMedications]);
     const { loggedInUserContext } = useContext(AuthContext);
     const [visible, setVisible] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
@@ -51,19 +52,22 @@ export default function MedicationScreen({ title, itemList, addNewItemCommon, se
     const [formulation, setFormulation] = useState('');
 
     const dropdownData = itemList.map((item) => ({
-        label: item.medicationName + " " + item.dosage + item.dosageUnit + " " + item.dosageForm,
-        value: item.medicationName + " " + item.dosage + item.dosageUnit + " " + item.dosageForm,
+        label: item.medicationName + " " + item.dosage + item?.dosageUnit + " " + item.dosageForm,
+        value: item.medicationName + " " + item.dosage + item?.dosageUnit + " " + item.dosageForm,
         id: item.id,
     }));
 
     const addPatientMedication = async (item: CreatePatientMedication, medicationId: string) => {
-        createPatientMedication(item,medicationId)
-        const patientMedication =  await patientService.createPatientMedication(patientId,medicationId,item);
-        if (!selectedItems.some((selected) => selected.id === patientMedication.id)) {
-            setSelectedItems((prevItems) => [...prevItems, patientMedication]);
+        try{
+            const patientMedication =  await createPatientMedication(item,medicationId)
+            if (!selectedItems.some((selected) => selected.id === patientMedication.id)) {
+                setSelectedItems((prevItems) => [...prevItems, patientMedication]);
+            }
+            setSearchText("");
+            setSel("");
+        }catch(error){
         }
-        setSearchText("");
-        setSel("");
+        
     };
 
     const remove = (item: PatientMedication) => {
@@ -105,9 +109,7 @@ export default function MedicationScreen({ title, itemList, addNewItemCommon, se
         }
     };
 
-    const formatTiming = (timing: { M: boolean; A: boolean; N: boolean }) => {
-        return `${timing.M ? 1 : 0}-${timing.A ? 1 : 0}-${timing.N ? 1 : 0}`;
-    };
+    
 
     const updateNoteString = () => {
         
@@ -162,7 +164,7 @@ export default function MedicationScreen({ title, itemList, addNewItemCommon, se
                 {selectedItems.length > 0 && (
                     selectedItems.map((item, index) => (
                         <View key={index} style={styles.selectedChip}>
-                            <Text>{item.medicationName + " " + item.dosage + ", " + item.frequency }</Text>
+                            <Text>{getPatientMedicationString(item)}</Text>
                             <TouchableOpacity onPress={() => remove(item)}>
                                 <Icon name="close-circle" size={18} color="grey" style={styles.removeIcon} />
                             </TouchableOpacity>

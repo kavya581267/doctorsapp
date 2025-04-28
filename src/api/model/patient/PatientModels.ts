@@ -148,24 +148,55 @@ export class VitalsResponse {
 }
 
 export class PatientMedication {
-  id: number;
-  medicationId: number;
-  medicationName: string;
-  genericName: string | null;
+  clinic_id: number;
+  created_at: string;
+  days: string;
   dosage: string;
+  dosage_unit: string;
+  end_date: string;
+  formulation: string;
   frequency: string;
+  generic_name: string | null;
+  id: number;
   instructions: string | null;
-  prescribedByName: string;
-  startDate: string;
-  endDate: string | null;
+  medication_id: number;
+  medication_name: string;
+  medication_schedule: string;
+  patient_id: number;
+  prescribed_by_name: string;
+  route: string;
+  start_date: string;
   status: string;
-  patientId: number;
-  clinicId: number;
-  createdAt: string;
-  updatedAt: string;
+  time_phase: string;
+  updated_at: string;
 }
 
-export class CreatePatientMedication {
+export class PatientMedicationResponse {
+  id: number;
+  clinicId: number;
+  patientId: number;
+  medicationId: number;
+  appointmentId: number | null;
+  medicationName: string;
+  genericName: string | null;
+  prescribedByName: string;
+  dosage: string;
+  frequency: string;
+  startDate: string; // ISO Date string
+  endDate: string;   // ISO Date string
+  instructions: string;
+  dosageUnit: string;
+  formulation: string;
+  route: string;
+  timePhase: string;
+  medicationSchedule: string;
+  days: string;
+  status: string;
+  createdAt: string; // ISO Date-Time string
+  updatedAt: string; // ISO Date-Time string
+}
+
+export class UpdatePatientMedication {
   dosage: string;
   frequency: string;
   startDate: string;
@@ -180,7 +211,7 @@ export class CreatePatientMedication {
   status: string;
 }
 
-export class UpdatePatientMedication extends CreatePatientMedication {
+export class CreatePatientMedication extends UpdatePatientMedication {
   clinicId: string;
   medicationId: string
   appointmentId: string
@@ -316,56 +347,75 @@ export class CreateInitialNoteRequest {
   noteId?: number;
 }
 
-export interface CreateInitialNoteResponse{
-    id: number;
-    clinicId: number;
-    patientId: number;
-    doctorId: number;
-    doctorName: string;
-    appointmentId: number;
-    noteType: NoteType;
-    createdAt: string; // ISO timestamp
-    updatedAt: string;
-    noteHistoryId: number;
-    drugHistory: string;
-    familyHistory: string;
-    investigations: string;
-    pastMedicalHistory: string;
-    personalHistory: string;
-    presentingComplaints: string;
-    systemicExamination: string;
-    physicalExamination: string;
-    diet: string;
-    exercise: string;
-    visitDx: string;
-    vitals: any[]; // Replace `any` with a specific type if known
-    medications: any[]; // Replace with type if known
-    problems: any[]; // Replace with type if known
-    filed: boolean;
-    nextVisitDate?: string;
-    filedTimestamp?: string;
-  }
+export interface CreateInitialNoteResponse {
+  id: number;
+  clinicId: number;
+  patientId: number;
+  doctorId: number;
+  doctorName: string;
+  appointmentId: number;
+  noteType: NoteType;
+  createdAt: string; // ISO timestamp
+  updatedAt: string;
+  noteHistoryId: number;
+  drugHistory: string;
+  familyHistory: string;
+  investigations: string;
+  pastMedicalHistory: string;
+  personalHistory: string;
+  presentingComplaints: string;
+  systemicExamination: string;
+  physicalExamination: string;
+  diet: string;
+  exercise: string;
+  visitDx: string;
+  vitals: any[]; // Replace `any` with a specific type if known
+  medications: any[]; // Replace with type if known
+  problems: any[]; // Replace with type if known
+  filed: boolean;
+  nextVisitDate?: string;
+  filedTimestamp?: string;
+}
 
-  export class UpdateNoteRequest {
-      clinicId: string;
-      doctorId: string;
-      drugHistory: string;
-      familyHistory: string;
-      investigations: string;
-      pastMedicalHistory: string;
-      personalHistory: string;
-      presentingComplaints: string;
-      systemicExamination: string;
-      physicalExamination: string;
-      diet: string;
-      exercise: string;
-      visitDx: string;
-  }
+export class UpdateNoteRequest {
+  clinicId: string;
+  doctorId: string;
+  drugHistory: string;
+  familyHistory: string;
+  investigations: string;
+  pastMedicalHistory: string;
+  personalHistory: string;
+  presentingComplaints: string;
+  systemicExamination: string;
+  physicalExamination: string;
+  diet: string;
+  exercise: string;
+  visitDx: string;
+}
 
 
-  export class FileNoteRequest {
-    clinicId: number;
-    doctorId: number;
-    filed?: boolean = true
-    nextVisitDate: string
+export class FileNoteRequest {
+  clinicId: number;
+  doctorId: number;
+  filed?: boolean = true
+  nextVisitDate: string
+}
+
+
+export interface ListNoteResponse {
+  appointmentDate: string; // Format: "YYYY-MM-DD"
+  appointmentId: number;
+  clinicId: number;
+  createdAt: string; // Format: "YYYY-MM-DDTHH:MM:SS"
+  doctorFirstname: string;
+  doctorId: number;
+  doctorLastname: string;
+  filed: boolean;
+  filedTimestamp: string | null; // could be null
+  noteId: number;
+  noteType: string; // Example: "INITIAL"
+  patientFirstname: string;
+  patientId: number;
+  patientLastname: string;
+  patientMrn: string; // Example: "C40-2025-000001"
 }

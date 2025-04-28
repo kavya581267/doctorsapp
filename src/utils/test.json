@@ -1,0 +1,194 @@
+{"labtest" : [
+    {
+      "id": 1,
+      "testName": "FBS",
+      "description": "Fasting Blood Sugar",
+      "category": null
+    },
+    {
+      "id": 3,
+      "testName": "HbA1c",
+      "description": "HbA1c (Glycated Hemoglobin)",
+      "category": null
+    },
+    {
+      "id": 10,
+      "testName": "hs-CRP",
+      "description": "High-Sensitivity C-Reactive Protein",
+      "category": null
+    },
+    {
+      "id": 6,
+      "testName": "Lipid Profile",
+      "description": "Lipid Profile",
+      "category": null
+    },
+    {
+      "id": 2,
+      "testName": "PPBS",
+      "description": "Postprandial Blood Sugar",
+      "category": null
+    },
+    {
+      "id": 7,
+      "testName": "Retinal Exam",
+      "description": "Fundus Examination (or Retinal Exam)",
+      "category": null
+    },
+    {
+      "id": 4,
+      "testName": "Sr. Creatinine",
+      "description": "Serum Creatinine",
+      "category": null
+    },
+    {
+      "id": 9,
+      "testName": "TFT",
+      "description": "Thyroid Function",
+      "category": null
+    },
+    {
+      "id": 5,
+      "testName": "UACR",
+      "description": "Urinary Albumin-to-Creatinine Ratio",
+      "category": null
+    },
+    {
+      "id": 8,
+      "testName": "Vit B12",
+      "description": "Vitamin B12 Levels",
+      "category": null
+    }
+  ],
+
+  "labresult": [
+    {
+      "id": 1,
+      "labTestId": 1,
+      "observation": "Glucose Level",
+      "observationCode": "FBS GL",
+      "units": "mg/dL",
+      "ranges": "{\"normal\":\"70-100 mg/dL\",\"preDiabetes\":\"101-125 mg/dL\",\"diabetes\":\">=126 mg/dL\"}"
+    },
+    {
+      "id": 2,
+      "labTestId": 2,
+      "observation": "Glucose Level",
+      "observationCode": "PPBS GL",
+      "units": "mg/dL",
+      "ranges": "{\"normal\":\"<140 mg/dL\",\"preDiabetes\":\"140-199 mg/dL\",\"diabetes\":\">=200 mg/dL\"}"
+    },
+    {
+      "id": 3,
+      "labTestId": 3,
+      "observation": "HbA1c",
+      "observationCode": "HbA1c",
+      "units": "%",
+      "ranges": "{\"normal\":\"<5.7%\",\"preDiabetes\":\"5.7-6.4%\",\"diabetes\":\">=6.5%\"}"
+    },
+    {
+      "id": 4,
+      "labTestId": 3,
+      "observation": "Estimated Average Glucose (eAG)",
+      "observationCode": "eAG",
+      "units": "mg/dL",
+      "ranges": null
+    },
+    {
+      "id": 5,
+      "labTestId": 4,
+      "observation": "Creatinine",
+      "observationCode": "Cr",
+      "units": "mg/dL",
+      "ranges": "{\"men\":\"0.7-1.3 mg/dL\",\"women\":\"0.6-1.1 mg/dL\"}"
+    },
+    {
+      "id": 6,
+      "labTestId": 5,
+      "observation": "Urinary Albumin-to-Creatinine Ratio",
+      "observationCode": "UACR",
+      "units": "mg/dL",
+      "ranges": "{\"men\":\"0.7-1.3 mg/dL\",\"women\":\"0.6-1.1 mg/dL\"}"
+    },
+    {
+      "id": 7,
+      "labTestId": 6,
+      "observation": "Total Cholesterol",
+      "observationCode": "TC",
+      "units": "mg/dL",
+      "ranges": "{\"totalCholesterol\": \"<200 mg/dL\"}"
+    },
+    {
+      "id": 8,
+      "labTestId": 6,
+      "observation": "LDL Cholesterol",
+      "observationCode": "LDL",
+      "units": "mg/g",
+      "ranges": "{\"normal\":\"<30 mg/g\",\"microalbuminuria\":\"30-299 mg/g\",\"macroalbuminuria\":\">=300 mg/g\"}"
+    },
+    {
+      "id": 9,
+      "labTestId": 6,
+      "observation": "HDL Cholesterol",
+      "observationCode": "HDL",
+      "units": "mg/dL",
+      "ranges": "{\"men\": \">=40 mg/dL\",\"women\": \">=50 mg/dL\"}"
+    },
+    {
+      "id": 10,
+      "labTestId": 6,
+      "observation": "Triglycerides",
+      "observationCode": "TG",
+      "units": "mg/dL",
+      "ranges": "{\"triglycerides\": \"<150 mg/dL\"}"
+    },
+    {
+      "id": 11,
+      "labTestId": 6,
+      "observation": "VLDL Cholesterol",
+      "observationCode": "VLDL",
+      "units": "mg/dL",
+      "ranges": "{ \"VLDLCholesterol\": \"5-30 mg/dL\"}"
+    },
+    {
+      "id": 12,
+      "labTestId": 6,
+      "observation": "Total Cholesterol/HDL Ratio",
+      "observationCode": "TC/HDL",
+      "units": null,
+      "ranges": "{\"totalCholesterolHDLRatio\": \"<5:1\"}"
+    },
+    {
+      "id": 13,
+      "labTestId": 7,
+      "observation": "Retinal Exam",
+      "observationCode": "RE",
+      "units": null,
+      "ranges": "{\"normal\":\"No abnormalities\",\"pathologicalIndicators\":[\"Microaneurysms\",\"Haemorrhages\",\"Cotton-wool spots\",\"Macular edema\",\"Retinal detachment\"]}"
+    },
+    {
+      "id": 14,
+      "labTestId": 8,
+      "observation": "Vitamin B12 Levels",
+      "observationCode": "B12",
+      "units": "pg/mL",
+      "ranges": "{\"normal\":\"200-900 pg/mL\",\"deficiency\":\"<200 pg/mL\"}"
+    },
+    {
+      "id": 15,
+      "labTestId": 9,
+      "observation": "TSH",
+      "observationCode": "TSH",
+      "units": "mIU/L",
+      "ranges": "{\"normal\":\"0.4-4.0 mIU/L\"}"
+    },
+    {
+      "id": 16,
+      "labTestId": 10,
+      "observation": "High-Sensitivity C-Reactive Protein",
+      "observationCode": "hs-CRP",
+      "units": "mg/L",
+      "ranges": "{\"lowRisk\":\"<1.0 mg/L\",\"moderateRisk\":\"1.0-3.0 mg/L\",\"highRisk\":\">3.0 mg/L\"}"
+    }
+  ]
+}

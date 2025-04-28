@@ -1,13 +1,16 @@
 import Back from '@components/Back';
+import MdLogTextInput from '@components/MdLogTextInput';
+import DateTimePicker from '@react-native-community/datetimepicker';
 import React, { useEffect, useState } from 'react';
-import { View, Text, TextInput, ScrollView, StyleSheet } from 'react-native';
+import { View, Text, TextInput, ScrollView, StyleSheet, Platform, TouchableOpacity, Button } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
 
 const LipidProfileScreen = () => {
 
     const [values, setValues] = useState({});
     const [loading, setLoading] = useState(true);
-
+    const [date, setDate] = useState(new Date());
+    const [showPicker, setShowPicker] = useState(false);
     const fields = [
         {
             "label": "Total Cholesterol",
@@ -68,36 +71,66 @@ const LipidProfileScreen = () => {
         setValues((prev) => ({ ...prev, [key]: value }));
     };
 
+    const onChangeDate = (event, selectedDate) => {
+       setShowPicker(false); 
+        if (selectedDate) {
+          setDate(selectedDate);
+        }
+       
+      };
+
+    const openDatePicker = () => {
+        setShowPicker(true);
+    };
+
     //if (loading) {
     //  return <ActivityIndicator style={{ marginTop: 50 }} />;
     // }
 
+
     return (
         <ScrollView >
             <View style={styles.container}>
-            <Back nav='LabTestScreen'/>
-            <Text style={styles.title}>Lipid Profile</Text>
-            <Text style={styles.date}>Collection Date: {new Date().toLocaleDateString()}</Text>
-            {fields.map((item) => (
-                <View key={item.key} style={styles.card}>
-                    <View style={styles.row}>
-                        <Text style={styles.label}>{item.label}</Text>
-
-                        <View style={styles.inputContainer}>
-                            <TextInput
-                                style={styles.input}
-                                placeholder="Enter"
-                                keyboardType="numeric"
-                                value={values[item.key] || ''}
-                                onChangeText={(text) => handleInputChange(item.key, text)}
-                            />
-                            <Text style={styles.unit}>{item.unit}</Text>
-                        </View>
-                    </View>
-
-                    <Text style={styles.note}>{item.note}</Text>
+                <Back nav='LabTestScreen' />
+               
+                <View style={styles.dateContainer}>
+                <Text style={styles.dateText}> Collection Date:</Text>
+                    <TouchableOpacity onPress={openDatePicker} style={styles.dateInputBox}>
+                        <Text style={styles.dateText}>
+                            {date.toLocaleDateString()}
+                        </Text>
+                    </TouchableOpacity>
+                   
                 </View>
-            ))}
+
+                {showPicker && (
+                    <DateTimePicker
+                        value={date}
+                        mode="date"
+                        display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+                        onChange={onChangeDate}
+                    />
+                )}
+                {fields.map((item) => (
+                    <View key={item.key} style={styles.card}>
+                        <View style={styles.row}>
+                            <Text style={styles.label}>{item.label}</Text>
+
+                            <View style={styles.inputContainer}>
+                                <TextInput
+                                    style={styles.input}
+                                    placeholder="Enter"
+                                    keyboardType="numeric"
+                                    value={values[item.key] || ''}
+                                    onChangeText={(text) => handleInputChange(item.key, text)}
+                                />
+                                <Text style={styles.unit}>{item.unit}</Text>
+                            </View>
+                        </View>
+
+                        <Text style={styles.note}>{item.note}</Text>
+                    </View>
+                ))}
             </View>
         </ScrollView>
     );
@@ -106,12 +139,11 @@ const LipidProfileScreen = () => {
 const styles = StyleSheet.create({
     container: {
         padding: 10,
-       
+
     },
     title: {
         fontSize: 22,
         fontWeight: '600',
-        textAlign: 'center',
         marginVertical: 12,
     },
     date: {
@@ -147,7 +179,7 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'row',
         alignItems: 'center',
-        marginLeft:70,
+        marginLeft: 70,
     },
 
     input: {
@@ -157,7 +189,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
         paddingVertical: 6,
         fontSize: 16,
-        width: 90, 
+        width: 90,
         marginRight: 8,
     },
 
@@ -173,6 +205,28 @@ const styles = StyleSheet.create({
         marginTop: 6,
     },
 
+    dateContainer: {
+        marginVertical: 10,
+        flexDirection:"row",
+        justifyContent:"flex-end",
+        alignItems:"center"
+    },
+    dateText: {
+        textAlign: 'center',
+        marginBottom: 10,
+        fontWeight: '500',
+        fontSize: 16, 
+        marginRight:10
+    },
+    dateInputBox: {
+        borderWidth: 1,
+        borderColor: '#ddd',
+        borderRadius: 8,
+        paddingVertical: 4,
+        width: 140,
+        backgroundColor: '#fff',
+       
+      },
 });
 
 export default LipidProfileScreen;

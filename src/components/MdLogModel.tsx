@@ -19,7 +19,7 @@ type Fields = {
 interface CustomModalProps {
     visible: boolean;
     onCancel: () => void;
-    onSave: (values: Record<string, string>) => void;
+    onSave: (values?: Record<string, string>) => void;
     fields: string[]; // List of field names
     title:string
     values: Record<string, string>

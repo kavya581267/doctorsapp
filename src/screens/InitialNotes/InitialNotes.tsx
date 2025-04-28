@@ -19,7 +19,7 @@ import { MdLogActivityIndicator } from '@components/MdLogActivityIndicator';
 import { patientService } from '@api/patientService';
 import { CreateInitialNoteRequest, CreateInitialNoteResponse, CreatePatientMedication, FileNoteRequest, PatientMedication, UpdateNoteRequest, UpdatePatientMedication } from '@api/model/patient/PatientModels';
 import Investigation from './Investigation';
-import { formatToYYYYMMDD, getFutureDate } from '@utils/utils';
+import { convertPatientMedicationResponseToPatientMedication, formatToYYYYMMDD, getFutureDate } from '@utils/utils';
 import { MdLodSnackbar } from '@components/MdLogSnacbar';
 const { width, height } = Dimensions.get("window");
 
@@ -36,6 +36,8 @@ const InitialNoteScreen = () => {
     const route = useRoute<RouteProp<RouteParams>>()
     const { facesheet, appointment } = route.params;
     const [loading, setLoading] = useState(false);
+    const [visible, setVisible] = useState(false);
+    const [errorMessage, setErrorMessage] = useState("");
     const [note, setNote] = useState<CreateInitialNoteResponse>();
     //
     const [presentingComplaints, setPresntingComplaints] = useState("");
@@ -56,6 +58,7 @@ const InitialNoteScreen = () => {
 
 
     const createPresentingComplaint = async (reqObj: InitialCommonNoteRequest) => {
+        setLoading(true)
         try {
             const resp = await doctorService.createPresentingComplaints(reqObj);
             masterData.presentingComplaints.push(resp);
@@ -63,10 +66,14 @@ const InitialNoteScreen = () => {
             await setMasterDataAdapter(newMasterDate);
             return resp;
         } catch (error) {
+            setErrorMessage(error.toString());
+            setVisible(true)
         }
+        setLoading(false)
     }
 
     const createProblems = async (reqObj: ProblemsRequest) => {
+        setLoading(true)
         try {
             const resp = await doctorService.createProblems(reqObj);
             masterData.problems.push(resp);
@@ -74,27 +81,27 @@ const InitialNoteScreen = () => {
             await setMasterDataAdapter(newMasterDate);
             return resp;
         } catch (error) {
-            
+            setErrorMessage(error.toString());
+            setVisible(true)
         }
+        setLoading(false)
     }
 
-    const createPatientMedication = async (patientMedication: UpdatePatientMedication, medicationId: string) => {
-        patientMedication.clinicId = appointment.clinicId.toString();
-        patientMedication.appointmentId = appointment.id.toString();
-        patientMedication.medicationId = medicationId;
+
+    const createPatientMedication = async (patientMedication: CreatePatientMedication, medicationId: string) => {
         setLoading(true)
         try {
-            //const resp = await patientService.createPatientMedication(appointment.patientId.toString(), medicationId,patientMedication);
-            const resp = await patientService.updatePatientMedication(appointment.patientId.toString(),patientMedication);
-            return resp;
+            const resp = await patientService.updatePatientMedication(appointment.patientId.toString(), medicationId, patientMedication);
+            return convertPatientMedicationResponseToPatientMedication(resp);
         } catch (error) {
-            setShowError(true)
-            setError(error.toString())
+            setErrorMessage(error.toString());
+            setVisible(true)
         }
         setLoading(false)
     }
 
     const createMedicalHistory = async (reqObj: InitialCommonNoteRequest) => {
+        setLoading(true)
         try {
             const resp = await doctorService.createPastMedicalHistory(reqObj);
             masterData.pastMedicalHistory.push(resp);
@@ -102,10 +109,14 @@ const InitialNoteScreen = () => {
             await setMasterDataAdapter(newMasterDate)
             return resp;
         } catch (error) {
+            setErrorMessage(error.toString());
+            setVisible(true)
         }
+        setLoading(false)
     }
 
     const createFamilyHistory = async (reqObj: InitialCommonNoteRequest) => {
+        setLoading(true)
         try {
             const resp = await doctorService.createFamilyHistory(reqObj);
             masterData.familyHistory.push(resp);
@@ -113,10 +124,14 @@ const InitialNoteScreen = () => {
             await setMasterDataAdapter(newMasterDate)
             return resp;
         } catch (error) {
+            setErrorMessage(error.toString());
+            setVisible(true)
         }
+        setLoading(false)
     }
 
     const createMedication = async (reqObj: MedicationsRequest) => {
+        setLoading(true)
         try {
             const resp = await doctorService.createMedications(reqObj);
             masterData.medications.push(resp);
@@ -124,10 +139,14 @@ const InitialNoteScreen = () => {
             await setMasterDataAdapter(newMasterDate)
             return resp;
         } catch (error) {
+            setErrorMessage(error.toString());
+            setVisible(true)
         }
+        setLoading(false)
     }
 
     const createInvestigation = async (reqObj: LabTestRequest) => {
+        setLoading(true)
         try {
             const resp = await doctorService.createLabTest(reqObj);
             masterData.labResults.push(resp);
@@ -135,7 +154,10 @@ const InitialNoteScreen = () => {
             await setMasterDataAdapter(newMasterDate)
             return resp;
         } catch (error) {
+            setErrorMessage(error.toString());
+            setVisible(true)
         }
+        setLoading(false)
     }
 
     async function fetchInitialNote() {
@@ -149,7 +171,8 @@ const InitialNoteScreen = () => {
             const initialNote = await patientService.createInitialNote(facesheet?.patient?.id.toString(), reqBody);
             setNote(initialNote);
         } catch (error) {
-
+            setErrorMessage(error.toString());
+            setVisible(true)
         }
         setLoading(false)
     }
@@ -174,6 +197,8 @@ const InitialNoteScreen = () => {
             const savedNote = await patientService.updateInitialNote(facesheet?.patient?.id, note.id, updateNoteReq);
             console.log(savedNote);
         } catch (error) {
+            setErrorMessage(error.toString());
+            setVisible(true)
         }
         setLoading(false)
     }
@@ -188,7 +213,8 @@ const InitialNoteScreen = () => {
             const resp = await patientService.fileInitialNote(facesheet.patient.id, note.id, fileNote);
             console.log(resp);
         } catch (error) {
-
+            setErrorMessage(error.toString());
+            setVisible(true)
         }
         setLoading(false)
 
@@ -219,6 +245,8 @@ const InitialNoteScreen = () => {
 
                         <PresentingComplaints noteSectionString={presentingComplaints} setNoteSectionString={setPresntingComplaints} setLoading={setLoading} title="Presenting Complaints"
                             addNewItemCommon={createPresentingComplaint} itemList={masterData.presentingComplaints} />
+                        <Medications patientMedications={patientMedications} setLoading={setLoading} title='Medications' addNewItemCommon={createMedication}
+                            createPatientMedication={createPatientMedication} itemList={masterData.medications} patientId={appointment.patientId.toString()} />
 
                         <Note setNoteSectionString={setPersonalHistory} title="Personal History" />
                         <PasMedHistory noteSectionString={pastMedicalHistory} setNoteSectionString={setPastMedicalHistory} setLoading={setLoading} title="Past Medical History"
@@ -239,8 +267,6 @@ const InitialNoteScreen = () => {
                             */
                         }
                         <Investigation noteSectionString={investigations} setNoteSectionString={setInvestigations} setLoading={setLoading} title="Investigation" addNewItemCommon={createInvestigation} itemList={masterData.labResults} />
-                        <Medications patientMedications={patientMedications} setLoading={setLoading} title='Medications' addNewItemCommon={createMedication} 
-                        createPatientMedication={createPatientMedication} itemList={masterData.medications} patientId={appointment.patientId.toString()} />
                         <Note setNoteSectionString={setPhysicalExamination} title="Physical Examination" />
                         <Note setNoteSectionString={setDiet} title="Diet" />
                         <Note setNoteSectionString={setExercise} title="Exercise" />
