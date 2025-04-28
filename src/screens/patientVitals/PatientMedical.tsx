@@ -5,12 +5,10 @@ import styles from "styles/patientMedicalStyle";
 import Back from "@components/Back";
 import { PatientMedicalParams, RootStackParamList } from "@components/MainNavigation";
 import { patientService } from "@api/patientService";
-import { FaceSheet, Vital, VitalsRequest } from "@api/model/patient/PatientModels";
+import { FaceSheet, PatientMedication, Vital, VitalsRequest } from "@api/model/patient/PatientModels";
 import { MdLogActivityIndicator } from "@components/MdLogActivityIndicator";
 import { getUser } from "@utils/loadContextDetails";
 import { UserInfo } from "@api/model/auth/Auth";
-import { Role } from "@api/model/enums";
-import HealthOverviewScreen from "@screens/InitialNotes/HealthOverview";
 import FabMenuScreen from "./FAB";
 import { ScrollView } from "react-native-gesture-handler";
 import { Feather, MaterialIcons } from "@expo/vector-icons";
@@ -18,9 +16,18 @@ import VitalsCard from "./ViewVital";
 import { COLORS } from "@utils/colors";
 import CustomModal from "@components/MdLogModel";
 import { MdLodSnackbar } from "@components/MdLogSnacbar";
+import { Role } from "@api/model/enums";
 
 type RoueParams = {
     params: PatientMedicalParams
+}
+
+export const createPatientMedication = async (reqObj: PatientMedication, medicationId: string, appointmentId: string) => {
+    try {
+       // const resp = await patientService.createPatientMedication(appointmentId, medicationId, reqObj);
+       // return resp;
+    } catch (error) {
+    }
 }
 
 
@@ -35,7 +42,9 @@ export default function PatientMedical() {
     const [visiblemodal, setShowModal] = useState(false);
     const [updateVitals, setUpdateVitals] = useState(false);
     const [error, setErrorMessage] = useState("Failed to load!!")
-    const [showError, setShowError] = useState(false)
+    const [showError, setShowError] = useState(false);
+    const [patientMedications, setPatientMedication] = useState<PatientMedication[]>([])
+
 
     const vital: Record<string, string> = {
         'Height (cms)': '',
@@ -78,6 +87,7 @@ export default function PatientMedical() {
         SetUser(userDetails);
         const factSheetData = await patientService.fetchFactSheet(appointment.patientId.toString());
         const vital = factSheetData.vitals && factSheetData.vitals.find((v) => v.appointment_id === appointment.id);
+        setPatientMedication([...factSheetData.medications])
         setAppointmetVital(vital)
         setFaceSheet(factSheetData)
         setLoading(false);
@@ -212,6 +222,9 @@ export default function PatientMedical() {
                         {
                             //Vitals  end , Medications start
                         }
+                        {
+
+                        }
 
                         <View style={{ flex: 1, flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginTop: 20 }}>
                             <Text style={{
@@ -219,16 +232,10 @@ export default function PatientMedical() {
                                 fontWeight: 'bold',
                                 color: '#ff4d6d',
                             }}>💊 Medications:</Text>
-                            {
-                                !appointmetVital &&
-                                <TouchableOpacity style={{ flexDirection: "row" }} onPress={() => setShowModal(true)}>
-                                    <Text style={{ color: COLORS.primary }}> <Feather name="plus" size={20} color={COLORS.primary} /> Add</Text>
-                                </TouchableOpacity>
-                            }
 
                             {
-                                appointmetVital &&
-                                <TouchableOpacity style={{ flexDirection: "row" }} onPress={editVitalsPress}>
+                                 user.roles && user.roles.find((role) => role === Role.DOCTOR) &&
+                                <TouchableOpacity style={{ flexDirection: "row" }} onPress={() => navigation.navigate("CreatePatientMedication", { appointment: appointment, facesheet:faceSheetData })}>
                                     <Text style={{ color: COLORS.primary, fontWeight: "500" }}> <Feather name="edit" size={15} color={COLORS.primary} /> Edit</Text>
                                 </TouchableOpacity>
                             }
@@ -237,18 +244,33 @@ export default function PatientMedical() {
                         {
                             faceSheetData?.medications && faceSheetData?.medications.length > 0 &&
                             <View style={{ marginTop: 10 }}>
-                                {faceSheetData?.medications.map((item, key) => <Text>{item}</Text>)}
+                                {faceSheetData?.medications.map((item, key) => <Text>{item.medicationName}</Text>)}
                             </View>
                         }
 
                         {
-                            // Medications end, 
+                            // Medications end, lab
                         }
+
+                        <View style={{ flex: 1, flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginTop: 20 }}>
+                            <Text style={{
+                                fontSize: 15,
+                                fontWeight: 'bold',
+                                color: '#ff4d6d',
+                            }}>🔬 Lab Results:</Text>
+
+                            {
+                                !appointmetVital && user.roles && user.roles.find((role) => role !== Role.DOCTOR && role !== Role.ADMIN) &&
+                                <TouchableOpacity style={{ flexDirection: "row" }} onPress={() => {navigation.navigate("LabTestScreen")}}>
+                                    <Text style={{ color: COLORS.primary, fontWeight: "500" }}> <Feather name="edit" size={15} color={COLORS.primary} /> Edit</Text>
+                                </TouchableOpacity>
+                            }
+
+                        </View>
 
                         {
                             faceSheetData?.labResults && faceSheetData?.labResults.length > 0 &&
                             <View style={{ marginTop: 20 }}>
-                                <Text style={{ fontWeight: "700", fontSize: 16 }}>🔬 Lab Results</Text>
                                 {faceSheetData?.labResults.map((item, key) => <Text>{item}</Text>)}
                             </View>
                         }
@@ -264,18 +286,21 @@ export default function PatientMedical() {
                 </View>
                 <CustomModal values={vitalRecord} title="💓 Add Vitals" fields={fields} visible={visiblemodal} onCancel={() => setShowModal(false)} onSave={storeVitals} />
             </ScrollView>
-            <TouchableOpacity style={{
-                backgroundColor: COLORS.primary,
-                paddingVertical: 14,
-                borderRadius: 12,
-                alignItems: 'center'
-            }} onPress={() => navigation.navigate("InitialNote", { appointment: appointment, facesheet: faceSheetData })}>
-                <Text style={{
-                    color: '#fff',
-                    fontSize: 16,
-                    fontWeight: '600',
-                }}>+ Initial Note</Text>
-            </TouchableOpacity>
+            {
+                user.roles && user.roles.find((role) => role === Role.DOCTOR) &&
+                <TouchableOpacity style={{
+                    backgroundColor: COLORS.primary,
+                    paddingVertical: 14,
+                    borderRadius: 12,
+                    alignItems: 'center'
+                }} onPress={() => navigation.navigate("InitialNote", { appointment: appointment, facesheet: faceSheetData })}>
+                    <Text style={{
+                        color: '#fff',
+                        fontSize: 16,
+                        fontWeight: '600',
+                    }}>+ Initial Note</Text>
+                </TouchableOpacity>
+            }
             <MdLodSnackbar visible={showError} message={error} onDismiss={() => setShowError(false)} />
             <FabMenuScreen action={actions} onPress={fabPress} />
         </View>
@@ -289,38 +314,43 @@ const actions = [
         text: "Medications",
         icon: <MaterialIcons name="medication" size={20} color="#fff" />,
         name: "medications",
-        position: 1
-    },
-    {
-        text: "Past Notes",
-        icon: <MaterialIcons name="notes" size={20} color="#fff" />,
-        name: "past_notes",
-        position: 2
+        position: 1,
+        textColor: COLORS.white,
+        textBackground: COLORS.secondary
     },
     {
         text: "Record Lab Results",
         icon: <MaterialIcons name="science" size={20} color="#fff" />,
         name: "lab_results",
-        position: 3
+        position: 3,
+        textColor: COLORS.white,
+        textBackground: COLORS.secondary
     },
     {
         text: "Patient Readings",
         icon: <MaterialIcons name="monitor-heart" size={20} color="#fff" />,
         name: "patient_readings",
-        position: 4
+        position: 4,
+        textColor: COLORS.white,
+        textBackground: COLORS.secondary
     },
     {
         text: "Home",
         icon: <MaterialIcons name="home" size={20} color="#fff" />,
         name: "home",
-        position: 5
+        position: 5,
+        textColor: COLORS.white,
+        textBackground: COLORS.secondary
     },
     {
         text: "Cancel",
         icon: <MaterialIcons name="cancel" size={20} color="#fff" />,
         name: "cancel",
         position: 6,
-        color: "#f44336"
+        color: "#f44336",
+
+        textColor: COLORS.white,
+        textBackground: COLORS.red
     }
 ];
 

@@ -8,7 +8,7 @@ import {
   StyleSheet,
   Alert,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import Back from '@components/Back';
 import { COLORS } from '@utils/colors';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
@@ -23,6 +23,7 @@ import { Badge, Chip, Modal, Portal } from 'react-native-paper';
 import { convertTo12Hour, formatDateToMonthDay, formatToYYYYMMDD, getFutureDate, getPastDate } from '@utils/utils';
 import { RootStackParamList } from '@components/MainNavigation';
 import FilterableAppointments from './Filter';
+import FabMenuScreen from './patientVitals/FAB';
 
 const AppointmentsListScreen = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
@@ -71,6 +72,16 @@ const AppointmentsListScreen = () => {
       return styles.activeBadgeNoshow
     }
   }
+
+  const fabPress = (screen: string) => {
+    if (screen === "inprogress_notes") {
+      navigation.navigate("InProgressNotes")
+    }
+    if (screen === "past_notes") {
+      navigation.navigate("LabTestScreen")
+    }
+  }
+
   const fetchAppointments = async () => {
     const loggedinUserInfo = await getUser();
     let response: AppointmentListResponse[] = [];
@@ -222,7 +233,7 @@ const AppointmentsListScreen = () => {
         keyExtractor={(item) => item.id.toString()}
       />
 
-   
+
       <TouchableOpacity style={styles.addButton} onPress={() => navigation.navigate('BookAppointmentScreen')}>
         <Text style={styles.addButtonText}>+ Book Appointment</Text>
       </TouchableOpacity>
@@ -281,11 +292,39 @@ const AppointmentsListScreen = () => {
           </View>
         </View>
       )}
-
+      <FabMenuScreen action={actions} onPress={fabPress} />
       <MdLogActivityIndicator loading={loading} />
     </View>
   );
 };
+
+const actions = [
+  {
+    text: "InProgress Notes",
+    icon: <MaterialIcons name="medication" size={20} color="#fff" />,
+    name: "inprogress_notes",
+    position: 1,
+    textColor: COLORS.white,
+    textBackground: COLORS.secondary
+  },
+  {
+    text: "Past Notes",
+    icon: <MaterialIcons name="medication" size={20} color="#fff" />,
+    name: "past_notes",
+    position: 2,
+    textColor: COLORS.white,
+    textBackground: COLORS.secondary
+  },
+  {
+    text: "Cancel",
+    icon: <MaterialIcons name="cancel" size={20} color="#fff" />,
+    name: "cancel",
+    position: 3,
+    color: "#f44336",
+    textColor: COLORS.white,
+    textBackground: COLORS.red
+  }
+];
 
 const styles = StyleSheet.create({
   container: { padding: 16, flex: 1, backgroundColor: '#fff' },

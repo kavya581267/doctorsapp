@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity, Image } from "react-native";
 import styles from "@styles/launchScreenStyles";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { RootStackParamList } from "@components/MainNavigation";
+import Footer from "@components/Footer";
 
 
 
@@ -27,6 +28,7 @@ export default function LaunchScreen() {
                     <Text style={styles.signTxt}>Sign Up</Text>
                 </TouchableOpacity>
             </View>
+            <Footer/>
         </View>
     );
 }

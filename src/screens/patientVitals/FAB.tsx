@@ -32,7 +32,8 @@ export default function FabMenuScreen({onPress, action}:Props) {
                 color={COLORS.secondary}
                 floatingIcon={<MaterialIcons name="add" size={24} color="#fff" />}
                 position="right" // this sets it to bottom-right
-                distanceToEdge={20} // distance from screen edges
+                distanceToEdge={10} // distance from screen edges
+                animated
             />
         </View>
     );
@@ -43,6 +44,6 @@ const styles = StyleSheet.create({
         backgroundColor: "#fff",
         position: 'absolute',
         bottom: 60,
-        right: 20,
+        right: 0,
     }
 });

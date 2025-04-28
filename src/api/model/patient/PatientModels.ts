@@ -147,15 +147,46 @@ export class VitalsResponse {
   updatedAt: string;
 }
 
-export interface MedicationRequest {
-  clinicId: string;
-  medicationId: string;
+export class PatientMedication {
+  id: number;
+  medicationId: number;
+  medicationName: string;
+  genericName: string | null;
+  dosage: string;
+  frequency: string;
+  instructions: string | null;
+  prescribedByName: string;
+  startDate: string;
+  endDate: string | null;
+  status: string;
+  patientId: number;
+  clinicId: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export class CreatePatientMedication {
   dosage: string;
   frequency: string;
   startDate: string;
   endDate: string;
   instructions: string;
+  dosageUnit: string;
+  formulation: string;
+  route: string;
+  timePhase: string;
+  medicationSchedule: string;
+  days: string;
+  status: string;
 }
+
+export class UpdatePatientMedication extends CreatePatientMedication {
+  clinicId: string;
+  medicationId: string
+  appointmentId: string
+}
+
+
 
 export interface LabTestUpdateRequest {
   status: string;
@@ -268,7 +299,7 @@ export interface Vital {
 export interface FaceSheet {
   hasAppointment: boolean
   labResults: string[]
-  medications: string[]
+  medications: PatientMedication[]
   newAppointment: true
   patient: PatientResponse
   problems: string[]
