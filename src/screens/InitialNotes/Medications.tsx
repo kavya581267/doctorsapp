@@ -58,12 +58,16 @@ export default function MedicationScreen({ title, itemList, addNewItemCommon, se
     }));
 
     const addPatientMedication = async (item: CreatePatientMedication, medicationId: string) => {
-        const patientMedication =  await createPatientMedication(item,medicationId)
-        if (!selectedItems.some((selected) => selected.id === patientMedication.id)) {
-            setSelectedItems((prevItems) => [...prevItems, patientMedication]);
+        try{
+            const patientMedication =  await createPatientMedication(item,medicationId)
+            if (!selectedItems.some((selected) => selected.id === patientMedication.id)) {
+                setSelectedItems((prevItems) => [...prevItems, patientMedication]);
+            }
+            setSearchText("");
+            setSel("");
+        }catch(error){
         }
-        setSearchText("");
-        setSel("");
+        
     };
 
     const remove = (item: PatientMedication) => {
@@ -105,9 +109,7 @@ export default function MedicationScreen({ title, itemList, addNewItemCommon, se
         }
     };
 
-    const formatTiming = (timing: { M: boolean; A: boolean; N: boolean }) => {
-        return `${timing.M ? 1 : 0}-${timing.A ? 1 : 0}-${timing.N ? 1 : 0}`;
-    };
+    
 
     const updateNoteString = () => {
         

@@ -52,6 +52,7 @@ const InitialNoteScreen = () => {
 
 
     const createPresentingComplaint = async (reqObj: InitialCommonNoteRequest) => {
+        setLoading(true)
         try {
             const resp = await doctorService.createPresentingComplaints(reqObj);
             masterData.presentingComplaints.push(resp);
@@ -60,9 +61,11 @@ const InitialNoteScreen = () => {
             return resp;
         } catch (error) {
         }
+        setLoading(false)
     }
 
     const createProblems = async (reqObj: ProblemsRequest) => {
+        setLoading(true)
         try {
             const resp = await doctorService.createProblems(reqObj);
             masterData.problems.push(resp);
@@ -72,9 +75,11 @@ const InitialNoteScreen = () => {
         } catch (error) {
             
         }
+        setLoading(false)
     }
 
     const createPatientMedication = async (patientMedication: CreatePatientMedication, medicationId: string) => {
+        setLoading(true)
         try {
             //const resp = await patientService.createPatientMedication(appointment.patientId.toString(), medicationId,patientMedication);
             const resp = await patientService.updatePatientMedication(appointment.patientId.toString(),medicationId, patientMedication);
@@ -82,9 +87,11 @@ const InitialNoteScreen = () => {
         } catch (error) {
             
         }
+        setLoading(false)
     }
 
     const createMedicalHistory = async (reqObj: InitialCommonNoteRequest) => {
+        setLoading(true)
         try {
             const resp = await doctorService.createPastMedicalHistory(reqObj);
             masterData.pastMedicalHistory.push(resp);
@@ -93,9 +100,11 @@ const InitialNoteScreen = () => {
             return resp;
         } catch (error) {
         }
+        setLoading(false)
     }
 
     const createFamilyHistory = async (reqObj: InitialCommonNoteRequest) => {
+        setLoading(true)
         try {
             const resp = await doctorService.createFamilyHistory(reqObj);
             masterData.familyHistory.push(resp);
@@ -104,9 +113,11 @@ const InitialNoteScreen = () => {
             return resp;
         } catch (error) {
         }
+        setLoading(false)
     }
 
     const createMedication = async (reqObj: MedicationsRequest) => {
+        setLoading(true)
         try {
             const resp = await doctorService.createMedications(reqObj);
             masterData.medications.push(resp);
@@ -115,9 +126,11 @@ const InitialNoteScreen = () => {
             return resp;
         } catch (error) {
         }
+        setLoading(false)
     }
 
     const createInvestigation = async (reqObj: LabTestRequest) => {
+        setLoading(true)
         try {
             const resp = await doctorService.createLabTest(reqObj);
             masterData.labResults.push(resp);
@@ -126,6 +139,7 @@ const InitialNoteScreen = () => {
             return resp;
         } catch (error) {
         }
+        setLoading(false)
     }
 
     async function fetchInitialNote() {

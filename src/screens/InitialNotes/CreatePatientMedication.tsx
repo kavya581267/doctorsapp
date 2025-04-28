@@ -10,6 +10,8 @@ import { RouteProp, useRoute } from "@react-navigation/native";
 import { patientService } from "@api/patientService";
 import { CreatePatientMedication, PatientMedication } from "@api/model/patient/PatientModels";
 import { convertPatientMedicationResponseToPatientMedication } from "@utils/utils";
+import { MdLogActivityIndicator } from "@components/MdLogActivityIndicator";
+import { MdLodSnackbar } from "@components/MdLogSnacbar";
 
 type RoueParams = {
     params: InitialNotesParams
@@ -19,6 +21,8 @@ const CreatePatientMedicationScreen = () => {
 
     const [drugHistory, setDrugHistory] = useState("");
     const [loading, setLoading] = useState(false);
+    const [error, setError] = useState("");
+    const [visibleError, setVisibleError] = useState(false);
     const { masterData, setMasterDataAdapter } = useContext(AuthContext);
     const route = useRoute<RouteProp<RoueParams>>();
     const { appointment, facesheet } = route.params;
@@ -26,6 +30,7 @@ const CreatePatientMedicationScreen = () => {
 
 
     const createPatientMedication = async (reqObj: CreatePatientMedication, mId:string) => {
+        setLoading(true);
         try {
             reqObj.clinicId = appointment.clinicId.toString();
             reqObj.medicationId = mId;
@@ -33,8 +38,11 @@ const CreatePatientMedicationScreen = () => {
             const resp = await patientService.createPatientMedication(appointment.patientId.toString(), reqObj);
             return convertPatientMedicationResponseToPatientMedication(resp);
         } catch (error) {
-
+            setVisibleError(true)
+            setError(error.toString())
+            throw error;
         }
+        setLoading(false)
     }
 
     const createMedication = async (reqObj: MedicationsRequest) => {
@@ -53,6 +61,8 @@ const CreatePatientMedicationScreen = () => {
             <Back nav="PatientMedical" routeParam={{ appointment: appointment }} />
             <MedicationScreen patientMedications={patientMedications} setLoading={setLoading} title='Medications' addNewItemCommon={createMedication}
                 createPatientMedication={createPatientMedication} itemList={masterData.medications} patientId={appointment.patientId.toString()} />
+                <MdLogActivityIndicator loading={loading}/>
+                <MdLodSnackbar  message={error} visible={visibleError} onDismiss={()=>setVisibleError(false)}/>
         </View>
     )
 }

@@ -32,10 +32,12 @@ const MedicationsPopUp: React.FC<Props> = ({ selectedItem, modalVisible, onClose
         onClose();
     };
 
+    const formatTiming = (timing: { M: boolean; A: boolean; N: boolean }) => {
+        return `${timing.M ? 1 : 0}-${timing.A ? 1 : 0}-${timing.N ? 1 : 0}`;
+    };
+
     const handleSave = () => {
-        const item = new MedicalHistoryNote();
         const patientMedication = new CreatePatientMedication();
-        item.id = selectedItem.id;
         patientMedication.days = duration;
         patientMedication.dosage = selectedItem.dosage;
         patientMedication.frequency = selectedFrequency;
@@ -43,17 +45,9 @@ const MedicationsPopUp: React.FC<Props> = ({ selectedItem, modalVisible, onClose
         patientMedication.startDate = formatToYYYYMMDD(new Date());
         patientMedication.endDate = getFutureDate(new Date(), Number(duration));
         patientMedication.timePhase = beforeFood ? "Before": "After";
-        patientMedication.medicationSchedule = "1-1-1"
+        patientMedication.medicationSchedule = formatTiming(timing)
         patientMedication.dosageUnit = selectedItem.dosageUnit;
         patientMedication.formulation = selectedItem.dosageForm;
-
-
-        item.name = selectedItem.medicationName;
-        item.howlong = Number(duration);
-        item.food = beforeFood;
-        item.type = timing;
-        item.frequency = selectedFrequency;
-        item.route = selectedRoute;
         onSave(patientMedication, selectedItem.id.toString());
         onClose();
     };
