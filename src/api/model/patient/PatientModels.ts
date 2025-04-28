@@ -171,6 +171,31 @@ export class PatientMedication {
   updated_at: string;
 }
 
+export class PatientMedicationResponse {
+  id: number;
+  clinicId: number;
+  patientId: number;
+  medicationId: number;
+  appointmentId: number | null;
+  medicationName: string;
+  genericName: string | null;
+  prescribedByName: string;
+  dosage: string;
+  frequency: string;
+  startDate: string; // ISO Date string
+  endDate: string;   // ISO Date string
+  instructions: string;
+  dosageUnit: string;
+  formulation: string;
+  route: string;
+  timePhase: string;
+  medicationSchedule: string;
+  days: string;
+  status: string;
+  createdAt: string; // ISO Date-Time string
+  updatedAt: string; // ISO Date-Time string
+}
+
 export class UpdatePatientMedication {
   dosage: string;
   frequency: string;

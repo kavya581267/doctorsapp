@@ -10,6 +10,7 @@ import MedicationsPopUp from "./MedicationsPopUp";
 import { Divider } from "react-native-paper";
 import { CreatePatientMedication, PatientMedication, UpdatePatientMedication } from "@api/model/patient/PatientModels";
 import { patientService } from "@api/patientService";
+import { getPatientMedicationString } from "@utils/utils";
 
 export class MedicalHistoryNote extends Symptom {
     howlong: number
@@ -33,7 +34,7 @@ type Props = {
 
 export default function MedicationScreen({ title, itemList, addNewItemCommon, setLoading, patientMedications, createPatientMedication, patientId }: Props) {
     const [searchText, setSearchText] = useState("");
-    const [selectedItems, setSelectedItems] = useState<PatientMedication[]>([]);
+    const [selectedItems, setSelectedItems] = useState<PatientMedication[]>([...patientMedications]);
     const { loggedInUserContext } = useContext(AuthContext);
     const [visible, setVisible] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
@@ -51,8 +52,8 @@ export default function MedicationScreen({ title, itemList, addNewItemCommon, se
     const [formulation, setFormulation] = useState('');
 
     const dropdownData = itemList.map((item) => ({
-        label: item.medicationName + " " + item.dosage + item.dosageUnit + " " + item.dosageForm,
-        value: item.medicationName + " " + item.dosage + item.dosageUnit + " " + item.dosageForm,
+        label: item.medicationName + " " + item.dosage + item?.dosageUnit + " " + item.dosageForm,
+        value: item.medicationName + " " + item.dosage + item?.dosageUnit + " " + item.dosageForm,
         id: item.id,
     }));
 
@@ -161,7 +162,7 @@ export default function MedicationScreen({ title, itemList, addNewItemCommon, se
                 {selectedItems.length > 0 && (
                     selectedItems.map((item, index) => (
                         <View key={index} style={styles.selectedChip}>
-                            <Text>{item.medicationName + " " + item.dosage + ", " + item.frequency }</Text>
+                            <Text>{getPatientMedicationString(item)}</Text>
                             <TouchableOpacity onPress={() => remove(item)}>
                                 <Icon name="close-circle" size={18} color="grey" style={styles.removeIcon} />
                             </TouchableOpacity>

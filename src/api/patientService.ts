@@ -4,7 +4,7 @@ import { AdminRegistarationRequest, AdminRegistrationResponse } from "./model/au
 import { ClinicResponse } from "./model/clinic/ClinicResponse";
 import { Staff } from "./model/staff/Staff";
 import { replacePlaceholders } from "@utils/utils";
-import { AppointmentRequest, AppointmentResponse, AppointmentUpdateRequest, CreateInitialNoteRequest, CreateInitialNoteResponse, CreatePatientMedication, FaceSheet, FileNoteRequest, PatientMedication, PatientResponse, UpdateNoteRequest, UpdatePatientMedication, VitalsRequest, VitalsResponse } from "./model/patient/PatientModels";
+import { AppointmentRequest, AppointmentResponse, AppointmentUpdateRequest, CreateInitialNoteRequest, CreateInitialNoteResponse, CreatePatientMedication, FaceSheet, FileNoteRequest, PatientMedication, PatientMedicationResponse, PatientResponse, UpdateNoteRequest, UpdatePatientMedication, VitalsRequest, VitalsResponse } from "./model/patient/PatientModels";
 
 
 
@@ -113,7 +113,7 @@ export const patientService = {
             throw error
         }
     },
-    createPatientMedication: async (patientId: string, patientMedication:CreatePatientMedication):Promise<PatientMedication> => {
+    createPatientMedication: async (patientId: string, patientMedication:CreatePatientMedication):Promise<PatientMedicationResponse> => {
         try {
             const resp = await apiService.post(replacePlaceholders(SAVE_PATIENT_MEDICATION, {id: patientId}),patientMedication);
             return resp.data;
@@ -121,7 +121,7 @@ export const patientService = {
             throw error
         }
     },
-    updatePatientMedication: async (patientId: string,medicationId:string,  patientMedication:UpdatePatientMedication):Promise<PatientMedication> => {
+    updatePatientMedication: async (patientId: string,medicationId:string,  patientMedication:UpdatePatientMedication):Promise<PatientMedicationResponse> => {
         try {
             const resp = await apiService.put(replacePlaceholders(UPDATE_PATIENT_MEDICATION, {id: patientId, medicationId: medicationId}),patientMedication);
             return resp.data;

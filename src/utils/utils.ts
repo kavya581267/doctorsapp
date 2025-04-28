@@ -1,5 +1,5 @@
 import { Medication } from "@api/model/doctor/MasterData";
-import { PatientMedication } from "@api/model/patient/PatientModels";
+import { PatientMedication, PatientMedicationResponse } from "@api/model/patient/PatientModels";
 
 export const isEmptyString = (value: string): boolean => {
   return !value || value.trim().length === 0
@@ -110,5 +110,34 @@ export const getPatientMedicationString = (patientMed: PatientMedication) => {
   return `${patientMed.formulation} ${patientMed.medication_name} ${patientMed?.dosage}${patientMed?.dosage_unit}, ${patientMed.frequency} 
   ${patientMed.medication_schedule} ${patientMed.time_phase} Food for ${patientMed.days || patientMed.days.trim().length === 0 ? 0 : patientMed.days} days - ${patientMed.route}`
   
+}
+
+
+export const convertPatientMedicationResponseToPatientMedication = (resp:PatientMedicationResponse) => {
+
+  const pr = new PatientMedication();
+  pr.id = resp.id;
+  pr.clinic_id = resp.clinicId;
+  pr.patient_id = resp.patientId;
+  pr.medication_id = resp.medicationId;
+  pr.medication_name = resp.medicationName;
+  pr.generic_name = resp.genericName;
+  pr.prescribed_by_name = resp.prescribedByName;
+  pr.dosage = resp.dosage;
+  pr.frequency = resp.frequency;
+  pr.start_date = resp.startDate;
+  pr.end_date = resp.endDate;
+  pr.instructions = resp.instructions;
+  pr.dosage_unit = resp.dosageUnit;
+  pr.formulation = resp.formulation;
+  pr.route = resp.route;
+  pr.time_phase = resp.timePhase;
+  pr.medication_schedule = resp.medicationSchedule;
+  pr.days = resp.days;
+  pr.status = resp.status;
+  pr.created_at = resp.createdAt;
+  pr.updated_at = resp.updatedAt;
+  return pr;
+
 }
 

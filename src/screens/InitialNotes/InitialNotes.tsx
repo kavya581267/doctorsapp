@@ -19,7 +19,7 @@ import { MdLogActivityIndicator } from '@components/MdLogActivityIndicator';
 import { patientService } from '@api/patientService';
 import { CreateInitialNoteRequest, CreateInitialNoteResponse, CreatePatientMedication, FileNoteRequest, PatientMedication, UpdateNoteRequest, UpdatePatientMedication } from '@api/model/patient/PatientModels';
 import Investigation from './Investigation';
-import { formatToYYYYMMDD, getFutureDate } from '@utils/utils';
+import { convertPatientMedicationResponseToPatientMedication, formatToYYYYMMDD, getFutureDate } from '@utils/utils';
 const { width, height } = Dimensions.get("window");
 
 
@@ -78,7 +78,7 @@ const InitialNoteScreen = () => {
         try {
             //const resp = await patientService.createPatientMedication(appointment.patientId.toString(), medicationId,patientMedication);
             const resp = await patientService.updatePatientMedication(appointment.patientId.toString(),medicationId, patientMedication);
-            return resp;
+            return convertPatientMedicationResponseToPatientMedication(resp);
         } catch (error) {
             
         }

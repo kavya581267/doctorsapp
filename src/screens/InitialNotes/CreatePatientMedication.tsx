@@ -9,6 +9,7 @@ import { InitialNotesParams, PatientMedicalParams } from "@components/MainNaviga
 import { RouteProp, useRoute } from "@react-navigation/native";
 import { patientService } from "@api/patientService";
 import { CreatePatientMedication, PatientMedication } from "@api/model/patient/PatientModels";
+import { convertPatientMedicationResponseToPatientMedication } from "@utils/utils";
 
 type RoueParams = {
     params: InitialNotesParams
@@ -30,7 +31,7 @@ const CreatePatientMedicationScreen = () => {
             reqObj.medicationId = mId;
             reqObj.appointmentId = appointment.id.toString();
             const resp = await patientService.createPatientMedication(appointment.patientId.toString(), reqObj);
-            return resp;
+            return convertPatientMedicationResponseToPatientMedication(resp);
         } catch (error) {
 
         }
