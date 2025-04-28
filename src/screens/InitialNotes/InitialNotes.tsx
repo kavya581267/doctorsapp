@@ -17,7 +17,7 @@ import { RouteProp, useRoute } from '@react-navigation/native';
 import { InitialNotesParams } from '@components/MainNavigation';
 import { MdLogActivityIndicator } from '@components/MdLogActivityIndicator';
 import { patientService } from '@api/patientService';
-import { CreateInitialNoteRequest, CreateInitialNoteResponse, FileNoteRequest, PatientMedication, UpdateNoteRequest } from '@api/model/patient/PatientModels';
+import { CreateInitialNoteRequest, CreateInitialNoteResponse, CreatePatientMedication, FileNoteRequest, PatientMedication, UpdateNoteRequest, UpdatePatientMedication } from '@api/model/patient/PatientModels';
 import Investigation from './Investigation';
 import { formatToYYYYMMDD, getFutureDate } from '@utils/utils';
 const { width, height } = Dimensions.get("window");
@@ -68,6 +68,19 @@ const InitialNoteScreen = () => {
             masterData.problems.push(resp);
             const newMasterDate = { ...masterData };
             await setMasterDataAdapter(newMasterDate);
+            return resp;
+        } catch (error) {
+            
+        }
+    }
+
+    const createPatientMedication = async (patientMedication: UpdatePatientMedication, medicationId: string) => {
+        patientMedication.clinicId = appointment.clinicId.toString();
+        patientMedication.appointmentId = appointment.id.toString();
+        patientMedication.medicationId = medicationId;
+        try {
+            //const resp = await patientService.createPatientMedication(appointment.patientId.toString(), medicationId,patientMedication);
+            const resp = await patientService.updatePatientMedication(appointment.patientId.toString(),patientMedication);
             return resp;
         } catch (error) {
             
@@ -219,7 +232,8 @@ const InitialNoteScreen = () => {
                             */
                         }
                         <Investigation noteSectionString={investigations} setNoteSectionString={setInvestigations} setLoading={setLoading} title="Investigation" addNewItemCommon={createInvestigation} itemList={masterData.labResults} />
-                        <Medications patientMedications={patientMedications} setPatientMedications={setPatientMedication} setLoading={setLoading} title='Medications' addNewItemCommon={createMedication} itemList={masterData.medications} />
+                        <Medications patientMedications={patientMedications} setLoading={setLoading} title='Medications' addNewItemCommon={createMedication} 
+                        createPatientMedication={createPatientMedication} itemList={masterData.medications} patientId={appointment.patientId.toString()} />
                         <Note setNoteSectionString={setPhysicalExamination} title="Physical Examination" />
                         <Note setNoteSectionString={setDiet} title="Diet" />
                         <Note setNoteSectionString={setExercise} title="Exercise" />

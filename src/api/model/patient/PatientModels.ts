@@ -147,7 +147,7 @@ export class VitalsResponse {
   updatedAt: string;
 }
 
-export interface PatientMedication {
+export class PatientMedication {
   id: number;
   medicationId: number;
   medicationName: string;
@@ -164,6 +164,29 @@ export interface PatientMedication {
   createdAt: string;
   updatedAt: string;
 }
+
+export class CreatePatientMedication {
+  dosage: string;
+  frequency: string;
+  startDate: string;
+  endDate: string;
+  instructions: string;
+  dosageUnit: string;
+  formulation: string;
+  route: string;
+  timePhase: string;
+  medicationSchedule: string;
+  days: string;
+  status: string;
+}
+
+export class UpdatePatientMedication extends CreatePatientMedication {
+  clinicId: string;
+  medicationId: string
+  appointmentId: string
+}
+
+
 
 export interface LabTestUpdateRequest {
   status: string;

@@ -8,7 +8,8 @@ import { MdLodSnackbar } from "@components/MdLogSnacbar";
 import { Dropdown } from "react-native-element-dropdown";
 import MedicationsPopUp from "./MedicationsPopUp";
 import { Divider } from "react-native-paper";
-import { PatientMedication } from "@api/model/patient/PatientModels";
+import { CreatePatientMedication, PatientMedication, UpdatePatientMedication } from "@api/model/patient/PatientModels";
+import { patientService } from "@api/patientService";
 
 export class MedicalHistoryNote extends Symptom {
     howlong: number
@@ -20,16 +21,17 @@ export class MedicalHistoryNote extends Symptom {
 
 type Props = {
     title: string;
-    itemList: Medication[];
-    addNewItemCommon: (reqObj: MedicationsRequest) => Promise<MedicationsResponse>;
+    patientId: string;
+    itemList: Medication[]; // master sheet medicines
+    addNewItemCommon: (reqObj: MedicationsRequest) => Promise<MedicationsResponse>; // to add a new medicine to master sheet
     setLoading: (load: boolean) => void
-    patientMedications: PatientMedication[]
-    setPatientMedications: (patientMedications: PatientMedication[]) => void
+    patientMedications: PatientMedication[] // patient medications
+    createPatientMedication: (patientMedication: CreatePatientMedication | UpdatePatientMedication, medicationId: string) => Promise<PatientMedication> // create/update patient medication
 };
 
 
 
-export default function MedicationScreen({ title, itemList, addNewItemCommon, setLoading, patientMedications, setPatientMedications }: Props) {
+export default function MedicationScreen({ title, itemList, addNewItemCommon, setLoading, patientMedications, createPatientMedication, patientId }: Props) {
     const [searchText, setSearchText] = useState("");
     const [selectedItems, setSelectedItems] = useState<PatientMedication[]>([]);
     const { loggedInUserContext } = useContext(AuthContext);
@@ -54,9 +56,11 @@ export default function MedicationScreen({ title, itemList, addNewItemCommon, se
         id: item.id,
     }));
 
-    const addItem = (item: MedicalHistoryNote) => {
-        if (!selectedItems.some((selected) => selected.id === item.id)) {
-            //setSelectedItems((prevItems) => [...prevItems, item]);
+    const addPatientMedication = async (item: CreatePatientMedication, medicationId: string) => {
+        createPatientMedication(item,medicationId)
+        const patientMedication =  await patientService.createPatientMedication(patientId,medicationId,item);
+        if (!selectedItems.some((selected) => selected.id === patientMedication.id)) {
+            setSelectedItems((prevItems) => [...prevItems, patientMedication]);
         }
         setSearchText("");
         setSel("");
@@ -147,7 +151,7 @@ export default function MedicationScreen({ title, itemList, addNewItemCommon, se
                     <MedicationsPopUp
                         selectedItem={selectedModelItem}
                         modalVisible={isVisibleModel}
-                        onSave={(item) => addItem(item)}
+                        onSave={(item, medicationId) => addPatientMedication(item,medicationId)}
                         onClose={() => setIsVisibleModel(false)}
                     />)}
             </View>
@@ -207,7 +211,7 @@ export default function MedicationScreen({ title, itemList, addNewItemCommon, se
                         <View style={styles.buttonRow}>
                             <Button title="Cancel" onPress={() => setModalVisible(false)} />
                             <Button title="Create" onPress={() => {
-                                // Handle create action here
+                                // Add new medicine to master, update local state
                                 addNewItem()
                                 setModalVisible(false);
                                 setComplaintText('');

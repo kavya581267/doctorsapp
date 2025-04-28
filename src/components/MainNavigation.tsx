@@ -29,7 +29,7 @@ import LabTestScreen from '@screens/patientVitals/LabTestScreen';
 import LoadingScreen from './LoadingScreen';
 import LipidProfileScreen from '@screens/patientVitals/LipidProfileScreen';
 import InProgressNotes from '@screens/InProgressNotes';
-import CreatePatientMedication from '@screens/InitialNotes/CreatePatientMedication';
+import CreatePatientMedicationScreen from '@screens/InitialNotes/CreatePatientMedication';
 
 export type BookAppointmentScreenRouteParams = {
       edit?: boolean; // or string, depending on your use case
@@ -80,7 +80,7 @@ export type RootStackParamList = {
     LabTestScreen:undefined;
     LipidProfileScreen:undefined;
     InProgressNotes:undefined;
-    CreatePatientMedication: PatientMedicalParams;
+    CreatePatientMedication: InitialNotesParams;
 };
 
 export default function MainNavigator() {
@@ -117,7 +117,7 @@ export default function MainNavigator() {
                 <Stack.Screen name='LabTestScreen' component={LabTestScreen}></Stack.Screen>
                 <Stack.Screen name='LipidProfileScreen' component={LipidProfileScreen}></Stack.Screen>
                 <Stack.Screen name='InProgressNotes' component={InProgressNotes}></Stack.Screen>
-                <Stack.Screen name='CreatePatientMedication' component={CreatePatientMedication}></Stack.Screen>
+                <Stack.Screen name='CreatePatientMedication' component={CreatePatientMedicationScreen}></Stack.Screen>
             </Stack.Navigator>
         </NavigationContainer>
     );

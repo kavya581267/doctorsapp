@@ -5,40 +5,33 @@ import { MedicationsRequest } from "@api/model/doctor/MasterData";
 import { doctorService } from "@api/doctorService";
 import { AuthContext } from "@context/AuthContext";
 import Back from "@components/Back";
-import { PatientMedicalParams } from "@components/MainNavigation";
+import { InitialNotesParams, PatientMedicalParams } from "@components/MainNavigation";
 import { RouteProp, useRoute } from "@react-navigation/native";
 import { patientService } from "@api/patientService";
+import { CreatePatientMedication, PatientMedication } from "@api/model/patient/PatientModels";
 
 type RoueParams = {
-    params: PatientMedicalParams
-}
-/*
-
-{
-"dosage": "10mg",
-"frequency": "Twice daily",
-"startDate": "2025-04-01",
-"endDate": "2025-05-15",
-"instructions": "Take with meals, morning and evening",
-"dosageUnit":"mg",
-"formulation":"form",
-"route":"route",
-"timePhase":"1",
-"medicationSchedule":"",
-"days":"2",
-"status": "ACTIVE"
+    params: InitialNotesParams
 }
 
-*/
-
-const CreatePatientMedication = () => {
+const CreatePatientMedicationScreen = () => {
 
     const [drugHistory, setDrugHistory] = useState("");
     const [loading, setLoading] = useState(false);
     const { masterData, setMasterDataAdapter } = useContext(AuthContext);
     const route = useRoute<RouteProp<RoueParams>>();
-    const { appointment } = route.params;
+    const { appointment, facesheet } = route.params;
+    const [patientMedications, setPatientMedication] = useState<PatientMedication[]>([...facesheet.medications])
 
+
+    const createPatientMedication = async (reqObj: CreatePatientMedication, medicationId: string) => {
+        try {
+            const resp = await patientService.createPatientMedication(appointment.patientId.toString(), medicationId, reqObj);
+            return resp;
+        } catch (error) {
+
+        }
+    }
 
     const createMedication = async (reqObj: MedicationsRequest) => {
         try {
@@ -48,16 +41,16 @@ const CreatePatientMedication = () => {
             await setMasterDataAdapter(newMasterDate)
             return resp;
         } catch (error) {
-
         }
     }
 
     return (
         <View style={{ padding: 15 }}>
             <Back nav="PatientMedical" routeParam={{ appointment: appointment }} />
-            <MedicationScreen patientMedications={[]} setPatientMedications={()=>{}} setLoading={setLoading} title='Medications' addNewItemCommon={createMedication} itemList={masterData.medications} />
+            <MedicationScreen patientMedications={patientMedications} setLoading={setLoading} title='Medications' addNewItemCommon={createMedication}
+                createPatientMedication={createPatientMedication} itemList={masterData.medications} patientId={appointment.patientId.toString()} />
         </View>
     )
 }
 
-export default CreatePatientMedication;
+export default CreatePatientMedicationScreen;

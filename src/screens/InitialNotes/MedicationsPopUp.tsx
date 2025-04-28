@@ -7,12 +7,14 @@ import { COLORS } from '@utils/colors';
 import { Dropdown } from 'react-native-element-dropdown';
 import stylesp from "@styles/presentingComplaintsStyle";
 import SegmentedToggle from '@components/SegmentedToggle';
+import { CreatePatientMedication, PatientMedication } from '@api/model/patient/PatientModels';
+import { formatToYYYYMMDD, getFutureDate } from '@utils/utils';
 
 type Props = {
     selectedItem: Medication;
     modalVisible: boolean;
     onClose: () => void;
-    onSave: (item: MedicalHistoryNote) => void;
+    onSave: (item: CreatePatientMedication, medicationId:string) => void;
 };
 const MedicationsPopUp: React.FC<Props> = ({ selectedItem, modalVisible, onClose, onSave }) => {
     const [beforeFood, setBeforeFood] = useState(true);
@@ -32,14 +34,25 @@ const MedicationsPopUp: React.FC<Props> = ({ selectedItem, modalVisible, onClose
 
     const handleSave = () => {
         const item = new MedicalHistoryNote();
+        const patientMedication = new CreatePatientMedication();
         item.id = selectedItem.id;
+        patientMedication.days = duration;
+        patientMedication.dosage = "";
+        patientMedication.frequency = selectedFrequency;
+        patientMedication.route = selectedRoute;
+        patientMedication.startDate = formatToYYYYMMDD(new Date());
+        patientMedication.endDate = getFutureDate(new Date(), Number(duration));
+        patientMedication.timePhase = beforeFood ? "Before": "After";
+        patientMedication.medicationSchedule = "1-1-1"
+
+
         item.name = selectedItem.medicationName;
         item.howlong = Number(duration);
         item.food = beforeFood;
         item.type = timing;
         item.frequency = selectedFrequency;
         item.route = selectedRoute;
-        onSave(item);
+        onSave(patientMedication, selectedItem.id.toString());
         onClose();
     };
 

@@ -1,10 +1,10 @@
-import { CREATE_DOCTO_APPOINTMENT, CREATE_INITIAL_NOTE, CREATE_PATIENT_VITALS, DOCTOR_INPROGRESS_NOTES, FILE_NOTE, GET_CLINIC_PATIENTS_PATH, GET_CLINIC_STAFF_PATH, GET_FACT_SHEET, SAVE_PATIENT_MEDICATION, UPDATE_APPOINTMENT, UPDATE_INITIAL_NOTE } from "@utils/constants";
+import { CREATE_DOCTO_APPOINTMENT, CREATE_INITIAL_NOTE, CREATE_PATIENT_VITALS, DOCTOR_INPROGRESS_NOTES, FILE_NOTE, GET_CLINIC_PATIENTS_PATH, GET_CLINIC_STAFF_PATH, GET_FACT_SHEET, SAVE_PATIENT_MEDICATION, UPDATE_APPOINTMENT, UPDATE_INITIAL_NOTE, UPDATE_PATIENT_MEDICATION } from "@utils/constants";
 import { apiService } from "./apiService";
 import { AdminRegistarationRequest, AdminRegistrationResponse } from "./model/auth/Auth";
 import { ClinicResponse } from "./model/clinic/ClinicResponse";
 import { Staff } from "./model/staff/Staff";
 import { replacePlaceholders } from "@utils/utils";
-import { AppointmentRequest, AppointmentResponse, AppointmentUpdateRequest, CreateInitialNoteRequest, CreateInitialNoteResponse, FaceSheet, FileNoteRequest, PatientMedication, PatientResponse, UpdateNoteRequest, VitalsRequest, VitalsResponse } from "./model/patient/PatientModels";
+import { AppointmentRequest, AppointmentResponse, AppointmentUpdateRequest, CreateInitialNoteRequest, CreateInitialNoteResponse, CreatePatientMedication, FaceSheet, FileNoteRequest, PatientMedication, PatientResponse, UpdateNoteRequest, UpdatePatientMedication, VitalsRequest, VitalsResponse } from "./model/patient/PatientModels";
 
 
 
@@ -113,9 +113,17 @@ export const patientService = {
             throw error
         }
     },
-    createPatientMedication: async (patientId: string, medicationId:string, patientMedication:PatientMedication) => {
+    createPatientMedication: async (patientId: string, medicationId:string, patientMedication:CreatePatientMedication):Promise<PatientMedication> => {
         try {
             const resp = await apiService.post(replacePlaceholders(SAVE_PATIENT_MEDICATION, {id: patientId, medicationId:medicationId}),patientMedication);
+            return resp.data;
+        } catch (error) {
+            throw error
+        }
+    },
+    updatePatientMedication: async (patientId: string,  patientMedication:UpdatePatientMedication):Promise<PatientMedication> => {
+        try {
+            const resp = await apiService.put(replacePlaceholders(UPDATE_PATIENT_MEDICATION, {id: patientId}),patientMedication);
             return resp.data;
         } catch (error) {
             throw error
