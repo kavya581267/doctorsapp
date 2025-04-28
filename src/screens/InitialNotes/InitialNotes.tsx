@@ -35,6 +35,8 @@ const InitialNoteScreen = () => {
     const route = useRoute<RouteProp<RouteParams>>()
     const { facesheet, appointment } = route.params;
     const [loading, setLoading] = useState(false);
+    const [visible, setVisible] = useState(false);
+    const [errorMessage, setErrorMessage] = useState("");
     const [note, setNote] = useState<CreateInitialNoteResponse>();
     //
     const [presentingComplaints, setPresntingComplaints] = useState("");
@@ -60,6 +62,8 @@ const InitialNoteScreen = () => {
             await setMasterDataAdapter(newMasterDate);
             return resp;
         } catch (error) {
+            setErrorMessage(error.toString());
+            setVisible(true)
         }
         setLoading(false)
     }
@@ -73,7 +77,8 @@ const InitialNoteScreen = () => {
             await setMasterDataAdapter(newMasterDate);
             return resp;
         } catch (error) {
-            
+            setErrorMessage(error.toString());
+            setVisible(true)
         }
         setLoading(false)
     }
@@ -81,11 +86,11 @@ const InitialNoteScreen = () => {
     const createPatientMedication = async (patientMedication: CreatePatientMedication, medicationId: string) => {
         setLoading(true)
         try {
-            //const resp = await patientService.createPatientMedication(appointment.patientId.toString(), medicationId,patientMedication);
-            const resp = await patientService.updatePatientMedication(appointment.patientId.toString(),medicationId, patientMedication);
+            const resp = await patientService.updatePatientMedication(appointment.patientId.toString(), medicationId, patientMedication);
             return convertPatientMedicationResponseToPatientMedication(resp);
         } catch (error) {
-            
+            setErrorMessage(error.toString());
+            setVisible(true)
         }
         setLoading(false)
     }
@@ -99,6 +104,8 @@ const InitialNoteScreen = () => {
             await setMasterDataAdapter(newMasterDate)
             return resp;
         } catch (error) {
+            setErrorMessage(error.toString());
+            setVisible(true)
         }
         setLoading(false)
     }
@@ -112,6 +119,8 @@ const InitialNoteScreen = () => {
             await setMasterDataAdapter(newMasterDate)
             return resp;
         } catch (error) {
+            setErrorMessage(error.toString());
+            setVisible(true)
         }
         setLoading(false)
     }
@@ -125,6 +134,8 @@ const InitialNoteScreen = () => {
             await setMasterDataAdapter(newMasterDate)
             return resp;
         } catch (error) {
+            setErrorMessage(error.toString());
+            setVisible(true)
         }
         setLoading(false)
     }
@@ -138,6 +149,8 @@ const InitialNoteScreen = () => {
             await setMasterDataAdapter(newMasterDate)
             return resp;
         } catch (error) {
+            setErrorMessage(error.toString());
+            setVisible(true)
         }
         setLoading(false)
     }
@@ -153,7 +166,8 @@ const InitialNoteScreen = () => {
             const initialNote = await patientService.createInitialNote(facesheet?.patient?.id.toString(), reqBody);
             setNote(initialNote);
         } catch (error) {
-
+            setErrorMessage(error.toString());
+            setVisible(true)
         }
         setLoading(false)
     }
@@ -178,6 +192,8 @@ const InitialNoteScreen = () => {
             const savedNote = await patientService.updateInitialNote(facesheet?.patient?.id, note.id, updateNoteReq);
             console.log(savedNote);
         } catch (error) {
+            setErrorMessage(error.toString());
+            setVisible(true)
         }
         setLoading(false)
     }
@@ -192,7 +208,8 @@ const InitialNoteScreen = () => {
             const resp = await patientService.fileInitialNote(facesheet.patient.id, note.id, fileNote);
             console.log(resp);
         } catch (error) {
-
+            setErrorMessage(error.toString());
+            setVisible(true)
         }
         setLoading(false)
 
@@ -223,8 +240,8 @@ const InitialNoteScreen = () => {
 
                         <PresentingComplaints noteSectionString={presentingComplaints} setNoteSectionString={setPresntingComplaints} setLoading={setLoading} title="Presenting Complaints"
                             addNewItemCommon={createPresentingComplaint} itemList={masterData.presentingComplaints} />
-                            <Medications patientMedications={patientMedications} setLoading={setLoading} title='Medications' addNewItemCommon={createMedication} 
-                        createPatientMedication={createPatientMedication} itemList={masterData.medications} patientId={appointment.patientId.toString()} />
+                        <Medications patientMedications={patientMedications} setLoading={setLoading} title='Medications' addNewItemCommon={createMedication}
+                            createPatientMedication={createPatientMedication} itemList={masterData.medications} patientId={appointment.patientId.toString()} />
 
                         <Note setNoteSectionString={setPersonalHistory} title="Personal History" />
                         <PasMedHistory noteSectionString={pastMedicalHistory} setNoteSectionString={setPastMedicalHistory} setLoading={setLoading} title="Past Medical History"
