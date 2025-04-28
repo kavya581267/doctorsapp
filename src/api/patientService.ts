@@ -113,17 +113,17 @@ export const patientService = {
             throw error
         }
     },
-    createPatientMedication: async (patientId: string, medicationId:string, patientMedication:CreatePatientMedication):Promise<PatientMedication> => {
+    createPatientMedication: async (patientId: string, patientMedication:CreatePatientMedication):Promise<PatientMedication> => {
         try {
-            const resp = await apiService.post(replacePlaceholders(SAVE_PATIENT_MEDICATION, {id: patientId, medicationId:medicationId}),patientMedication);
+            const resp = await apiService.post(replacePlaceholders(SAVE_PATIENT_MEDICATION, {id: patientId}),patientMedication);
             return resp.data;
         } catch (error) {
             throw error
         }
     },
-    updatePatientMedication: async (patientId: string,  patientMedication:UpdatePatientMedication):Promise<PatientMedication> => {
+    updatePatientMedication: async (patientId: string,medicationId:string,  patientMedication:UpdatePatientMedication):Promise<PatientMedication> => {
         try {
-            const resp = await apiService.put(replacePlaceholders(UPDATE_PATIENT_MEDICATION, {id: patientId}),patientMedication);
+            const resp = await apiService.put(replacePlaceholders(UPDATE_PATIENT_MEDICATION, {id: patientId, medicationId: medicationId}),patientMedication);
             return resp.data;
         } catch (error) {
             throw error

@@ -148,24 +148,30 @@ export class VitalsResponse {
 }
 
 export class PatientMedication {
-  id: number;
-  medicationId: number;
-  medicationName: string;
-  genericName: string | null;
+  clinic_id: number;
+  created_at: string;
+  days: string;
   dosage: string;
+  dosage_unit: string;
+  end_date: string;
+  formulation: string;
   frequency: string;
+  generic_name: string | null;
+  id: number;
   instructions: string | null;
-  prescribedByName: string;
-  startDate: string;
-  endDate: string | null;
+  medication_id: number;
+  medication_name: string;
+  medication_schedule: string;
+  patient_id: number;
+  prescribed_by_name: string;
+  route: string;
+  start_date: string;
   status: string;
-  patientId: number;
-  clinicId: number;
-  createdAt: string;
-  updatedAt: string;
+  time_phase: string;
+  updated_at: string;
 }
 
-export class CreatePatientMedication {
+export class UpdatePatientMedication {
   dosage: string;
   frequency: string;
   startDate: string;
@@ -180,7 +186,7 @@ export class CreatePatientMedication {
   status: string;
 }
 
-export class UpdatePatientMedication extends CreatePatientMedication {
+export class CreatePatientMedication extends UpdatePatientMedication {
   clinicId: string;
   medicationId: string
   appointmentId: string

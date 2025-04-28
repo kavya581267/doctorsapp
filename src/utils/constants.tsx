@@ -126,5 +126,5 @@ export const DOCTOR_INPROGRESS_NOTES = "/doctors/notes"
 
 
 //save Patient medication 
-export const SAVE_PATIENT_MEDICATION = "/patients/{{id}}/medications/{{medicationId}}"
-export const UPDATE_PATIENT_MEDICATION = "/patients/{{id}}/medications"
+export const SAVE_PATIENT_MEDICATION = "/patients/{{id}}/medications"
+export const UPDATE_PATIENT_MEDICATION = "/patients/{{id}}/medications/{{medicationId}}"

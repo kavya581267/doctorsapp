@@ -37,13 +37,15 @@ const MedicationsPopUp: React.FC<Props> = ({ selectedItem, modalVisible, onClose
         const patientMedication = new CreatePatientMedication();
         item.id = selectedItem.id;
         patientMedication.days = duration;
-        patientMedication.dosage = "";
+        patientMedication.dosage = selectedItem.dosage;
         patientMedication.frequency = selectedFrequency;
         patientMedication.route = selectedRoute;
         patientMedication.startDate = formatToYYYYMMDD(new Date());
         patientMedication.endDate = getFutureDate(new Date(), Number(duration));
         patientMedication.timePhase = beforeFood ? "Before": "After";
         patientMedication.medicationSchedule = "1-1-1"
+        patientMedication.dosageUnit = selectedItem.dosageUnit;
+        patientMedication.formulation = selectedItem.dosageForm;
 
 
         item.name = selectedItem.medicationName;

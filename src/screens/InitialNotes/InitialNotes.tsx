@@ -74,13 +74,10 @@ const InitialNoteScreen = () => {
         }
     }
 
-    const createPatientMedication = async (patientMedication: UpdatePatientMedication, medicationId: string) => {
-        patientMedication.clinicId = appointment.clinicId.toString();
-        patientMedication.appointmentId = appointment.id.toString();
-        patientMedication.medicationId = medicationId;
+    const createPatientMedication = async (patientMedication: CreatePatientMedication, medicationId: string) => {
         try {
             //const resp = await patientService.createPatientMedication(appointment.patientId.toString(), medicationId,patientMedication);
-            const resp = await patientService.updatePatientMedication(appointment.patientId.toString(),patientMedication);
+            const resp = await patientService.updatePatientMedication(appointment.patientId.toString(),medicationId, patientMedication);
             return resp;
         } catch (error) {
             
@@ -212,6 +209,8 @@ const InitialNoteScreen = () => {
 
                         <PresentingComplaints noteSectionString={presentingComplaints} setNoteSectionString={setPresntingComplaints} setLoading={setLoading} title="Presenting Complaints"
                             addNewItemCommon={createPresentingComplaint} itemList={masterData.presentingComplaints} />
+                            <Medications patientMedications={patientMedications} setLoading={setLoading} title='Medications' addNewItemCommon={createMedication} 
+                        createPatientMedication={createPatientMedication} itemList={masterData.medications} patientId={appointment.patientId.toString()} />
 
                         <Note setNoteSectionString={setPersonalHistory} title="Personal History" />
                         <PasMedHistory noteSectionString={pastMedicalHistory} setNoteSectionString={setPastMedicalHistory} setLoading={setLoading} title="Past Medical History"
@@ -232,8 +231,6 @@ const InitialNoteScreen = () => {
                             */
                         }
                         <Investigation noteSectionString={investigations} setNoteSectionString={setInvestigations} setLoading={setLoading} title="Investigation" addNewItemCommon={createInvestigation} itemList={masterData.labResults} />
-                        <Medications patientMedications={patientMedications} setLoading={setLoading} title='Medications' addNewItemCommon={createMedication} 
-                        createPatientMedication={createPatientMedication} itemList={masterData.medications} patientId={appointment.patientId.toString()} />
                         <Note setNoteSectionString={setPhysicalExamination} title="Physical Examination" />
                         <Note setNoteSectionString={setDiet} title="Diet" />
                         <Note setNoteSectionString={setExercise} title="Exercise" />

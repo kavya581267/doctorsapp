@@ -24,9 +24,12 @@ const CreatePatientMedicationScreen = () => {
     const [patientMedications, setPatientMedication] = useState<PatientMedication[]>([...facesheet.medications])
 
 
-    const createPatientMedication = async (reqObj: CreatePatientMedication, medicationId: string) => {
+    const createPatientMedication = async (reqObj: CreatePatientMedication, mId:string) => {
         try {
-            const resp = await patientService.createPatientMedication(appointment.patientId.toString(), medicationId, reqObj);
+            reqObj.clinicId = appointment.clinicId.toString();
+            reqObj.medicationId = mId;
+            reqObj.appointmentId = appointment.id.toString();
+            const resp = await patientService.createPatientMedication(appointment.patientId.toString(), reqObj);
             return resp;
         } catch (error) {
 

@@ -57,8 +57,7 @@ export default function MedicationScreen({ title, itemList, addNewItemCommon, se
     }));
 
     const addPatientMedication = async (item: CreatePatientMedication, medicationId: string) => {
-        createPatientMedication(item,medicationId)
-        const patientMedication =  await patientService.createPatientMedication(patientId,medicationId,item);
+        const patientMedication =  await createPatientMedication(item,medicationId)
         if (!selectedItems.some((selected) => selected.id === patientMedication.id)) {
             setSelectedItems((prevItems) => [...prevItems, patientMedication]);
         }
