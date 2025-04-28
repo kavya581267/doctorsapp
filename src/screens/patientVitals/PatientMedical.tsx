@@ -17,6 +17,7 @@ import { COLORS } from "@utils/colors";
 import CustomModal from "@components/MdLogModel";
 import { MdLodSnackbar } from "@components/MdLogSnacbar";
 import { Role } from "@api/model/enums";
+import { getPatientMedicationString } from "@utils/utils";
 
 type RoueParams = {
     params: PatientMedicalParams
@@ -245,7 +246,7 @@ export default function PatientMedical() {
                             faceSheetData?.medications && faceSheetData?.medications.length > 0 &&
                             <View style={{ marginTop: 5, paddingLeft:10 }}>
                                 {faceSheetData?.medications.map((item, key) => <Text 
-                                > {'\u2022'}  {item.medication_name} {item.dosage}{item.dosage_unit} {item.formulation} - {item.frequency}, {item.medication_schedule} {item.time_phase} Food
+                                > {'\u2022'} {getPatientMedicationString(item)}
                                 </Text>)}
                             </View>
                         }

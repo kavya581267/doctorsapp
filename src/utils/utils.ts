@@ -1,3 +1,6 @@
+import { Medication } from "@api/model/doctor/MasterData";
+import { PatientMedication } from "@api/model/patient/PatientModels";
+
 export const isEmptyString = (value: string): boolean => {
   return !value || value.trim().length === 0
 }
@@ -101,5 +104,11 @@ export function formatDateToMonthDay(dateString) {
   };
 
   return `${month} ${day}${getOrdinalSuffix(day)}`;
+}
+
+export const getPatientMedicationString = (patientMed: PatientMedication) => {
+  return `${patientMed.formulation} ${patientMed.medication_name} ${patientMed?.dosage}${patientMed?.dosage_unit}, ${patientMed.frequency} 
+  ${patientMed.medication_schedule} ${patientMed.time_phase} Food for ${patientMed.days || patientMed.days.trim().length === 0 ? 0 : patientMed.days} days - ${patientMed.route}`
+  
 }
 
