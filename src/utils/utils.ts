@@ -108,7 +108,7 @@ export function formatDateToMonthDay(dateString) {
 
 export const getPatientMedicationString = (patientMed: PatientMedication) => {
   return `${patientMed.formulation} ${patientMed.medication_name} ${patientMed?.dosage}${patientMed?.dosage_unit}, ${patientMed.frequency} 
-  ${patientMed.medication_schedule} ${patientMed.time_phase} Food for ${patientMed.days || patientMed.days.trim().length === 0 ? 0 : patientMed.days} days - ${patientMed.route}`
+  ${patientMed.medication_schedule} ${patientMed.time_phase} Food for ${!patientMed.days || patientMed.days.trim().length === 0 ? 0 : patientMed.days} days - ${patientMed.route}`
   
 }
 

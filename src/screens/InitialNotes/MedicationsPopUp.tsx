@@ -96,7 +96,7 @@ const MedicationsPopUp: React.FC<Props> = ({ selectedItem, modalVisible, onClose
 
                         <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
                             <View style={styles.timingRow}>
-                                {['Morning', 'After noon', 'Night'].map(time => (
+                                {['M', 'A', 'N'].map(time => (
                                     <TouchableOpacity
                                         key={time}
                                         style={[

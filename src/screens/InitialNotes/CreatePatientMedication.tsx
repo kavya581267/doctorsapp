@@ -36,13 +36,15 @@ const CreatePatientMedicationScreen = () => {
             reqObj.medicationId = mId;
             reqObj.appointmentId = appointment.id.toString();
             const resp = await patientService.createPatientMedication(appointment.patientId.toString(), reqObj);
+            setLoading(false)
             return convertPatientMedicationResponseToPatientMedication(resp);
         } catch (error) {
             setVisibleError(true)
             setError(error.toString())
+            setLoading(false)
             throw error;
         }
-        setLoading(false)
+        
     }
 
     const createMedication = async (reqObj: MedicationsRequest) => {
