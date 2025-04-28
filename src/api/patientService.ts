@@ -4,7 +4,7 @@ import { AdminRegistarationRequest, AdminRegistrationResponse } from "./model/au
 import { ClinicResponse } from "./model/clinic/ClinicResponse";
 import { Staff } from "./model/staff/Staff";
 import { replacePlaceholders } from "@utils/utils";
-import { AppointmentRequest, AppointmentResponse, AppointmentUpdateRequest, CreateInitialNoteRequest, CreateInitialNoteResponse, CreatePatientMedication, FaceSheet, FileNoteRequest, PatientMedication, PatientMedicationResponse, PatientResponse, UpdateNoteRequest, UpdatePatientMedication, VitalsRequest, VitalsResponse } from "./model/patient/PatientModels";
+import { AppointmentRequest, AppointmentResponse, AppointmentUpdateRequest, CreateInitialNoteRequest, CreateInitialNoteResponse, CreatePatientMedication, FaceSheet, FileNoteRequest, ListNoteResponse, PatientMedication, PatientMedicationResponse, PatientResponse, UpdateNoteRequest, UpdatePatientMedication, VitalsRequest, VitalsResponse } from "./model/patient/PatientModels";
 
 
 
@@ -105,7 +105,7 @@ export const patientService = {
             throw error
         }
     },
-    getDoctorInprogressNotes: async (clinicId:number) => {
+    getDoctorInprogressNotes: async (clinicId:number):Promise<ListNoteResponse[]> => {
         try {
             const resp = await apiService.get(DOCTOR_INPROGRESS_NOTES, {clinicId: clinicId, field:false})
             return resp.data;
