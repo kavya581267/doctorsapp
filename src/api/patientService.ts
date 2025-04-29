@@ -1,10 +1,10 @@
-import { CREATE_DOCTO_APPOINTMENT, CREATE_INITIAL_NOTE, CREATE_PATIENT_VITALS, DOCTOR_INPROGRESS_NOTES, FILE_NOTE, GET_CLINIC_PATIENTS_PATH, GET_CLINIC_STAFF_PATH, GET_FACT_SHEET, SAVE_PATIENT_MEDICATION, UPDATE_APPOINTMENT, UPDATE_INITIAL_NOTE, UPDATE_PATIENT_MEDICATION } from "@utils/constants";
+import { CREATE_DOCTO_APPOINTMENT, CREATE_INITIAL_NOTE, CREATE_PATIENT_VITALS, DOCTOR_INPROGRESS_NOTES, FILE_NOTE, GET_CLINIC_PATIENTS_PATH, GET_CLINIC_STAFF_PATH, GET_FACT_SHEET, PAST_NOTES, SAVE_PATIENT_MEDICATION, UPDATE_APPOINTMENT, UPDATE_INITIAL_NOTE, UPDATE_PATIENT_MEDICATION } from "@utils/constants";
 import { apiService } from "./apiService";
 import { AdminRegistarationRequest, AdminRegistrationResponse } from "./model/auth/Auth";
 import { ClinicResponse } from "./model/clinic/ClinicResponse";
 import { Staff } from "./model/staff/Staff";
 import { replacePlaceholders } from "@utils/utils";
-import { AppointmentRequest, AppointmentResponse, AppointmentUpdateRequest, CreateInitialNoteRequest, CreateInitialNoteResponse, CreatePatientMedication, FaceSheet, FileNoteRequest, ListNoteResponse, PatientMedication, PatientMedicationResponse, PatientResponse, UpdateNoteRequest, UpdatePatientMedication, VitalsRequest, VitalsResponse } from "./model/patient/PatientModels";
+import { AppointmentRequest, AppointmentResponse, AppointmentUpdateRequest, CreateInitialNoteRequest, CreateInitialNoteResponse, CreatePatientMedication, FaceSheet, FileNoteRequest, ListNoteResponse, PastNotesResponse, PatientMedication, PatientMedicationResponse, PatientResponse, UpdateNoteRequest, UpdatePatientMedication, VitalsRequest, VitalsResponse } from "./model/patient/PatientModels";
 
 
 
@@ -110,6 +110,19 @@ export const patientService = {
             const resp = await apiService.get(DOCTOR_INPROGRESS_NOTES, {clinicId: clinicId, field:false})
             return resp.data;
         } catch (error) {
+            throw error
+        }
+    },
+    getDoctorPastNotes: async (clinicId:number, fromDate:string, toDate:string):Promise<PastNotesResponse[]>=>{
+        const queryParam = {
+            fromDate: fromDate,
+            toDate: toDate
+        }
+        let url = replacePlaceholders(PAST_NOTES,{clinicId:clinicId, field: true});
+        try{
+            const resp = await apiService.get(url,queryParam);
+            return resp;
+        }catch(error){
             throw error
         }
     },

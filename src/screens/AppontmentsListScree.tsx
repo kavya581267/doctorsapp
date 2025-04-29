@@ -78,7 +78,7 @@ const AppointmentsListScreen = () => {
       navigation.navigate("InProgressNotes")
     }
     if (screen === "past_notes") {
-      navigation.navigate("LabTestScreen")
+      navigation.navigate("PastNotes")
     }
   }
 
