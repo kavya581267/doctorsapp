@@ -1,35 +1,39 @@
 import { LabObservation, LabTest } from '@api/model/doctor/MasterData';
 import Back from '@components/Back';
-import { RootStackParamList } from '@components/MainNavigation';
+import { LabTestScreenParam, RootStackParamList } from '@components/MainNavigation';
 import { AuthContext } from '@context/AuthContext';
-import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { NavigationProp, RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import React, { useContext, useEffect, useState } from 'react';
 import { View, Text, FlatList, TouchableOpacity, StyleSheet, SafeAreaView } from 'react-native';
 
+type RouteParams = {
+  param: LabTestScreenParam
+}
+
 
 const LabTestScreen = () => {
-  const {masterData} = useContext(AuthContext)
+  const { masterData } = useContext(AuthContext)
   const [labTest, setLabtests] = useState<LabTest[]>([...masterData.labTests])
   const [labResluts, setLabResults] = useState<LabObservation[]>([...masterData.labResults])
-   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+  const route = useRoute<RouteProp<RouteParams>>()
+  const { appointment } = route.params
 
-  useEffect(()=>{
-      console.log(labTest)
-      console.log(labResluts)
-  },[])
-  const handlePress = (item:LabTest) => {
-    console.log( item);
-     // navigation.navigate('TestDetails', { testName });
-      const labTestResults = labResluts.filter((lr) => lr.labTestId === item.id)
-      navigation.navigate("LabResultsScreen", {labResults: labTestResults, labTest: item});
-     
-     
+  useEffect(() => {
+    console.log(labTest)
+    console.log(labResluts)
+  }, [])
+  const handlePress = (item: LabTest) => {
+    console.log(item);
+    // navigation.navigate('TestDetails', { testName });
+    const labTestResults = labResluts.filter((lr) => lr.labTestId === item.id)
+    navigation.navigate("LabResultsScreen", { labResults: labTestResults, labTest: item, appointment: appointment });
   };
 
   return (
     <View style={styles.container}>
-        <Back nav='Mainscreen' tab='Appointments'/>
-        <Text style={styles.headerTitle}>Select Lab Test</Text>
+      <Back nav='Mainscreen' tab='Appointments' />
+      <Text style={styles.headerTitle}>Select Lab Test</Text>
       <FlatList
         data={labTest}
         keyExtractor={(item) => item.id.toString()}

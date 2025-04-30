@@ -37,15 +37,12 @@ export type BookAppointmentScreenRouteParams = {
     edit?: boolean; // or string, depending on your use case
     bookingDetails?: AppointmentListResponse
 };
-
 export type MainScreenRouteParams = {
     tab: string
 };
-
 export type SuccessScreenParams = {
     screen: string
 };
-
 export type PatientMedicalParams = {
     appointment: AppointmentListResponse
 }
@@ -56,6 +53,10 @@ export type InitialNotesParams = {
 export type LipidProfileScreenParams = {
     labResults: LabObservation[]
     labTest: LabTest
+    appointment: AppointmentListResponse
+}
+export type LabTestScreenParam ={
+    appointment: AppointmentListResponse
 }
 
 
@@ -83,7 +84,7 @@ export type RootStackParamList = {
     AppointmentsListScreen: undefined;
     StaffProffileScreen: undefined;
     PatientDirectoryScreen: undefined;
-    LabTestScreen: undefined;
+    LabTestScreen: LabTestScreenParam;
     LabResultsScreen: LipidProfileScreenParams;
     InProgressNotes: undefined;
     PastNotes: undefined;

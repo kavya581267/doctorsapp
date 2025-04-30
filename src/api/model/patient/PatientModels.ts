@@ -242,7 +242,7 @@ export interface LabTestResponse {
   updatedAt: string;
 }
 
-export interface LabOrderRequest {
+export class LabOrderRequest {
   clinicId: string;
   testId: string;
   notes: string;
@@ -457,7 +457,7 @@ export interface PastNotesResponse {
 }
 
 
-class LabResultEntryReq {
+export class LabResultEntryReq {
   observation: string;
   units: string;
   value: number;

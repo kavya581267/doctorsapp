@@ -1,4 +1,6 @@
 import { LabObservation, LabTest } from '@api/model/doctor/MasterData';
+import { LabOrderRequest, LabResultEntryReq, LabResultsPayload } from '@api/model/patient/PatientModels';
+import { patientService } from '@api/patientService';
 import Back from '@components/Back';
 import { LipidProfileScreenParams } from '@components/MainNavigation';
 import MdLogTextInput from '@components/MdLogTextInput';
@@ -38,9 +40,9 @@ const LabResultsScreen = () => {
     const [date, setDate] = useState(new Date());
     const [showPicker, setShowPicker] = useState(false);
     const route = useRoute<RouteProp<RouteParams>>();
-    const { labResults, labTest } = route.params
+    const { labResults, labTest, appointment } = route.params
 
-    const handleInputChange = (key: string, value: string) => {
+    const handleInputChange = (key: number, value: string) => {
         setValues((prev) => ({ ...prev, [key]: value }));
     };
 
@@ -49,60 +51,102 @@ const LabResultsScreen = () => {
         if (selectedDate) {
             setDate(selectedDate);
         }
-
     };
 
     const openDatePicker = () => {
         setShowPicker(true);
     };
 
+    const getLabResultsEntry = () => {
+        let resp: LabResultEntryReq[] = [];
+        for(let i = 0; i< labResults.length ;i++){
+            let aa = new LabResultEntryReq()
+            aa.observation = labResults[i].observation;
+            aa.units = labResults[i].units;
+            aa.value = values[i];
+            resp.push(aa);
+        }
+        return resp;
+    }
+
+    const handleSave = async () => {
+        const labOrder = new LabOrderRequest()
+        labOrder.clinicId = appointment.clinicId.toString();
+        labOrder.testId = labTest.id.toString();
+        labOrder.notes = ""
+        const labOrderResp =  await patientService.savePatientlabOrders(appointment.patientId.toString(),labOrder);
+        const labResultPayload = new LabResultsPayload();
+        labResultPayload.appointmentId = appointment.patientId;
+        labResultPayload.clinicId = labOrderResp.clinicId;
+        labResultPayload.orderId = labOrderResp.id;
+        labResultPayload.labResults = getLabResultsEntry();
+        await patientService.savePatientlabResults(appointment.patientId.toString(),labResultPayload);
+    }
+
 
     return (
-        <ScrollView >
-            <View style={styles.container}>
-                <Back nav='LabTestScreen' />
-
-                <View style={styles.dateContainer}>
-                    <Text style={{fontWeight:"600", fontSize:16, color:COLORS.primary}}>{labTest.testName}</Text>
-                    <View style={{flexDirection:"row", alignItems:"center"}}>
-                        <Text style={styles.dateText}> Collection Date:</Text>
-                        <TouchableOpacity onPress={openDatePicker} style={styles.dateInputBox}>
-                            <Text style={styles.dateText}>
-                                {date.toLocaleDateString()}
-                            </Text>
-                        </TouchableOpacity>
-                    </View>
-                </View>
-
-                {showPicker && (
-                    <DateTimePicker
-                        value={date}
-                        mode="date"
-                        display={Platform.OS === 'ios' ? 'spinner' : 'default'}
-                        onChange={onChangeDate}
-                    />
-                )}
-                {labResults.map((item, key) => (
-                    <View key={key} style={styles.card}>
-                        <View style={styles.row}>
-                            <Text style={styles.label}>{item.observation}</Text>
-
-                            <View style={styles.inputContainer}>
-                                <TextInput
-                                    style={styles.input}
-                                    placeholder="Enter"
-                                    keyboardType="numeric"
-                                    onChangeText={(text) => { }}
-                                />
-                                <Text style={styles.unit}>{item.units}</Text>
-                            </View>
+        <>
+            <ScrollView >
+                <View style={styles.container}>
+                    <Back nav='LabTestScreen' />
+                    <View style={styles.dateContainer}>
+                        <Text style={{ fontWeight: "600", fontSize: 16, color: COLORS.primary }}>{labTest.testName}</Text>
+                        <View style={{ flexDirection: "row", alignItems: "center" }}>
+                            <Text style={styles.dateText}> Collection Date:</Text>
+                            <TouchableOpacity onPress={openDatePicker} style={styles.dateInputBox}>
+                                <Text style={styles.dateText}>
+                                    {date.toLocaleDateString()}
+                                </Text>
+                            </TouchableOpacity>
                         </View>
-
-                        <Text style={styles.note}>{formatNote(item.ranges)}</Text>
                     </View>
-                ))}
+
+                    {showPicker && (
+                        <DateTimePicker
+                            value={date}
+                            mode="date"
+                            display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+                            onChange={onChangeDate}
+                        />
+                    )}
+                    {labResults.map((item, key) => (
+                        <View key={key} style={styles.card}>
+                            <View style={styles.row}>
+                                <Text style={styles.label}>{item.observation}</Text>
+
+                                <View style={styles.inputContainer}>
+                                    <TextInput
+                                        style={styles.input}
+                                        placeholder="Enter"
+                                        keyboardType="numeric"
+                                        onChangeText={(text) => {handleInputChange(key, text) }}
+                                    />
+                                    <Text style={styles.unit}>{item.units}</Text>
+                                </View>
+                            </View>
+
+                            <Text style={styles.note}>{formatNote(item.ranges)}</Text>
+                        </View>
+                    ))}
+                </View>
+            </ScrollView>
+            <View>
+                <TouchableOpacity onPress={handleSave} style={{
+                    backgroundColor: COLORS.secondary,
+                    paddingVertical: 14,
+                    borderRadius: 12,
+                    alignItems: 'center',
+                    marginBottom: 5,
+                }}>
+                    <Text style={{
+                        color: '#fff',
+                        fontSize: 16,
+                        fontWeight: '600',
+                    }}>Submit</Text>
+                </TouchableOpacity>
             </View>
-        </ScrollView>
+        </>
+
     );
 };
 
@@ -178,7 +222,7 @@ const styles = StyleSheet.create({
     dateContainer: {
         marginVertical: 10,
         flexDirection: "row",
-        justifyContent:"space-between",
+        justifyContent: "space-between",
         alignItems: "center"
     },
     dateText: {

@@ -95,11 +95,9 @@ export default function PatientMedical() {
     }
 
     const fabPress = (screen: string) => {
-        if (screen === "initial_note") {
-            navigation.navigate("InitialNote", { appointment: appointment, facesheet: faceSheetData })
-        }
+    
         if (screen === "lab_results") {
-            navigation.navigate("LabTestScreen")
+            navigation.navigate("LabTestScreen",{ appointment: appointment})
         }
     }
     const fields = [
