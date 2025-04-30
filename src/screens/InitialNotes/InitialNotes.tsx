@@ -22,6 +22,7 @@ import Investigation from './Investigation';
 import { convertPatientMedicationResponseToPatientMedication, formatToYYYYMMDD, getFutureDate } from '@utils/utils';
 import { MdLodSnackbar } from '@components/MdLogSnacbar';
 import ConfirmationModal from '@components/ConfirmationModal';
+import InitialNoteSubmitPopUp from './InitialNoteSubmitPopUp';
 const { width, height } = Dimensions.get("window");
 
 
@@ -54,6 +55,7 @@ const InitialNoteScreen = () => {
     const [visitDx, setVisitDx] = useState("");
     const [patientMedications, setPatientMedication] = useState<PatientMedication[]>([...facesheet.medications])
     const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+    const [fileNoteModel, setfileNoteModel] = useState(false)
 
 
     const createPresentingComplaint = async (reqObj: InitialCommonNoteRequest) => {
@@ -224,15 +226,18 @@ const InitialNoteScreen = () => {
         setLoading(false)
         if (failed) {
 
+        }else{
+            setVisible(true);
+            setErrorMessage("Saved note!!")
         }
     }
 
-    const fileNote = async () => {
+    const fileNote = async (date: string) => {
         const fileNote = new FileNoteRequest()
         fileNote.clinicId = note.clinicId;
         fileNote.doctorId = note.doctorId;
         fileNote.filed = true;
-        fileNote.nextVisitDate = getFutureDate(new Date(), 10);
+        fileNote.nextVisitDate = date;
         setLoading(true)
         try {
             const resp = await patientService.fileInitialNote(facesheet.patient.id, note.id, fileNote);
@@ -262,9 +267,15 @@ const InitialNoteScreen = () => {
                 <Back nav='Mainscreen' tab='Appointments' />
                 <View style={styles.header}>
                     <Text style={styles.headerTitle}>Initial Note</Text>
-                    <TouchableOpacity style={styles.submitButton} onPress={handleSave}>
-                        <Text style={styles.submitText}>Save</Text>
-                    </TouchableOpacity>
+                    <View style={{flexDirection:"row", justifyContent:"space-between"}}>
+                        <TouchableOpacity style={{...styles.submitButton, backgroundColor:COLORS.secondary, marginRight:20}}
+                         onPress={() => setfileNoteModel(true)}>
+                            <Text style={styles.submitText}>Submit</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.submitButton} onPress={handleSave}>
+                            <Text style={styles.submitText}>Save</Text>
+                        </TouchableOpacity>
+                    </View>
                 </View>
                 <Divider />
                 <KeyboardAwareScrollView>
@@ -279,7 +290,7 @@ const InitialNoteScreen = () => {
                         <Medications setPatientMedications={setPatientMedication} patientMedications={patientMedications} setLoading={setLoading} title='Medications' addNewItemCommon={createMedication}
                             createPatientMedication={createPatientMedication} itemList={masterData.medications} patientId={appointment.patientId.toString()} />
 
-                        <Note prevVal={personalHistory}  setNoteSectionString={setPersonalHistory} title="Personal History" />
+                        <Note prevVal={personalHistory} setNoteSectionString={setPersonalHistory} title="Personal History" />
                         <PasMedHistory noteSectionString={pastMedicalHistory} setNoteSectionString={setPastMedicalHistory} setLoading={setLoading} title="Past Medical History"
                             addNewItemCommon={createMedicalHistory} itemList={masterData.pastMedicalHistory} />
                         <Note prevVal={drugHistory} setNoteSectionString={setDrugHistory} title="Drug History" />
@@ -303,25 +314,11 @@ const InitialNoteScreen = () => {
                         <Note prevVal={exercise} setNoteSectionString={setExercise} title="Exercise" />
                         {/*labtest */}
                     </View>
+                    <InitialNoteSubmitPopUp modalVisible={fileNoteModel} onClose={() => setfileNoteModel(false)} onSave={(date) => { fileNote(date) }} title='Initial Note' />
                 </KeyboardAwareScrollView>
             </View>
             <MdLogActivityIndicator loading={loading} />
-            <MdLodSnackbar visible={visible} message={errorMessage} onDismiss={() => setVisible(false)} />
-            <View>
-                <TouchableOpacity onPress={fileNote} style={{
-                    backgroundColor: COLORS.secondary,
-                    paddingVertical: 14,
-                    borderRadius: 12,
-                    alignItems: 'center',
-                    marginBottom: 5
-                }}>
-                    <Text style={{
-                        color: '#fff',
-                        fontSize: 16,
-                        fontWeight: '600',
-                    }}>Submit</Text>
-                </TouchableOpacity>
-            </View>
+            <MdLodSnackbar visible={visible} message={errorMessage} onDismiss={() => setVisible(false)}  success={errorMessage === "Saved note!!"?true:false} />
         </>
     )
 
