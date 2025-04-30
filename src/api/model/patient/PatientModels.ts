@@ -391,6 +391,7 @@ export class UpdateNoteRequest {
   diet: string;
   exercise: string;
   visitDx: string;
+  medications:PatientMedication[]
 }
 
 
