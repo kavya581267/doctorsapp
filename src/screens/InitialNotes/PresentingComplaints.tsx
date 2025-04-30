@@ -21,6 +21,7 @@ type Props = {
 };
 
 const PresentingComplaints = ({ title, itemList, addNewItemCommon, setLoading, noteSectionString, setNoteSectionString }: Props) => {
+  
     const { loggedInUserContext } = useContext(AuthContext);
     const [selectedItems, setSelectedItems] = useState<Symptom[]>([]);
     const [searchText, setSearchText] = useState("");
@@ -32,6 +33,9 @@ const PresentingComplaints = ({ title, itemList, addNewItemCommon, setLoading, n
     const [complaintText, setComplaintText] = useState('');
 
     const onDismissSnackbar = () => setVisible(false);
+
+    
+
 
     const dropdownData = itemList.map((item) => ({
         label: item.name,
@@ -79,8 +83,17 @@ const PresentingComplaints = ({ title, itemList, addNewItemCommon, setLoading, n
     };
 
     useEffect(()=>{
-       updateNoteString()
-    },[selectedItems])
+       updateNoteString();
+    },[selectedItems, noteSectionString])
+
+    useEffect(() => {
+       const it =   noteSectionString.split(", ");
+       const ini =  itemList.filter((i)=> it.includes(i.name))
+       console.log(ini)
+       if(ini && ini.length > 0){
+        setSelectedItems([...ini])
+       }
+      }, []);
 
 
     return (

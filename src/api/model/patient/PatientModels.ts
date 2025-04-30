@@ -410,8 +410,8 @@ export interface CreateInitialNoteResponse {
 }
 
 export class UpdateNoteRequest {
-  clinicId: string;
-  doctorId: string;
+  clinicId: number;
+  doctorId: number;
   drugHistory: string;
   familyHistory: string;
   investigations: string;

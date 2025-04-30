@@ -177,6 +177,7 @@ const InitialNoteScreen = () => {
             setLoading(true)
             const initialNote = await patientService.createInitialNote(facesheet?.patient?.id.toString(), reqBody);
             setNote(initialNote);
+            setPresntingComplaints(initialNote.presentingComplaints);
         } catch (error) {
             setErrorMessage(error.toString());
             setVisible(true)
@@ -187,9 +188,9 @@ const InitialNoteScreen = () => {
     const handleSave = async () => {
         let failed = false;
         const updateNoteReq = new UpdateNoteRequest()
-        updateNoteReq.clinicId = note.clinicId.toString();
+        updateNoteReq.clinicId = note.clinicId;
         updateNoteReq.diet = diet;
-        updateNoteReq.doctorId = note.doctorId.toString();
+        updateNoteReq.doctorId = note.doctorId;
         updateNoteReq.drugHistory = drugHistory;
         updateNoteReq.exercise = exercise;
         updateNoteReq.familyHistory = familyHistory;
@@ -200,7 +201,7 @@ const InitialNoteScreen = () => {
         updateNoteReq.presentingComplaints = presentingComplaints;
         updateNoteReq.systemicExamination = systemicExamination;
         updateNoteReq.visitDx = visitDx;
-        updateNoteReq.medications=patientMedications;
+        //updateNoteReq.medications=patientMedications;
         try {
             setLoading(true)
             const savedNote = await patientService.updateInitialNote(facesheet?.patient?.id, note.id, updateNoteReq);
@@ -211,8 +212,8 @@ const InitialNoteScreen = () => {
             failed = true;
         }
         setLoading(false)
-        if(failed){
-            
+        if (failed) {
+
         }
     }
 
@@ -233,10 +234,25 @@ const InitialNoteScreen = () => {
 
     }
 
+    const setSelectedItemsOnLoad = (noteType: string, itemList: Symptom[]) => {
+        const items: string[] = noteType.split(",")
+        const trimmedlist = items.map((i) => i.trim());
+        if (items && items.length > 0) {
+            return itemList.filter((i) => trimmedlist.includes(i.name));
+        }
+        return []
+    }
+
 
     useEffect(() => {
         fetchInitialNote();
     }, [])
+
+    if (loading) {
+        return (
+            <MdLogActivityIndicator loading={loading} />
+        )
+    }
 
     return (
         <>
@@ -258,7 +274,7 @@ const InitialNoteScreen = () => {
 
                         <PresentingComplaints noteSectionString={presentingComplaints} setNoteSectionString={setPresntingComplaints} setLoading={setLoading} title="Presenting Complaints"
                             addNewItemCommon={createPresentingComplaint} itemList={masterData.presentingComplaints} />
-                        <Medications setPatientMedications={setPatientMedication} patientMedications={patientMedications}  setLoading={setLoading} title='Medications' addNewItemCommon={createMedication}
+                        <Medications setPatientMedications={setPatientMedication} patientMedications={patientMedications} setLoading={setLoading} title='Medications' addNewItemCommon={createMedication}
                             createPatientMedication={createPatientMedication} itemList={masterData.medications} patientId={appointment.patientId.toString()} />
 
                         <Note setNoteSectionString={setPersonalHistory} title="Personal History" />
@@ -288,7 +304,7 @@ const InitialNoteScreen = () => {
                 </KeyboardAwareScrollView>
             </View>
             <MdLogActivityIndicator loading={loading} />
-            <MdLodSnackbar visible={visible} message={errorMessage} onDismiss={()=>setVisible(false)}/>
+            <MdLodSnackbar visible={visible} message={errorMessage} onDismiss={() => setVisible(false)} />
             <View>
                 <TouchableOpacity onPress={fileNote} style={{
                     backgroundColor: COLORS.secondary,
@@ -317,7 +333,7 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: 'white',
         padding: 10,
-        height:height
+        height: height
     },
     header: {
         flexDirection: 'row',
