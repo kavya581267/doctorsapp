@@ -11,6 +11,7 @@ import { Divider } from "react-native-paper";
 import { CreatePatientMedication, PatientMedication, UpdatePatientMedication } from "@api/model/patient/PatientModels";
 import { patientService } from "@api/patientService";
 import { getPatientMedicationString } from "@utils/utils";
+import ConfirmationModal from "@components/ConfirmationModal";
 
 export class MedicalHistoryNote extends Symptom {
     howlong: number
@@ -27,12 +28,13 @@ type Props = {
     addNewItemCommon: (reqObj: MedicationsRequest) => Promise<MedicationsResponse>; // to add a new medicine to master sheet
     setLoading: (load: boolean) => void
     patientMedications: PatientMedication[] // patient medications
+    setPatientMedications: (med:PatientMedication[]) => void
     createPatientMedication: (patientMedication: CreatePatientMedication | UpdatePatientMedication, medicationId: string) => Promise<PatientMedication> // create/update patient medication
 };
 
 
 
-export default function MedicationScreen({ title, itemList, addNewItemCommon, setLoading, patientMedications, createPatientMedication, patientId }: Props) {
+export default function MedicationScreen({ title, itemList, addNewItemCommon, setLoading, patientMedications, createPatientMedication, patientId, setPatientMedications }: Props) {
     const [searchText, setSearchText] = useState("");
     const [selectedItems, setSelectedItems] = useState<PatientMedication[]>([...patientMedications]);
     const { loggedInUserContext } = useContext(AuthContext);
@@ -50,6 +52,8 @@ export default function MedicationScreen({ title, itemList, addNewItemCommon, se
     const [dosage, setDosage] = useState('');
     const [unit, setunit] = useState('');
     const [formulation, setFormulation] = useState('');
+    const [confirmModalVisible, setConfirmModalVisible] = useState(false);
+    const [removeItem, setRemoveItem] = useState<PatientMedication| undefined>()
 
     const dropdownData = itemList.map((item) => ({
         label: item.medicationName + " " + item.dosage + item?.dosageUnit + " " + item.dosageForm,
@@ -62,6 +66,7 @@ export default function MedicationScreen({ title, itemList, addNewItemCommon, se
             const patientMedication =  await createPatientMedication(item,medicationId)
             if (!selectedItems.some((selected) => selected.id === patientMedication.id)) {
                 setSelectedItems((prevItems) => [...prevItems, patientMedication]);
+                setPatientMedications([...selectedItems, patientMedication])
             }
             setSearchText("");
             setSel("");
@@ -70,10 +75,39 @@ export default function MedicationScreen({ title, itemList, addNewItemCommon, se
         
     };
 
-    const remove = (item: PatientMedication) => {
-        setSelectedItems((prevItems) =>
-            prevItems.filter((selected) => selected.id !== item.id)
-        );
+    const callRemovePatientMedication = async (item: PatientMedication) => {
+         const updateMed = new UpdatePatientMedication();
+         updateMed.days = item.days;
+         updateMed.dosage = item.dosage;
+         updateMed.dosageUnit = item.dosage_unit;
+         updateMed.endDate = item.end_date;
+         updateMed.formulation = item.formulation;
+         updateMed.frequency = item.frequency;
+         updateMed.instructions = item.frequency;
+         updateMed.medicationSchedule = item.medication_schedule;
+         updateMed.route = item.route;
+         updateMed.startDate = item.start_date;
+         updateMed.timePhase = item.time_phase;
+         updateMed.status = "COMPLETED"
+        const resp = await patientService.updatePatientMedication(item.patient_id.toString(), item.id.toString(),updateMed);
+    }
+
+    const remove = async (item: PatientMedication) => {
+        try{
+            setLoading(true)
+            setConfirmModalVisible(false)
+            await callRemovePatientMedication(item);
+            setSelectedItems((prevItems) =>
+                prevItems.filter((selected) => selected.id !== item.id)
+            );
+            setPatientMedications([...selectedItems.filter((selected) => selected.id !== item.id)])
+        }catch(error){
+            setErrorMessage(error.toString())
+            setVisible(true)
+           
+        }
+        setLoading(false)
+       
     };
 
     const addNewItem = async () => {
@@ -112,7 +146,7 @@ export default function MedicationScreen({ title, itemList, addNewItemCommon, se
     
 
     const updateNoteString = () => {
-        
+        setPatientMedications(selectedItems)
     }
 
     useEffect(() => {
@@ -163,9 +197,9 @@ export default function MedicationScreen({ title, itemList, addNewItemCommon, se
             <ScrollView contentContainerStyle={styles.complaintsBox}>
                 {selectedItems.length > 0 && (
                     selectedItems.map((item, index) => (
-                        <View key={index} style={styles.selectedChip}>
+                        item.status === "ACTIVE" && <View key={index} style={styles.selectedChip}>
                             <Text>{getPatientMedicationString(item)}</Text>
-                            <TouchableOpacity onPress={() => remove(item)}>
+                            <TouchableOpacity onPress={() => {setConfirmModalVisible(true); setRemoveItem(item)}}>
                                 <Icon name="close-circle" size={18} color="grey" style={styles.removeIcon} />
                             </TouchableOpacity>
                         </View>
@@ -222,7 +256,9 @@ export default function MedicationScreen({ title, itemList, addNewItemCommon, se
                     </View>
                 </View>
             </Modal>
+            <ConfirmationModal visible={confirmModalVisible} title={`Delete ${removeItem?.medication_name} ${removeItem?.dosage}${removeItem?.dosage_unit}`} onCancel={()=>setConfirmModalVisible(false)} onAccept={()=>{remove(removeItem)}}/>
             <MdLodSnackbar visible={visible} onDismiss={onDissmissSnackbar} message={errorMessage} />
         </View>
     );
+
 }

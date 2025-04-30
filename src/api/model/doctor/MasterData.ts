@@ -40,7 +40,7 @@ export class LabObservation {
 
 export class MasterData {
     familyHistory: Symptom[] = []
-    labResults: LabTestResponse[] = []
+    labResults: LabObservation[] = []
     labTests: LabTest[] = []
     medications: Medication[] = []
     pastMedicalHistory: Symptom[] = []

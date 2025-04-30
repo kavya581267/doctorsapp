@@ -3,7 +3,7 @@ import { View, StyleSheet, ScrollView, TouchableOpacity, Modal, Switch } from 'r
 import { Text, Card, Avatar, Button, Chip, Divider } from 'react-native-paper';
 import { MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
 import Back from '@components/Back';
-import { useRoute } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { COLORS } from '@utils/colors';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { MdLogTimePicker } from '@components/MdLogTimePicker';
@@ -11,7 +11,7 @@ import Spacer from '@components/Spacer';
 import { doctorService } from '@api/doctorService';
 import { DoctorSchedule } from '@api/model/doctor/DoctorSchedule';
 import { AuthContext } from '@context/AuthContext';
-import { DayOfWeek } from '@api/model/enums';
+import { DayOfWeek, Role } from '@api/model/enums';
 import { MdLogActivityIndicator } from '@components/MdLogActivityIndicator';
 import { MdLodSnackbar } from '@components/MdLogSnacbar';
 
@@ -27,6 +27,7 @@ const DoctorScheduleScreen = () => {
     const [errorMessage, setErrorMessage] = useState("Failed");
     const { loggedInUserContext } = useContext(AuthContext);
     const [selectedDay, setSelectedDay] = useState<DayOfWeek>(DayOfWeek.MONDAY);
+    const navigation = useNavigation();
 
     const { doctorDetails } = route?.params;
 
@@ -121,6 +122,14 @@ const DoctorScheduleScreen = () => {
         }
         setModalVisible(false);
     };
+
+    if(loggedInUserContext.roles.find((r) => r !== Role.DOCTOR  && r !== Role.ADMIN)){
+       return(
+        <View>
+            <Text>Un Auth</Text>
+        </View>
+       )
+    }
 
     return (
         <View style={styles.container}>

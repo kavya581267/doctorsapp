@@ -1,23 +1,22 @@
-import { LabTest, LabTestResponse, Symptom } from '@api/model/doctor/MasterData';
+import { Symptom } from '@api/model/doctor/MasterData';
 import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, TouchableWithoutFeedback, Keyboard, TouchableOpacity } from 'react-native';
 import { Modal, Portal, Text, TextInput, Button, Card, ToggleButton, Divider } from 'react-native-paper';
+import { MedicalHistoryNote } from './MedicalHistory';
 import { formatToYYYYMMDD } from '@utils/utils';
 import SegmentedToggle from '@components/SegmentedToggle';
-import { InvestigationNote } from './Investigation';
 
 type Props = {
-    selectedItem: LabTest;
     modalVisible: boolean;
     onClose: () => void;
-    onSave: (item: InvestigationNote) => void;
+    onSave: (date: string) => void;
+    title:string
 };
-const InvestigationPopUp: React.FC<Props> = ({ selectedItem, modalVisible, onClose, onSave }) => {
+const InitialNoteSubmitPopUp: React.FC<Props> = ({  modalVisible, onClose, onSave, title }) => {
     const [duration, setDuration] = useState('0');
     const [unit, setUnit] = useState('Days');
     const [startDate, setStartDate] = useState(formatToYYYYMMDD(new Date()));
 
-    console.log(selectedItem);
     const calculateStartDate = () => {
         const num = parseInt(duration);
         const now = new Date();
@@ -55,10 +54,8 @@ const InvestigationPopUp: React.FC<Props> = ({ selectedItem, modalVisible, onClo
 
 
     const handleSave = () => {
-        const item:InvestigationNote = {...selectedItem, date:startDate}
-        onSave(item);
+        onSave(startDate);
         onClose();
-
     };
 
 
@@ -67,12 +64,12 @@ const InvestigationPopUp: React.FC<Props> = ({ selectedItem, modalVisible, onClo
             <Modal visible={modalVisible} contentContainerStyle={styles.modalContainer}>
                 <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                     <View>
-                        <Card.Title title={selectedItem.testName} titleStyle={styles.title} />
+                        <Card.Title title={title} titleStyle={styles.title} />
                         <Divider />
                         <View style={{ padding: 10 }}>
                             <View>
                                 <View style={styles.row}>
-                                    <Text style={styles.label}>Visit schedule for:</Text>
+                                    <Text style={styles.label}>Schedule a folloup visit: </Text>
                                     <TextInput
                                         mode="outlined"
                                         style={styles.input}
@@ -84,7 +81,7 @@ const InvestigationPopUp: React.FC<Props> = ({ selectedItem, modalVisible, onClo
                                 </View>
 
                                 <SegmentedToggle
-                                    options={['Day(s)', 'Week(s)', 'Month(s)']}
+                                    options={['Days', 'Months', 'Years']}
                                     onSelect={(item) => setUnit(item)}
                                     defaultIndex={0}
                                 />
@@ -108,7 +105,7 @@ const InvestigationPopUp: React.FC<Props> = ({ selectedItem, modalVisible, onClo
     );
 };
 
-export default InvestigationPopUp;
+export default InitialNoteSubmitPopUp;
 
 const styles = StyleSheet.create({
     modalContainer: {
@@ -128,7 +125,7 @@ const styles = StyleSheet.create({
         marginBottom: 20
     },
     input: {
-        width: 180,
+        width: 120,
         height: 40
     },
     label: {

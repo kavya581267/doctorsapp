@@ -95,11 +95,9 @@ export default function PatientMedical() {
     }
 
     const fabPress = (screen: string) => {
-        if (screen === "initial_note") {
-            navigation.navigate("InitialNote", { appointment: appointment, facesheet: faceSheetData })
-        }
+    
         if (screen === "lab_results") {
-            navigation.navigate("LabTestScreen")
+            navigation.navigate("LabTestScreen",{ appointment: appointment})
         }
     }
     const fields = [
@@ -154,6 +152,12 @@ export default function PatientMedical() {
             'Oxygen Saturation': appointmetVital.oxygen_saturation.toString()
         };
         setVitalsRecord(vital)
+    }
+
+    const roleActions = () => {
+        const rolesStr =  user.roles.join(" ");
+        const act = actions.filter((a) => a.role.find((r) => rolesStr.includes(r)))
+        return act
     }
 
     useEffect(() => {
@@ -245,7 +249,7 @@ export default function PatientMedical() {
                         {
                             faceSheetData?.medications && faceSheetData?.medications.length > 0 &&
                             <View style={{ marginTop: 5, paddingLeft:10 }}>
-                                {faceSheetData?.medications.map((item, key) => <Text key={key}
+                                {faceSheetData?.medications.map((item, key) => item.status === "ACTIVE" && <Text key={key}
                                 > {'\u2022'} {getPatientMedicationString(item)}
                                 </Text>)}
                             </View>
@@ -264,7 +268,7 @@ export default function PatientMedical() {
 
                             {
                                 !appointmetVital && user.roles && user.roles.find((role) => role !== Role.DOCTOR && role !== Role.ADMIN) &&
-                                <TouchableOpacity style={{ flexDirection: "row" }} onPress={() => {navigation.navigate("LabTestScreen")}}>
+                                <TouchableOpacity style={{ flexDirection: "row" }} onPress={() => {navigation.navigate("LabTestScreen", {appointment:appointment})}}>
                                     <Text style={{ color: COLORS.primary, fontWeight: "500" }}> <Feather name="edit" size={15} color={COLORS.primary} /> Edit</Text>
                                 </TouchableOpacity>
                             }
@@ -274,7 +278,7 @@ export default function PatientMedical() {
                         {
                             faceSheetData?.labResults && faceSheetData?.labResults.length > 0 &&
                             <View style={{ marginTop: 20 }}>
-                                {faceSheetData?.labResults.map((item, key) => <Text>{item}</Text>)}
+                                {faceSheetData?.labResults.map((item, key) => <Text>{`${item.observation} : ${item.value}${item.units}  - Recorded on: ${item.recorded_at}`}</Text>)}
                             </View>
                         }
 
@@ -305,7 +309,7 @@ export default function PatientMedical() {
                 </TouchableOpacity>
             }
             <MdLodSnackbar visible={showError} message={error} onDismiss={() => setShowError(false)} />
-            <FabMenuScreen action={actions} onPress={fabPress} />
+            <FabMenuScreen action={roleActions()} onPress={fabPress} />
         </View>
 
     )
@@ -319,7 +323,8 @@ const actions = [
         name: "medications",
         position: 1,
         textColor: COLORS.white,
-        textBackground: COLORS.secondary
+        textBackground: COLORS.secondary,
+        role:[Role.DOCTOR]
     },
     {
         text: "Record Lab Results",
@@ -327,7 +332,8 @@ const actions = [
         name: "lab_results",
         position: 3,
         textColor: COLORS.white,
-        textBackground: COLORS.secondary
+        textBackground: COLORS.secondary,
+        role:[Role.DOCTOR, Role.FRONT_OFFICE, Role.NURSE]
     },
     {
         text: "Patient Readings",
@@ -335,15 +341,8 @@ const actions = [
         name: "patient_readings",
         position: 4,
         textColor: COLORS.white,
-        textBackground: COLORS.secondary
-    },
-    {
-        text: "Home",
-        icon: <MaterialIcons name="home" size={20} color="#fff" />,
-        name: "home",
-        position: 5,
-        textColor: COLORS.white,
-        textBackground: COLORS.secondary
+        textBackground: COLORS.secondary,
+        role: [Role.DOCTOR, Role.FRONT_OFFICE, Role.NURSE]
     },
     {
         text: "Cancel",
@@ -351,9 +350,9 @@ const actions = [
         name: "cancel",
         position: 6,
         color: "#f44336",
-
         textColor: COLORS.white,
-        textBackground: COLORS.red
+        textBackground: COLORS.red,
+        role: [Role.DOCTOR, Role.FRONT_OFFICE, Role.NURSE, Role.ADMIN]
     }
 ];
 

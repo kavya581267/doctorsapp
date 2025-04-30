@@ -13,7 +13,7 @@ export const initializeToken = async () => {
 };
 
 
-const getAccessToken = async () => {
+export const getAccessToken = async () => {
        if(!cachedAccessTokes){
         await initializeToken();
        }

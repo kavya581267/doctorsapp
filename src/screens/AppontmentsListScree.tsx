@@ -84,7 +84,7 @@ const AppointmentsListScreen = () => {
       navigation.navigate("InProgressNotes")
     }
     if (screen === "past_notes") {
-      navigation.navigate("LabTestScreen")
+      navigation.navigate("PastNotes")
     }
   }
 
@@ -138,6 +138,12 @@ const AppointmentsListScreen = () => {
   useEffect(() => {
     fetchAppointments();
   }, []);
+
+  const roleActions = () => {
+    const rolesStr =  loggedInUserContext.roles.join(" ");
+    const act = actions.filter((a) => a.role.find((r) => rolesStr.includes(r)))
+    return act
+}
 
   const handleFilterApplied = (filteredData, isFilterActive) => {
     setFilteredAppointments(filteredData);
@@ -312,7 +318,7 @@ const AppointmentsListScreen = () => {
           </View>
         </View>
       )}
-      <FabMenuScreen action={actions} onPress={fabPress} />
+      <FabMenuScreen action={roleActions()} onPress={fabPress} />
       <MdLogActivityIndicator loading={loading} />
     </View>
   );
@@ -325,15 +331,17 @@ const actions = [
     name: "inprogress_notes",
     position: 1,
     textColor: COLORS.white,
-    textBackground: COLORS.secondary
+    textBackground: COLORS.secondary,
+    role:[Role.DOCTOR]
   },
   {
-    text: "Past Notes",
+    text: "My Filed Notes",
     icon: <MaterialIcons name="medication" size={20} color="#fff" />,
     name: "past_notes",
     position: 2,
     textColor: COLORS.white,
-    textBackground: COLORS.secondary
+    textBackground: COLORS.secondary,
+    role:[Role.DOCTOR]
   },
   {
     text: "Cancel",
@@ -342,7 +350,8 @@ const actions = [
     position: 3,
     color: "#f44336",
     textColor: COLORS.white,
-    textBackground: COLORS.red
+    textBackground: COLORS.red,
+    role:[Role.DOCTOR, Role.ADMIN,Role.FRONT_OFFICE, Role.NURSE]
   }
 ];
 

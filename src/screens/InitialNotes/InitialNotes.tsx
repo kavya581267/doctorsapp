@@ -13,14 +13,17 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import PasMedHistory from './MedicalHistory';
 import Medications from './Medications';
 import Problems from './Problems';
-import { RouteProp, useRoute } from '@react-navigation/native';
-import { InitialNotesParams } from '@components/MainNavigation';
+import { NavigationProp, RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { InitialNotesParams, RootStackParamList } from '@components/MainNavigation';
 import { MdLogActivityIndicator } from '@components/MdLogActivityIndicator';
 import { patientService } from '@api/patientService';
 import { CreateInitialNoteRequest, CreateInitialNoteResponse, CreatePatientMedication, FileNoteRequest, PatientMedication, UpdateNoteRequest, UpdatePatientMedication } from '@api/model/patient/PatientModels';
 import Investigation from './Investigation';
 import { convertPatientMedicationResponseToPatientMedication, formatToYYYYMMDD, getFutureDate } from '@utils/utils';
 import { MdLodSnackbar } from '@components/MdLogSnacbar';
+import ConfirmationModal from '@components/ConfirmationModal';
+import InitialNoteSubmitPopUp from './InitialNoteSubmitPopUp';
+import InitialNoteVitalScreen from '@screens/InitialNoteVitals';
 const { width, height } = Dimensions.get("window");
 
 
@@ -52,6 +55,8 @@ const InitialNoteScreen = () => {
     const [exercise, setExercise] = useState("");
     const [visitDx, setVisitDx] = useState("");
     const [patientMedications, setPatientMedication] = useState<PatientMedication[]>([...facesheet.medications])
+    const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+    const [fileNoteModel, setfileNoteModel] = useState(false)
 
     const [shoeError, setShowError] = useState(false)
     const [error, setError] = useState("");
@@ -64,6 +69,7 @@ const InitialNoteScreen = () => {
             masterData.presentingComplaints.push(resp);
             const newMasterDate = { ...masterData };
             await setMasterDataAdapter(newMasterDate);
+            setLoading(false)
             return resp;
         } catch (error) {
             setErrorMessage(error.toString());
@@ -79,6 +85,7 @@ const InitialNoteScreen = () => {
             masterData.problems.push(resp);
             const newMasterDate = { ...masterData };
             await setMasterDataAdapter(newMasterDate);
+            setLoading(false)
             return resp;
         } catch (error) {
             setErrorMessage(error.toString());
@@ -91,7 +98,11 @@ const InitialNoteScreen = () => {
     const createPatientMedication = async (patientMedication: CreatePatientMedication, medicationId: string) => {
         setLoading(true)
         try {
-            const resp = await patientService.updatePatientMedication(appointment.patientId.toString(), medicationId, patientMedication);
+            patientMedication.clinicId = appointment.clinicId.toString();
+            patientMedication.medicationId = medicationId;
+            patientMedication.appointmentId = appointment.id.toString();
+            const resp = await patientService.createPatientMedication(appointment.patientId.toString(), patientMedication);
+            setLoading(false)
             return convertPatientMedicationResponseToPatientMedication(resp);
         } catch (error) {
             setErrorMessage(error.toString());
@@ -107,6 +118,7 @@ const InitialNoteScreen = () => {
             masterData.pastMedicalHistory.push(resp);
             const newMasterDate = { ...masterData };
             await setMasterDataAdapter(newMasterDate)
+            setLoading(false)
             return resp;
         } catch (error) {
             setErrorMessage(error.toString());
@@ -122,6 +134,7 @@ const InitialNoteScreen = () => {
             masterData.familyHistory.push(resp);
             const newMasterDate = { ...masterData };
             await setMasterDataAdapter(newMasterDate)
+            setLoading(false)
             return resp;
         } catch (error) {
             setErrorMessage(error.toString());
@@ -137,6 +150,7 @@ const InitialNoteScreen = () => {
             masterData.medications.push(resp);
             const newMasterDate = { ...masterData };
             await setMasterDataAdapter(newMasterDate)
+            setLoading(false)
             return resp;
         } catch (error) {
             setErrorMessage(error.toString());
@@ -149,9 +163,10 @@ const InitialNoteScreen = () => {
         setLoading(true)
         try {
             const resp = await doctorService.createLabTest(reqObj);
-            masterData.labResults.push(resp);
-            const newMasterDate = { ...masterData };
-            await setMasterDataAdapter(newMasterDate)
+            //masterData.labResults.push(resp);
+            //const newMasterDate = { ...masterData };
+            //await setMasterDataAdapter(newMasterDate)
+            setLoading(false)
             return resp;
         } catch (error) {
             setErrorMessage(error.toString());
@@ -170,6 +185,16 @@ const InitialNoteScreen = () => {
             setLoading(true)
             const initialNote = await patientService.createInitialNote(facesheet?.patient?.id.toString(), reqBody);
             setNote(initialNote);
+            setPresntingComplaints(initialNote.presentingComplaints);
+            setPersonalHistory(initialNote.personalHistory)
+            setDrugHistory(initialNote.drugHistory)
+            setFamilyHistory(initialNote.familyHistory)
+            setSystemicExamination(initialNote.systemicExamination)
+            setPhysicalExamination(initialNote.physicalExamination)
+            setDiet(diet)
+            setExercise(exercise)
+            setPastMedicalHistory(initialNote.pastMedicalHistory)
+
         } catch (error) {
             setErrorMessage(error.toString());
             setVisible(true)
@@ -178,10 +203,11 @@ const InitialNoteScreen = () => {
     }
 
     const handleSave = async () => {
+        let failed = false;
         const updateNoteReq = new UpdateNoteRequest()
-        updateNoteReq.clinicId = note.clinicId.toString();
+        updateNoteReq.clinicId = note.clinicId;
         updateNoteReq.diet = diet;
-        updateNoteReq.doctorId = note.doctorId.toString();
+        updateNoteReq.doctorId = note.doctorId;
         updateNoteReq.drugHistory = drugHistory;
         updateNoteReq.exercise = exercise;
         updateNoteReq.familyHistory = familyHistory;
@@ -192,6 +218,7 @@ const InitialNoteScreen = () => {
         updateNoteReq.presentingComplaints = presentingComplaints;
         updateNoteReq.systemicExamination = systemicExamination;
         updateNoteReq.visitDx = visitDx;
+        //updateNoteReq.medications=patientMedications;
         try {
             setLoading(true)
             const savedNote = await patientService.updateInitialNote(facesheet?.patient?.id, note.id, updateNoteReq);
@@ -199,15 +226,23 @@ const InitialNoteScreen = () => {
         } catch (error) {
             setErrorMessage(error.toString());
             setVisible(true)
+            failed = true;
         }
         setLoading(false)
+        if (failed) {
+
+        }else{
+            setVisible(true);
+            setErrorMessage("Saved note!!")
+        }
     }
 
-    const fileNote = async () => {
+    const fileNote = async (date: string) => {
         const fileNote = new FileNoteRequest()
         fileNote.clinicId = note.clinicId;
         fileNote.doctorId = note.doctorId;
-        fileNote.nextVisitDate = getFutureDate(new Date(), 10);
+        fileNote.filed = true;
+        fileNote.nextVisitDate = date;
         setLoading(true)
         try {
             const resp = await patientService.fileInitialNote(facesheet.patient.id, note.id, fileNote);
@@ -225,15 +260,27 @@ const InitialNoteScreen = () => {
         fetchInitialNote();
     }, [])
 
+    if (loading) {
+        return (
+            <MdLogActivityIndicator loading={loading} />
+        )
+    }
+
     return (
         <>
             <View style={styles.container}>
                 <Back nav='Mainscreen' tab='Appointments' />
                 <View style={styles.header}>
                     <Text style={styles.headerTitle}>Initial Note</Text>
-                    <TouchableOpacity style={styles.submitButton} onPress={handleSave}>
-                        <Text style={styles.submitText}>Save</Text>
-                    </TouchableOpacity>
+                    <View style={{flexDirection:"row", justifyContent:"space-between"}}>
+                        <TouchableOpacity style={{...styles.submitButton, backgroundColor:COLORS.secondary, marginRight:20}}
+                         onPress={() => setfileNoteModel(true)}>
+                            <Text style={styles.submitText}>Submit</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.submitButton} onPress={handleSave}>
+                            <Text style={styles.submitText}>Save</Text>
+                        </TouchableOpacity>
+                    </View>
                 </View>
                 <Divider />
                 <KeyboardAwareScrollView>
@@ -245,13 +292,13 @@ const InitialNoteScreen = () => {
 
                         <PresentingComplaints noteSectionString={presentingComplaints} setNoteSectionString={setPresntingComplaints} setLoading={setLoading} title="Presenting Complaints"
                             addNewItemCommon={createPresentingComplaint} itemList={masterData.presentingComplaints} />
-                        <Medications patientMedications={patientMedications} setLoading={setLoading} title='Medications' addNewItemCommon={createMedication}
+                        <Medications setPatientMedications={setPatientMedication} patientMedications={patientMedications} setLoading={setLoading} title='Medications' addNewItemCommon={createMedication}
                             createPatientMedication={createPatientMedication} itemList={masterData.medications} patientId={appointment.patientId.toString()} />
 
-                        <Note setNoteSectionString={setPersonalHistory} title="Personal History" />
+                        <Note prevVal={personalHistory} setNoteSectionString={setPersonalHistory} title="Personal History" />
                         <PasMedHistory noteSectionString={pastMedicalHistory} setNoteSectionString={setPastMedicalHistory} setLoading={setLoading} title="Past Medical History"
                             addNewItemCommon={createMedicalHistory} itemList={masterData.pastMedicalHistory} />
-                        <Note setNoteSectionString={setDrugHistory} title="Drug History" />
+                        <Note prevVal={drugHistory} setNoteSectionString={setDrugHistory} title="Drug History" />
 
                         <PresentingComplaints noteSectionString={familyHistory} setNoteSectionString={setFamilyHistory} setLoading={setLoading} title="Family History"
                             addNewItemCommon={createFamilyHistory} itemList={masterData.familyHistory} />
@@ -259,38 +306,25 @@ const InitialNoteScreen = () => {
                         {
                             // vitals
                         }
-                        <Note setNoteSectionString={setSystemicExamination} title="Systemic Examination" />
+                        <Note prevVal={systemicExamination} setNoteSectionString={setSystemicExamination} title="Systemic Examination" />
                         {
                             /*
                               <Problems noteSectionString={personalHistory} setNoteSectionString={setPersonalHistory} setLoading={setLoading} title='Problems'
                                 addNewItemCommon={createProblems} itemList={masterData.problems} />
                             */
                         }
-                        <Investigation noteSectionString={investigations} setNoteSectionString={setInvestigations} setLoading={setLoading} title="Investigation" addNewItemCommon={createInvestigation} itemList={masterData.labResults} />
-                        <Note setNoteSectionString={setPhysicalExamination} title="Physical Examination" />
-                        <Note setNoteSectionString={setDiet} title="Diet" />
-                        <Note setNoteSectionString={setExercise} title="Exercise" />
+                        <Investigation noteSectionString={investigations} setNoteSectionString={setInvestigations} setLoading={setLoading} title="Investigation" addNewItemCommon={createInvestigation} itemList={masterData.labTests} />
+                        <InitialNoteVitalScreen />
+                        <Note prevVal={physicalExamination} setNoteSectionString={setPhysicalExamination} title="Physical Examination" />
+                        <Note prevVal={diet} setNoteSectionString={setDiet} title="Diet" />
+                        <Note prevVal={exercise} setNoteSectionString={setExercise} title="Exercise" />
                         {/*labtest */}
                     </View>
+                    <InitialNoteSubmitPopUp modalVisible={fileNoteModel} onClose={() => setfileNoteModel(false)} onSave={(date) => { fileNote(date) }} title='Initial Note' />
                 </KeyboardAwareScrollView>
             </View>
             <MdLogActivityIndicator loading={loading} />
-            <MdLodSnackbar message={error} visible={shoeError} onDismiss={() => setShowError(false)} />
-            <View>
-                <TouchableOpacity onPress={fileNote} style={{
-                    backgroundColor: COLORS.secondary,
-                    paddingVertical: 14,
-                    borderRadius: 12,
-                    alignItems: 'center',
-                    marginBottom: 5
-                }}>
-                    <Text style={{
-                        color: '#fff',
-                        fontSize: 16,
-                        fontWeight: '600',
-                    }}>Submit</Text>
-                </TouchableOpacity>
-            </View>
+            <MdLodSnackbar visible={visible} message={errorMessage} onDismiss={() => setVisible(false)}  success={errorMessage === "Saved note!!"?true:false} />
         </>
     )
 
@@ -303,7 +337,8 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: 'white',
-        padding: 10
+        padding: 10,
+        height: height
     },
     header: {
         flexDirection: 'row',

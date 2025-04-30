@@ -1,46 +1,39 @@
-import { LabTest } from '@api/model/doctor/MasterData';
+import { LabObservation, LabTest } from '@api/model/doctor/MasterData';
 import Back from '@components/Back';
+import { LabTestScreenParam, RootStackParamList } from '@components/MainNavigation';
 import { AuthContext } from '@context/AuthContext';
-import { AuthProvider } from '@context/AuthProvider';
-import { useNavigation } from '@react-navigation/native';
+import { NavigationProp, RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import React, { useContext, useEffect, useState } from 'react';
 import { View, Text, FlatList, TouchableOpacity, StyleSheet, SafeAreaView } from 'react-native';
 
+type RouteParams = {
+  param: LabTestScreenParam
+}
 
-const labTests = [
-  'FBS',
-  'PPBS',
-  'HbA1c',
-  'Sr. Creatinine',
-  'UACR',
-  'Lipid Profile',
-  'Retinal Exam',
-  'Vit B12',
-  'TFT',
-  'hs-CRP'
-];
 
 const LabTestScreen = () => {
-  const navigation = useNavigation();
-  const {masterData} = useContext(AuthContext)
-  const [labTest, setLabtests] = useState([...masterData.labTests])
+  const { masterData } = useContext(AuthContext)
+  const [labTest, setLabtests] = useState<LabTest[]>([])
+  const [labResluts, setLabResults] = useState<LabObservation[]>([])
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+  const route = useRoute<RouteProp<RouteParams>>()
+  const { appointment } = route.params
 
-  useEffect(()=>{
-      console.log(labTest)
-  },[])
-  const handlePress = (item:LabTest) => {
-    console.log( item);
-     // navigation.navigate('TestDetails', { testName });
-     if(item.testName === "Lipid Profile"){
-      navigation.navigate("LipidProfileScreen");
-     }
-     
+  useEffect(() => {
+   masterData && masterData?.labResults && setLabResults([...masterData.labResults])
+   masterData && masterData?.labTests && setLabtests([...masterData.labTests])
+  }, [])
+  const handlePress = (item: LabTest) => {
+    console.log(item);
+    // navigation.navigate('TestDetails', { testName });
+    const labTestResults = labResluts.filter((lr) => lr.labTestId === item.id)
+    navigation.navigate("LabResultsScreen", { labResults: labTestResults, labTest: item, appointment: appointment });
   };
 
   return (
     <View style={styles.container}>
-        <Back nav='Mainscreen' tab='Appointments'/>
-        <Text style={styles.headerTitle}>Select Lab Test</Text>
+      <Back nav='Mainscreen' tab='Appointments' />
+      <Text style={styles.headerTitle}>Select Lab Test</Text>
       <FlatList
         data={labTest}
         keyExtractor={(item) => item.id.toString()}

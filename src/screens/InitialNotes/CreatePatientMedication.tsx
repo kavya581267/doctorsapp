@@ -61,7 +61,7 @@ const CreatePatientMedicationScreen = () => {
     return (
         <View style={{ padding: 15 }}>
             <Back nav="PatientMedical" routeParam={{ appointment: appointment }} />
-            <MedicationScreen patientMedications={patientMedications} setLoading={setLoading} title='Medications' addNewItemCommon={createMedication}
+            <MedicationScreen setPatientMedications={setPatientMedication} patientMedications={patientMedications} setLoading={setLoading} title='Medications' addNewItemCommon={createMedication}
                 createPatientMedication={createPatientMedication} itemList={masterData.medications} patientId={appointment.patientId.toString()} />
                 <MdLogActivityIndicator loading={loading}/>
                 <MdLodSnackbar  message={error} visible={visibleError} onDismiss={()=>setVisibleError(false)}/>

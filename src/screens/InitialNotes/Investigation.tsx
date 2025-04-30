@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { View, Text, TouchableOpacity, Button, TextInput, Modal } from "react-native";
 import styles from "@styles/presentingComplaintsStyle";
 import Icon from "react-native-vector-icons/Ionicons";
-import {  LabTestRequest, LabTestResponse } from "@api/model/doctor/MasterData";
+import {  LabTest, LabTestRequest, LabTestResponse } from "@api/model/doctor/MasterData";
 import { AuthContext } from "@context/AuthContext";
 import { MdLodSnackbar } from "@components/MdLogSnacbar";
 import { Dropdown } from "react-native-element-dropdown";
@@ -11,14 +11,13 @@ import { ScrollView } from "react-native-gesture-handler";
 import { Divider } from "react-native-paper";
 import InvestigationPopUp from "./InestigationPopUp";
 
-export class MedicalHistoryNote extends LabTestResponse {
-    howlong: number
+export class InvestigationNote extends LabTest {
     date: string
 }
 
 type Props = {
     title: string;
-    itemList: LabTestResponse[];
+    itemList: LabTest[];
     addNewItemCommon: (reqObj: LabTestRequest) => Promise<LabTestResponse>;
     setLoading: (load:boolean) => void
     noteSectionString: string
@@ -29,7 +28,7 @@ type Props = {
 
 export default function Investigation({ title, itemList, addNewItemCommon, setLoading, noteSectionString, setNoteSectionString}: Props) {
     const [searchText, setSearchText] = useState("");
-    const [selectedItems, setSelectedItems] = useState<MedicalHistoryNote[]>([]);
+    const [selectedItems, setSelectedItems] = useState<InvestigationNote[]>([]);
     const { loggedInUserContext } = useContext(AuthContext);
     const [visible, setVisible] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
@@ -37,7 +36,7 @@ export default function Investigation({ title, itemList, addNewItemCommon, setLo
     const [isFocus, setIsFocus] = useState(false);
     const [sel, setSel] = useState<string>();
     const [isVisibleModel, setIsVisibleModel] = useState(false);
-    const [selectedModelItem, setSelectedModelItem] = useState<LabTestResponse>()
+    const [selectedModelItem, setSelectedModelItem] = useState<LabTest>()
 
     const [modalVisible, setModalVisible] = useState(false);
     const [complaintText, setComplaintText] = useState('');
@@ -48,7 +47,7 @@ export default function Investigation({ title, itemList, addNewItemCommon, setLo
         id: item.id,
     }));
 
-    const addItem = (item: MedicalHistoryNote) => {
+    const addItem = (item: InvestigationNote) => {
         if (!selectedItems.some((selected) => selected.id === item.id)) {
             setSelectedItems((prevItems) => [...prevItems, item]);
         }
@@ -56,7 +55,7 @@ export default function Investigation({ title, itemList, addNewItemCommon, setLo
         setSel("");
     };
 
-    const remove = (item: MedicalHistoryNote) => {
+    const remove = (item: InvestigationNote) => {
         setSelectedItems((prevItems) =>
             prevItems.filter((selected) => selected.id !== item.id)
         );

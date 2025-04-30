@@ -242,10 +242,27 @@ export interface LabTestResponse {
   updatedAt: string;
 }
 
-export interface LabTestRequest {
-  clinicId: string;
-  testId: string;
+export class LabOrderRequest {
+  clinicId: number;
+  testId: number;
   notes: string;
+}
+
+export class LabTestOrderResp {
+  id: number;
+  clinicId: number;
+  patientId: number;
+  testId: number;
+  testName: string;
+  testCategory: string | null;
+  orderedByName: string;
+  orderedAt: string; // ISO timestamp
+  status: string;
+  results: any | null;
+  completedAt: string | null;
+  notes: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export class AppointmentUpdateRequest {
@@ -327,9 +344,24 @@ export interface Vital {
   updated_at: string; // ISO datetime string
 }
 
+class FacesheetObservation {
+  appointment_id: number;
+  clinic_id: number;
+  created_at: string; // ISO datetime string
+  id: number;
+  observation: string;
+  order_id: number;
+  patient_id: number;
+  recorded_at: string; // ISO datetime string
+  recorded_by_name: string;
+  units: string;
+  updated_at: string; // ISO datetime string
+  value: number;
+}
+
 export interface FaceSheet {
   hasAppointment: boolean
-  labResults: string[]
+  labResults: FacesheetObservation[]
   medications: PatientMedication[]
   newAppointment: true
   patient: PatientResponse
@@ -378,8 +410,8 @@ export interface CreateInitialNoteResponse {
 }
 
 export class UpdateNoteRequest {
-  clinicId: string;
-  doctorId: string;
+  clinicId: number;
+  doctorId: number;
   drugHistory: string;
   familyHistory: string;
   investigations: string;
@@ -391,6 +423,7 @@ export class UpdateNoteRequest {
   diet: string;
   exercise: string;
   visitDx: string;
+  medications:PatientMedication[]
 }
 
 
@@ -418,4 +451,36 @@ export interface ListNoteResponse {
   patientId: number;
   patientLastname: string;
   patientMrn: string; // Example: "C40-2025-000001"
+}
+
+export interface PastNotesResponse {
+  noteId: number;
+  clinicId: number;
+  patientId: number;
+  patientFirstname: string;
+  patientLastname: string;
+  patientMrn: string;
+  appointmentId: number;
+  appointmentDate: string;
+  doctorId: number;
+  doctorFirstname: string;
+  doctorLastname: string;
+  noteType: string;
+  createdAt: string;
+  filed: boolean;
+  filedTimestamp: string;
+}
+
+
+export class LabResultEntryReq {
+  observation: string;
+  units: string;
+  value: number;
+}
+
+export class LabResultsPayload {
+  clinicId: number;
+  appointmentId: number;
+  orderId: number;
+  labResults: LabResultEntryReq[];
 }

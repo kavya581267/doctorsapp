@@ -141,3 +141,31 @@ export const convertPatientMedicationResponseToPatientMedication = (resp:Patient
 
 }
 
+export const convertPatientMedicationToPatientMedicationResponse = (pm: PatientMedication,appointmentId: number, ): PatientMedicationResponse => {
+  return {
+    id: pm.id,
+    clinicId: pm.clinic_id,
+    patientId: pm.patient_id,
+    medicationId: pm.medication_id,
+    medicationName: pm.medication_name,
+    genericName: pm.generic_name,
+    prescribedByName: pm.prescribed_by_name,
+    dosage: pm.dosage,
+    frequency: pm.frequency,
+    startDate: pm.start_date,
+    endDate: pm.end_date,
+    instructions: pm.instructions,
+    dosageUnit: pm.dosage_unit,
+    formulation: pm.formulation,
+    route: pm.route,
+    timePhase: pm.time_phase,
+    medicationSchedule: pm.medication_schedule,
+    days: pm.days,
+    status: pm.status,
+    createdAt: pm.created_at,
+    updatedAt: pm.updated_at,
+    appointmentId: appointmentId
+  };
+};
+
+
