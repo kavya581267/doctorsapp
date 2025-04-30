@@ -154,7 +154,7 @@ export const patientService = {
     },
     savePatientlabResults: async (patientId: string,  labResults:LabResultsPayload):Promise<any> => {
         try {
-            const resp = await apiService.put(replacePlaceholders(SAVE_LAB_RESULTS, {patient_id: patientId}),labResults);
+            const resp = await apiService.post(replacePlaceholders(SAVE_LAB_RESULTS, {patient_id: patientId}),labResults);
             return resp.data;
         } catch (error) {
             throw error

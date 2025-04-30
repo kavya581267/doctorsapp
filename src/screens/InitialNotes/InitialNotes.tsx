@@ -20,6 +20,7 @@ import { patientService } from '@api/patientService';
 import { CreateInitialNoteRequest, CreateInitialNoteResponse, CreatePatientMedication, FileNoteRequest, PatientMedication, UpdateNoteRequest, UpdatePatientMedication } from '@api/model/patient/PatientModels';
 import Investigation from './Investigation';
 import { convertPatientMedicationResponseToPatientMedication, formatToYYYYMMDD, getFutureDate } from '@utils/utils';
+import { MdLodSnackbar } from '@components/MdLogSnacbar';
 const { width, height } = Dimensions.get("window");
 
 
@@ -86,7 +87,10 @@ const InitialNoteScreen = () => {
     const createPatientMedication = async (patientMedication: CreatePatientMedication, medicationId: string) => {
         setLoading(true)
         try {
-            const resp = await patientService.updatePatientMedication(appointment.patientId.toString(), medicationId, patientMedication);
+            patientMedication.clinicId = appointment.clinicId.toString();
+            patientMedication.medicationId = medicationId;
+            patientMedication.appointmentId = appointment.id.toString();
+            const resp = await patientService.createPatientMedication(appointment.patientId.toString(), patientMedication);
             return convertPatientMedicationResponseToPatientMedication(resp);
         } catch (error) {
             setErrorMessage(error.toString());
@@ -271,6 +275,7 @@ const InitialNoteScreen = () => {
                 </KeyboardAwareScrollView>
             </View>
             <MdLogActivityIndicator loading={loading} />
+            <MdLodSnackbar visible={visible} message={errorMessage} onDismiss={()=>setVisible(false)}/>
             <View>
                 <TouchableOpacity onPress={fileNote} style={{
                     backgroundColor: COLORS.secondary,

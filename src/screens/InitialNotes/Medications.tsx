@@ -11,6 +11,7 @@ import { Divider } from "react-native-paper";
 import { CreatePatientMedication, PatientMedication, UpdatePatientMedication } from "@api/model/patient/PatientModels";
 import { patientService } from "@api/patientService";
 import { getPatientMedicationString } from "@utils/utils";
+import ConfirmationModal from "@components/ConfirmationModal";
 
 export class MedicalHistoryNote extends Symptom {
     howlong: number
@@ -51,6 +52,8 @@ export default function MedicationScreen({ title, itemList, addNewItemCommon, se
     const [dosage, setDosage] = useState('');
     const [unit, setunit] = useState('');
     const [formulation, setFormulation] = useState('');
+    const [confirmModalVisible, setConfirmModalVisible] = useState(false);
+    const [removeItem, setRemoveItem] = useState<PatientMedication| undefined>()
 
     const dropdownData = itemList.map((item) => ({
         label: item.medicationName + " " + item.dosage + item?.dosageUnit + " " + item.dosageForm,
@@ -85,18 +88,23 @@ export default function MedicationScreen({ title, itemList, addNewItemCommon, se
          updateMed.startDate = item.start_date;
          updateMed.timePhase = item.time_phase;
          updateMed.status = "COMPLETED"
-        const resp = await patientService.updatePatientMedication(item.patient_id.toString(), item.medication_id.toString(),updateMed);
+        const resp = await patientService.updatePatientMedication(item.patient_id.toString(), item.id.toString(),updateMed);
     }
 
     const remove = async (item: PatientMedication) => {
         try{
-            callRemovePatientMedication(item);
+            setLoading(true)
+            setConfirmModalVisible(false)
+            await callRemovePatientMedication(item);
             setSelectedItems((prevItems) =>
                 prevItems.filter((selected) => selected.id !== item.id)
             );
         }catch(error){
-           console.log(error.toString())
+            setErrorMessage(error.toString())
+            setVisible(true)
+           
         }
+        setLoading(false)
        
     };
 
@@ -189,7 +197,7 @@ export default function MedicationScreen({ title, itemList, addNewItemCommon, se
                     selectedItems.map((item, index) => (
                         <View key={index} style={styles.selectedChip}>
                             <Text>{getPatientMedicationString(item)}</Text>
-                            <TouchableOpacity onPress={() => remove(item)}>
+                            <TouchableOpacity onPress={() => {setConfirmModalVisible(true); setRemoveItem(item)}}>
                                 <Icon name="close-circle" size={18} color="grey" style={styles.removeIcon} />
                             </TouchableOpacity>
                         </View>
@@ -246,7 +254,9 @@ export default function MedicationScreen({ title, itemList, addNewItemCommon, se
                     </View>
                 </View>
             </Modal>
+            <ConfirmationModal visible={confirmModalVisible} title={`Delete ${removeItem?.medication_name} ${removeItem?.dosage}${removeItem?.dosage_unit}`} onCancel={()=>setConfirmModalVisible(false)} onAccept={()=>{remove(removeItem)}}/>
             <MdLodSnackbar visible={visible} onDismiss={onDissmissSnackbar} message={errorMessage} />
         </View>
     );
+
 }
