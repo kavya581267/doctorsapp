@@ -144,9 +144,9 @@ const InitialNoteScreen = () => {
         setLoading(true)
         try {
             const resp = await doctorService.createLabTest(reqObj);
-            masterData.labResults.push(resp);
-            const newMasterDate = { ...masterData };
-            await setMasterDataAdapter(newMasterDate)
+            //masterData.labResults.push(resp);
+            //const newMasterDate = { ...masterData };
+            //await setMasterDataAdapter(newMasterDate)
             return resp;
         } catch (error) {
             setErrorMessage(error.toString());
@@ -261,7 +261,7 @@ const InitialNoteScreen = () => {
                                 addNewItemCommon={createProblems} itemList={masterData.problems} />
                             */
                         }
-                        <Investigation noteSectionString={investigations} setNoteSectionString={setInvestigations} setLoading={setLoading} title="Investigation" addNewItemCommon={createInvestigation} itemList={masterData.labResults} />
+                        <Investigation noteSectionString={investigations} setNoteSectionString={setInvestigations} setLoading={setLoading} title="Investigation" addNewItemCommon={createInvestigation} itemList={masterData.labTests} />
                         <Note setNoteSectionString={setPhysicalExamination} title="Physical Examination" />
                         <Note setNoteSectionString={setDiet} title="Diet" />
                         <Note setNoteSectionString={setExercise} title="Exercise" />

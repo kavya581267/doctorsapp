@@ -1,16 +1,16 @@
-import { LabTestResponse, Symptom } from '@api/model/doctor/MasterData';
+import { LabTest, LabTestResponse, Symptom } from '@api/model/doctor/MasterData';
 import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, TouchableWithoutFeedback, Keyboard, TouchableOpacity } from 'react-native';
 import { Modal, Portal, Text, TextInput, Button, Card, ToggleButton, Divider } from 'react-native-paper';
 import { formatToYYYYMMDD } from '@utils/utils';
 import SegmentedToggle from '@components/SegmentedToggle';
-import { MedicalHistoryNote } from './Investigation';
+import { InvestigationNote } from './Investigation';
 
 type Props = {
-    selectedItem: LabTestResponse;
+    selectedItem: LabTest;
     modalVisible: boolean;
     onClose: () => void;
-    onSave: (item: MedicalHistoryNote) => void;
+    onSave: (item: InvestigationNote) => void;
 };
 const InvestigationPopUp: React.FC<Props> = ({ selectedItem, modalVisible, onClose, onSave }) => {
     const [duration, setDuration] = useState('0');
@@ -31,13 +31,13 @@ const InvestigationPopUp: React.FC<Props> = ({ selectedItem, modalVisible, onClo
 
         if (unit === 'Days') {
             pastDate = new Date();
-            pastDate.setDate(now.getDate() - num);
+            pastDate.setDate(now.getDate() + num);
         } else if (unit === 'Months') {
             pastDate = new Date();
-            pastDate.setMonth(now.getMonth() - num);
+            pastDate.setMonth(now.getMonth() + num);
         } else if (unit === 'Years') {
             pastDate = new Date();
-            pastDate.setFullYear(now.getFullYear() - num);
+            pastDate.setFullYear(now.getFullYear() + num);
         }
 
         setStartDate(formatToYYYYMMDD(pastDate));
@@ -55,11 +55,7 @@ const InvestigationPopUp: React.FC<Props> = ({ selectedItem, modalVisible, onClo
 
 
     const handleSave = () => {
-        const item = new MedicalHistoryNote();
-        item.id = selectedItem.id;
-        item.name = selectedItem.testName;
-        item.howlong = Number(duration);
-        item.type = unit;
+        const item:InvestigationNote = {...selectedItem, date:startDate}
         onSave(item);
         onClose();
 
