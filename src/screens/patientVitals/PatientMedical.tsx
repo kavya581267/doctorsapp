@@ -268,7 +268,7 @@ export default function PatientMedical() {
 
                             {
                                 !appointmetVital && user.roles && user.roles.find((role) => role !== Role.DOCTOR && role !== Role.ADMIN) &&
-                                <TouchableOpacity style={{ flexDirection: "row" }} onPress={() => {navigation.navigate("LabTestScreen")}}>
+                                <TouchableOpacity style={{ flexDirection: "row" }} onPress={() => {navigation.navigate("LabTestScreen", {appointment:appointment})}}>
                                     <Text style={{ color: COLORS.primary, fontWeight: "500" }}> <Feather name="edit" size={15} color={COLORS.primary} /> Edit</Text>
                                 </TouchableOpacity>
                             }
