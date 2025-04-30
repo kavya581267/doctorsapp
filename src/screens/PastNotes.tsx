@@ -7,7 +7,6 @@ import React, { useContext, useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Platform } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { getPastDate } from '@utils/utils';
 
 
 const PastNotes = () => {
