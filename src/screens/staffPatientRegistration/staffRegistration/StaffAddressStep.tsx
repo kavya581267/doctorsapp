@@ -30,7 +30,7 @@ export const StaffAddress: React.FC<StepProps> = ({ nextStep, prevStep, formData
     }
 
     const validateFormFields = () => {
-        if (!isAnyFieldsEmpty(["address", "city", "state", "zipCode", "country"], formData)) {
+        if (isAnyFieldsEmpty(["address", "city", "state", "zipCode", "country"], formData)) {
             setVisible(true);
             setErrorMessage("Please fill all required details");
             return;
