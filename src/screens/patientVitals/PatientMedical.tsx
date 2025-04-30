@@ -243,7 +243,7 @@ export default function PatientMedical() {
                         {
                             faceSheetData?.medications && faceSheetData?.medications.length > 0 &&
                             <View style={{ marginTop: 5, paddingLeft:10 }}>
-                                {faceSheetData?.medications.map((item, key) => <Text key={key}
+                                {faceSheetData?.medications.map((item, key) => item.status === "ACTIVE" && <Text key={key}
                                 > {'\u2022'} {getPatientMedicationString(item)}
                                 </Text>)}
                             </View>

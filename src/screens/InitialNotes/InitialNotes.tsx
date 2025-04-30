@@ -61,6 +61,7 @@ const InitialNoteScreen = () => {
             masterData.presentingComplaints.push(resp);
             const newMasterDate = { ...masterData };
             await setMasterDataAdapter(newMasterDate);
+            setLoading(false)
             return resp;
         } catch (error) {
             setErrorMessage(error.toString());
@@ -76,6 +77,7 @@ const InitialNoteScreen = () => {
             masterData.problems.push(resp);
             const newMasterDate = { ...masterData };
             await setMasterDataAdapter(newMasterDate);
+            setLoading(false)
             return resp;
         } catch (error) {
             setErrorMessage(error.toString());
@@ -91,6 +93,7 @@ const InitialNoteScreen = () => {
             patientMedication.medicationId = medicationId;
             patientMedication.appointmentId = appointment.id.toString();
             const resp = await patientService.createPatientMedication(appointment.patientId.toString(), patientMedication);
+            setLoading(false)
             return convertPatientMedicationResponseToPatientMedication(resp);
         } catch (error) {
             setErrorMessage(error.toString());
@@ -106,6 +109,7 @@ const InitialNoteScreen = () => {
             masterData.pastMedicalHistory.push(resp);
             const newMasterDate = { ...masterData };
             await setMasterDataAdapter(newMasterDate)
+            setLoading(false)
             return resp;
         } catch (error) {
             setErrorMessage(error.toString());
@@ -121,6 +125,7 @@ const InitialNoteScreen = () => {
             masterData.familyHistory.push(resp);
             const newMasterDate = { ...masterData };
             await setMasterDataAdapter(newMasterDate)
+            setLoading(false)
             return resp;
         } catch (error) {
             setErrorMessage(error.toString());
@@ -136,6 +141,7 @@ const InitialNoteScreen = () => {
             masterData.medications.push(resp);
             const newMasterDate = { ...masterData };
             await setMasterDataAdapter(newMasterDate)
+            setLoading(false)
             return resp;
         } catch (error) {
             setErrorMessage(error.toString());
@@ -151,6 +157,7 @@ const InitialNoteScreen = () => {
             //masterData.labResults.push(resp);
             //const newMasterDate = { ...masterData };
             //await setMasterDataAdapter(newMasterDate)
+            setLoading(false)
             return resp;
         } catch (error) {
             setErrorMessage(error.toString());

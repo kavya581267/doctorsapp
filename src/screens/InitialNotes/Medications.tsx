@@ -195,7 +195,7 @@ export default function MedicationScreen({ title, itemList, addNewItemCommon, se
             <ScrollView contentContainerStyle={styles.complaintsBox}>
                 {selectedItems.length > 0 && (
                     selectedItems.map((item, index) => (
-                        <View key={index} style={styles.selectedChip}>
+                        item.status === "ACTIVE" && <View key={index} style={styles.selectedChip}>
                             <Text>{getPatientMedicationString(item)}</Text>
                             <TouchableOpacity onPress={() => {setConfirmModalVisible(true); setRemoveItem(item)}}>
                                 <Icon name="close-circle" size={18} color="grey" style={styles.removeIcon} />
