@@ -15,13 +15,13 @@ type Props = {
     title: string;
     itemList: Symptom[];
     addNewItemCommon: (reqObj: InitialCommonNoteRequest) => Promise<Symptom>;
-    setLoading: (load:boolean) => void;
+    setLoading: (load: boolean) => void;
     noteSectionString: string
-    setNoteSectionString: (note:string) => void
+    setNoteSectionString: (note: string) => void
 };
 
 const PresentingComplaints = ({ title, itemList, addNewItemCommon, setLoading, noteSectionString, setNoteSectionString }: Props) => {
-  
+
     const { loggedInUserContext } = useContext(AuthContext);
     const [selectedItems, setSelectedItems] = useState<Symptom[]>([]);
     const [searchText, setSearchText] = useState("");
@@ -34,7 +34,7 @@ const PresentingComplaints = ({ title, itemList, addNewItemCommon, setLoading, n
 
     const onDismissSnackbar = () => setVisible(false);
 
-    
+
 
 
     const dropdownData = itemList.map((item) => ({
@@ -45,7 +45,7 @@ const PresentingComplaints = ({ title, itemList, addNewItemCommon, setLoading, n
 
     const updateNoteString = () => {
         let noteString = selectedItems.map((item) => item.name)
-        .join(", ");
+            .join(", ");
         setNoteSectionString(noteString)
     }
 
@@ -82,18 +82,21 @@ const PresentingComplaints = ({ title, itemList, addNewItemCommon, setLoading, n
         setSelectedItems(selectedItems.filter((i) => i.id !== item.id));
     };
 
-    useEffect(()=>{
-       updateNoteString();
-    },[selectedItems, noteSectionString])
+    useEffect(() => {
+        updateNoteString();
+    }, [selectedItems, noteSectionString])
 
     useEffect(() => {
-       const it =   noteSectionString.split(", ");
-       const ini =  itemList.filter((i)=> it.includes(i.name))
-       console.log(ini)
-       if(ini && ini.length > 0){
-        setSelectedItems([...ini])
-       }
-      }, []);
+        if (noteSectionString) {
+            const it = noteSectionString.split(", ");
+            const ini = itemList.filter((i) => it.includes(i.name))
+            console.log(ini)
+            if (ini && ini.length > 0) {
+                setSelectedItems([...ini])
+            }
+        }
+
+    }, []);
 
 
     return (
@@ -129,7 +132,7 @@ const PresentingComplaints = ({ title, itemList, addNewItemCommon, setLoading, n
                         <Icon name="search" size={20} color="black" style={styles.icon} />
                     )}
                 />
-                <TouchableOpacity onPress={()=> setModalVisible(true)} >
+                <TouchableOpacity onPress={() => setModalVisible(true)} >
                     <Text>Add</Text>
                 </TouchableOpacity>
             </View>
@@ -153,14 +156,14 @@ const PresentingComplaints = ({ title, itemList, addNewItemCommon, setLoading, n
                 <View style={styles.modalOverlay}>
                     <View style={styles.modalContainer}>
                         <Text style={styles.heading}>Add {title}</Text>
-                        <Divider style={{marginBottom:20}}/>
+                        <Divider style={{ marginBottom: 20 }} />
                         <TextInput
                             style={styles.input1}
                             value={complaintText}
                             onChangeText={setComplaintText}
                             placeholder="Enter name"
                         />
-                      <Divider style={{marginBottom:20}}/>
+                        <Divider style={{ marginBottom: 20 }} />
                         <View style={styles.buttonRow}>
                             <Button title="Cancel" onPress={() => setModalVisible(false)} />
                             <Button title="Create" onPress={() => {

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Modal, View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { Divider } from 'react-native-paper';
 
 const ConfirmationModal = ({
   visible,
@@ -20,7 +21,11 @@ const ConfirmationModal = ({
       <View style={styles.overlay}>
         <View style={styles.container}>
           <Text style={styles.title}>{title}</Text>
-          <Text style={styles.message}>{message}</Text>
+          <Divider />
+          <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+            <Text style={styles.message}>{message}</Text>
+          </View>
+          <Divider />
           <View style={styles.buttonContainer}>
             <TouchableOpacity onPress={onCancel} style={styles.button}>
               <Text style={styles.cancelText}>{cancelText}</Text>
@@ -43,6 +48,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   container: {
+    height:150,
     width: '80%',
     padding: 20,
     backgroundColor: '#fff',
@@ -57,7 +63,6 @@ const styles = StyleSheet.create({
   message: {
     fontSize: 16,
     color: '#444',
-    marginBottom: 20,
   },
   buttonContainer: {
     flexDirection: 'row',

@@ -21,6 +21,7 @@ import { CreateInitialNoteRequest, CreateInitialNoteResponse, CreatePatientMedic
 import Investigation from './Investigation';
 import { convertPatientMedicationResponseToPatientMedication, formatToYYYYMMDD, getFutureDate } from '@utils/utils';
 import { MdLodSnackbar } from '@components/MdLogSnacbar';
+import ConfirmationModal from '@components/ConfirmationModal';
 const { width, height } = Dimensions.get("window");
 
 
@@ -178,6 +179,15 @@ const InitialNoteScreen = () => {
             const initialNote = await patientService.createInitialNote(facesheet?.patient?.id.toString(), reqBody);
             setNote(initialNote);
             setPresntingComplaints(initialNote.presentingComplaints);
+            setPersonalHistory(initialNote.personalHistory)
+            setDrugHistory(initialNote.drugHistory)
+            setFamilyHistory(initialNote.familyHistory)
+            setSystemicExamination(initialNote.systemicExamination)
+            setPhysicalExamination(initialNote.physicalExamination)
+            setDiet(diet)
+            setExercise(exercise)
+            setPastMedicalHistory(initialNote.pastMedicalHistory)
+
         } catch (error) {
             setErrorMessage(error.toString());
             setVisible(true)
@@ -221,6 +231,7 @@ const InitialNoteScreen = () => {
         const fileNote = new FileNoteRequest()
         fileNote.clinicId = note.clinicId;
         fileNote.doctorId = note.doctorId;
+        fileNote.filed = true;
         fileNote.nextVisitDate = getFutureDate(new Date(), 10);
         setLoading(true)
         try {
@@ -232,15 +243,6 @@ const InitialNoteScreen = () => {
         }
         setLoading(false)
 
-    }
-
-    const setSelectedItemsOnLoad = (noteType: string, itemList: Symptom[]) => {
-        const items: string[] = noteType.split(",")
-        const trimmedlist = items.map((i) => i.trim());
-        if (items && items.length > 0) {
-            return itemList.filter((i) => trimmedlist.includes(i.name));
-        }
-        return []
     }
 
 
@@ -277,10 +279,10 @@ const InitialNoteScreen = () => {
                         <Medications setPatientMedications={setPatientMedication} patientMedications={patientMedications} setLoading={setLoading} title='Medications' addNewItemCommon={createMedication}
                             createPatientMedication={createPatientMedication} itemList={masterData.medications} patientId={appointment.patientId.toString()} />
 
-                        <Note setNoteSectionString={setPersonalHistory} title="Personal History" />
+                        <Note prevVal={personalHistory}  setNoteSectionString={setPersonalHistory} title="Personal History" />
                         <PasMedHistory noteSectionString={pastMedicalHistory} setNoteSectionString={setPastMedicalHistory} setLoading={setLoading} title="Past Medical History"
                             addNewItemCommon={createMedicalHistory} itemList={masterData.pastMedicalHistory} />
-                        <Note setNoteSectionString={setDrugHistory} title="Drug History" />
+                        <Note prevVal={drugHistory} setNoteSectionString={setDrugHistory} title="Drug History" />
 
                         <PresentingComplaints noteSectionString={familyHistory} setNoteSectionString={setFamilyHistory} setLoading={setLoading} title="Family History"
                             addNewItemCommon={createFamilyHistory} itemList={masterData.familyHistory} />
@@ -288,7 +290,7 @@ const InitialNoteScreen = () => {
                         {
                             // vitals
                         }
-                        <Note setNoteSectionString={setSystemicExamination} title="Systemic Examination" />
+                        <Note prevVal={systemicExamination} setNoteSectionString={setSystemicExamination} title="Systemic Examination" />
                         {
                             /*
                               <Problems noteSectionString={personalHistory} setNoteSectionString={setPersonalHistory} setLoading={setLoading} title='Problems'
@@ -296,9 +298,9 @@ const InitialNoteScreen = () => {
                             */
                         }
                         <Investigation noteSectionString={investigations} setNoteSectionString={setInvestigations} setLoading={setLoading} title="Investigation" addNewItemCommon={createInvestigation} itemList={masterData.labTests} />
-                        <Note setNoteSectionString={setPhysicalExamination} title="Physical Examination" />
-                        <Note setNoteSectionString={setDiet} title="Diet" />
-                        <Note setNoteSectionString={setExercise} title="Exercise" />
+                        <Note prevVal={physicalExamination} setNoteSectionString={setPhysicalExamination} title="Physical Examination" />
+                        <Note prevVal={diet} setNoteSectionString={setDiet} title="Diet" />
+                        <Note prevVal={exercise} setNoteSectionString={setExercise} title="Exercise" />
                         {/*labtest */}
                     </View>
                 </KeyboardAwareScrollView>

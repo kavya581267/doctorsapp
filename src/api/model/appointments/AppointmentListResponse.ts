@@ -1,4 +1,4 @@
-export interface AppointmentListResponse {
+export class AppointmentListResponse {
     clinicId : number
     doctorId : number
     doctorName : string

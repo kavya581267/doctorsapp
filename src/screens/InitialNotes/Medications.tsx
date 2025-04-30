@@ -66,6 +66,7 @@ export default function MedicationScreen({ title, itemList, addNewItemCommon, se
             const patientMedication =  await createPatientMedication(item,medicationId)
             if (!selectedItems.some((selected) => selected.id === patientMedication.id)) {
                 setSelectedItems((prevItems) => [...prevItems, patientMedication]);
+                setPatientMedications([...selectedItems, patientMedication])
             }
             setSearchText("");
             setSel("");
@@ -99,6 +100,7 @@ export default function MedicationScreen({ title, itemList, addNewItemCommon, se
             setSelectedItems((prevItems) =>
                 prevItems.filter((selected) => selected.id !== item.id)
             );
+            setPatientMedications([...selectedItems.filter((selected) => selected.id !== item.id)])
         }catch(error){
             setErrorMessage(error.toString())
             setVisible(true)

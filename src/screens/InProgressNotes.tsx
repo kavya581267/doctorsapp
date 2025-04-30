@@ -1,9 +1,12 @@
+import { AppointmentListResponse } from '@api/model/appointments/AppointmentListResponse';
 import { ListNoteResponse } from '@api/model/patient/PatientModels';
 import { patientService } from '@api/patientService';
 import Back from '@components/Back';
+import { RootStackParamList } from '@components/MainNavigation';
 import { MdLogActivityIndicator } from '@components/MdLogActivityIndicator';
 import { AuthContext } from '@context/AuthContext';
 import { AuthProvider } from '@context/AuthProvider';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { COLORS } from '@utils/colors';
 import React, { useContext, useEffect, useState } from 'react';
 import { View, Text, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
@@ -15,6 +18,29 @@ const InProgressNotes = () => {
     const [loading, setLoading] = useState(false);
     const { loggedInUserContext } = useContext(AuthContext)
     const [notes, setNotes] = useState<ListNoteResponse[]>([])
+    const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+
+
+    const openNote = async (note: ListNoteResponse) => {
+
+        const appointmentId = note.appointmentId;
+        const patId = note.patientId;
+        try {
+            setLoading(true);
+            const factSheetData = await patientService.fetchFactSheet(patId.toString());
+            const app = new AppointmentListResponse()
+            app.id = appointmentId;
+            app.clinicId = note.clinicId;
+            app.appointmentDate = note.appointmentDate;
+            app.doctorId = note.doctorId;
+            app.doctorName = note.doctorFirstname;
+            app.patientId = patId
+            navigation.navigate("InitialNote", { appointment: app, facesheet: factSheetData })
+        } catch (error) {
+        }
+        setLoading(false)
+
+    }
 
 
     const loadNotes = async () => {
@@ -41,7 +67,7 @@ const InProgressNotes = () => {
                 data={notes}
                 keyExtractor={(item, index) => index.toString()}
                 renderItem={({ item }) => (
-                   <TouchableOpacity style={styles.card}>
+                    <TouchableOpacity style={styles.card} onPress={()=>openNote(item)}>
                         <View style={[styles.row, styles.margin]}>
                             <Text style={styles.label}>
                                 {item.patientFirstname}, {item.patientLastname}
@@ -70,8 +96,8 @@ const InProgressNotes = () => {
 const styles = StyleSheet.create({
     container: {
         padding: 10,
-        backgroundColor:"white",
-        flex:1
+        backgroundColor: "white",
+        flex: 1
 
     },
     title: {
@@ -79,7 +105,7 @@ const styles = StyleSheet.create({
         fontWeight: '500',
         textAlign: 'left',
         marginVertical: 12,
-        marginBottom:18
+        marginBottom: 18
     },
     card: {
         backgroundColor: '#FAFAFA',
