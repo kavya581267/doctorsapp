@@ -419,3 +419,21 @@ export interface ListNoteResponse {
   patientLastname: string;
   patientMrn: string; // Example: "C40-2025-000001"
 }
+
+export interface PastNotesResponse {
+  noteId: number;
+  clinicId: number;
+  patientId: number;
+  patientFirstname: string;
+  patientLastname: string;
+  patientMrn: string;
+  appointmentId: number;
+  appointmentDate: string;
+  doctorId: number;
+  doctorFirstname: string;
+  doctorLastname: string;
+  noteType: string;
+  createdAt: string;
+  filed: boolean;
+  filedTimestamp: string;
+}
