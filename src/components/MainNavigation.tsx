@@ -27,11 +27,11 @@ import Mainscreen from './Mainscreen';
 import { AppointmentResponse, FaceSheet } from '@api/model/patient/PatientModels';
 import LabTestScreen from '@screens/patientVitals/LabTestScreen';
 import LoadingScreen from './LoadingScreen';
-import LipidProfileScreen from '@screens/patientVitals/LabResults';
 import InProgressNotes from '@screens/InProgressNotes';
 import CreatePatientMedicationScreen from '@screens/InitialNotes/CreatePatientMedication';
 import PastNotes from '@screens/PastNotes';
 import { LabObservation, LabTest } from '@api/model/doctor/MasterData';
+import LabResultsScreen from '@screens/patientVitals/LabResults';
 
 export type BookAppointmentScreenRouteParams = {
     edit?: boolean; // or string, depending on your use case
@@ -84,7 +84,7 @@ export type RootStackParamList = {
     StaffProffileScreen: undefined;
     PatientDirectoryScreen: undefined;
     LabTestScreen: undefined;
-    LipidProfileScreen: LipidProfileScreenParams;
+    LabResultsScreen: LipidProfileScreenParams;
     InProgressNotes: undefined;
     PastNotes: undefined;
     CreatePatientMedication: InitialNotesParams;
@@ -122,7 +122,7 @@ export default function MainNavigator() {
                 <Stack.Screen name='AppointmentsListScreen' component={AppointmentsListScreen}></Stack.Screen>
                 <Stack.Screen name='StaffProffileScreen' component={StaffProffileScreen}></Stack.Screen>
                 <Stack.Screen name='LabTestScreen' component={LabTestScreen}></Stack.Screen>
-                <Stack.Screen name='LipidProfileScreen' component={LipidProfileScreen}></Stack.Screen>
+                <Stack.Screen name='LabResultsScreen' component={LabResultsScreen}></Stack.Screen>
                 <Stack.Screen name='InProgressNotes' component={InProgressNotes}></Stack.Screen>
                 <Stack.Screen name='PastNotes' component={PastNotes}></Stack.Screen>
                 <Stack.Screen name='CreatePatientMedication' component={CreatePatientMedicationScreen}></Stack.Screen>

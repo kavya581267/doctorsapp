@@ -27,12 +27,13 @@ type Props = {
     addNewItemCommon: (reqObj: MedicationsRequest) => Promise<MedicationsResponse>; // to add a new medicine to master sheet
     setLoading: (load: boolean) => void
     patientMedications: PatientMedication[] // patient medications
+    setPatientMedications: (med:PatientMedication[]) => void
     createPatientMedication: (patientMedication: CreatePatientMedication | UpdatePatientMedication, medicationId: string) => Promise<PatientMedication> // create/update patient medication
 };
 
 
 
-export default function MedicationScreen({ title, itemList, addNewItemCommon, setLoading, patientMedications, createPatientMedication, patientId }: Props) {
+export default function MedicationScreen({ title, itemList, addNewItemCommon, setLoading, patientMedications, createPatientMedication, patientId, setPatientMedications }: Props) {
     const [searchText, setSearchText] = useState("");
     const [selectedItems, setSelectedItems] = useState<PatientMedication[]>([...patientMedications]);
     const { loggedInUserContext } = useContext(AuthContext);
@@ -70,10 +71,33 @@ export default function MedicationScreen({ title, itemList, addNewItemCommon, se
         
     };
 
-    const remove = (item: PatientMedication) => {
-        setSelectedItems((prevItems) =>
-            prevItems.filter((selected) => selected.id !== item.id)
-        );
+    const callRemovePatientMedication = async (item: PatientMedication) => {
+         const updateMed = new UpdatePatientMedication();
+         updateMed.days = item.days;
+         updateMed.dosage = item.dosage;
+         updateMed.dosageUnit = item.dosage_unit;
+         updateMed.endDate = item.end_date;
+         updateMed.formulation = item.formulation;
+         updateMed.frequency = item.frequency;
+         updateMed.instructions = item.frequency;
+         updateMed.medicationSchedule = item.medication_schedule;
+         updateMed.route = item.route;
+         updateMed.startDate = item.start_date;
+         updateMed.timePhase = item.time_phase;
+         updateMed.status = "COMPLETED"
+        const resp = await patientService.updatePatientMedication(item.patient_id.toString(), item.medication_id.toString(),updateMed);
+    }
+
+    const remove = async (item: PatientMedication) => {
+        try{
+            callRemovePatientMedication(item);
+            setSelectedItems((prevItems) =>
+                prevItems.filter((selected) => selected.id !== item.id)
+            );
+        }catch(error){
+           console.log(error.toString())
+        }
+       
     };
 
     const addNewItem = async () => {
@@ -112,7 +136,7 @@ export default function MedicationScreen({ title, itemList, addNewItemCommon, se
     
 
     const updateNoteString = () => {
-        
+        setPatientMedications(selectedItems)
     }
 
     useEffect(() => {

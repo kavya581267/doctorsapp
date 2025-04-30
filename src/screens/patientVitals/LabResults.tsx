@@ -31,7 +31,7 @@ function formatNote(jsonStr) {
 
 }
 
-const LipidProfileScreen = () => {
+const LabResultsScreen = () => {
 
     const [values, setValues] = useState({});
     const [loading, setLoading] = useState(true);
@@ -198,4 +198,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default LipidProfileScreen;
+export default LabResultsScreen;

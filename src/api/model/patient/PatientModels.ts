@@ -242,10 +242,27 @@ export interface LabTestResponse {
   updatedAt: string;
 }
 
-export interface LabTestRequest {
+export interface LabOrderRequest {
   clinicId: string;
   testId: string;
   notes: string;
+}
+
+export class LabTestOrderResp {
+  id: number;
+  clinicId: number;
+  patientId: number;
+  testId: number;
+  testName: string;
+  testCategory: string | null;
+  orderedByName: string;
+  orderedAt: string; // ISO timestamp
+  status: string;
+  results: any | null;
+  completedAt: string | null;
+  notes: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export class AppointmentUpdateRequest {
@@ -437,4 +454,18 @@ export interface PastNotesResponse {
   createdAt: string;
   filed: boolean;
   filedTimestamp: string;
+}
+
+
+class LabResultEntryReq {
+  observation: string;
+  units: string;
+  value: number;
+}
+
+export class LabResultsPayload {
+  clinicId: number;
+  appointmentId: number;
+  orderId: number;
+  labResults: LabResultEntryReq[];
 }

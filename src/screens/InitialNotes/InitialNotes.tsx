@@ -241,7 +241,7 @@ const InitialNoteScreen = () => {
 
                         <PresentingComplaints noteSectionString={presentingComplaints} setNoteSectionString={setPresntingComplaints} setLoading={setLoading} title="Presenting Complaints"
                             addNewItemCommon={createPresentingComplaint} itemList={masterData.presentingComplaints} />
-                        <Medications patientMedications={patientMedications} setLoading={setLoading} title='Medications' addNewItemCommon={createMedication}
+                        <Medications setPatientMedications={setPatientMedication} patientMedications={patientMedications}  setLoading={setLoading} title='Medications' addNewItemCommon={createMedication}
                             createPatientMedication={createPatientMedication} itemList={masterData.medications} patientId={appointment.patientId.toString()} />
 
                         <Note setNoteSectionString={setPersonalHistory} title="Personal History" />
@@ -298,14 +298,16 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: 'white',
-        padding: 10
+        padding: 10,
+        height:height
     },
     header: {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
         paddingTop: 10,
-        marginBottom: 10
+        marginBottom: 10,
+        flex: 1
     },
     headerTitle: {
         fontSize: 18,

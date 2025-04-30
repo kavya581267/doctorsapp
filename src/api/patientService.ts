@@ -1,10 +1,10 @@
-import { CREATE_DOCTO_APPOINTMENT, CREATE_INITIAL_NOTE, CREATE_PATIENT_VITALS, DOCTOR_INPROGRESS_NOTES, FILE_NOTE, GET_CLINIC_PATIENTS_PATH, GET_CLINIC_STAFF_PATH, GET_FACT_SHEET, PAST_NOTES, SAVE_PATIENT_MEDICATION, UPDATE_APPOINTMENT, UPDATE_INITIAL_NOTE, UPDATE_PATIENT_MEDICATION } from "@utils/constants";
+import { CREATE_DOCTO_APPOINTMENT, CREATE_INITIAL_NOTE, CREATE_PATIENT_VITALS, DOCTOR_INPROGRESS_NOTES, FILE_NOTE, GET_CLINIC_PATIENTS_PATH, GET_CLINIC_STAFF_PATH, GET_FACT_SHEET, PAST_NOTES, SAVE_LAB_ORDERS, SAVE_LAB_RESULTS, SAVE_PATIENT_MEDICATION, UPDATE_APPOINTMENT, UPDATE_INITIAL_NOTE, UPDATE_PATIENT_MEDICATION } from "@utils/constants";
 import { apiService } from "./apiService";
 import { AdminRegistarationRequest, AdminRegistrationResponse } from "./model/auth/Auth";
 import { ClinicResponse } from "./model/clinic/ClinicResponse";
 import { Staff } from "./model/staff/Staff";
 import { replacePlaceholders } from "@utils/utils";
-import { AppointmentRequest, AppointmentResponse, AppointmentUpdateRequest, CreateInitialNoteRequest, CreateInitialNoteResponse, CreatePatientMedication, FaceSheet, FileNoteRequest, ListNoteResponse, PastNotesResponse, PatientMedication, PatientMedicationResponse, PatientResponse, UpdateNoteRequest, UpdatePatientMedication, VitalsRequest, VitalsResponse } from "./model/patient/PatientModels";
+import { AppointmentRequest, AppointmentResponse, AppointmentUpdateRequest, CreateInitialNoteRequest, CreateInitialNoteResponse, CreatePatientMedication, FaceSheet, FileNoteRequest, LabOrderRequest, LabResultsPayload, LabTestOrderResp, ListNoteResponse, PastNotesResponse, PatientMedication, PatientMedicationResponse, PatientResponse, UpdateNoteRequest, UpdatePatientMedication, VitalsRequest, VitalsResponse } from "./model/patient/PatientModels";
 
 
 
@@ -139,6 +139,22 @@ export const patientService = {
     updatePatientMedication: async (patientId: string,medicationId:string,  patientMedication:UpdatePatientMedication):Promise<PatientMedicationResponse> => {
         try {
             const resp = await apiService.put(replacePlaceholders(UPDATE_PATIENT_MEDICATION, {id: patientId, medicationId: medicationId}),patientMedication);
+            return resp.data;
+        } catch (error) {
+            throw error
+        }
+    },
+    savePatientlabOrders: async (patientId: string, order:LabOrderRequest):Promise<LabTestOrderResp> => {
+        try {
+            const resp = await apiService.post(replacePlaceholders(SAVE_LAB_ORDERS, {id: patientId}),order);
+            return resp.data;
+        } catch (error) {
+            throw error
+        }
+    },
+    savePatientlabResults: async (patientId: string,  labResults:LabResultsPayload):Promise<any> => {
+        try {
+            const resp = await apiService.put(replacePlaceholders(SAVE_LAB_RESULTS, {id: patientId}),labResults);
             return resp.data;
         } catch (error) {
             throw error
