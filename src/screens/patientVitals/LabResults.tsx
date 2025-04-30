@@ -107,7 +107,7 @@ const LabResultsScreen = () => {
                 <View style={styles.container}>
                     <Back nav='LabTestScreen' />
                     <View style={styles.dateContainer}>
-                        <Text style={{ fontWeight: "600", fontSize: 16, color: COLORS.primary }}>{labTest.testName}</Text>
+                        <Text style={{ fontWeight: "600", fontSize: 16, color: COLORS.primary }}>{labTest && labTest.testName}</Text>
                         <View style={{ flexDirection: "row", alignItems: "center" }}>
                             <Text style={styles.dateText}> Collection Date:</Text>
                             <TouchableOpacity onPress={openDatePicker} style={styles.dateInputBox}>
@@ -126,7 +126,7 @@ const LabResultsScreen = () => {
                             onChange={onChangeDate}
                         />
                     )}
-                    {labResults.map((item, key) => (
+                    {labResults && labResults.map((item, key) => (
                         <View key={key} style={styles.card}>
                             <View style={styles.row}>
                                 <Text style={styles.label}>{item.observation}</Text>
