@@ -33,17 +33,18 @@ export const StaffAddress: React.FC<StepProps> = ({ nextStep, prevStep, formData
         if (!isAnyFieldsEmpty(["address", "city", "state", "zipCode", "country"], formData)) {
             setVisible(true);
             setErrorMessage("Please fill all required details");
+            return;
         }
         if (formData.emergencyContactPhone) {
             if (!isValidPhone(formData.emergencyContactPhone)) {
                 setVisible(true);
                 setErrorMessage("Please enter a valid phone number with country code. Eg : +91xxxxxxxxxx")
+                return;
             }
 
-        } else {
-            setVisible(false);
-            nextStep();
         }
+        setVisible(false);
+        nextStep();
     }
 
     return (
@@ -111,7 +112,7 @@ export const StaffAddress: React.FC<StepProps> = ({ nextStep, prevStep, formData
                     <Text style={styles.nextTxt}>Next</Text>
                 </TouchableOpacity>
             </View>
-            <MdLodSnackbar visible={visible} onDismiss={onDismissSnackBar} message={errorMessage}/>
+            <MdLodSnackbar visible={visible} onDismiss={onDismissSnackBar} message={errorMessage} />
         </View>
     )
 }

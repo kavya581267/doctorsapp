@@ -36,15 +36,16 @@ export const PatientAddress: React.FC<StepProps> = ({ nextStep, prevStep, formDa
         if (isAnyFieldsEmpty(["address", "city", "state", "zipCode", "country", "emergencyContactName", "emergencyContactPhone"], formData)) {
             setVisible(true)
             setErrorMessage("Please fill all the required fields");
+            return;
         }
 
         if (!isValidPhone(formData.emergencyContactPhone)) {
             setVisible(true);
             setErrorMessage("Please enter a valid phone number with country code. Eg : +91xxxxxxxxxx")
-        } else {
-            setVisible(false);
-            nextStep();
+            return;
         }
+        setVisible(false);
+        nextStep();
     }
 
     return (
