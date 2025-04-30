@@ -13,8 +13,8 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import PasMedHistory from './MedicalHistory';
 import Medications from './Medications';
 import Problems from './Problems';
-import { RouteProp, useRoute } from '@react-navigation/native';
-import { InitialNotesParams } from '@components/MainNavigation';
+import { NavigationProp, RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { InitialNotesParams, RootStackParamList } from '@components/MainNavigation';
 import { MdLogActivityIndicator } from '@components/MdLogActivityIndicator';
 import { patientService } from '@api/patientService';
 import { CreateInitialNoteRequest, CreateInitialNoteResponse, CreatePatientMedication, FileNoteRequest, PatientMedication, UpdateNoteRequest, UpdatePatientMedication } from '@api/model/patient/PatientModels';
@@ -52,6 +52,7 @@ const InitialNoteScreen = () => {
     const [exercise, setExercise] = useState("");
     const [visitDx, setVisitDx] = useState("");
     const [patientMedications, setPatientMedication] = useState<PatientMedication[]>([...facesheet.medications])
+    const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
 
     const createPresentingComplaint = async (reqObj: InitialCommonNoteRequest) => {
@@ -184,6 +185,7 @@ const InitialNoteScreen = () => {
     }
 
     const handleSave = async () => {
+        let failed = false;
         const updateNoteReq = new UpdateNoteRequest()
         updateNoteReq.clinicId = note.clinicId.toString();
         updateNoteReq.diet = diet;
@@ -206,8 +208,12 @@ const InitialNoteScreen = () => {
         } catch (error) {
             setErrorMessage(error.toString());
             setVisible(true)
+            failed = true;
         }
         setLoading(false)
+        if(failed){
+            
+        }
     }
 
     const fileNote = async () => {
