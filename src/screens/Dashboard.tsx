@@ -200,6 +200,8 @@ export default function DashboardScreen() {
                     </View>
                 ))}
 
+                
+
                 {/* Bottom spacing */}
                 <View style={{ height: 80 }} />
             </View>

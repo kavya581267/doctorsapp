@@ -122,7 +122,7 @@ export const patientService = {
         }
         let url = replacePlaceholders(PAST_NOTES,{clinicId:clinicId, field: true});
         try{
-            const resp = await apiService.get(url,queryParam);
+            const resp = await apiService.get(PAST_NOTES,queryParam);
             return resp.data;
         }catch(error){
             throw error

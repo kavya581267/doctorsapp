@@ -315,7 +315,7 @@ const actions = [
     role:[Role.DOCTOR]
   },
   {
-    text: "Past Notes",
+    text: "My Filed Notes",
     icon: <MaterialIcons name="medication" size={20} color="#fff" />,
     name: "past_notes",
     position: 2,

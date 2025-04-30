@@ -7,6 +7,8 @@ import React, { useContext, useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Platform } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { RootStackParamList } from '@components/MainNavigation';
 
 
 const PastNotes = () => {
@@ -22,6 +24,7 @@ const PastNotes = () => {
     const [toDate, setToDate] = useState(new Date());
     const [showFromPicker, setShowFromPicker] = useState(false);
     const [showToPicker, setShowToPicker] = useState(false);
+    const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
     const formatDate = (date: Date): string => {
         return date.toISOString().split('T')[0];
@@ -122,7 +125,7 @@ const PastNotes = () => {
                 data={notes}
                 keyExtractor={(item, index) => index.toString()}
                 renderItem={({ item }) => (
-                    <TouchableOpacity style={styles.card}>
+                    <TouchableOpacity style={styles.card} onPress={() => navigation.navigate("PDFViewer")}>
                         <View style={[styles.row, styles.margin]}>
                             <Text style={styles.label}>
                                 {item.patientFirstname}, {item.patientLastname}
