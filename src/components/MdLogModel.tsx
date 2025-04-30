@@ -59,9 +59,9 @@ const CustomModal: React.FC<CustomModalProps> = ({ visible, onCancel, onSave, fi
                 <View style={styles.modalView}>
                     <Text style={styles.modalTitle}>{title}</Text>
                     <KeyboardAwareScrollView>
-                        {fields.map((field) => (
+                        {fields.map((field, key) => (
                             <TextInput
-                                key={field}
+                                key={key}
                                 style={styles.input}
                                 placeholder={`Enter ${field}`}
                                 value={formValues[field] || ''}

@@ -13,15 +13,15 @@ type RouteParams = {
 
 const LabTestScreen = () => {
   const { masterData } = useContext(AuthContext)
-  const [labTest, setLabtests] = useState<LabTest[]>([...masterData.labTests])
-  const [labResluts, setLabResults] = useState<LabObservation[]>([...masterData.labResults])
+  const [labTest, setLabtests] = useState<LabTest[]>([])
+  const [labResluts, setLabResults] = useState<LabObservation[]>([])
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const route = useRoute<RouteProp<RouteParams>>()
   const { appointment } = route.params
 
   useEffect(() => {
-    console.log(labTest)
-    console.log(labResluts)
+   masterData && masterData?.labResults && setLabResults([...masterData.labResults])
+   masterData && masterData?.labTests && setLabtests([...masterData.labTests])
   }, [])
   const handlePress = (item: LabTest) => {
     console.log(item);

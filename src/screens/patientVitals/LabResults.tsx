@@ -65,7 +65,7 @@ const LabResultsScreen = () => {
 
     const getLabResultsEntry = () => {
         let resp: LabResultEntryReq[] = [];
-        for (let i = 0; i < labResults.length; i++) {
+        for (let i = 0; labResults && i < labResults.length; i++) {
             let aa = new LabResultEntryReq()
             aa.observation = labResults[i].observation;
             aa.units = labResults[i].units;

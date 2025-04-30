@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, Image, TextInput, Dimensions } from 'react-native';
 import { Ionicons, MaterialIcons, FontAwesome5, Feather } from '@expo/vector-icons';
 import { styles } from '@styles/dashboardStyles'
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import Back from '@components/Back';
-import { convertTo12Hour} from '@utils/utils';
+import { convertTo12Hour } from '@utils/utils';
 import { dashBoardService } from '@api/dashboard';
 import { MdLogActivityIndicator } from '@components/MdLogActivityIndicator';
 import { storeObject } from '@utils/MdLogAsyncStorage';
@@ -13,6 +13,7 @@ import { getUser } from '@utils/loadContextDetails';
 import EmptyListScreen from '@components/Empty';
 import { RootStackParamList } from '@components/MainNavigation';
 import { MdLodSnackbar } from '@components/MdLogSnacbar';
+import { AuthContext } from '@context/AuthContext';
 const { width, height } = Dimensions.get("window");
 
 export default function DashboardScreen() {
@@ -25,8 +26,10 @@ export default function DashboardScreen() {
     const [quickActions, setQuickActions] = useState([]);
     const [role, setRole] = useState<string>("");
     const [error, setError] = useState("");
-      const [visible, setVisible] = useState(false);
+    const [visible, setVisible] = useState(false);
     const onDismissSnackBar = () => setVisible(false);
+    const {loggedInUserContext} = useContext(AuthContext)
+
 
     const allQuickActions = [
         {
@@ -34,7 +37,7 @@ export default function DashboardScreen() {
             bgColor: '#E6F0FB',
             icon: <Ionicons name="information-circle-outline" size={24} color="#2F80ED" />,
             navPage: "ClinicOverview",
-            roles: ['DOCTOR', 'ADMIN',"FRONT_OFFICE","NURSE"],
+            roles: ['DOCTOR', 'ADMIN', "FRONT_OFFICE", "NURSE"],
         },
         {
             label: 'New Staff',
@@ -48,32 +51,33 @@ export default function DashboardScreen() {
             bgColor: '#E6F8ED',
             icon: <Ionicons name="calendar-outline" size={24} color="#27AE60" />,
             navPage: "ClinicScheduleScreen",
-            roles: ['DOCTOR', 'ADMIN',"FRONT_OFFICE","NURSE"],
+            roles: ['DOCTOR', 'ADMIN', "FRONT_OFFICE", "NURSE"],
         },
         {
             label: 'Holidays',
             bgColor: '#FDEAEA',
             icon: <MaterialIcons name="event-note" size={24} color="#EB5757" />,
-            roles: ['DOCTOR', 'ADMIN',"FRONT_OFFICE","NURSE"],
+            roles: ['DOCTOR', 'ADMIN', "FRONT_OFFICE", "NURSE"],
         },
         {
             label: 'Your Schedule',
             bgColor: '#EEE8FC',
             icon: <MaterialIcons name="event-note" size={24} color="#EB5757" />,
             roles: ['DOCTOR'],
+            navPage: "DoctorScheduleScreen"
         },
         {
             label: 'New Patient',
             bgColor: '#FFF4E5',
             icon: <FontAwesome5 name="user-plus" size={20} color="#F2994A" />,
             navPage: "PatientRegistrationScreen",
-            roles: ['ADMIN',"FRONT_OFFICE","NURSE"],
+            roles: ['ADMIN', "FRONT_OFFICE", "NURSE"],
         },
         {
             label: 'Book Appointment',
             bgColor: '#E6F9F8',
             icon: <Feather name="activity" size={20} color="#2D9CDB" />,
-            roles: ['DOCTOR', 'FRONT_OFFICE',"NURSE"],
+            roles: ['DOCTOR', 'FRONT_OFFICE', "NURSE"],
             navPage: "BookAppointmentScreen"
         },
     ];
@@ -92,7 +96,7 @@ export default function DashboardScreen() {
             const filteredActions = allQuickActions.filter(action => action.roles.includes(role));
             setQuickActions(filteredActions);
             // fetch todays appointments
-        
+
 
         } catch (error) {
             setVisible(true)
@@ -100,6 +104,17 @@ export default function DashboardScreen() {
         }
         setLoading(false);
     };
+
+    const getRouteObj = (route: string) => {
+        if (route === "DoctorScheduleScreen") {
+            return {
+                doctorDetails: {
+                    ...loggedInUserContext.userDetails
+                }
+            }
+        }
+        return {}
+    }
 
     useEffect(() => {
         loadData();
@@ -126,18 +141,18 @@ export default function DashboardScreen() {
                             </View>
                         </View>
 
-                    ) :(
-                <View style={styles.statsContainer}>
-                    <View style={styles.statCard}>
-                        <Text style={styles.statLabel}>Today's Appointments</Text>
-                        <Text style={styles.statNumber}>{appointmentsToday.length}</Text>
-                    </View>
-                    <View style={[styles.statCard, { backgroundColor: '#E6F8ED' }]}>
-                        <Text style={styles.statLabel}>Active Staff</Text>
-                        <Text style={styles.statNumber}>{staffCount}</Text>
-                    </View>
-                </View>
-                )
+                    ) : (
+                        <View style={styles.statsContainer}>
+                            <View style={styles.statCard}>
+                                <Text style={styles.statLabel}>Today's Appointments</Text>
+                                <Text style={styles.statNumber}>{appointmentsToday.length}</Text>
+                            </View>
+                            <View style={[styles.statCard, { backgroundColor: '#E6F8ED' }]}>
+                                <Text style={styles.statLabel}>Active Staff</Text>
+                                <Text style={styles.statNumber}>{staffCount}</Text>
+                            </View>
+                        </View>
+                    )
                 }
 
 
@@ -148,7 +163,7 @@ export default function DashboardScreen() {
                     {quickActions.map((action, index) => (
                         <TouchableOpacity
                             key={index}
-                            onPress={() => action.navPage ? navigation.navigate(action.navPage) : null}
+                            onPress={() => action.navPage ? navigation.navigate(action.navPage, getRouteObj(action.navPage)) : null}
                             style={[styles.actionItem, { backgroundColor: action.bgColor }]}
                         >
                             {action.icon}
@@ -166,7 +181,7 @@ export default function DashboardScreen() {
                 </View>
 
                 {
-                    appointmentsToday.length === 0 ? <EmptyListScreen  message='No appointments scheduled Today'/> : <></>
+                    appointmentsToday.length === 0 ? <EmptyListScreen message='No appointments scheduled Today' /> : <></>
                 }
 
                 {appointmentsToday.map((appt, index) => (

@@ -43,18 +43,20 @@ export const PatientDetails: React.FC<StepProps> = ({ nextStep, formData, setFor
         if (isAnyFieldsEmpty(["firstName", "lastName", "email", "dateOfBirth", "gender", "phone", "bloodGroup"], formData)) {
             setVisible(true);
             setErrorMessage("Please fill all the required fields");
+            return;
         }
         if (!isValidEmail(formData.email)) {
             setVisible(true);
             setErrorMessage("enter valid email");
+            return;
         }
         if (!isValidPhone(formData.phone)) {
             setVisible(true);
             setErrorMessage("Please enter a valid phone number with country code. Eg : +91xxxxxxxxxx")
-        } else {
-            setVisible(true);
-            nextStep();
+            return;
         }
+        setVisible(true);
+        nextStep();
     }
 
 

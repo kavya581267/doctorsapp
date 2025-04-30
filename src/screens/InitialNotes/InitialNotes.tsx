@@ -23,6 +23,7 @@ import { convertPatientMedicationResponseToPatientMedication, formatToYYYYMMDD, 
 import { MdLodSnackbar } from '@components/MdLogSnacbar';
 import ConfirmationModal from '@components/ConfirmationModal';
 import InitialNoteSubmitPopUp from './InitialNoteSubmitPopUp';
+import InitialNoteVitalScreen from '@screens/InitialNoteVitals';
 const { width, height } = Dimensions.get("window");
 
 
@@ -309,6 +310,7 @@ const InitialNoteScreen = () => {
                             */
                         }
                         <Investigation noteSectionString={investigations} setNoteSectionString={setInvestigations} setLoading={setLoading} title="Investigation" addNewItemCommon={createInvestigation} itemList={masterData.labTests} />
+                        <InitialNoteVitalScreen />
                         <Note prevVal={physicalExamination} setNoteSectionString={setPhysicalExamination} title="Physical Examination" />
                         <Note prevVal={diet} setNoteSectionString={setDiet} title="Diet" />
                         <Note prevVal={exercise} setNoteSectionString={setExercise} title="Exercise" />
