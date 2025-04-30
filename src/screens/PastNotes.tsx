@@ -12,6 +12,9 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 const PastNotes = () => {
     const oldDate = new Date();
     oldDate.setDate(new Date().getDate() - 30)
+
+    const oldDate1 = new Date();
+    oldDate1.setDate(new Date().getDate() + 3)
     const [loading, setLoading] = useState(false);
     const { loggedInUserContext } = useContext(AuthContext)
     const [notes, setNotes] = useState<PastNotesResponse[]>([]);
@@ -28,7 +31,7 @@ const PastNotes = () => {
         setLoading(true);
         try {
             const allNotes = await patientService.getDoctorPastNotes(loggedInUserContext.clinicDetails.id,formatDate(fromDate),
-            formatDate(toDate));
+            formatDate(oldDate1));
             
             const filtered = allNotes.filter((note) => {
                 if (!note.appointmentDate) return false;

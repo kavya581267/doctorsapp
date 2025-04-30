@@ -119,6 +119,12 @@ const AppointmentsListScreen = () => {
     fetchAppointments();
   }, []);
 
+  const roleActions = () => {
+    const rolesStr =  loggedInUserContext.roles.join(" ");
+    const act = actions.filter((a) => a.role.find((r) => rolesStr.includes(r)))
+    return act
+}
+
   const handleFilterApplied = (filteredData, isFilterActive) => {
     setFilteredAppointments(filteredData);
     setFiltersApplied(isFilterActive);
@@ -292,7 +298,7 @@ const AppointmentsListScreen = () => {
           </View>
         </View>
       )}
-      <FabMenuScreen action={actions} onPress={fabPress} />
+      <FabMenuScreen action={roleActions()} onPress={fabPress} />
       <MdLogActivityIndicator loading={loading} />
     </View>
   );
@@ -305,7 +311,8 @@ const actions = [
     name: "inprogress_notes",
     position: 1,
     textColor: COLORS.white,
-    textBackground: COLORS.secondary
+    textBackground: COLORS.secondary,
+    role:[Role.DOCTOR]
   },
   {
     text: "Past Notes",
@@ -313,7 +320,8 @@ const actions = [
     name: "past_notes",
     position: 2,
     textColor: COLORS.white,
-    textBackground: COLORS.secondary
+    textBackground: COLORS.secondary,
+    role:[Role.DOCTOR]
   },
   {
     text: "Cancel",
@@ -322,7 +330,8 @@ const actions = [
     position: 3,
     color: "#f44336",
     textColor: COLORS.white,
-    textBackground: COLORS.red
+    textBackground: COLORS.red,
+    role:[Role.DOCTOR, Role.ADMIN,Role.FRONT_OFFICE, Role.NURSE]
   }
 ];
 
