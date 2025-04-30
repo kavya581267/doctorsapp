@@ -1,9 +1,35 @@
+import { LabObservation, LabTest } from '@api/model/doctor/MasterData';
 import Back from '@components/Back';
+import { LipidProfileScreenParams } from '@components/MainNavigation';
 import MdLogTextInput from '@components/MdLogTextInput';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import { RouteProp, useRoute } from '@react-navigation/native';
+import { COLORS } from '@utils/colors';
 import React, { useEffect, useState } from 'react';
 import { View, Text, TextInput, ScrollView, StyleSheet, Platform, TouchableOpacity, Button } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
+
+type RouteParams = {
+    param: LipidProfileScreenParams
+}
+
+function capitalize(str) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+function formatNote(jsonStr) {
+    try {
+        const obj = JSON.parse(jsonStr);
+
+        const formatted = Object.entries(obj)
+            .map(([key, value]) => `${capitalize(key)} : ${value}`)
+            .join('\n');
+        return `"${formatted}"`;
+    } catch (ex) {
+        return ""
+    }
+
+}
 
 const LipidProfileScreen = () => {
 
@@ -11,96 +37,41 @@ const LipidProfileScreen = () => {
     const [loading, setLoading] = useState(true);
     const [date, setDate] = useState(new Date());
     const [showPicker, setShowPicker] = useState(false);
-    const fields = [
-        {
-            "label": "Total Cholesterol",
-            "unit": "mg/dL",
-            "note": "Totalcholesterol : <200 mg/dL",
-            "key": "totalCholesterol"
-        },
-        {
-            "label": "LDL Cholesterol",
-            "unit": "mg/g",
-            "note": "Microalbuminuria : 30-299 mg/g\nNormal : <30 mg/g\nMacroalbuminuria : >=300 mg/g",
-            "key": "ldlCholesterol"
-        },
-        {
-            "label": "HDL Cholesterol",
-            "unit": "mg/dL",
-            "note": "Women : >=50 mg/dL\nMen : >=40 mg/dL",
-            "key": "hdlCholesterol"
-        },
-        {
-            "label": "Triglycerides",
-            "unit": "mg/dL",
-            "note": "Triglycerides : <150 mg/dL",
-            "key": "triglycerides"
-        },
-        {
-            "label": "VLDL Cholesterol",
-            "unit": "mg/dL",
-            "note": "Vldlcholesterol : 5-30 mg/dL",
-            "key": "vldlCholesterol"
-        },
-        {
-            "label": "Total Cholesterol/HDL Ratio",
-            "unit": "",
-            "note": "Totalcholesterolhdlratio : <5:1",
-            "key": "cholesterolHdlRatio"
-        }
-    ]
-
-
-    {/*useEffect(() => {
-    fetchLipidProfileSchema();
-  }, []);
-
-  const fetchLipidProfileSchema = async () => {
-    try {
-      // Replace with your API call
-     // const response = await fetch('https://your-api.com/lipid-profile-schema');
-     // const data = await response.json();
-     // setFields(data);
-     // setLoading(false);
-    } catch (error) {
-      console.error('Failed to fetch schema:', error);
-    }
-  };*/}
+    const route = useRoute<RouteProp<RouteParams>>();
+    const { labResults, labTest } = route.params
 
     const handleInputChange = (key: string, value: string) => {
         setValues((prev) => ({ ...prev, [key]: value }));
     };
 
     const onChangeDate = (event, selectedDate) => {
-       setShowPicker(false); 
+        setShowPicker(false);
         if (selectedDate) {
-          setDate(selectedDate);
+            setDate(selectedDate);
         }
-       
-      };
+
+    };
 
     const openDatePicker = () => {
         setShowPicker(true);
     };
-
-    //if (loading) {
-    //  return <ActivityIndicator style={{ marginTop: 50 }} />;
-    // }
 
 
     return (
         <ScrollView >
             <View style={styles.container}>
                 <Back nav='LabTestScreen' />
-               
+
                 <View style={styles.dateContainer}>
-                <Text style={styles.dateText}> Collection Date:</Text>
-                    <TouchableOpacity onPress={openDatePicker} style={styles.dateInputBox}>
-                        <Text style={styles.dateText}>
-                            {date.toLocaleDateString()}
-                        </Text>
-                    </TouchableOpacity>
-                   
+                    <Text style={{fontWeight:"600", fontSize:16, color:COLORS.primary}}>{labTest.testName}</Text>
+                    <View style={{flexDirection:"row", alignItems:"center"}}>
+                        <Text style={styles.dateText}> Collection Date:</Text>
+                        <TouchableOpacity onPress={openDatePicker} style={styles.dateInputBox}>
+                            <Text style={styles.dateText}>
+                                {date.toLocaleDateString()}
+                            </Text>
+                        </TouchableOpacity>
+                    </View>
                 </View>
 
                 {showPicker && (
@@ -111,24 +82,23 @@ const LipidProfileScreen = () => {
                         onChange={onChangeDate}
                     />
                 )}
-                {fields.map((item) => (
-                    <View key={item.key} style={styles.card}>
+                {labResults.map((item, key) => (
+                    <View key={key} style={styles.card}>
                         <View style={styles.row}>
-                            <Text style={styles.label}>{item.label}</Text>
+                            <Text style={styles.label}>{item.observation}</Text>
 
                             <View style={styles.inputContainer}>
                                 <TextInput
                                     style={styles.input}
                                     placeholder="Enter"
                                     keyboardType="numeric"
-                                    value={values[item.key] || ''}
-                                    onChangeText={(text) => handleInputChange(item.key, text)}
+                                    onChangeText={(text) => { }}
                                 />
-                                <Text style={styles.unit}>{item.unit}</Text>
+                                <Text style={styles.unit}>{item.units}</Text>
                             </View>
                         </View>
 
-                        <Text style={styles.note}>{item.note}</Text>
+                        <Text style={styles.note}>{formatNote(item.ranges)}</Text>
                     </View>
                 ))}
             </View>
@@ -207,16 +177,15 @@ const styles = StyleSheet.create({
 
     dateContainer: {
         marginVertical: 10,
-        flexDirection:"row",
-        justifyContent:"flex-end",
-        alignItems:"center"
+        flexDirection: "row",
+        justifyContent:"space-between",
+        alignItems: "center"
     },
     dateText: {
         textAlign: 'center',
-        marginBottom: 10,
         fontWeight: '500',
-        fontSize: 16, 
-        marginRight:10
+        fontSize: 16,
+        marginRight: 1
     },
     dateInputBox: {
         borderWidth: 1,
@@ -225,8 +194,8 @@ const styles = StyleSheet.create({
         paddingVertical: 4,
         width: 140,
         backgroundColor: '#fff',
-       
-      },
+
+    },
 });
 
 export default LipidProfileScreen;

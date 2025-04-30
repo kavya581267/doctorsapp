@@ -27,14 +27,15 @@ import Mainscreen from './Mainscreen';
 import { AppointmentResponse, FaceSheet } from '@api/model/patient/PatientModels';
 import LabTestScreen from '@screens/patientVitals/LabTestScreen';
 import LoadingScreen from './LoadingScreen';
-import LipidProfileScreen from '@screens/patientVitals/LipidProfileScreen';
+import LipidProfileScreen from '@screens/patientVitals/LabResults';
 import InProgressNotes from '@screens/InProgressNotes';
 import CreatePatientMedicationScreen from '@screens/InitialNotes/CreatePatientMedication';
 import PastNotes from '@screens/PastNotes';
+import { LabObservation, LabTest } from '@api/model/doctor/MasterData';
 
 export type BookAppointmentScreenRouteParams = {
-      edit?: boolean; // or string, depending on your use case
-      bookingDetails?:AppointmentListResponse 
+    edit?: boolean; // or string, depending on your use case
+    bookingDetails?: AppointmentListResponse
 };
 
 export type MainScreenRouteParams = {
@@ -51,6 +52,10 @@ export type PatientMedicalParams = {
 export type InitialNotesParams = {
     facesheet: FaceSheet
     appointment: AppointmentListResponse
+}
+export type LipidProfileScreenParams = {
+    labResults: LabObservation[]
+    labTest: LabTest
 }
 
 
@@ -75,13 +80,13 @@ export type RootStackParamList = {
     ClinicOverview: undefined;
     BookAppointmentScreen: BookAppointmentScreenRouteParams;
     DoctorScheduleScreen: undefined;
-    AppointmentsListScreen:undefined;
-    StaffProffileScreen:undefined;
-    PatientDirectoryScreen:undefined;
-    LabTestScreen:undefined;
-    LipidProfileScreen:undefined;
-    InProgressNotes:undefined;
-    PastNotes:undefined;
+    AppointmentsListScreen: undefined;
+    StaffProffileScreen: undefined;
+    PatientDirectoryScreen: undefined;
+    LabTestScreen: undefined;
+    LipidProfileScreen: LipidProfileScreenParams;
+    InProgressNotes: undefined;
+    PastNotes: undefined;
     CreatePatientMedication: InitialNotesParams;
 };
 

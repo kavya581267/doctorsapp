@@ -116,12 +116,14 @@ export const patientService = {
     getDoctorPastNotes: async (clinicId:number, fromDate:string, toDate:string):Promise<PastNotesResponse[]>=>{
         const queryParam = {
             fromDate: fromDate,
-            toDate: toDate
+            toDate: toDate,
+            clinicId: clinicId,
+            field: true
         }
         let url = replacePlaceholders(PAST_NOTES,{clinicId:clinicId, field: true});
         try{
             const resp = await apiService.get(url,queryParam);
-            return resp;
+            return resp.data;
         }catch(error){
             throw error
         }

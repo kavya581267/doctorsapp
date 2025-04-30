@@ -7,14 +7,16 @@ import React, { useContext, useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Platform } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import { getPastDate } from '@utils/utils';
 
 
 const PastNotes = () => {
-
+    const oldDate = new Date();
+    oldDate.setDate(new Date().getDate() - 30)
     const [loading, setLoading] = useState(false);
     const { loggedInUserContext } = useContext(AuthContext)
     const [notes, setNotes] = useState<PastNotesResponse[]>([]);
-    const [fromDate, setFromDate] = useState(new Date());
+    const [fromDate, setFromDate] = useState(oldDate);
     const [toDate, setToDate] = useState(new Date());
     const [showFromPicker, setShowFromPicker] = useState(false);
     const [showToPicker, setShowToPicker] = useState(false);
@@ -71,7 +73,6 @@ const PastNotes = () => {
     return (
         <View style={styles.container}>
             <Back nav='Mainscreen' tab='Appointments' />
-            <Text style={styles.title}>Past Notes</Text>
             <View style={styles.dateContainer}>
                 <View style={{ flexDirection: "column", marginRight: 20 }}>
                     <View style={{ flexDirection: "row", alignItems: "center" }}>
