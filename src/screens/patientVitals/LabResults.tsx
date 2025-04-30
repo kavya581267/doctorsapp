@@ -2,10 +2,12 @@ import { LabObservation, LabTest } from '@api/model/doctor/MasterData';
 import { LabOrderRequest, LabResultEntryReq, LabResultsPayload } from '@api/model/patient/PatientModels';
 import { patientService } from '@api/patientService';
 import Back from '@components/Back';
-import { LipidProfileScreenParams } from '@components/MainNavigation';
+import { LipidProfileScreenParams, RootStackParamList } from '@components/MainNavigation';
+import { MdLogActivityIndicator } from '@components/MdLogActivityIndicator';
+import { MdLodSnackbar } from '@components/MdLogSnacbar';
 import MdLogTextInput from '@components/MdLogTextInput';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { RouteProp, useRoute } from '@react-navigation/native';
+import { NavigationProp, RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { COLORS } from '@utils/colors';
 import React, { useEffect, useState } from 'react';
 import { View, Text, TextInput, ScrollView, StyleSheet, Platform, TouchableOpacity, Button } from 'react-native';
@@ -36,11 +38,15 @@ function formatNote(jsonStr) {
 const LabResultsScreen = () => {
 
     const [values, setValues] = useState({});
-    const [loading, setLoading] = useState(true);
+
+    const [loading, setLoading] = useState(false);
+    const [visible, setVisible] = useState(false);
+    const [errorMessage, setErrorMessage] = useState("");
     const [date, setDate] = useState(new Date());
     const [showPicker, setShowPicker] = useState(false);
     const route = useRoute<RouteProp<RouteParams>>();
     const { labResults, labTest, appointment } = route.params
+    const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
     const handleInputChange = (key: number, value: string) => {
         setValues((prev) => ({ ...prev, [key]: value }));
@@ -59,7 +65,7 @@ const LabResultsScreen = () => {
 
     const getLabResultsEntry = () => {
         let resp: LabResultEntryReq[] = [];
-        for(let i = 0; i< labResults.length ;i++){
+        for (let i = 0; i < labResults.length; i++) {
             let aa = new LabResultEntryReq()
             aa.observation = labResults[i].observation;
             aa.units = labResults[i].units;
@@ -70,17 +76,28 @@ const LabResultsScreen = () => {
     }
 
     const handleSave = async () => {
-        const labOrder = new LabOrderRequest()
-        labOrder.clinicId = appointment.clinicId.toString();
-        labOrder.testId = labTest.id.toString();
-        labOrder.notes = ""
-        const labOrderResp =  await patientService.savePatientlabOrders(appointment.patientId.toString(),labOrder);
-        const labResultPayload = new LabResultsPayload();
-        labResultPayload.appointmentId = appointment.patientId;
-        labResultPayload.clinicId = labOrderResp.clinicId;
-        labResultPayload.orderId = labOrderResp.id;
-        labResultPayload.labResults = getLabResultsEntry();
-        await patientService.savePatientlabResults(appointment.patientId.toString(),labResultPayload);
+        try {
+            setLoading(true)
+            const labOrder = new LabOrderRequest()
+            labOrder.clinicId = appointment.clinicId;
+            labOrder.testId = labTest.id;
+            labOrder.notes = ""
+            const labOrderResp = await patientService.savePatientlabOrders(appointment.patientId.toString(), labOrder);
+            const labResultPayload = new LabResultsPayload();
+            labResultPayload.appointmentId = appointment.patientId;
+            labResultPayload.clinicId = labOrderResp.clinicId;
+            labResultPayload.orderId = labOrderResp.id;
+            labResultPayload.labResults = getLabResultsEntry();
+            await patientService.savePatientlabResults(appointment.patientId.toString(), labResultPayload);
+            setLoading(false)
+            navigation.navigate("PatientMedical", { appointment: appointment })
+        }
+        catch (error) {
+          setVisible(true);
+          setErrorMessage(error.toString())
+        }
+        setLoading(false)
+
     }
 
 
@@ -119,7 +136,7 @@ const LabResultsScreen = () => {
                                         style={styles.input}
                                         placeholder="Enter"
                                         keyboardType="numeric"
-                                        onChangeText={(text) => {handleInputChange(key, text) }}
+                                        onChangeText={(text) => { handleInputChange(key, text) }}
                                     />
                                     <Text style={styles.unit}>{item.units}</Text>
                                 </View>
@@ -145,6 +162,8 @@ const LabResultsScreen = () => {
                     }}>Submit</Text>
                 </TouchableOpacity>
             </View>
+            <MdLogActivityIndicator  loading={loading}/>
+            <MdLodSnackbar message={errorMessage} visible={visible} onDismiss={() => setVisible(false)}/>
         </>
 
     );

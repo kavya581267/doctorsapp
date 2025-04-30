@@ -243,8 +243,8 @@ export interface LabTestResponse {
 }
 
 export class LabOrderRequest {
-  clinicId: string;
-  testId: string;
+  clinicId: number;
+  testId: number;
   notes: string;
 }
 

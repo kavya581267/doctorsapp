@@ -129,6 +129,6 @@ export const PAST_NOTES = "/doctors/notes"
 export const SAVE_PATIENT_MEDICATION = "/patients/{{id}}/medications"
 export const UPDATE_PATIENT_MEDICATION = "/patients/{{id}}/medications/{{medicationId}}"
 
-export const SAVE_LAB_RESULTS = "patients/{{patient_id}}/lab-results"
-export const SAVE_LAB_ORDERS = "patients/{{patient_id}}/lab-orders"
+export const SAVE_LAB_RESULTS = "/patients/{{patient_id}}/lab-results"
+export const SAVE_LAB_ORDERS = "/patients/{{patient_id}}/lab-orders"
 
