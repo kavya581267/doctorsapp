@@ -272,7 +272,7 @@ export default function PatientMedical() {
                         {
                             faceSheetData?.labResults && faceSheetData?.labResults.length > 0 &&
                             <View style={{ marginTop: 20 }}>
-                                {faceSheetData?.labResults.map((item, key) => <Text>{item}</Text>)}
+                                {faceSheetData?.labResults.map((item, key) => <Text>{`${item.observation} : ${item.value}${item.units}  - Recorded on: ${item.recorded_at}`}</Text>)}
                             </View>
                         }
 

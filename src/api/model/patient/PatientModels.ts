@@ -344,9 +344,24 @@ export interface Vital {
   updated_at: string; // ISO datetime string
 }
 
+class FacesheetObservation {
+  appointment_id: number;
+  clinic_id: number;
+  created_at: string; // ISO datetime string
+  id: number;
+  observation: string;
+  order_id: number;
+  patient_id: number;
+  recorded_at: string; // ISO datetime string
+  recorded_by_name: string;
+  units: string;
+  updated_at: string; // ISO datetime string
+  value: number;
+}
+
 export interface FaceSheet {
   hasAppointment: boolean
-  labResults: string[]
+  labResults: FacesheetObservation[]
   medications: PatientMedication[]
   newAppointment: true
   patient: PatientResponse
