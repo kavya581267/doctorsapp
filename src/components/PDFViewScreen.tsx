@@ -3,11 +3,15 @@ import { View, ActivityIndicator, StyleSheet } from 'react-native';
 import { WebView } from 'react-native-webview';
 import Back from './Back';
 import { getAccessToken } from '@api/apiService';
+import { useRoute } from '@react-navigation/native';
 
 const PDFViewer = ({ patientId, noteId, accessToken }) => {
-  let pdfUrl = `https://j7lfcx9ij0.execute-api.ap-south-1.amazonaws.com/prod/patients/24/notes/18/pdf`;
 
-  const token = getAccessToken()
+  const route =  useRoute()
+  const {pid, nid, token} =  route.params
+
+
+  let pdfUrl = `https://j7lfcx9ij0.execute-api.ap-south-1.amazonaws.com/prod/patients/${pid}/notes/${nid}/pdf`;
   
 
   return (
@@ -17,7 +21,7 @@ const PDFViewer = ({ patientId, noteId, accessToken }) => {
         source={{
           uri: pdfUrl,
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${token._j}`,
             'Content-Type': 'application/pdf',
           },
         }}

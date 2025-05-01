@@ -9,6 +9,7 @@ import { FlatList } from 'react-native-gesture-handler';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { RootStackParamList } from '@components/MainNavigation';
+import { getAccessToken } from '@api/apiService';
 
 
 const PastNotes = () => {
@@ -25,6 +26,11 @@ const PastNotes = () => {
     const [showFromPicker, setShowFromPicker] = useState(false);
     const [showToPicker, setShowToPicker] = useState(false);
     const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+
+    const loadPdf = (item: PastNotesResponse) => {
+        const token = getAccessToken()
+      navigation.navigate("PDFViewer",{pid:item.patientId, nid:item.noteId, token: token} )
+    }
 
     const formatDate = (date: Date): string => {
         return date.toISOString().split('T')[0];
@@ -125,7 +131,7 @@ const PastNotes = () => {
                 data={notes}
                 keyExtractor={(item, index) => index.toString()}
                 renderItem={({ item }) => (
-                    <TouchableOpacity style={styles.card} onPress={() => navigation.navigate("PDFViewer")}>
+                    <TouchableOpacity style={styles.card} onPress={()=> loadPdf(item)}>
                         <View style={[styles.row, styles.margin]}>
                             <Text style={styles.label}>
                                 {item.patientFirstname}, {item.patientLastname}

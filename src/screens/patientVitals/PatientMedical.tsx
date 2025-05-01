@@ -25,8 +25,8 @@ type RoueParams = {
 
 export const createPatientMedication = async (reqObj: PatientMedication, medicationId: string, appointmentId: string) => {
     try {
-       // const resp = await patientService.createPatientMedication(appointmentId, medicationId, reqObj);
-       // return resp;
+        // const resp = await patientService.createPatientMedication(appointmentId, medicationId, reqObj);
+        // return resp;
     } catch (error) {
     }
 }
@@ -95,9 +95,9 @@ export default function PatientMedical() {
     }
 
     const fabPress = (screen: string) => {
-    
+
         if (screen === "lab_results") {
-            navigation.navigate("LabTestScreen",{ appointment: appointment})
+            navigation.navigate("LabTestScreen", { appointment: appointment })
         }
     }
     const fields = [
@@ -155,7 +155,7 @@ export default function PatientMedical() {
     }
 
     const roleActions = () => {
-        const rolesStr =  user.roles.join(" ");
+        const rolesStr = user.roles.join(" ");
         const act = actions.filter((a) => a.role.find((r) => rolesStr.includes(r)))
         return act
     }
@@ -231,7 +231,7 @@ export default function PatientMedical() {
 
                         }
 
-                        <View style={{ flex: 1, flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginTop: 20, marginBottom:10 }}>
+                        <View style={{ flex: 1, flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginTop: 20, marginBottom: 10 }}>
                             <Text style={{
                                 fontSize: 15,
                                 fontWeight: 'bold',
@@ -239,8 +239,8 @@ export default function PatientMedical() {
                             }}>💊 Medications:</Text>
 
                             {
-                                 user.roles && user.roles.find((role) => role === Role.DOCTOR) &&
-                                <TouchableOpacity style={{ flexDirection: "row" }} onPress={() => navigation.navigate("CreatePatientMedication", { appointment: appointment, facesheet:faceSheetData })}>
+                                user.roles && user.roles.find((role) => role === Role.DOCTOR) &&
+                                <TouchableOpacity style={{ flexDirection: "row" }} onPress={() => navigation.navigate("CreatePatientMedication", { appointment: appointment, facesheet: faceSheetData })}>
                                     <Text style={{ color: COLORS.primary, fontWeight: "500" }}> <Feather name="edit" size={15} color={COLORS.primary} /> Edit</Text>
                                 </TouchableOpacity>
                             }
@@ -248,8 +248,8 @@ export default function PatientMedical() {
                         </View>
                         {
                             faceSheetData?.medications && faceSheetData?.medications.length > 0 &&
-                            <View style={{ marginTop: 5, paddingLeft:10 }}>
-                                {faceSheetData?.medications.map((item, key) => item.status === "ACTIVE" && <Text key={key}
+                            <View style={{ marginTop: 5, paddingLeft: 10 , flexDirection:"column"}}>
+                                {faceSheetData?.medications.map((item, key) => item.status === "ACTIVE" && <Text style={{marginBottom:7}} key={key}
                                 > {'\u2022'} {getPatientMedicationString(item)}
                                 </Text>)}
                             </View>
@@ -268,7 +268,7 @@ export default function PatientMedical() {
 
                             {
                                 !appointmetVital && user.roles && user.roles.find((role) => role !== Role.DOCTOR && role !== Role.ADMIN) &&
-                                <TouchableOpacity style={{ flexDirection: "row" }} onPress={() => {navigation.navigate("LabTestScreen", {appointment:appointment})}}>
+                                <TouchableOpacity style={{ flexDirection: "row" }} onPress={() => { navigation.navigate("LabTestScreen", { appointment: appointment }) }}>
                                     <Text style={{ color: COLORS.primary, fontWeight: "500" }}> <Feather name="edit" size={15} color={COLORS.primary} /> Edit</Text>
                                 </TouchableOpacity>
                             }
@@ -277,8 +277,8 @@ export default function PatientMedical() {
 
                         {
                             faceSheetData?.labResults && faceSheetData?.labResults.length > 0 &&
-                            <View style={{ marginTop: 20 }}>
-                                {faceSheetData?.labResults.map((item, key) => <Text>{`${item.observation} : ${item.value}${item.units}  - Recorded on: ${item.recorded_at}`}</Text>)}
+                            <View style={{ marginTop: 20, flexDirection:"column"}}>
+                                {faceSheetData?.labResults.map((item, key) => <Text style={{marginBottom:7}}>{`${item.observation} : ${item.value}${item.units}  - Recorded on: ${item.recorded_at}`}</Text>)}
                             </View>
                         }
 
@@ -324,7 +324,7 @@ const actions = [
         position: 1,
         textColor: COLORS.white,
         textBackground: COLORS.secondary,
-        role:[Role.DOCTOR]
+        role: [Role.DOCTOR]
     },
     {
         text: "Record Lab Results",
@@ -333,7 +333,7 @@ const actions = [
         position: 3,
         textColor: COLORS.white,
         textBackground: COLORS.secondary,
-        role:[Role.DOCTOR, Role.FRONT_OFFICE, Role.NURSE]
+        role: [Role.DOCTOR, Role.FRONT_OFFICE, Role.NURSE]
     },
     {
         text: "Patient Readings",
