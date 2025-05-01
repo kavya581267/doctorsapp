@@ -17,7 +17,7 @@ import { NavigationProp, RouteProp, useNavigation, useRoute } from '@react-navig
 import { InitialNotesParams, RootStackParamList } from '@components/MainNavigation';
 import { MdLogActivityIndicator } from '@components/MdLogActivityIndicator';
 import { patientService } from '@api/patientService';
-import { CreateInitialNoteRequest, CreateInitialNoteResponse, CreatePatientMedication, FileNoteRequest, PatientMedication, UpdateNoteRequest, UpdatePatientMedication } from '@api/model/patient/PatientModels';
+import { CreateInitialNoteRequest, CreateInitialNoteResponse, CreatePatientMedication, FileNoteRequest, PatientMedication, UpdateNoteRequest, UpdatePatientMedication, Vital } from '@api/model/patient/PatientModels';
 import Investigation from './Investigation';
 import { convertPatientMedicationResponseToPatientMedication, formatToYYYYMMDD, getFutureDate } from '@utils/utils';
 import { MdLodSnackbar } from '@components/MdLogSnacbar';
@@ -57,6 +57,8 @@ const InitialNoteScreen = () => {
     const [patientMedications, setPatientMedication] = useState<PatientMedication[]>([...facesheet.medications])
     const navigation = useNavigation<NavigationProp<RootStackParamList>>();
     const [fileNoteModel, setfileNoteModel] = useState(false)
+    const appVital: Vital = route.params?.appointmetVital;
+    const [vitals,setVitals] = useState<Vital>(appVital)
 
     const [shoeError, setShowError] = useState(false)
     const [error, setError] = useState("");
@@ -194,6 +196,9 @@ const InitialNoteScreen = () => {
             setDiet(diet)
             setExercise(exercise)
             setPastMedicalHistory(initialNote.pastMedicalHistory)
+            setInvestigations(initialNote.investigations);
+            //if(initialNote.vitals)
+              //setVitals();
 
         } catch (error) {
             setErrorMessage(error.toString());
@@ -314,7 +319,7 @@ const InitialNoteScreen = () => {
                             */
                         }
                         <Investigation noteSectionString={investigations} setNoteSectionString={setInvestigations} setLoading={setLoading} title="Investigation" addNewItemCommon={createInvestigation} itemList={masterData.labTests} />
-                        <InitialNoteVitalScreen />
+                        <InitialNoteVitalScreen vital={appVital} setVitals={()=>{}}/>
                         <Note prevVal={physicalExamination} setNoteSectionString={setPhysicalExamination} title="Physical Examination" />
                         <Note prevVal={diet} setNoteSectionString={setDiet} title="Diet" />
                         <Note prevVal={exercise} setNoteSectionString={setExercise} title="Exercise" />

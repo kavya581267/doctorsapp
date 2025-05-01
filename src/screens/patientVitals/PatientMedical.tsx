@@ -300,7 +300,7 @@ export default function PatientMedical() {
                     paddingVertical: 14,
                     borderRadius: 12,
                     alignItems: 'center'
-                }} onPress={() => navigation.navigate("InitialNote", { appointment: appointment, facesheet: faceSheetData })}>
+                }} onPress={() => navigation.navigate("InitialNote", { appointment: appointment, facesheet: faceSheetData, appointmetVital: appointmetVital })}>
                     <Text style={{
                         color: '#fff',
                         fontSize: 16,

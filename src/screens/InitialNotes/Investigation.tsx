@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { View, Text, TouchableOpacity, Button, TextInput, Modal } from "react-native";
 import styles from "@styles/presentingComplaintsStyle";
 import Icon from "react-native-vector-icons/Ionicons";
-import {  LabTest, LabTestRequest, LabTestResponse } from "@api/model/doctor/MasterData";
+import { LabTest, LabTestRequest, LabTestResponse } from "@api/model/doctor/MasterData";
 import { AuthContext } from "@context/AuthContext";
 import { MdLodSnackbar } from "@components/MdLogSnacbar";
 import { Dropdown } from "react-native-element-dropdown";
@@ -19,14 +19,14 @@ type Props = {
     title: string;
     itemList: LabTest[];
     addNewItemCommon: (reqObj: LabTestRequest) => Promise<LabTestResponse>;
-    setLoading: (load:boolean) => void
+    setLoading: (load: boolean) => void
     noteSectionString: string
-    setNoteSectionString: (note:string) => void
+    setNoteSectionString: (note: string) => void
 };
 
 
 
-export default function Investigation({ title, itemList, addNewItemCommon, setLoading, noteSectionString, setNoteSectionString}: Props) {
+export default function Investigation({ title, itemList, addNewItemCommon, setLoading, noteSectionString, setNoteSectionString }: Props) {
     const [searchText, setSearchText] = useState("");
     const [selectedItems, setSelectedItems] = useState<InvestigationNote[]>([]);
     const { loggedInUserContext } = useContext(AuthContext);
@@ -69,8 +69,8 @@ export default function Investigation({ title, itemList, addNewItemCommon, setLo
             specialityId: specialityId,
             clinicId: clinicId,
             testName: complaintText,
-            description:"",
-            category:""
+            description: "",
+            category: ""
         };
         const respItem = await addNewItemCommon(reqObj);
         if (respItem) {
@@ -90,16 +90,63 @@ export default function Investigation({ title, itemList, addNewItemCommon, setLo
         }
     };
 
+    const getObj = (str: string) => {
+        const regex = /^(.*?)\s+-\s+need report by\s+(.*)$/;
+        try {
+            const match = str.match(regex);
+
+            if (match) {
+                const item = {
+                    testName: match[1],
+                    date: match[2]
+                };
+                return item;
+
+            }
+        } catch (error) {
+
+        }
+        return null;
+    }
+
+
+    const fetchMedHisFromNote = () => {
+        if (noteSectionString) {
+            const it = noteSectionString.split(", ");
+            const selectedItems: InvestigationNote[] = []
+            try {
+                const medHis = it.map((val) => getObj(val))
+                medHis.forEach((it) => {
+                    const symp = itemList.find((i) => i.testName === it.testName);
+                    if (symp) {
+                        const selI: InvestigationNote = { ...it, id: symp.id, description: symp.description, category: symp.category };
+                        selectedItems.push(selI)
+                    }
+                })
+            } catch (error) {
+
+            }
+
+            if (selectedItems && selectedItems.length > 0) {
+                setSelectedItems([...selectedItems])
+            }
+        }
+    }
+
 
     const updateNoteString = () => {
         let noteString = selectedItems.map((item) => item.testName + " - " + "need report by " + item.date)
-        .join(", ");
+            .join(", ");
         setNoteSectionString(noteString)
     }
 
-    useEffect(()=>{
+    useEffect(() => {
         updateNoteString()
-    },[selectedItems])
+    }, [selectedItems, noteSectionString])
+
+    useEffect(() => {
+        fetchMedHisFromNote()
+    }, []);
 
     return (
         <View style={styles.section}>
@@ -128,7 +175,7 @@ export default function Investigation({ title, itemList, addNewItemCommon, setLo
                     )}
                 />
 
-                <TouchableOpacity onPress={()=>setModalVisible(true)}>
+                <TouchableOpacity onPress={() => setModalVisible(true)}>
                     <Text>Add</Text>
                 </TouchableOpacity>
                 {isVisibleModel && (

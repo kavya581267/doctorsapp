@@ -24,7 +24,7 @@ import { StaffProffileScreen } from '@screens/StaffProfileScreen';
 import InitialNoteScreen from '@screens/InitialNotes/InitialNotes';
 import PatientDirectoryScreen from '@screens/PatientsDirectory';
 import Mainscreen from './Mainscreen';
-import { AppointmentResponse, FaceSheet } from '@api/model/patient/PatientModels';
+import { AppointmentResponse, FaceSheet, Vital } from '@api/model/patient/PatientModels';
 import LabTestScreen from '@screens/patientVitals/LabTestScreen';
 import LoadingScreen from './LoadingScreen';
 import InProgressNotes from '@screens/InProgressNotes';
@@ -50,6 +50,7 @@ export type PatientMedicalParams = {
 export type InitialNotesParams = {
     facesheet: FaceSheet
     appointment: AppointmentListResponse
+    appointmetVital: Vital
 }
 export type LipidProfileScreenParams = {
     labResults: LabObservation[]

@@ -95,7 +95,6 @@ const PresentingComplaints = ({ title, itemList, addNewItemCommon, setLoading, n
                 setSelectedItems([...ini])
             }
         }
-
     }, []);
 
 

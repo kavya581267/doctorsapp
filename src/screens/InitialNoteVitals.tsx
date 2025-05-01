@@ -1,8 +1,13 @@
+import { Vital } from '@api/model/patient/PatientModels';
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Text, TextInput, Title } from 'react-native-paper';
+type props = {
+    vital: Vital
+    setVitals: (vitals:Vital) => void
+}
 
-const InitialNoteVitalScreen = () => {
+const InitialNoteVitalScreen = ({vital, setVitals}:props) => {
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Vitals</Text>
@@ -12,6 +17,7 @@ const InitialNoteVitalScreen = () => {
                 mode="outlined"
                 keyboardType="numeric"
                 style={styles.input}
+                value=''
             />
             <TextInput
                 label="Weight (kgs)"

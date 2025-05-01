@@ -401,7 +401,7 @@ export interface CreateInitialNoteResponse {
   diet: string;
   exercise: string;
   visitDx: string;
-  vitals: any[]; // Replace `any` with a specific type if known
+  vitals: Vital; // Replace `any` with a specific type if known
   medications: any[]; // Replace with type if known
   problems: any[]; // Replace with type if known
   filed: boolean;
