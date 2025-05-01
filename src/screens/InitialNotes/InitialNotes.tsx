@@ -198,7 +198,7 @@ const InitialNoteScreen = () => {
             setPastMedicalHistory(initialNote.pastMedicalHistory)
             setInvestigations(initialNote.investigations);
             if(initialNote.vitals && initialNote.vitals.length > 0){
-                setVitals(getVitals(initialNote.vitals[0]));
+                setVitals(initialNote.vitals[0]);
             }
 
         } catch (error) {
@@ -209,6 +209,7 @@ const InitialNoteScreen = () => {
     }
 
     const getVitals = (vital: Vital) => {
+        debugger;
          if(vital){
             const newVital = new VitalsRequest();
             newVital.appointmentId = appointment.id;
@@ -243,7 +244,7 @@ const InitialNoteScreen = () => {
         updateNoteReq.presentingComplaints = presentingComplaints;
         updateNoteReq.systemicExamination = systemicExamination;
         updateNoteReq.visitDx = visitDx;
-        updateNoteReq.vitals = getVitals(vitals);
+        updateNoteReq.vitals = vitals;
         //updateNoteReq.medications=patientMedications;
         try {
             setLoading(true)

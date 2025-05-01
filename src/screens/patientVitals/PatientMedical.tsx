@@ -87,7 +87,7 @@ export default function PatientMedical() {
         const userDetails = await getUser();
         SetUser(userDetails);
         const factSheetData = await patientService.fetchFactSheet(appointment.patientId.toString());
-        const vital = factSheetData.vitals && factSheetData.vitals.find((v) => v.appointment_id === appointment.id);
+        const vital = factSheetData.vitals && factSheetData.vitals.length > 0 ? factSheetData.vitals[0] : null;
         setPatientMedication([...factSheetData.medications])
         setAppointmetVital(vital)
         setFaceSheet(factSheetData)
@@ -124,11 +124,7 @@ export default function PatientMedical() {
             vitalsPayload.bloodPressureSystolic = parseInt(vital[fields[3]]);
             vitalsPayload.bloodPressureDiastolic = parseInt(vital[fields[4]]);
             vitalsPayload.appointmentId = appointment.id;
-            if (!updateVitals) {
-                const res = await patientService.recordPatientVitals(vitalsPayload, faceSheetData.patient.id);
-            } else {
-                //update
-            }
+            const res = await patientService.recordPatientVitals(vitalsPayload, faceSheetData.patient.id);
             setShowModal(false)
             await load()
         } catch (error) {
