@@ -115,7 +115,7 @@ export interface PatientUpdateRequest {
 
 export class VitalsRequest {
   clinicId: number;
-  appointmentId: string;
+  appointmentId: number;
   temperature: number;
   bloodPressureSystolic: number;
   bloodPressureDiastolic: number;
@@ -423,7 +423,8 @@ export class UpdateNoteRequest {
   diet: string;
   exercise: string;
   visitDx: string;
-  medications:PatientMedication[]
+  medications:PatientMedication[];
+  vitals: VitalsRequest
 }
 
 

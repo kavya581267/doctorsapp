@@ -17,7 +17,7 @@ import { NavigationProp, RouteProp, useNavigation, useRoute } from '@react-navig
 import { InitialNotesParams, RootStackParamList } from '@components/MainNavigation';
 import { MdLogActivityIndicator } from '@components/MdLogActivityIndicator';
 import { patientService } from '@api/patientService';
-import { CreateInitialNoteRequest, CreateInitialNoteResponse, CreatePatientMedication, FileNoteRequest, PatientMedication, UpdateNoteRequest, UpdatePatientMedication, Vital } from '@api/model/patient/PatientModels';
+import { CreateInitialNoteRequest, CreateInitialNoteResponse, CreatePatientMedication, FileNoteRequest, PatientMedication, UpdateNoteRequest, UpdatePatientMedication, Vital, VitalsRequest } from '@api/model/patient/PatientModels';
 import Investigation from './Investigation';
 import { convertPatientMedicationResponseToPatientMedication, formatToYYYYMMDD, getFutureDate } from '@utils/utils';
 import { MdLodSnackbar } from '@components/MdLogSnacbar';
@@ -58,7 +58,7 @@ const InitialNoteScreen = () => {
     const navigation = useNavigation<NavigationProp<RootStackParamList>>();
     const [fileNoteModel, setfileNoteModel] = useState(false)
     const appVital: Vital = route.params?.appointmetVital;
-    const [vitals,setVitals] = useState<Vital>(appVital)
+    const [vitals,setVitals] = useState<VitalsRequest>()
 
     const [shoeError, setShowError] = useState(false)
     const [error, setError] = useState("");
@@ -207,6 +207,25 @@ const InitialNoteScreen = () => {
         setLoading(false)
     }
 
+    const getVitals = (vital: Vital) => {
+         if(vital){
+            const newVital = new VitalsRequest();
+            newVital.appointmentId = appointment.id;
+            newVital.bloodPressureDiastolic = vital.blood_pressure_diastolic;
+            newVital.bloodPressureSystolic = vital.blood_pressure_systolic;
+            newVital.bmi = vital.bmi;
+            newVital.clinicId = appointment.clinicId;
+            newVital.heartRate = vital.heart_rate;
+            newVital.height = vital.height;
+            newVital.oxygenSaturation = vital.oxygen_saturation;
+            newVital.respiratoryRate = vital.respiratory_rate;
+            newVital.temperature = vital.temperature;
+            newVital.weight = vital.weight;
+            return newVital;
+         }
+         return null;
+    }
+
     const handleSave = async () => {
         let failed = false;
         const updateNoteReq = new UpdateNoteRequest()
@@ -223,6 +242,7 @@ const InitialNoteScreen = () => {
         updateNoteReq.presentingComplaints = presentingComplaints;
         updateNoteReq.systemicExamination = systemicExamination;
         updateNoteReq.visitDx = visitDx;
+        updateNoteReq.vitals = getVitals(vitals);
         //updateNoteReq.medications=patientMedications;
         try {
             setLoading(true)
@@ -269,6 +289,7 @@ const InitialNoteScreen = () => {
 
     useEffect(() => {
         fetchInitialNote();
+        setVitals(getVitals(appVital))
     }, [])
 
     if (loading) {
@@ -325,7 +346,7 @@ const InitialNoteScreen = () => {
                             */
                         }
                         <Investigation noteSectionString={investigations} setNoteSectionString={setInvestigations} setLoading={setLoading} title="Investigation" addNewItemCommon={createInvestigation} itemList={masterData.labTests} />
-                        <InitialNoteVitalScreen vital={appVital} setVitals={()=>{}}/>
+                        <InitialNoteVitalScreen vital={vitals} setVitals={setVitals}/>
                         <Note prevVal={physicalExamination} setNoteSectionString={setPhysicalExamination} title="Physical Examination" />
                         <Note prevVal={diet} setNoteSectionString={setDiet} title="Diet" />
                         <Note prevVal={exercise} setNoteSectionString={setExercise} title="Exercise" />

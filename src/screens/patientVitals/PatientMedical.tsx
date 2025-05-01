@@ -123,7 +123,7 @@ export default function PatientMedical() {
             vitalsPayload.oxygenSaturation = parseInt(vital[fields[7]]);
             vitalsPayload.bloodPressureSystolic = parseInt(vital[fields[3]]);
             vitalsPayload.bloodPressureDiastolic = parseInt(vital[fields[4]]);
-            vitalsPayload.appointmentId = appointment.id.toString();
+            vitalsPayload.appointmentId = appointment.id;
             if (!updateVitals) {
                 const res = await patientService.recordPatientVitals(vitalsPayload, faceSheetData.patient.id);
             } else {
