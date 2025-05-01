@@ -227,7 +227,6 @@ const InitialNoteScreen = () => {
         try {
             setLoading(true)
             const savedNote = await patientService.updateInitialNote(facesheet?.patient?.id, note.id, updateNoteReq);
-            console.log(savedNote);
         } catch (error) {
             setErrorMessage(error.toString());
             setVisible(true)
@@ -240,6 +239,7 @@ const InitialNoteScreen = () => {
             setVisible(true);
             setErrorMessage("Saved note!!")
         }
+        return failed;
     }
 
     const fileNote = async (date: string) => {
@@ -248,16 +248,22 @@ const InitialNoteScreen = () => {
         fileNote.doctorId = note.doctorId;
         fileNote.filed = true;
         fileNote.nextVisitDate = date;
+        let failedNoteFile = false;
         setLoading(true)
         try {
-            const resp = await patientService.fileInitialNote(facesheet.patient.id, note.id, fileNote);
-            console.log(resp);
+            const failed =  await handleSave()
+            if(!failed){
+                const resp = await patientService.fileInitialNote(facesheet.patient.id, note.id, fileNote);
+            }
         } catch (error) {
             setErrorMessage(error.toString());
             setVisible(true)
+            failedNoteFile = true;
+        }
+        if(!failedNoteFile){
+            navigation.navigate("PatientMedical",{appointment:appointment})
         }
         setLoading(false)
-
     }
 
 
