@@ -142,14 +142,14 @@ export default function PatientMedical() {
         setShowModal(true);
         setUpdateVitals(true);
         const vital: Record<string, string> = {
-            'Height (cms)': appointmetVital.height.toString(),
-            'Weight (kgs)': appointmetVital.weight.toString(),
-            'Temperature': appointmetVital.temperature.toString(),
-            'Blood Pressure Systolic': appointmetVital.blood_pressure_systolic.toString(),
-            'Blood Pressure Diastolic': appointmetVital.blood_pressure_systolic.toString(),
-            'Heart Rate': appointmetVital.heart_rate.toString(),
-            'Respiratory Rate': appointmetVital.respiratory_rate.toString(),
-            'Oxygen Saturation': appointmetVital.oxygen_saturation.toString()
+            'Height (cms)': appointmetVital && appointmetVital?.height ? appointmetVital.height.toString():"",
+            'Weight (kgs)': appointmetVital && appointmetVital?.weight ? appointmetVital.weight.toString(): "",
+            'Temperature': appointmetVital && appointmetVital?.temperature ? appointmetVital.temperature.toString():"",
+            'Blood Pressure Systolic': appointmetVital && appointmetVital?.blood_pressure_systolic ? appointmetVital.blood_pressure_systolic.toString():"",
+            'Blood Pressure Diastolic': appointmetVital && appointmetVital?.blood_pressure_systolic ? appointmetVital.blood_pressure_systolic.toString():"",
+            'Heart Rate':appointmetVital && appointmetVital?.heart_rate ? appointmetVital.heart_rate.toString():"",
+            'Respiratory Rate': appointmetVital && appointmetVital?.respiratory_rate ? appointmetVital.respiratory_rate.toString():"",
+            'Oxygen Saturation':appointmetVital && appointmetVital?.oxygen_saturation ? appointmetVital.oxygen_saturation.toString():""
         };
         setVitalsRecord(vital)
     }

@@ -197,8 +197,9 @@ const InitialNoteScreen = () => {
             setExercise(exercise)
             setPastMedicalHistory(initialNote.pastMedicalHistory)
             setInvestigations(initialNote.investigations);
-            //if(initialNote.vitals)
-              //setVitals();
+            if(initialNote.vitals && initialNote.vitals.length > 0){
+                setVitals(getVitals(initialNote.vitals[0]));
+            }
 
         } catch (error) {
             setErrorMessage(error.toString());
