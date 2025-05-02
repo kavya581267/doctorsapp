@@ -83,19 +83,30 @@ export default function PatientMedical() {
     }
 
     const age = calculateAge(patient ? patient.dateOfBirth : appointment.dateOfBirth)
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+        return date.toLocaleString('en-GB', {
+            day: '2-digit',
+            month: 'short',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: true,
+        });
+    };
     const load = async () => {
         setLoading(true);
         //set role
         const userDetails = await getUser();
         SetUser(userDetails);
-        const factSheetData = await patientService.fetchFactSheet(patient ? patient.id.toString() :appointment.patientId.toString());
+        const factSheetData = await patientService.fetchFactSheet(patient ? patient.id.toString() : appointment.patientId.toString());
         const vital = factSheetData.vitals && factSheetData.vitals.length > 0 ? factSheetData.vitals[0] : null;
         setPatientMedication([...factSheetData.medications])
         setAppointmetVital(vital);
         setFaceSheet(factSheetData);
-        setHasAppointments( factSheetData.patient?.hasAppointment)
-        if(factSheetData.patient?.filedNoteCount > 0){
-           setInitialNote(false)
+        setHasAppointments(factSheetData.patient?.hasAppointment)
+        if (factSheetData.patient?.filedNoteCount > 0) {
+            setInitialNote(false)
         }
         setLoading(false);
     }
@@ -144,14 +155,14 @@ export default function PatientMedical() {
         setShowModal(true);
         setUpdateVitals(true);
         const vital: Record<string, string> = {
-            'Height (cms)': appointmetVital && appointmetVital?.height ? appointmetVital.height.toString():"",
-            'Weight (kgs)': appointmetVital && appointmetVital?.weight ? appointmetVital.weight.toString(): "",
-            'Temperature': appointmetVital && appointmetVital?.temperature ? appointmetVital.temperature.toString():"",
-            'Blood Pressure Systolic': appointmetVital && appointmetVital?.blood_pressure_systolic ? appointmetVital.blood_pressure_systolic.toString():"",
-            'Blood Pressure Diastolic': appointmetVital && appointmetVital?.blood_pressure_systolic ? appointmetVital.blood_pressure_systolic.toString():"",
-            'Heart Rate':appointmetVital && appointmetVital?.heart_rate ? appointmetVital.heart_rate.toString():"",
-            'Respiratory Rate': appointmetVital && appointmetVital?.respiratory_rate ? appointmetVital.respiratory_rate.toString():"",
-            'Oxygen Saturation':appointmetVital && appointmetVital?.oxygen_saturation ? appointmetVital.oxygen_saturation.toString():""
+            'Height (cms)': appointmetVital && appointmetVital?.height ? appointmetVital.height.toString() : "",
+            'Weight (kgs)': appointmetVital && appointmetVital?.weight ? appointmetVital.weight.toString() : "",
+            'Temperature': appointmetVital && appointmetVital?.temperature ? appointmetVital.temperature.toString() : "",
+            'Blood Pressure Systolic': appointmetVital && appointmetVital?.blood_pressure_systolic ? appointmetVital.blood_pressure_systolic.toString() : "",
+            'Blood Pressure Diastolic': appointmetVital && appointmetVital?.blood_pressure_systolic ? appointmetVital.blood_pressure_systolic.toString() : "",
+            'Heart Rate': appointmetVital && appointmetVital?.heart_rate ? appointmetVital.heart_rate.toString() : "",
+            'Respiratory Rate': appointmetVital && appointmetVital?.respiratory_rate ? appointmetVital.respiratory_rate.toString() : "",
+            'Oxygen Saturation': appointmetVital && appointmetVital?.oxygen_saturation ? appointmetVital.oxygen_saturation.toString() : ""
         };
         setVitalsRecord(vital)
     }
@@ -175,7 +186,7 @@ export default function PatientMedical() {
     return (
 
         <View style={{ padding: 10, height: "100%" }}>
-            <Back nav="Mainscreen" tab={patient ? "Patients":"Appointments"} />
+            <Back nav="Mainscreen" tab={patient ? "Patients" : "Appointments"} />
             <ScrollView>
                 <View style={styles.patientContainer}>
                     <View>
@@ -249,8 +260,8 @@ export default function PatientMedical() {
                         </View>
                         {
                             faceSheetData?.medications && faceSheetData?.medications.length > 0 &&
-                            <View style={{ marginTop: 5, paddingLeft: 10 , flexDirection:"column"}}>
-                                {faceSheetData?.medications.map((item, key) => item.status === "ACTIVE" && <Text style={{marginBottom:7}} key={key}
+                            <View style={{ marginTop: 5, paddingLeft: 10, flexDirection: "column" }}>
+                                {faceSheetData?.medications.map((item, key) => item.status === "ACTIVE" && <Text style={{ marginBottom: 7 }} key={key}
                                 > {'\u2022'} {getPatientMedicationString(item)}
                                 </Text>)}
                             </View>
@@ -278,8 +289,30 @@ export default function PatientMedical() {
 
                         {
                             faceSheetData?.labResults && faceSheetData?.labResults.length > 0 &&
-                            <View style={{ marginTop: 20, flexDirection:"column"}}>
-                                {faceSheetData?.labResults.map((item, key) => <Text key={key} style={{marginBottom:7}}>{`${item.observation} : ${item.value}${item.units}  - Recorded on: ${item.recorded_at}`}</Text>)}
+                            <View style={{ marginTop: 20 }}>
+                                {
+                                    Object.entries(
+                                        faceSheetData.labResults.reduce((acc, item) => {
+                                            const key = item.master_lab_test_name;
+                                            if (!acc[key]) acc[key] = [];
+                                            acc[key].push(item);
+                                            return acc;
+                                        }, {})
+                                    ).map(([testName, results]) => (
+                                        <View key={testName} style={{ marginBottom: 10 }}>
+                                            <Text style={{ fontWeight: 'bold', fontSize: 16, marginBottom: 8 }}>{testName}</Text>
+                                            {results.map((item, index) => (
+                                                <View key={item.id || index} style={{ marginBottom: 10, paddingLeft: 10 }}>
+                                                    <Text style={{ fontSize: 14 }}>{`${item.observation}: ${item.value}${item.units}`}</Text>
+                                                    <View style={{ paddingLeft: 10, marginTop: 2 }}>
+                                                        <Text style={{ fontSize: 12, color: 'gray' }}>{`Recorded on: ${formatDate(item.recorded_at)}`}</Text>
+                                                    
+                                                    </View>
+                                                </View>
+                                            ))}
+                                        </View>
+                                    ))
+                                }
                             </View>
                         }
 
@@ -295,7 +328,7 @@ export default function PatientMedical() {
                 <CustomModal values={vitalRecord} title="💓 Add Vitals" fields={fields} visible={visiblemodal} onCancel={() => setShowModal(false)} onSave={storeVitals} />
             </ScrollView>
             {
-               !patient && hasAppointments && user.roles && user.roles.find((role) => role === Role.DOCTOR) &&
+                !patient && hasAppointments && user.roles && user.roles.find((role) => role === Role.DOCTOR) &&
                 <TouchableOpacity style={{
                     backgroundColor: COLORS.primary,
                     paddingVertical: 14,
@@ -306,7 +339,7 @@ export default function PatientMedical() {
                         color: '#fff',
                         fontSize: 16,
                         fontWeight: '600',
-                    }}>{initialNote ? "+ Initial Note" :"+ Followup Note"}</Text>
+                    }}>{initialNote ? "+ Initial Note" : "+ Followup Note"}</Text>
                 </TouchableOpacity>
             }
             <MdLodSnackbar visible={showError} message={error} onDismiss={() => setShowError(false)} />
