@@ -96,6 +96,9 @@ export interface PatientResponse {
   isActive: boolean;
   createdAt: string;
   updatedAt: string;
+  hasAppointment:boolean;
+  inprogressCount:number;
+  filedNoteCount: number
 }
 
 export interface PatientUpdateRequest {
@@ -357,6 +360,8 @@ class FacesheetObservation {
   units: string;
   updated_at: string; // ISO datetime string
   value: number;
+  master_lab_test_name: string;
+  master_lab_test_id: number
 }
 
 export interface FaceSheet {

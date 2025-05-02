@@ -209,7 +209,6 @@ const InitialNoteScreen = () => {
     }
 
     const getVitals = (vital: Vital) => {
-        debugger;
          if(vital){
             const newVital = new VitalsRequest();
             newVital.appointmentId = appointment.id;

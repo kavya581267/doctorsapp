@@ -45,6 +45,8 @@ export default function PatientMedical() {
     const [error, setErrorMessage] = useState("Failed to load!!")
     const [showError, setShowError] = useState(false);
     const [patientMedications, setPatientMedication] = useState<PatientMedication[]>([])
+    const [hasAppointments, setHasAppointments] = useState(false);
+    const [initialNote, setInitialNote] = useState(true)
 
 
     const vital: Record<string, string> = {
@@ -89,8 +91,12 @@ export default function PatientMedical() {
         const factSheetData = await patientService.fetchFactSheet(appointment.patientId.toString());
         const vital = factSheetData.vitals && factSheetData.vitals.length > 0 ? factSheetData.vitals[0] : null;
         setPatientMedication([...factSheetData.medications])
-        setAppointmetVital(vital)
-        setFaceSheet(factSheetData)
+        setAppointmetVital(vital);
+        setFaceSheet(factSheetData);
+        setHasAppointments( factSheetData.patient?.hasAppointment)
+        if(factSheetData.patient?.filedNoteCount > 0){
+           setInitialNote(false)
+        }
         setLoading(false);
     }
 
@@ -290,7 +296,7 @@ export default function PatientMedical() {
                 <CustomModal values={vitalRecord} title="💓 Add Vitals" fields={fields} visible={visiblemodal} onCancel={() => setShowModal(false)} onSave={storeVitals} />
             </ScrollView>
             {
-                user.roles && user.roles.find((role) => role === Role.DOCTOR) &&
+               hasAppointments && user.roles && user.roles.find((role) => role === Role.DOCTOR) &&
                 <TouchableOpacity style={{
                     backgroundColor: COLORS.primary,
                     paddingVertical: 14,
@@ -301,7 +307,7 @@ export default function PatientMedical() {
                         color: '#fff',
                         fontSize: 16,
                         fontWeight: '600',
-                    }}>+ Initial Note</Text>
+                    }}>{initialNote ? "+ Initial Note" :"+ Followup Note"}</Text>
                 </TouchableOpacity>
             }
             <MdLodSnackbar visible={showError} message={error} onDismiss={() => setShowError(false)} />
