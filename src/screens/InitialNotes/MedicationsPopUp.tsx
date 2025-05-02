@@ -172,8 +172,8 @@ const MedicationsPopUp: React.FC<Props> = ({ selectedItem, modalVisible, onClose
                             <Divider style={{marginTop:10}}/>
 
                             <View style={styles.actions}>
-                                <Button onPress={handleCancel} mode="outlined">Cancel</Button>
-                                <Button onPress={handleSave} mode="contained" style={styles.saveBtn}>Save</Button>
+                                <Button onPress={handleCancel} mode="outlined" style={{ borderRadius: 8, borderWidth: 1, borderColor:COLORS.red }}>Cancel</Button>
+                                <Button onPress={handleSave} mode="contained" style={styles.saveBtn} >Save</Button>
                             </View>
                         </View>
                     </View>
@@ -214,17 +214,16 @@ const styles = StyleSheet.create({
     actions: {
         flexDirection: "row",
         justifyContent: "space-between",
-        paddingHorizontal: 8,
         paddingBottom: 8,
         marginTop: 10
     },
     saveBtn: {
-        marginLeft: 8,
+       backgroundColor: COLORS.secondary, 
+       borderRadius: 8, 
+       borderWidth: 0 ,
+       paddingLeft:6,
+       paddingRight:6
     },
-
-
-
-
 
     foodToggle: {
         flexDirection: 'row',

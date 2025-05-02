@@ -164,7 +164,7 @@ const PresentingComplaints = ({ title, itemList, addNewItemCommon, setLoading, n
                         />
                         <Divider style={{ marginBottom: 20 }} />
                         <View style={styles.buttonRow}>
-                            <Button title="Cancel" onPress={() => setModalVisible(false)} />
+                            <Button title="Cancel"  onPress={() => setModalVisible(false)} />
                             <Button title="Create" onPress={() => {
                                 // Handle create action here
                                 handleAddNewItem()

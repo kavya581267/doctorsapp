@@ -5,6 +5,7 @@ import { Modal, Portal, Text, TextInput, Button, Card, ToggleButton, Divider } f
 import { MedicalHistoryNote } from './MedicalHistory';
 import { formatToYYYYMMDD } from '@utils/utils';
 import SegmentedToggle from '@components/SegmentedToggle';
+import { COLORS } from '@utils/colors';
 
 type Props = {
     selectedItem: Symptom;
@@ -101,7 +102,7 @@ const MedicalHistoryPopUp: React.FC<Props> = ({ selectedItem, modalVisible, onCl
                             <Divider />
 
                             <View style={styles.actions}>
-                                <Button onPress={handleCancel} mode="outlined">Cancel</Button>
+                                <Button onPress={handleCancel} mode="outlined" style={{ borderRadius: 8, borderWidth: 1, borderColor:COLORS.red }}>Cancel</Button>
                                 <Button onPress={handleSave} mode="contained" style={styles.saveBtn}>Save</Button>
                             </View>
                         </View>
@@ -163,7 +164,11 @@ const styles = StyleSheet.create({
         marginTop: 10
     },
     saveBtn: {
-        marginLeft: 8,
+        backgroundColor: COLORS.secondary, 
+        borderRadius: 8, 
+        borderWidth: 0 ,
+        paddingLeft:6,
+        paddingRight:6
     },
 
 
