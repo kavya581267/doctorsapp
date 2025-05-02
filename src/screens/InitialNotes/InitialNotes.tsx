@@ -37,7 +37,7 @@ type RouteParams = {
 const InitialNoteScreen = () => {
     const { masterData, setMasterDataAdapter } = useContext(AuthContext);
     const route = useRoute<RouteProp<RouteParams>>()
-    const { facesheet, appointment } = route.params;
+    const { facesheet, appointment, patient } = route.params;
     const [loading, setLoading] = useState(false);
     const [visible, setVisible] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
@@ -59,6 +59,7 @@ const InitialNoteScreen = () => {
     const [fileNoteModel, setfileNoteModel] = useState(false)
     const appVital: Vital = route.params?.appointmetVital;
     const [vitals,setVitals] = useState<VitalsRequest>()
+
 
     const [shoeError, setShowError] = useState(false)
     const [error, setError] = useState("");
@@ -204,6 +205,8 @@ const InitialNoteScreen = () => {
         } catch (error) {
             setErrorMessage(error.toString());
             setVisible(true)
+            setLoading(false)
+            navigation.navigate("PatientMedical", {appointment:appointment, patient:patient})
         }
         setLoading(false)
     }

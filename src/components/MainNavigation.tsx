@@ -52,6 +52,7 @@ export type InitialNotesParams = {
     facesheet: FaceSheet
     appointment: AppointmentListResponse
     appointmetVital: Vital
+    patient?:PatientResponse
 }
 export type LipidProfileScreenParams = {
     labResults: LabObservation[]
