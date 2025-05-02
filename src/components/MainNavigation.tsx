@@ -57,9 +57,11 @@ export type LipidProfileScreenParams = {
     labResults: LabObservation[]
     labTest: LabTest
     appointment: AppointmentListResponse
+    patient?:PatientResponse
 }
 export type LabTestScreenParam ={
     appointment: AppointmentListResponse
+    patient?: PatientResponse
 }
 
 

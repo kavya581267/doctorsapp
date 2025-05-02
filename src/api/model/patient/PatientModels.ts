@@ -75,7 +75,7 @@ export interface PatientNoteResponse {
 
 export interface PatientResponse {
   id: string;
-  clinicId: string;
+  clinicId: number;
   mrn: string;
   firstName: string;
   lastName: string;

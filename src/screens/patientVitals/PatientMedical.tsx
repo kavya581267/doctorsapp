@@ -113,8 +113,8 @@ export default function PatientMedical() {
 
     const fabPress = (screen: string) => {
 
-        if (screen === "lab_results") {
-            navigation.navigate("LabTestScreen", { appointment: appointment })
+        if (screen === "lab_results" && !patient) {
+            navigation.navigate("LabTestScreen", { appointment: appointment, patient:patient })
         }
     }
     const fields = [
@@ -131,7 +131,7 @@ export default function PatientMedical() {
         try {
             setLoading(true);
             const vitalsPayload = new VitalsRequest();
-            vitalsPayload.clinicId = parseInt(faceSheetData.patient.clinicId);
+            vitalsPayload.clinicId = faceSheetData.patient.clinicId;
             vitalsPayload.temperature = parseInt(vital[fields[2]]);
             vitalsPayload.height = parseInt(vital[fields[0]]);
             vitalsPayload.weight = parseInt(vital[fields[1]]);

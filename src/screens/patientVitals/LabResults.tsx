@@ -45,7 +45,7 @@ const LabResultsScreen = () => {
     const [date, setDate] = useState(new Date());
     const [showPicker, setShowPicker] = useState(false);
     const route = useRoute<RouteProp<RouteParams>>();
-    const { labResults, labTest, appointment } = route.params
+    const { labResults, labTest, appointment, patient } = route.params
     const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
     const handleInputChange = (key: number, value: string) => {
@@ -79,18 +79,18 @@ const LabResultsScreen = () => {
         try {
             setLoading(true)
             const labOrder = new LabOrderRequest()
-            labOrder.clinicId = appointment.clinicId;
+            labOrder.clinicId = patient ? patient.clinicId :appointment.clinicId;
             labOrder.testId = labTest.id;
             labOrder.notes = ""
-            const labOrderResp = await patientService.savePatientlabOrders(appointment.patientId.toString(), labOrder);
+            const labOrderResp = await patientService.savePatientlabOrders(patient ? patient.id.toString() :appointment.patientId.toString(), labOrder);
             const labResultPayload = new LabResultsPayload();
-            labResultPayload.appointmentId = appointment.patientId;
+            labResultPayload.appointmentId = appointment ? appointment.id : null;
             labResultPayload.clinicId = labOrderResp.clinicId;
             labResultPayload.orderId = labOrderResp.id;
             labResultPayload.labResults = getLabResultsEntry();
-            await patientService.savePatientlabResults(appointment.patientId.toString(), labResultPayload);
+            await patientService.savePatientlabResults(patient ? patient.id.toString() : appointment.patientId.toString(), labResultPayload);
             setLoading(false)
-            navigation.navigate("PatientMedical", { appointment: appointment })
+            navigation.navigate("PatientMedical", { appointment: appointment, patient:patient })
         }
         catch (error) {
           setVisible(true);
