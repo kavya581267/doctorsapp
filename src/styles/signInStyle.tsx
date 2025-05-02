@@ -42,15 +42,14 @@ export default StyleSheet.create({
         marginTop: 50
     },
     inputContainer: {
-        flexDirection: "row",
-        alignItems: "center",
-        paddingHorizontal: 10,
+        flexDirection: 'row',
+        alignItems: 'center',
         borderWidth: 1,
         borderColor: COLORS.grey,
         borderRadius: 8,
+        paddingHorizontal: 10,
         marginBottom: 15,
-        backgroundColor: "#F3F4F6FF"
-    },
+      },
     icon: {
         marginRight: 8
     },
