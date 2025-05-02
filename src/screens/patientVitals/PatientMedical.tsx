@@ -140,6 +140,7 @@ export default function PatientMedical() {
             vitalsPayload.oxygenSaturation = parseInt(vital[fields[7]]);
             vitalsPayload.bloodPressureSystolic = parseInt(vital[fields[3]]);
             vitalsPayload.bloodPressureDiastolic = parseInt(vital[fields[4]]);
+            vitalsPayload.appointmentId = appointment.id;
             //vitalsPayload.appointmentId = patient ? patientappointment.id;
             const res = await patientService.recordPatientVitals(vitalsPayload, faceSheetData.patient.id);
             setShowModal(false)
@@ -215,14 +216,14 @@ export default function PatientMedical() {
                                 color: '#ff4d6d',
                             }}>💓 Vitals:</Text>
                             {
-                                !appointmetVital &&
+                                !patient && !appointmetVital &&
                                 <TouchableOpacity style={{ flexDirection: "row" }} onPress={() => setShowModal(true)}>
                                     <Text style={{ color: COLORS.primary }}> <Feather name="plus" size={20} color={COLORS.primary} /> Add</Text>
                                 </TouchableOpacity>
                             }
 
                             {
-                                appointmetVital &&
+                                !patient && appointmetVital &&
                                 <TouchableOpacity style={{ flexDirection: "row" }} onPress={editVitalsPress}>
                                     <Text style={{ color: COLORS.primary, fontWeight: "500" }}> <Feather name="edit" size={15} color={COLORS.primary} /> Edit</Text>
                                 </TouchableOpacity>
