@@ -93,7 +93,7 @@ export interface PatientResponse {
   country: string;
   emergencyContactName: string;
   emergencyContactPhone: string;
-  isActive: boolean;
+  active: boolean;
   createdAt: string;
   updatedAt: string;
   hasAppointment:boolean;
