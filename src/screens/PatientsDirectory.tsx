@@ -74,7 +74,7 @@ const PatientDirectoryScreen = () => {
 
   const renderStaffCard: ListRenderItem<PatientResponse> = ({ item }) => (
     
-    <TouchableOpacity style={styles.card}>
+    <TouchableOpacity style={styles.card} onPress={()=> navigation.navigate("PatientMedical",{patient: item, appointment:null})}>
       <Avatar.Text size={60} label={getAvatarName(item?.firstName, item?.lastName)} />
       <View style={styles.cardContent}>
         <Text style={styles.name}>{item.firstName} </Text>

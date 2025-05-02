@@ -34,7 +34,7 @@ export const createPatientMedication = async (reqObj: PatientMedication, medicat
 
 export default function PatientMedical() {
     const route = useRoute<RouteProp<RoueParams>>();
-    const { appointment } = route.params;
+    const { appointment, patient } = route.params;
     const navigation = useNavigation<NavigationProp<RootStackParamList>>();
     const [loading, setLoading] = useState(true);
     const [appointmetVital, setAppointmetVital] = useState<Vital | undefined>(undefined);
@@ -82,13 +82,13 @@ export default function PatientMedical() {
         return age;
     }
 
-    const age = calculateAge(appointment.dateOfBirth)
+    const age = calculateAge(patient ? patient.dateOfBirth : appointment.dateOfBirth)
     const load = async () => {
         setLoading(true);
         //set role
         const userDetails = await getUser();
         SetUser(userDetails);
-        const factSheetData = await patientService.fetchFactSheet(appointment.patientId.toString());
+        const factSheetData = await patientService.fetchFactSheet(patient ? patient.id.toString() :appointment.patientId.toString());
         const vital = factSheetData.vitals && factSheetData.vitals.length > 0 ? factSheetData.vitals[0] : null;
         setPatientMedication([...factSheetData.medications])
         setAppointmetVital(vital);
@@ -129,7 +129,7 @@ export default function PatientMedical() {
             vitalsPayload.oxygenSaturation = parseInt(vital[fields[7]]);
             vitalsPayload.bloodPressureSystolic = parseInt(vital[fields[3]]);
             vitalsPayload.bloodPressureDiastolic = parseInt(vital[fields[4]]);
-            vitalsPayload.appointmentId = appointment.id;
+            //vitalsPayload.appointmentId = patient ? patientappointment.id;
             const res = await patientService.recordPatientVitals(vitalsPayload, faceSheetData.patient.id);
             setShowModal(false)
             await load()
@@ -175,7 +175,7 @@ export default function PatientMedical() {
     return (
 
         <View style={{ padding: 10, height: "100%" }}>
-            <Back nav="Mainscreen" tab="Appointments" />
+            <Back nav="Mainscreen" tab={patient ? "Patients":"Appointments"} />
             <ScrollView>
                 <View style={styles.patientContainer}>
                     <View>
@@ -184,14 +184,13 @@ export default function PatientMedical() {
                                 <View style={{ flexDirection: "row" }}>
                                     <Text style={{ marginRight: 5 }}>
                                         <Text style={{ fontWeight: 'bold' }}>Name:  </Text>
-                                        {appointment.firstName}
+                                        {patient ? patient.firstName : appointment.firstName}
                                     </Text>
-                                    <Text>{appointment.lastName}</Text>
+                                    <Text>{patient ? patient.lastName : appointment.lastName}</Text>
                                 </View>
 
                                 <Text><Text style={{ fontWeight: 'bold' }}>Age:  </Text>{age}</Text>
                             </View>
-                            <Text><Text style={{ fontWeight: 'bold' }}>Doctor:  </Text>{appointment.doctorName}</Text>
                             <Text><Text style={{ fontWeight: 'bold' }}>MRN:  </Text>#{faceSheetData?.patient?.mrn}</Text>
                         </View>
                         <View style={styles.divider} />
@@ -280,7 +279,7 @@ export default function PatientMedical() {
                         {
                             faceSheetData?.labResults && faceSheetData?.labResults.length > 0 &&
                             <View style={{ marginTop: 20, flexDirection:"column"}}>
-                                {faceSheetData?.labResults.map((item, key) => <Text style={{marginBottom:7}}>{`${item.observation} : ${item.value}${item.units}  - Recorded on: ${item.recorded_at}`}</Text>)}
+                                {faceSheetData?.labResults.map((item, key) => <Text key={key} style={{marginBottom:7}}>{`${item.observation} : ${item.value}${item.units}  - Recorded on: ${item.recorded_at}`}</Text>)}
                             </View>
                         }
 
@@ -288,7 +287,7 @@ export default function PatientMedical() {
                             faceSheetData?.problems && faceSheetData?.problems.length > 0 &&
                             <View style={{ marginTop: 20 }}>
                                 <Text style={{ fontWeight: "700", fontSize: 16 }}>🔬 Problems</Text>
-                                {faceSheetData?.problems.map((item, key) => <Text>{item}</Text>)}
+                                {faceSheetData?.problems.map((item, key) => <Text key={key}>{item}</Text>)}
                             </View>
                         }
                     </View>
@@ -296,7 +295,7 @@ export default function PatientMedical() {
                 <CustomModal values={vitalRecord} title="💓 Add Vitals" fields={fields} visible={visiblemodal} onCancel={() => setShowModal(false)} onSave={storeVitals} />
             </ScrollView>
             {
-               hasAppointments && user.roles && user.roles.find((role) => role === Role.DOCTOR) &&
+               !patient && hasAppointments && user.roles && user.roles.find((role) => role === Role.DOCTOR) &&
                 <TouchableOpacity style={{
                     backgroundColor: COLORS.primary,
                     paddingVertical: 14,

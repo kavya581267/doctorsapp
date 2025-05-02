@@ -24,7 +24,7 @@ import { StaffProffileScreen } from '@screens/StaffProfileScreen';
 import InitialNoteScreen from '@screens/InitialNotes/InitialNotes';
 import PatientDirectoryScreen from '@screens/PatientsDirectory';
 import Mainscreen from './Mainscreen';
-import { AppointmentResponse, FaceSheet, Vital } from '@api/model/patient/PatientModels';
+import { AppointmentResponse, FaceSheet, PatientResponse, Vital } from '@api/model/patient/PatientModels';
 import LabTestScreen from '@screens/patientVitals/LabTestScreen';
 import LoadingScreen from './LoadingScreen';
 import InProgressNotes from '@screens/InProgressNotes';
@@ -46,6 +46,7 @@ export type SuccessScreenParams = {
 };
 export type PatientMedicalParams = {
     appointment: AppointmentListResponse
+    patient?: PatientResponse
 }
 export type InitialNotesParams = {
     facesheet: FaceSheet

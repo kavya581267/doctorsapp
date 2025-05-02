@@ -100,7 +100,7 @@ const InitialNoteScreen = () => {
     const createPatientMedication = async (patientMedication: CreatePatientMedication, medicationId: string) => {
         setLoading(true)
         try {
-            patientMedication.clinicId = appointment.clinicId.toString();
+            patientMedication.clinicId = facesheet.patient.clinicId.toString();
             patientMedication.medicationId = medicationId;
             patientMedication.appointmentId = appointment.id.toString();
             const resp = await patientService.createPatientMedication(appointment.patientId.toString(), patientMedication);
