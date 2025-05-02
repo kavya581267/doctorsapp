@@ -202,7 +202,7 @@ const ClinicOverview = () => {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1, padding: 15,
+        flex: 1, padding: 15,backgroundColor:COLORS.white
     },
     webContainer: {
 

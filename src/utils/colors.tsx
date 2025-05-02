@@ -5,5 +5,6 @@ export const COLORS = {
     grey:"#ccc",
     red:"#e663639e",
     backgroundColor: "#FFFFFF",
-    safeAreabackgroundColor: "#FFFFFF"
+    safeAreabackgroundColor: "#FFFFFF",
+    cardGrey:'#FAFAFA'
 };
