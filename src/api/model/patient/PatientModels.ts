@@ -75,7 +75,7 @@ export interface PatientNoteResponse {
 
 export interface PatientResponse {
   id: string;
-  clinicId: string;
+  clinicId: number;
   mrn: string;
   firstName: string;
   lastName: string;
@@ -93,9 +93,12 @@ export interface PatientResponse {
   country: string;
   emergencyContactName: string;
   emergencyContactPhone: string;
-  isActive: boolean;
+  active: boolean;
   createdAt: string;
   updatedAt: string;
+  hasAppointment:boolean;
+  inprogressCount:number;
+  filedNoteCount: number
 }
 
 export interface PatientUpdateRequest {
@@ -115,7 +118,7 @@ export interface PatientUpdateRequest {
 
 export class VitalsRequest {
   clinicId: number;
-  appointmentId: string;
+  appointmentId: number;
   temperature: number;
   bloodPressureSystolic: number;
   bloodPressureDiastolic: number;
@@ -357,6 +360,8 @@ class FacesheetObservation {
   units: string;
   updated_at: string; // ISO datetime string
   value: number;
+  master_lab_test_name: string;
+  master_lab_test_id: number
 }
 
 export interface FaceSheet {
@@ -401,7 +406,7 @@ export interface CreateInitialNoteResponse {
   diet: string;
   exercise: string;
   visitDx: string;
-  vitals: any[]; // Replace `any` with a specific type if known
+  vitals: VitalsRequest[]; // Replace `any` with a specific type if known
   medications: any[]; // Replace with type if known
   problems: any[]; // Replace with type if known
   filed: boolean;
@@ -423,7 +428,8 @@ export class UpdateNoteRequest {
   diet: string;
   exercise: string;
   visitDx: string;
-  medications:PatientMedication[]
+  medications:PatientMedication[];
+  vitals: VitalsRequest
 }
 
 

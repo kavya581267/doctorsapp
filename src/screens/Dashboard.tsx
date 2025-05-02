@@ -57,7 +57,7 @@ export default function DashboardScreen() {
             label: 'Holidays',
             bgColor: '#FDEAEA',
             icon: <MaterialIcons name="event-note" size={24} color="#EB5757" />,
-            roles: ['DOCTOR', 'ADMIN', "FRONT_OFFICE", "NURSE"],
+            roles: ['ADMIN', "FRONT_OFFICE", "NURSE"],
         },
         {
             label: 'Your Schedule',

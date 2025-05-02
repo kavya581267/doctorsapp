@@ -91,13 +91,62 @@ export default function PasMedHistory({ title, itemList, addNewItemCommon, setLo
 
     const updateNoteString = () => {
         let noteString = selectedItems.map((item) => item.name + " for " + item.howlong + " " + item.type)
-        .join(", ");
+            .join(", ");
         setNoteSectionString(noteString)
     }
 
     useEffect(() => {
-        updateNoteString()
-    }, [selectedItems])
+        updateNoteString();
+    }, [selectedItems, noteSectionString])
+
+    const getObj = (str: string) => {
+        const regex = /^(.*?)\s+for\s+(\d+)\s+(\w+)$/;
+        try {
+            const match = str.match(regex);
+
+            if (match) {
+                const item = {
+                    name: match[1],
+                    howlong: Number(match[2]),
+                    type: match[3]
+                };
+                console.log(item);
+                return item;
+
+            }
+        } catch (error) {
+
+        }
+        return null;
+    }
+
+
+    const fetchMedHisFromNote = () => {
+        if (noteSectionString) {
+            const it = noteSectionString.split(", ");
+            const selectedItems: MedicalHistoryNote[] = []
+            try {
+                const medHis = it.map((val) => getObj(val))
+                medHis.forEach((it) => {
+                    const symp = itemList.find((i) => i.name === it.name);
+                    if (symp) {
+                        const selI: MedicalHistoryNote = { ...it, id: symp.id };
+                        selectedItems.push(selI)
+                    }
+                })
+            } catch (error) {
+
+            }
+
+            if (selectedItems && selectedItems.length > 0) {
+                setSelectedItems([...selectedItems])
+            }
+        }
+    }
+
+    useEffect(() => {
+        fetchMedHisFromNote()
+    }, []);
 
     return (
         <View style={styles.section}>

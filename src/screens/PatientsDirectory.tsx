@@ -73,40 +73,40 @@ const PatientDirectoryScreen = () => {
 
 
   const renderStaffCard: ListRenderItem<PatientResponse> = ({ item }) => (
-    
-    <TouchableOpacity style={styles.card}>
+
+    <TouchableOpacity style={styles.card} onPress={() => navigation.navigate("PatientMedical", { patient: item, appointment: null })}>
       <Avatar.Text size={60} label={getAvatarName(item?.firstName, item?.lastName)} />
       <View style={styles.cardContent}>
         <Text style={styles.name}>{item.firstName} </Text>
         <Text style={styles.role}>{item.lastName}</Text>
         <Text style={styles.role}>{item.phone}</Text>
       </View>
-      <Text style={[styles.status, item.isActive ? styles.active : styles.onLeave]}>
-        
-        {item.isActive ? "Active" : "InActive"}
+      <Text style={[styles.status, item.active ? styles.active : styles.onLeave]}>
+
+        {item.active ? "Active" : "InActive"}
       </Text>
     </TouchableOpacity>
   );
 
   return (
     <View style={styles.container}>
-        <Back></Back>
-        <TextInput
-          placeholder="Search patient..."
-          value={searchText}
-          onChangeText={filterStaff}
-          style={styles.searchInput}
-        />
+      <Back></Back>
+      <TextInput
+        placeholder="Search patient..."
+        value={searchText}
+        onChangeText={filterStaff}
+        style={styles.searchInput}
+      />
 
-        <FlatList<PatientResponse>
-          data={staff}
-          keyExtractor={(item) => item.id.toString()}
-          renderItem={renderStaffCard}
-        />
-        <TouchableOpacity style={styles.addButton} onPress={() => navigation.navigate("PatientRegistrationScreen")}>
-          <Text style={styles.addButtonText}>+ Add New Patient</Text>
-        </TouchableOpacity>
-        <MdLogActivityIndicator loading={loading} />
+      <FlatList<PatientResponse>
+        data={staff}
+        keyExtractor={(item) => item.id.toString()}
+        renderItem={renderStaffCard}
+      />
+      <TouchableOpacity style={styles.addButton} onPress={() => navigation.navigate("PatientRegistrationScreen")}>
+        <Text style={styles.addButtonText}>+ Add New Patient</Text>
+      </TouchableOpacity>
+      <MdLogActivityIndicator loading={loading} />
     </View>
   );
 };

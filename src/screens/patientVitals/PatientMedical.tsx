@@ -25,8 +25,8 @@ type RoueParams = {
 
 export const createPatientMedication = async (reqObj: PatientMedication, medicationId: string, appointmentId: string) => {
     try {
-       // const resp = await patientService.createPatientMedication(appointmentId, medicationId, reqObj);
-       // return resp;
+        // const resp = await patientService.createPatientMedication(appointmentId, medicationId, reqObj);
+        // return resp;
     } catch (error) {
     }
 }
@@ -34,7 +34,7 @@ export const createPatientMedication = async (reqObj: PatientMedication, medicat
 
 export default function PatientMedical() {
     const route = useRoute<RouteProp<RoueParams>>();
-    const { appointment } = route.params;
+    const { appointment, patient } = route.params;
     const navigation = useNavigation<NavigationProp<RootStackParamList>>();
     const [loading, setLoading] = useState(true);
     const [appointmetVital, setAppointmetVital] = useState<Vital | undefined>(undefined);
@@ -45,6 +45,8 @@ export default function PatientMedical() {
     const [error, setErrorMessage] = useState("Failed to load!!")
     const [showError, setShowError] = useState(false);
     const [patientMedications, setPatientMedication] = useState<PatientMedication[]>([])
+    const [hasAppointments, setHasAppointments] = useState(false);
+    const [initialNote, setInitialNote] = useState(true)
 
 
     const vital: Record<string, string> = {
@@ -80,24 +82,39 @@ export default function PatientMedical() {
         return age;
     }
 
-    const age = calculateAge(appointment.dateOfBirth)
+    const age = calculateAge(patient ? patient.dateOfBirth : appointment.dateOfBirth)
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+        return date.toLocaleString('en-GB', {
+            day: '2-digit',
+            month: 'short',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: true,
+        });
+    };
     const load = async () => {
         setLoading(true);
         //set role
         const userDetails = await getUser();
         SetUser(userDetails);
-        const factSheetData = await patientService.fetchFactSheet(appointment.patientId.toString());
-        const vital = factSheetData.vitals && factSheetData.vitals.find((v) => v.appointment_id === appointment.id);
+        const factSheetData = await patientService.fetchFactSheet(patient ? patient.id.toString() : appointment.patientId.toString());
+        const vital = factSheetData.vitals && factSheetData.vitals.length > 0 ? factSheetData.vitals[0] : null;
         setPatientMedication([...factSheetData.medications])
-        setAppointmetVital(vital)
-        setFaceSheet(factSheetData)
+        setAppointmetVital(vital);
+        setFaceSheet(factSheetData);
+        setHasAppointments(factSheetData.patient?.hasAppointment)
+        if (factSheetData.patient?.filedNoteCount > 0) {
+            setInitialNote(false)
+        }
         setLoading(false);
     }
 
     const fabPress = (screen: string) => {
-    
-        if (screen === "lab_results") {
-            navigation.navigate("LabTestScreen",{ appointment: appointment})
+
+        if (screen === "lab_results" && !patient) {
+            navigation.navigate("LabTestScreen", { appointment: appointment, patient:patient })
         }
     }
     const fields = [
@@ -114,7 +131,7 @@ export default function PatientMedical() {
         try {
             setLoading(true);
             const vitalsPayload = new VitalsRequest();
-            vitalsPayload.clinicId = parseInt(faceSheetData.patient.clinicId);
+            vitalsPayload.clinicId = faceSheetData.patient.clinicId;
             vitalsPayload.temperature = parseInt(vital[fields[2]]);
             vitalsPayload.height = parseInt(vital[fields[0]]);
             vitalsPayload.weight = parseInt(vital[fields[1]]);
@@ -123,12 +140,9 @@ export default function PatientMedical() {
             vitalsPayload.oxygenSaturation = parseInt(vital[fields[7]]);
             vitalsPayload.bloodPressureSystolic = parseInt(vital[fields[3]]);
             vitalsPayload.bloodPressureDiastolic = parseInt(vital[fields[4]]);
-            vitalsPayload.appointmentId = appointment.id.toString();
-            if (!updateVitals) {
-                const res = await patientService.recordPatientVitals(vitalsPayload, faceSheetData.patient.id);
-            } else {
-                //update
-            }
+            vitalsPayload.appointmentId = appointment.id;
+            //vitalsPayload.appointmentId = patient ? patientappointment.id;
+            const res = await patientService.recordPatientVitals(vitalsPayload, faceSheetData.patient.id);
             setShowModal(false)
             await load()
         } catch (error) {
@@ -142,20 +156,20 @@ export default function PatientMedical() {
         setShowModal(true);
         setUpdateVitals(true);
         const vital: Record<string, string> = {
-            'Height (cms)': appointmetVital.height.toString(),
-            'Weight (kgs)': appointmetVital.weight.toString(),
-            'Temperature': appointmetVital.temperature.toString(),
-            'Blood Pressure Systolic': appointmetVital.blood_pressure_systolic.toString(),
-            'Blood Pressure Diastolic': appointmetVital.blood_pressure_systolic.toString(),
-            'Heart Rate': appointmetVital.heart_rate.toString(),
-            'Respiratory Rate': appointmetVital.respiratory_rate.toString(),
-            'Oxygen Saturation': appointmetVital.oxygen_saturation.toString()
+            'Height (cms)': appointmetVital && appointmetVital?.height ? appointmetVital.height.toString() : "",
+            'Weight (kgs)': appointmetVital && appointmetVital?.weight ? appointmetVital.weight.toString() : "",
+            'Temperature': appointmetVital && appointmetVital?.temperature ? appointmetVital.temperature.toString() : "",
+            'Blood Pressure Systolic': appointmetVital && appointmetVital?.blood_pressure_systolic ? appointmetVital.blood_pressure_systolic.toString() : "",
+            'Blood Pressure Diastolic': appointmetVital && appointmetVital?.blood_pressure_systolic ? appointmetVital.blood_pressure_systolic.toString() : "",
+            'Heart Rate': appointmetVital && appointmetVital?.heart_rate ? appointmetVital.heart_rate.toString() : "",
+            'Respiratory Rate': appointmetVital && appointmetVital?.respiratory_rate ? appointmetVital.respiratory_rate.toString() : "",
+            'Oxygen Saturation': appointmetVital && appointmetVital?.oxygen_saturation ? appointmetVital.oxygen_saturation.toString() : ""
         };
         setVitalsRecord(vital)
     }
 
     const roleActions = () => {
-        const rolesStr =  user.roles.join(" ");
+        const rolesStr = user.roles.join(" ");
         const act = actions.filter((a) => a.role.find((r) => rolesStr.includes(r)))
         return act
     }
@@ -173,7 +187,7 @@ export default function PatientMedical() {
     return (
 
         <View style={{ padding: 10, height: "100%" }}>
-            <Back nav="Mainscreen" tab="Appointments" />
+            <Back nav="Mainscreen" tab={patient ? "Patients" : "Appointments"} />
             <ScrollView>
                 <View style={styles.patientContainer}>
                     <View>
@@ -182,14 +196,13 @@ export default function PatientMedical() {
                                 <View style={{ flexDirection: "row" }}>
                                     <Text style={{ marginRight: 5 }}>
                                         <Text style={{ fontWeight: 'bold' }}>Name:  </Text>
-                                        {appointment.firstName}
+                                        {patient ? patient.firstName : appointment.firstName}
                                     </Text>
-                                    <Text>{appointment.lastName}</Text>
+                                    <Text>{patient ? patient.lastName : appointment.lastName}</Text>
                                 </View>
 
                                 <Text><Text style={{ fontWeight: 'bold' }}>Age:  </Text>{age}</Text>
                             </View>
-                            <Text><Text style={{ fontWeight: 'bold' }}>Doctor:  </Text>{appointment.doctorName}</Text>
                             <Text><Text style={{ fontWeight: 'bold' }}>MRN:  </Text>#{faceSheetData?.patient?.mrn}</Text>
                         </View>
                         <View style={styles.divider} />
@@ -203,14 +216,14 @@ export default function PatientMedical() {
                                 color: '#ff4d6d',
                             }}>💓 Vitals:</Text>
                             {
-                                !appointmetVital &&
+                                !patient && !appointmetVital &&
                                 <TouchableOpacity style={{ flexDirection: "row" }} onPress={() => setShowModal(true)}>
                                     <Text style={{ color: COLORS.primary }}> <Feather name="plus" size={20} color={COLORS.primary} /> Add</Text>
                                 </TouchableOpacity>
                             }
 
                             {
-                                appointmetVital &&
+                                !patient && appointmetVital &&
                                 <TouchableOpacity style={{ flexDirection: "row" }} onPress={editVitalsPress}>
                                     <Text style={{ color: COLORS.primary, fontWeight: "500" }}> <Feather name="edit" size={15} color={COLORS.primary} /> Edit</Text>
                                 </TouchableOpacity>
@@ -231,7 +244,7 @@ export default function PatientMedical() {
 
                         }
 
-                        <View style={{ flex: 1, flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginTop: 20, marginBottom:10 }}>
+                        <View style={{ flex: 1, flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginTop: 20, marginBottom: 10 }}>
                             <Text style={{
                                 fontSize: 15,
                                 fontWeight: 'bold',
@@ -239,8 +252,8 @@ export default function PatientMedical() {
                             }}>💊 Medications:</Text>
 
                             {
-                                 user.roles && user.roles.find((role) => role === Role.DOCTOR) &&
-                                <TouchableOpacity style={{ flexDirection: "row" }} onPress={() => navigation.navigate("CreatePatientMedication", { appointment: appointment, facesheet:faceSheetData })}>
+                                user.roles && user.roles.find((role) => role === Role.DOCTOR) &&
+                                <TouchableOpacity style={{ flexDirection: "row" }} onPress={() => navigation.navigate("CreatePatientMedication", { appointment: appointment, facesheet: faceSheetData })}>
                                     <Text style={{ color: COLORS.primary, fontWeight: "500" }}> <Feather name="edit" size={15} color={COLORS.primary} /> Edit</Text>
                                 </TouchableOpacity>
                             }
@@ -248,8 +261,8 @@ export default function PatientMedical() {
                         </View>
                         {
                             faceSheetData?.medications && faceSheetData?.medications.length > 0 &&
-                            <View style={{ marginTop: 5, paddingLeft:10 }}>
-                                {faceSheetData?.medications.map((item, key) => item.status === "ACTIVE" && <Text key={key}
+                            <View style={{ marginTop: 5, paddingLeft: 10, flexDirection: "column" }}>
+                                {faceSheetData?.medications.map((item, key) => item.status === "ACTIVE" && <Text style={{ marginBottom: 7 }} key={key}
                                 > {'\u2022'} {getPatientMedicationString(item)}
                                 </Text>)}
                             </View>
@@ -268,7 +281,7 @@ export default function PatientMedical() {
 
                             {
                                 !appointmetVital && user.roles && user.roles.find((role) => role !== Role.DOCTOR && role !== Role.ADMIN) &&
-                                <TouchableOpacity style={{ flexDirection: "row" }} onPress={() => {navigation.navigate("LabTestScreen", {appointment:appointment})}}>
+                                <TouchableOpacity style={{ flexDirection: "row" }} onPress={() => { navigation.navigate("LabTestScreen", { appointment: appointment }) }}>
                                     <Text style={{ color: COLORS.primary, fontWeight: "500" }}> <Feather name="edit" size={15} color={COLORS.primary} /> Edit</Text>
                                 </TouchableOpacity>
                             }
@@ -278,7 +291,29 @@ export default function PatientMedical() {
                         {
                             faceSheetData?.labResults && faceSheetData?.labResults.length > 0 &&
                             <View style={{ marginTop: 20 }}>
-                                {faceSheetData?.labResults.map((item, key) => <Text>{`${item.observation} : ${item.value}${item.units}  - Recorded on: ${item.recorded_at}`}</Text>)}
+                                {
+                                    Object.entries(
+                                        faceSheetData.labResults.reduce((acc, item) => {
+                                            const key = item.master_lab_test_name;
+                                            if (!acc[key]) acc[key] = [];
+                                            acc[key].push(item);
+                                            return acc;
+                                        }, {})
+                                    ).map(([testName, results]) => (
+                                        <View key={testName} style={{ marginBottom: 10 }}>
+                                            <Text style={{ fontWeight: 'bold', fontSize: 16, marginBottom: 8 }}>{testName}</Text>
+                                            {results.map((item, index) => (
+                                                <View key={item.id || index} style={{ marginBottom: 10, paddingLeft: 10 }}>
+                                                    <Text style={{ fontSize: 14 }}>{`${item.observation}: ${item.value}${item.units}`}</Text>
+                                                    <View style={{ paddingLeft: 10, marginTop: 2 }}>
+                                                        <Text style={{ fontSize: 12, color: 'gray' }}>{`Recorded on: ${formatDate(item.recorded_at)}`}</Text>
+                                                    
+                                                    </View>
+                                                </View>
+                                            ))}
+                                        </View>
+                                    ))
+                                }
                             </View>
                         }
 
@@ -286,7 +321,7 @@ export default function PatientMedical() {
                             faceSheetData?.problems && faceSheetData?.problems.length > 0 &&
                             <View style={{ marginTop: 20 }}>
                                 <Text style={{ fontWeight: "700", fontSize: 16 }}>🔬 Problems</Text>
-                                {faceSheetData?.problems.map((item, key) => <Text>{item}</Text>)}
+                                {faceSheetData?.problems.map((item, key) => <Text key={key}>{item}</Text>)}
                             </View>
                         }
                     </View>
@@ -294,18 +329,18 @@ export default function PatientMedical() {
                 <CustomModal values={vitalRecord} title="💓 Add Vitals" fields={fields} visible={visiblemodal} onCancel={() => setShowModal(false)} onSave={storeVitals} />
             </ScrollView>
             {
-                user.roles && user.roles.find((role) => role === Role.DOCTOR) &&
+                !patient && hasAppointments && user.roles && user.roles.find((role) => role === Role.DOCTOR) &&
                 <TouchableOpacity style={{
                     backgroundColor: COLORS.primary,
                     paddingVertical: 14,
                     borderRadius: 12,
                     alignItems: 'center'
-                }} onPress={() => navigation.navigate("InitialNote", { appointment: appointment, facesheet: faceSheetData })}>
+                }} onPress={() => navigation.navigate("InitialNote", { appointment: appointment, facesheet: faceSheetData, appointmetVital: appointmetVital })}>
                     <Text style={{
                         color: '#fff',
                         fontSize: 16,
                         fontWeight: '600',
-                    }}>+ Initial Note</Text>
+                    }}>{initialNote ? "+ Initial Note" : "+ Followup Note"}</Text>
                 </TouchableOpacity>
             }
             <MdLodSnackbar visible={showError} message={error} onDismiss={() => setShowError(false)} />
@@ -324,7 +359,7 @@ const actions = [
         position: 1,
         textColor: COLORS.white,
         textBackground: COLORS.secondary,
-        role:[Role.DOCTOR]
+        role: [Role.DOCTOR]
     },
     {
         text: "Record Lab Results",
@@ -333,7 +368,7 @@ const actions = [
         position: 3,
         textColor: COLORS.white,
         textBackground: COLORS.secondary,
-        role:[Role.DOCTOR, Role.FRONT_OFFICE, Role.NURSE]
+        role: [Role.DOCTOR, Role.FRONT_OFFICE, Role.NURSE]
     },
     {
         text: "Patient Readings",

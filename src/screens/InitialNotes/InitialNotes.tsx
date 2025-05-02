@@ -17,7 +17,7 @@ import { NavigationProp, RouteProp, useNavigation, useRoute } from '@react-navig
 import { InitialNotesParams, RootStackParamList } from '@components/MainNavigation';
 import { MdLogActivityIndicator } from '@components/MdLogActivityIndicator';
 import { patientService } from '@api/patientService';
-import { CreateInitialNoteRequest, CreateInitialNoteResponse, CreatePatientMedication, FileNoteRequest, PatientMedication, UpdateNoteRequest, UpdatePatientMedication } from '@api/model/patient/PatientModels';
+import { CreateInitialNoteRequest, CreateInitialNoteResponse, CreatePatientMedication, FileNoteRequest, PatientMedication, UpdateNoteRequest, UpdatePatientMedication, Vital, VitalsRequest } from '@api/model/patient/PatientModels';
 import Investigation from './Investigation';
 import { convertPatientMedicationResponseToPatientMedication, formatToYYYYMMDD, getFutureDate } from '@utils/utils';
 import { MdLodSnackbar } from '@components/MdLogSnacbar';
@@ -37,7 +37,7 @@ type RouteParams = {
 const InitialNoteScreen = () => {
     const { masterData, setMasterDataAdapter } = useContext(AuthContext);
     const route = useRoute<RouteProp<RouteParams>>()
-    const { facesheet, appointment } = route.params;
+    const { facesheet, appointment, patient } = route.params;
     const [loading, setLoading] = useState(false);
     const [visible, setVisible] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
@@ -57,6 +57,12 @@ const InitialNoteScreen = () => {
     const [patientMedications, setPatientMedication] = useState<PatientMedication[]>([...facesheet.medications])
     const navigation = useNavigation<NavigationProp<RootStackParamList>>();
     const [fileNoteModel, setfileNoteModel] = useState(false)
+    const appVital: Vital = route.params?.appointmetVital;
+    const [vitals,setVitals] = useState<VitalsRequest>()
+
+
+    const [shoeError, setShowError] = useState(false)
+    const [error, setError] = useState("");
 
 
     const createPresentingComplaint = async (reqObj: InitialCommonNoteRequest) => {
@@ -91,10 +97,11 @@ const InitialNoteScreen = () => {
         setLoading(false)
     }
 
+
     const createPatientMedication = async (patientMedication: CreatePatientMedication, medicationId: string) => {
         setLoading(true)
         try {
-            patientMedication.clinicId = appointment.clinicId.toString();
+            patientMedication.clinicId = facesheet.patient.clinicId.toString();
             patientMedication.medicationId = medicationId;
             patientMedication.appointmentId = appointment.id.toString();
             const resp = await patientService.createPatientMedication(appointment.patientId.toString(), patientMedication);
@@ -190,12 +197,37 @@ const InitialNoteScreen = () => {
             setDiet(diet)
             setExercise(exercise)
             setPastMedicalHistory(initialNote.pastMedicalHistory)
+            setInvestigations(initialNote.investigations);
+            if(initialNote.vitals && initialNote.vitals.length > 0){
+                setVitals(initialNote.vitals[0]);
+            }
 
         } catch (error) {
             setErrorMessage(error.toString());
             setVisible(true)
+            setLoading(false)
+            navigation.navigate("PatientMedical", {appointment:appointment, patient:patient})
         }
         setLoading(false)
+    }
+
+    const getVitals = (vital: Vital) => {
+         if(vital){
+            const newVital = new VitalsRequest();
+            newVital.appointmentId = appointment.id;
+            newVital.bloodPressureDiastolic = vital.blood_pressure_diastolic;
+            newVital.bloodPressureSystolic = vital.blood_pressure_systolic;
+            newVital.bmi = vital.bmi;
+            newVital.clinicId = appointment.clinicId;
+            newVital.heartRate = vital.heart_rate;
+            newVital.height = vital.height;
+            newVital.oxygenSaturation = vital.oxygen_saturation;
+            newVital.respiratoryRate = vital.respiratory_rate;
+            newVital.temperature = vital.temperature;
+            newVital.weight = vital.weight;
+            return newVital;
+         }
+         return null;
     }
 
     const handleSave = async () => {
@@ -214,11 +246,11 @@ const InitialNoteScreen = () => {
         updateNoteReq.presentingComplaints = presentingComplaints;
         updateNoteReq.systemicExamination = systemicExamination;
         updateNoteReq.visitDx = visitDx;
+        updateNoteReq.vitals = vitals;
         //updateNoteReq.medications=patientMedications;
         try {
             setLoading(true)
             const savedNote = await patientService.updateInitialNote(facesheet?.patient?.id, note.id, updateNoteReq);
-            console.log(savedNote);
         } catch (error) {
             setErrorMessage(error.toString());
             setVisible(true)
@@ -231,6 +263,7 @@ const InitialNoteScreen = () => {
             setVisible(true);
             setErrorMessage("Saved note!!")
         }
+        return failed;
     }
 
     const fileNote = async (date: string) => {
@@ -239,21 +272,28 @@ const InitialNoteScreen = () => {
         fileNote.doctorId = note.doctorId;
         fileNote.filed = true;
         fileNote.nextVisitDate = date;
+        let failedNoteFile = false;
         setLoading(true)
         try {
-            const resp = await patientService.fileInitialNote(facesheet.patient.id, note.id, fileNote);
-            console.log(resp);
+            const failed =  await handleSave()
+            if(!failed){
+                const resp = await patientService.fileInitialNote(facesheet.patient.id, note.id, fileNote);
+            }
         } catch (error) {
             setErrorMessage(error.toString());
             setVisible(true)
+            failedNoteFile = true;
+        }
+        if(!failedNoteFile){
+            navigation.navigate("PatientMedical",{appointment:appointment})
         }
         setLoading(false)
-
     }
 
 
     useEffect(() => {
         fetchInitialNote();
+        setVitals(getVitals(appVital))
     }, [])
 
     if (loading) {
@@ -310,7 +350,7 @@ const InitialNoteScreen = () => {
                             */
                         }
                         <Investigation noteSectionString={investigations} setNoteSectionString={setInvestigations} setLoading={setLoading} title="Investigation" addNewItemCommon={createInvestigation} itemList={masterData.labTests} />
-                        <InitialNoteVitalScreen />
+                        <InitialNoteVitalScreen vital={vitals} setVitals={setVitals}/>
                         <Note prevVal={physicalExamination} setNoteSectionString={setPhysicalExamination} title="Physical Examination" />
                         <Note prevVal={diet} setNoteSectionString={setDiet} title="Diet" />
                         <Note prevVal={exercise} setNoteSectionString={setExercise} title="Exercise" />

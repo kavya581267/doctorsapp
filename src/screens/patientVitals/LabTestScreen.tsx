@@ -17,7 +17,7 @@ const LabTestScreen = () => {
   const [labResluts, setLabResults] = useState<LabObservation[]>([])
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const route = useRoute<RouteProp<RouteParams>>()
-  const { appointment } = route.params
+  const { appointment, patient } = route.params
 
   useEffect(() => {
    masterData && masterData?.labResults && setLabResults([...masterData.labResults])
@@ -27,7 +27,7 @@ const LabTestScreen = () => {
     console.log(item);
     // navigation.navigate('TestDetails', { testName });
     const labTestResults = labResluts.filter((lr) => lr.labTestId === item.id)
-    navigation.navigate("LabResultsScreen", { labResults: labTestResults, labTest: item, appointment: appointment });
+    navigation.navigate("LabResultsScreen", { labResults: labTestResults, labTest: item, appointment: appointment, patient: patient });
   };
 
   return (

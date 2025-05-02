@@ -56,8 +56,8 @@ export default function MedicationScreen({ title, itemList, addNewItemCommon, se
     const [removeItem, setRemoveItem] = useState<PatientMedication| undefined>()
 
     const dropdownData = itemList.map((item) => ({
-        label: item.medicationName + " " + item.dosage + item?.dosageUnit + " " + item.dosageForm,
-        value: item.medicationName + " " + item.dosage + item?.dosageUnit + " " + item.dosageForm,
+        label: item.medicationName + " " + (item?.dosage ? item?.dosage:"" ) + (item?.dosageUnit ? item?.dosageUnit:"") + " " + (item?.dosageForm ? item?.dosageForm:"" ),
+        value: item.medicationName + " " + (item?.dosage ? item?.dosage:"" ) + (item?.dosageUnit ? item?.dosageUnit:"" )+ " " +  (item?.dosageForm ? item?.dosageForm:"" ),
         id: item.id,
     }));
 

@@ -16,8 +16,7 @@ const InvestigationPopUp: React.FC<Props> = ({ selectedItem, modalVisible, onClo
     const [duration, setDuration] = useState('0');
     const [unit, setUnit] = useState('Days');
     const [startDate, setStartDate] = useState(formatToYYYYMMDD(new Date()));
-
-    console.log(selectedItem);
+    
     const calculateStartDate = () => {
         const num = parseInt(duration);
         const now = new Date();
@@ -29,15 +28,15 @@ const InvestigationPopUp: React.FC<Props> = ({ selectedItem, modalVisible, onClo
 
         let pastDate;
 
-        if (unit === 'Days') {
+        if (unit === 'Day(s)') {
             pastDate = new Date();
             pastDate.setDate(now.getDate() + num);
-        } else if (unit === 'Months') {
+        } else if (unit === 'Week(s)') {
+            pastDate = new Date();
+            pastDate.setDate(now.getDate() + (num * 7));
+        } else if (unit === 'Month(s)') {
             pastDate = new Date();
             pastDate.setMonth(now.getMonth() + num);
-        } else if (unit === 'Years') {
-            pastDate = new Date();
-            pastDate.setFullYear(now.getFullYear() + num);
         }
 
         setStartDate(formatToYYYYMMDD(pastDate));
