@@ -12,7 +12,6 @@ const InitialNoteVitalScreen = ({vital, setVitals}:props) => {
     const handleChange = (s:string, l:string) => {
         const newVitals = {...vital}
         newVitals[l] = s;
-        console.log(newVitals)
         setVitals(newVitals)
     }
 

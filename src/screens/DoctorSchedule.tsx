@@ -95,7 +95,6 @@ const DoctorScheduleScreen = () => {
         setLoading(true)
         try {
             const resp = await doctorService.createDoctorSchedule(doctorSchedule, doctorDetails.id);
-            console.log(resp);
         } catch (error) {
             setShowError(true);
             setErrorMessage(error.toString());

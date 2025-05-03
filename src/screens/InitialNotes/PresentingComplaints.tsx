@@ -90,7 +90,6 @@ const PresentingComplaints = ({ title, itemList, addNewItemCommon, setLoading, n
         if (noteSectionString) {
             const it = noteSectionString.split(", ");
             const ini = itemList.filter((i) => it.includes(i.name))
-            console.log(ini)
             if (ini && ini.length > 0) {
                 setSelectedItems([...ini])
             }
@@ -168,7 +167,6 @@ const PresentingComplaints = ({ title, itemList, addNewItemCommon, setLoading, n
                             <Button title="Create" onPress={() => {
                                 // Handle create action here
                                 handleAddNewItem()
-                                console.log('Complaint:', complaintText);
                                 setModalVisible(false);
                                 setComplaintText('');
                             }} />

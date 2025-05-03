@@ -52,7 +52,6 @@ export const StaffProffileScreen = () => {
         staffUpdate.userId = staffDetails.userId;
         try {
             const response = await staffService.updateClinicStaff(staffUpdate, staffDetails.clinicId, staffDetails.userId);
-            console.log("Updated staff:", response);
             setIsEditing(false);
         } catch (error) {
             setVisible(true);

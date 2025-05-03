@@ -152,7 +152,6 @@ export default function BookAppointmentScreen() {
 
   const loadDoctors = () => {
     const pt = [];
-    console.log(clinicDoctors)
     clinicDoctors.forEach(item => {
       let vv = item.first_name + ", " + item.last_name;
       const t: dropdownprops = { label: vv, value: item.user_id.toString() };

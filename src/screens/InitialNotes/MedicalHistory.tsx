@@ -110,7 +110,6 @@ export default function PasMedHistory({ title, itemList, addNewItemCommon, setLo
                     howlong: Number(match[2]),
                     type: match[3]
                 };
-                console.log(item);
                 return item;
 
             }

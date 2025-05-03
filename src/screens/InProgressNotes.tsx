@@ -48,7 +48,6 @@ const InProgressNotes = () => {
         try {
             const resp = await patientService.getDoctorInprogressNotes(loggedInUserContext.clinicDetails.id)
             setNotes(resp);
-            console.log(resp);
         } catch (error) {
 
         }

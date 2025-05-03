@@ -24,7 +24,6 @@ const LabTestScreen = () => {
    masterData && masterData?.labTests && setLabtests([...masterData.labTests])
   }, [])
   const handlePress = (item: LabTest) => {
-    console.log(item);
     // navigation.navigate('TestDetails', { testName });
     const labTestResults = labResluts.filter((lr) => lr.labTestId === item.id)
     navigation.navigate("LabResultsScreen", { labResults: labTestResults, labTest: item, appointment: appointment, patient: patient });

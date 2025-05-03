@@ -17,8 +17,6 @@ const MedicalHistoryPopUp: React.FC<Props> = ({ selectedItem, modalVisible, onCl
     const [duration, setDuration] = useState('0');
     const [unit, setUnit] = useState('Days');
     const [startDate, setStartDate] = useState(formatToYYYYMMDD(new Date()));
-
-    console.log(selectedItem);
     const calculateStartDate = () => {
         const num = parseInt(duration);
         const now = new Date();
