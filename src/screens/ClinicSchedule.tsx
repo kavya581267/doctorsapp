@@ -155,10 +155,10 @@ const App = () => {
 export default App;
 
 const styles = StyleSheet.create({
-    container: { flex: 1, padding: 15 },
+    container: { flex: 1, padding: 15 ,backgroundColor:COLORS.white},
     header: { flex: 1, fontSize: 18, fontWeight: '600', marginBottom: 10, textAlign: "center" },
     itemCard: {
-        backgroundColor: 'white',
+        backgroundColor: COLORS.cardGrey,
         padding: 16,
         borderRadius: 10,
         marginBottom: 12,

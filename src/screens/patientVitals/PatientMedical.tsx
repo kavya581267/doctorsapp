@@ -186,7 +186,7 @@ export default function PatientMedical() {
 
     return (
 
-        <View style={{ padding: 10, height: "100%" }}>
+        <View style={{ padding: 10, height: "100%",backgroundColor:COLORS.white }}>
             <Back nav="Mainscreen" tab={patient ? "Patients" : "Appointments"} />
             <ScrollView>
                 <View style={styles.patientContainer}>

@@ -5,7 +5,7 @@ import {  StyleSheet } from "react-native";
 
 export default StyleSheet.create({
     container: {
-        padding: 15
+        padding: 15,
     },
     header: {
         alignItems: "center",

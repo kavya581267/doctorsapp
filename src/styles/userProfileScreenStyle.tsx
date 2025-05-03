@@ -6,6 +6,7 @@ import { StyleSheet } from "react-native";
 export const styles = StyleSheet.create({
     container: {
         padding: 15,
+        backgroundColor:COLORS.white
     },
     webContainer:{
         padding:15,

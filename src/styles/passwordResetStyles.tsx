@@ -4,12 +4,12 @@ import { StyleSheet } from "react-native";
 export default StyleSheet.create({
     container: {
         padding: 15,
-        justifyContent: "center",  
-        flex: 1,  
-    
+        justifyContent: "center",
+        flex: 1,
+        backgroundColor: COLORS.white
     },
     png: {
-        alignSelf:"center"
+        alignSelf: "center"
     },
     heading: {
         fontSize: 24,
@@ -32,8 +32,8 @@ export default StyleSheet.create({
         borderWidth: 1,
         borderColor: COLORS.grey,
         borderRadius: 8,
-        marginBottom: 15,  
-       
+        marginBottom: 15,
+
     },
     icon: {
         marginRight: 8
@@ -42,7 +42,7 @@ export default StyleSheet.create({
         height: 40,
         fontSize: 16,
         width: "100%",
-      
+
     },
     btn: {
         backgroundColor: COLORS.primary,
@@ -55,26 +55,26 @@ export default StyleSheet.create({
         fontWeight: "500",
         color: COLORS.white
     },
-    loginText:{
-        color:COLORS.primary,
-        fontSize:14,
-        lineHeight:22,
-        fontWeight:"400",
-        marginLeft:10,
-        textAlign:"center"
+    loginText: {
+        color: COLORS.primary,
+        fontSize: 14,
+        lineHeight: 22,
+        fontWeight: "400",
+        marginLeft: 10,
+        textAlign: "center"
     },
     button: {
-        flexDirection: "row", 
-        alignItems: "center", 
-       
+        flexDirection: "row",
+        alignItems: "center",
+
     },
-    resendContainer:{
-        flexDirection:"row",
-        marginBottom:15
+    resendContainer: {
+        flexDirection: "row",
+        marginBottom: 15
     },
-    resendText:{
-        color:COLORS.primary,
-        fontWeight:"500",
-        marginLeft:10
+    resendText: {
+        color: COLORS.primary,
+        fontWeight: "500",
+        marginLeft: 10
     }
 })

@@ -15,6 +15,7 @@ import { AuthContext } from "@context/AuthContext";
 import { MdLodSnackbar } from "@components/MdLogSnacbar";
 import { RootStackParamList } from "@components/MainNavigation";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { COLORS } from "@utils/colors";
 
 
 
@@ -55,7 +56,7 @@ export default function PatientRegistrationScreen() {
 
   return (
    
-    <KeyboardAwareScrollView style={{ padding: 15 }}>
+    <KeyboardAwareScrollView style={{ padding: 15,backgroundColor:COLORS.white}}>
       <Back nav={"Mainscreen"}></Back>
 
       <Spacer height={30} />
