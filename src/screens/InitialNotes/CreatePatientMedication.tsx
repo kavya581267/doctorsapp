@@ -12,6 +12,7 @@ import { CreatePatientMedication, PatientMedication } from "@api/model/patient/P
 import { convertPatientMedicationResponseToPatientMedication } from "@utils/utils";
 import { MdLogActivityIndicator } from "@components/MdLogActivityIndicator";
 import { MdLodSnackbar } from "@components/MdLogSnacbar";
+import { COLORS } from "@utils/colors";
 
 type RoueParams = {
     params: InitialNotesParams
@@ -59,7 +60,7 @@ const CreatePatientMedicationScreen = () => {
     }
 
     return (
-        <View style={{ padding: 15 }}>
+        <View style={{ padding: 15 ,backgroundColor:COLORS.white,flex:1}}>
             <Back nav="PatientMedical" routeParam={{ appointment: appointment }} />
             <MedicationScreen setPatientMedications={setPatientMedication} patientMedications={patientMedications} setLoading={setLoading} title='Medications' addNewItemCommon={createMedication}
                 createPatientMedication={createPatientMedication} itemList={masterData.medications} patientId={appointment.patientId.toString()} />

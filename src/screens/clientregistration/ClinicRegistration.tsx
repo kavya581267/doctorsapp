@@ -59,7 +59,7 @@ export default function ClinicRegistration() {
     }
 
     return (
-        <ScrollView>
+        <ScrollView style={{ backgroundColor:COLORS.white}}>
             <SafeAreaView>
                 <KeyboardAwareScrollView style={styles.container}>
                     <View style={styles.header}>

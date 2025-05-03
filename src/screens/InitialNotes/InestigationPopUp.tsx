@@ -5,6 +5,7 @@ import { Modal, Portal, Text, TextInput, Button, Card, ToggleButton, Divider } f
 import { formatToYYYYMMDD } from '@utils/utils';
 import SegmentedToggle from '@components/SegmentedToggle';
 import { InvestigationNote } from './Investigation';
+import { COLORS } from '@utils/colors';
 
 type Props = {
     selectedItem: LabTest;
@@ -16,7 +17,7 @@ const InvestigationPopUp: React.FC<Props> = ({ selectedItem, modalVisible, onClo
     const [duration, setDuration] = useState('0');
     const [unit, setUnit] = useState('Days');
     const [startDate, setStartDate] = useState(formatToYYYYMMDD(new Date()));
-    
+
     const calculateStartDate = () => {
         const num = parseInt(duration);
         const now = new Date();
@@ -54,7 +55,7 @@ const InvestigationPopUp: React.FC<Props> = ({ selectedItem, modalVisible, onClo
 
 
     const handleSave = () => {
-        const item:InvestigationNote = {...selectedItem, date:startDate}
+        const item: InvestigationNote = { ...selectedItem, date: startDate }
         onSave(item);
         onClose();
 
@@ -96,8 +97,13 @@ const InvestigationPopUp: React.FC<Props> = ({ selectedItem, modalVisible, onClo
                             <Divider />
 
                             <View style={styles.actions}>
-                                <Button onPress={handleCancel} mode="outlined">Cancel</Button>
-                                <Button onPress={handleSave} mode="contained" style={styles.saveBtn}>Save</Button>
+                                <TouchableOpacity style={styles.cancelButton} onPress={handleCancel}>
+                                    <Text style={styles.cancelButtonText}>Cancel</Text>
+                                </TouchableOpacity>
+
+                                <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
+                                    <Text style={styles.saveButtonText}>Save</Text>
+                                </TouchableOpacity>
                             </View>
                         </View>
                     </View>
@@ -153,12 +159,34 @@ const styles = StyleSheet.create({
     actions: {
         flexDirection: "row",
         justifyContent: "space-between",
-        paddingHorizontal: 8,
-        paddingBottom: 8,
-        marginTop: 10
+        marginTop: 20
     },
-    saveBtn: {
-        marginLeft: 8,
+    cancelButton: {
+        flex: 1,
+        borderWidth: 1,
+        borderColor: COLORS.red,
+        borderRadius: 8,
+        padding: 12,
+        marginRight: 10,
+        alignItems: 'center',
+    },
+    cancelButtonText: {
+        color: '#6A0DAD',
+        fontWeight: 'bold',
+        fontSize: 15
+    },
+    saveButton: {
+        flex: 1,
+        backgroundColor: COLORS.secondary,
+        borderRadius: 8,
+        padding: 12,
+        marginLeft: 10,
+        alignItems: 'center',
+    },
+    saveButtonText: {
+        color: 'white',
+        fontWeight: 'bold',
+        fontSize: 15
     },
 
 
