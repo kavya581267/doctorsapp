@@ -107,7 +107,7 @@ export const patientService = {
     },
     getDoctorInprogressNotes: async (clinicId:number):Promise<ListNoteResponse[]> => {
         try {
-            const resp = await apiService.get(DOCTOR_INPROGRESS_NOTES, {clinicId: clinicId, field:false})
+            const resp = await apiService.get(DOCTOR_INPROGRESS_NOTES, {clinicId: clinicId, filed:false})
             return resp.data;
         } catch (error) {
             throw error
@@ -120,7 +120,7 @@ export const patientService = {
             clinicId: clinicId,
             field: true
         }
-        let url = replacePlaceholders(PAST_NOTES,{clinicId:clinicId, field: true});
+        let url = replacePlaceholders(PAST_NOTES,{clinicId:clinicId, filed: true});
         try{
             const resp = await apiService.get(PAST_NOTES,queryParam);
             return resp.data;
