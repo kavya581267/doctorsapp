@@ -19,6 +19,7 @@ import { ScrollView } from "react-native-gesture-handler";
 import { RootStackParamList } from "@components/MainNavigation";
 import { MdLodSnackbar } from "@components/MdLogSnacbar";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { COLORS } from "@utils/colors";
 
 
 
@@ -58,7 +59,7 @@ export default function StaffRegistrationScreen() {
 
   return (
     
-      <ScrollView style={{ padding: 15 }}>
+      <ScrollView style={{ padding: 15,backgroundColor:COLORS.white }}>
         <Back nav={"Mainscreen"}></Back>
         <Spacer height={30} />
         <KeyboardAwareScrollView>

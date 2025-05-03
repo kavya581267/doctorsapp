@@ -12,6 +12,7 @@ import { RootStackParamList } from "@components/MainNavigation";
 import { MdLodSnackbar } from "@components/MdLogSnacbar";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import Footer from "@components/Footer";
+import { COLORS } from "@utils/colors";
 
 
 export default function SignIn() {
@@ -38,7 +39,7 @@ export default function SignIn() {
     }
     return (
 
-        <SafeAreaView style={{ flex: 1 }}>
+        <SafeAreaView style={{ flex: 1,backgroundColor:COLORS.white }}>
             <KeyboardAwareScrollView style={{ flex: 1 }}>
                 <View style={{ padding: 24, flex: 1 }}>
                     <View style={styles.header}>

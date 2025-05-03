@@ -56,7 +56,7 @@ export default function PatientRegistrationScreen() {
 
   return (
    
-    <KeyboardAwareScrollView style={{ padding: 15,}}>
+    <KeyboardAwareScrollView style={{ padding: 15,backgroundColor:COLORS.white}}>
       <Back nav={"Mainscreen"}></Back>
 
       <Spacer height={30} />
