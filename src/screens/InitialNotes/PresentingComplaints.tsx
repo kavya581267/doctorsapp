@@ -18,7 +18,7 @@ type Props = {
     setLoading: (load: boolean) => void;
     noteSectionString: string
     setNoteSectionString: (note: string) => void
-};
+}
 
 const PresentingComplaints = ({ title, itemList, addNewItemCommon, setLoading, noteSectionString, setNoteSectionString }: Props) => {
 
@@ -123,7 +123,7 @@ const PresentingComplaints = ({ title, itemList, addNewItemCommon, setLoading, n
                         handleChange(items);
                     }}
                     renderSelectedItem={(item, unSelect) => (
-                        <></>
+                        <View></View>
                     )}
                     onChangeText={setSearchText}
                     renderLeftIcon={() => (
