@@ -14,7 +14,7 @@ type Props = {
     selectedItem: Medication;
     modalVisible: boolean;
     onClose: () => void;
-    onSave: (item: CreatePatientMedication, medicationId:string) => void;
+    onSave: (item: CreatePatientMedication, medicationId: string) => void;
 };
 const MedicationsPopUp: React.FC<Props> = ({ selectedItem, modalVisible, onClose, onSave }) => {
     const [beforeFood, setBeforeFood] = useState(true);
@@ -44,7 +44,7 @@ const MedicationsPopUp: React.FC<Props> = ({ selectedItem, modalVisible, onClose
         patientMedication.route = selectedRoute;
         patientMedication.startDate = formatToYYYYMMDD(new Date());
         patientMedication.endDate = getFutureDate(new Date(), Number(duration));
-        patientMedication.timePhase = beforeFood ? "Before": "After";
+        patientMedication.timePhase = beforeFood ? "Before" : "After";
         patientMedication.medicationSchedule = formatTiming(timing)
         patientMedication.dosageUnit = selectedItem.dosageUnit;
         patientMedication.formulation = selectedItem.dosageForm;
@@ -150,7 +150,7 @@ const MedicationsPopUp: React.FC<Props> = ({ selectedItem, modalVisible, onClose
                                     onFocus={() => setIsFocus(true)}
                                     onBlur={() => setIsFocus(false)}
                                     onChange={(item) => setSelectedFrequency(item.value)}
-                                    />
+                                />
 
                                 <Dropdown
                                     style={[stylesp.dropdown, isFocus && { borderColor: "blue" }]}
@@ -166,14 +166,20 @@ const MedicationsPopUp: React.FC<Props> = ({ selectedItem, modalVisible, onClose
                                     onFocus={() => setIsFocus(true)}
                                     onBlur={() => setIsFocus(false)}
                                     onChange={(item) => setSelectedRoute(item.value)}
-                                    />
+                                />
                             </View>
 
-                            <Divider style={{marginTop:10}}/>
+                            <Divider style={{ marginTop: 10 }} />
 
                             <View style={styles.actions}>
-                                <Button onPress={handleCancel} mode="outlined" style={{ borderRadius: 8, borderWidth: 1, borderColor:COLORS.red }}>Cancel</Button>
-                                <Button onPress={handleSave} mode="contained" style={styles.saveBtn} >Save</Button>
+                                <TouchableOpacity style={styles.cancelButton} onPress={handleCancel}>
+                                    <Text style={styles.cancelButtonText}>Cancel</Text>
+                                </TouchableOpacity>
+
+                                <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
+                                    <Text style={styles.saveButtonText}>Save</Text>
+                                </TouchableOpacity>
+                      
                             </View>
                         </View>
                     </View>
@@ -214,15 +220,7 @@ const styles = StyleSheet.create({
     actions: {
         flexDirection: "row",
         justifyContent: "space-between",
-        paddingBottom: 8,
-        marginTop: 10
-    },
-    saveBtn: {
-       backgroundColor: COLORS.secondary, 
-       borderRadius: 8, 
-       borderWidth: 0 ,
-       paddingLeft:6,
-       paddingRight:6
+        marginTop: 20
     },
 
     foodToggle: {
@@ -266,6 +264,34 @@ const styles = StyleSheet.create({
     },
     toggleTextSelected: {
         color: '#fff',
+    },
+
+    cancelButton: {
+        flex: 1,
+        borderWidth: 1,
+        borderColor: COLORS.red,
+        borderRadius: 8,
+        padding: 12,
+        marginRight: 10,
+        alignItems: 'center',
+    },
+    cancelButtonText: {
+        color: '#6A0DAD',
+        fontWeight: 'bold',
+        fontSize:15
+    },
+    saveButton: {
+        flex: 1,
+        backgroundColor: COLORS.secondary,
+        borderRadius: 8,
+        padding: 12,
+        marginLeft: 10,
+        alignItems: 'center',
+    },
+    saveButtonText: {
+        color: 'white',
+        fontWeight: 'bold',
+        fontSize:15
     },
 
 

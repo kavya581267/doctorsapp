@@ -102,8 +102,13 @@ const MedicalHistoryPopUp: React.FC<Props> = ({ selectedItem, modalVisible, onCl
                             <Divider />
 
                             <View style={styles.actions}>
-                                <Button onPress={handleCancel} mode="outlined" style={{ borderRadius: 8, borderWidth: 1, borderColor:COLORS.red }}>Cancel</Button>
-                                <Button onPress={handleSave} mode="contained" style={styles.saveBtn}>Save</Button>
+                                <TouchableOpacity style={styles.cancelButton} onPress={handleCancel}>
+                                    <Text style={styles.cancelButtonText}>Cancel</Text>
+                                </TouchableOpacity>
+
+                                <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
+                                    <Text style={styles.saveButtonText}>Save</Text>
+                                </TouchableOpacity>
                             </View>
                         </View>
                     </View>
@@ -159,16 +164,34 @@ const styles = StyleSheet.create({
     actions: {
         flexDirection: "row",
         justifyContent: "space-between",
-        paddingHorizontal: 8,
-        paddingBottom: 8,
-        marginTop: 10
+        marginTop: 20,
     },
-    saveBtn: {
-        backgroundColor: COLORS.secondary, 
-        borderRadius: 8, 
-        borderWidth: 0 ,
-        paddingLeft:6,
-        paddingRight:6
+    cancelButton: {
+        flex: 1,
+        borderWidth: 1,
+        borderColor: COLORS.red,
+        borderRadius: 8,
+        padding: 12,
+        marginRight: 10,
+        alignItems: 'center',
+    },
+    cancelButtonText: {
+        color: '#6A0DAD',
+        fontWeight: 'bold',
+        fontSize: 15
+    },
+    saveButton: {
+        flex: 1,
+        backgroundColor: COLORS.secondary,
+        borderRadius: 8,
+        padding: 12,
+        marginLeft: 10,
+        alignItems: 'center',
+    },
+    saveButtonText: {
+        color: 'white',
+        fontWeight: 'bold',
+        fontSize: 15
     },
 
 
