@@ -117,7 +117,7 @@ export default function PatientMedical() {
             navigation.navigate("LabTestScreen", { appointment: appointment, patient:patient })
         }
         if(screen === "patient_readings"){
-            navigation.navigate("PatientVitalsScreen")
+            navigation.navigate("PatientVitalsScreen",{patient:faceSheetData.patient, vitals: faceSheetData.vitals, labrecords: faceSheetData.labResults})
         }
     }
     const fields = [
