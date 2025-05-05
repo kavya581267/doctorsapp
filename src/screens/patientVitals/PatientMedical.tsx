@@ -116,6 +116,9 @@ export default function PatientMedical() {
         if (screen === "lab_results" && !patient) {
             navigation.navigate("LabTestScreen", { appointment: appointment, patient:patient })
         }
+        if(screen === "patient_readings"){
+            navigation.navigate("PatientVitalsScreen")
+        }
     }
     const fields = [
         'Height (cms)',
@@ -244,7 +247,7 @@ export default function PatientMedical() {
 
                         }
 
-                        <View style={{ flex: 1, flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginTop: 20, marginBottom: 10 }}>
+                        <View style={{ flex: 1, flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginTop: 20, marginBottom: 10,backgroundColor:COLORS.white }}>
                             <Text style={{
                                 fontSize: 15,
                                 fontWeight: 'bold',

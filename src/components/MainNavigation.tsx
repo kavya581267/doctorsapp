@@ -33,6 +33,7 @@ import PastNotes from '@screens/PastNotes';
 import { LabObservation, LabTest } from '@api/model/doctor/MasterData';
 import LabResultsScreen from '@screens/patientVitals/LabResults';
 import PDFViewer from './PDFViewScreen';
+import PatientVitalsScreen from '@screens/patient/PatientReadings';
 
 export type BookAppointmentScreenRouteParams = {
     edit?: boolean; // or string, depending on your use case
@@ -95,7 +96,8 @@ export type RootStackParamList = {
     InProgressNotes: undefined;
     PastNotes: undefined;
     CreatePatientMedication: InitialNotesParams;
-    PDFViewer:undefined
+    PDFViewer:undefined;
+    PatientVitalsScreen: undefined;
 };
 
 export default function MainNavigator() {
@@ -135,6 +137,7 @@ export default function MainNavigator() {
                 <Stack.Screen name='PastNotes' component={PastNotes}></Stack.Screen>
                 <Stack.Screen name='CreatePatientMedication' component={CreatePatientMedicationScreen}></Stack.Screen>
                 <Stack.Screen name='PDFViewer' component={PDFViewer}></Stack.Screen>
+                <Stack.Screen name='PatientVitalsScreen' component={PatientVitalsScreen}/>
             </Stack.Navigator>
         </NavigationContainer>
     );
