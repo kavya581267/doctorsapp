@@ -24,7 +24,7 @@ import { StaffProffileScreen } from '@screens/StaffProfileScreen';
 import InitialNoteScreen from '@screens/InitialNotes/InitialNotes';
 import PatientDirectoryScreen from '@screens/PatientsDirectory';
 import Mainscreen from './Mainscreen';
-import { AppointmentResponse, FaceSheet, PatientResponse, Vital } from '@api/model/patient/PatientModels';
+import { AppointmentResponse, FaceSheet, FacesheetObservation, PatientResponse, Vital } from '@api/model/patient/PatientModels';
 import LabTestScreen from '@screens/patientVitals/LabTestScreen';
 import LoadingScreen from './LoadingScreen';
 import InProgressNotes from '@screens/InProgressNotes';
@@ -66,6 +66,12 @@ export type LabTestScreenParam ={
     patient?: PatientResponse
 }
 
+export type PatientReadingsParam = {
+    vitals: Vital[]
+    labrecords: FacesheetObservation[]
+    patient: PatientResponse
+}
+
 
 export type RootStackParamList = {
     LaunchScreen: undefined;
@@ -97,7 +103,7 @@ export type RootStackParamList = {
     PastNotes: undefined;
     CreatePatientMedication: InitialNotesParams;
     PDFViewer:undefined;
-    PatientVitalsScreen: undefined;
+    PatientVitalsScreen: PatientReadingsParam;
 };
 
 export default function MainNavigator() {

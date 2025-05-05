@@ -347,7 +347,7 @@ export interface Vital {
   updated_at: string; // ISO datetime string
 }
 
-class FacesheetObservation {
+export class FacesheetObservation {
   appointment_id: number;
   clinic_id: number;
   created_at: string; // ISO datetime string

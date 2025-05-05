@@ -118,7 +118,7 @@ export const patientService = {
             fromDate: fromDate,
             toDate: toDate,
             clinicId: clinicId,
-            field: true
+            filed: true
         }
         let url = replacePlaceholders(PAST_NOTES,{clinicId:clinicId, filed: true});
         try{
