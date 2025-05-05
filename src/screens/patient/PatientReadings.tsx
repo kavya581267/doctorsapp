@@ -74,53 +74,56 @@ type RoueParams = {
 
 type chartType = {
   data: any[]
-  lables: any[]
+  labels: any[]
 
 }
 
 const PatientVitalsScreen = () => {
     const route = useRoute<RouteProp<RoueParams>>()
     const { vitals, labrecords, patient } = route.params;
+    const [actLabel, setActiveLabel] = useState("Heart Rate");
+    const [yAxis,setYAxis] = useState("");
+    
    
     const hr_valid = vitals.filter((item) => item.heart_rate != null).sort((a, b) => new Date(a.recorded_at) - new Date(b.recorded_at));
     const hr_data = hr_valid.map((item) => item.heart_rate);
-    const hr_labels = hr_valid.map((item) => new Date(item.recorded_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
+    const hr_labels = hr_valid.map((item) => new Date(item.recorded_at).toLocaleDateString());
 
     const os_valid = vitals.filter((item) => item.oxygen_saturation != null).sort((a, b) => new Date(a.recorded_at) - new Date(b.recorded_at));
     const os_data = os_valid.map((item) => item.oxygen_saturation);
-    const os_labels = os_valid.map((item) => new Date(item.recorded_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
+    const os_labels = os_valid.map((item) => new Date(item.recorded_at).toLocaleDateString());
 
     const rr_valid = vitals.filter((item) => item.respiratory_rate != null).sort((a, b) => new Date(a.recorded_at) - new Date(b.recorded_at));
     const rr_data = rr_valid.map((item) => item.respiratory_rate);
-    const rr_labels = rr_valid.map((item) => new Date(item.recorded_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
+    const rr_labels = rr_valid.map((item) => new Date(item.recorded_at).toLocaleDateString());
 
     const bps_valid = vitals.filter((item) => item.blood_pressure_systolic != null).sort((a, b) => new Date(a.recorded_at) - new Date(b.recorded_at));
     const bps_data = bps_valid.map((item) => item.blood_pressure_systolic);
-    const bps_labels = bps_valid.map((item) => new Date(item.recorded_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
+    const bps_labels = bps_valid.map((item) => new Date(item.recorded_at).toLocaleDateString());
 
     const bpd_valid = vitals.filter((item) => item.blood_pressure_diastolic != null).sort((a, b) => new Date(a.recorded_at) - new Date(b.recorded_at));
     const bpd_data = bpd_valid.map((item) => item.blood_pressure_diastolic);
-    const bpd_labels = bpd_valid.map((item) => new Date(item.recorded_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
+    const bpd_labels = bpd_valid.map((item) => new Date(item.recorded_at).toLocaleDateString());
 
     const height_valid = vitals.filter((item) => item.height != null).sort((a, b) => new Date(a.recorded_at) - new Date(b.recorded_at));
     const height_data = height_valid.map((item) => item.height);
-    const height_labels = height_valid.map((item) => new Date(item.recorded_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
+    const height_labels = height_valid.map((item) => new Date(item.recorded_at).toLocaleDateString());
 
     const weight_valid = vitals.filter((item) => item.weight != null).sort((a, b) => new Date(a.recorded_at) - new Date(b.recorded_at));
     const weight_data = weight_valid.map((item) => item.weight);
-    const weight_labels = weight_valid.map((item) => new Date(item.recorded_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
+    const weight_labels = weight_valid.map((item) => new Date(item.recorded_at).toLocaleDateString());
 
     const temp_valid = vitals.filter((item) => item.temperature != null).sort((a, b) => new Date(a.recorded_at) - new Date(b.recorded_at));
     const temp_data = temp_valid.map((item) => item.temperature);
-    const temp_labels = temp_valid.map((item) => new Date(item.recorded_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
+    const temp_labels = temp_valid.map((item) => new Date(item.recorded_at).toLocaleDateString());
 
     const bmi_valid = vitals.filter((item) => item.bmi != null).sort((a, b) => new Date(a.recorded_at) - new Date(b.recorded_at));
     const bmi_data = bmi_valid.map((item) => item.bmi);
-    const bmi_labels = bmi_valid.map((item) => new Date(item.recorded_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
+    const bmi_labels = bmi_valid.map((item) => new Date(item.recorded_at).toLocaleDateString());
 
     const [currState, setCurrState] = useState<chartType>({
       data:hr_data,
-      lables:hr_labels
+      labels:hr_labels
     });
 
 
@@ -129,81 +132,90 @@ const PatientVitalsScreen = () => {
       if(l === "Heart Rate"){
         const newState:chartType = {
           data:hr_data,
-          lables:hr_labels
+          labels:hr_labels
         }
-        setCurrState(newState)
+        setCurrState(newState);
+        setYAxis("bpm");
       }
+      setActiveLabel(l)
 
       if(l === "Respiratory Rate"){
         const newState:chartType = {
           data:rr_data,
-          lables:rr_labels
+          labels:rr_labels
         }
-        setCurrState(newState)
+        setCurrState(newState);
+        setYAxis("bpm")
       }
+      setActiveLabel(l)
 
       if(l === "O₂ Saturation"){
         const newState:chartType = {
           data:os_data,
-          lables:os_labels
+          labels:os_labels
         }
-        setCurrState(newState)
+        setCurrState(newState);
+        setYAxis("")
       }
       setActiveLabel(l)
 
       if(l === "Height"){
-        console.log(height_data)
-        console.log(height_labels)
         const newState:chartType = {
           data:height_data,
-          lables:height_labels
+          labels:height_labels
         }
-        setCurrState(newState)
+        setCurrState(newState);
+        setYAxis("cms")
       }
       setActiveLabel(l)
 
       if(l === "Blood Pressure Systolic"){
         const newState:chartType = {
           data:bps_data,
-          lables:bps_labels
+          labels:bps_labels
         }
-        setCurrState(newState)
+        setCurrState(newState);
+        setYAxis("mmHg")
       }
       setActiveLabel(l)
 
       if(l === "Blood Pressure Diastolic"){
         const newState:chartType = {
           data:bpd_data,
-          lables:bpd_labels
+          labels:bpd_labels
         }
         setCurrState(newState)
+        setYAxis("mmHg")
       }
       setActiveLabel(l)
 
       if(l === "Temperature"){
         const newState:chartType = {
           data:temp_data,
-          lables:temp_labels
+          labels:temp_labels
         }
         setCurrState(newState)
+        setYAxis("F")
       }
       setActiveLabel(l)
 
       if(l === "Weight"){
         const newState:chartType = {
           data:weight_data,
-          lables:weight_labels
+          labels:weight_labels
         }
         setCurrState(newState)
+        setYAxis("kgs")
       }
       setActiveLabel(l)
 
       if(l === "BMI"){
         const newState:chartType = {
           data:bmi_data,
-          lables:bmi_labels
+          labels:bmi_labels
         }
         setCurrState(newState)
+        setYAxis("")
       }
       setActiveLabel(l)
 
@@ -212,7 +224,7 @@ const PatientVitalsScreen = () => {
 
 
     const { labels, heartRateData, min, max, avg, recentReadings } = useMemo(() => {
-    const valid = sampleData.filter((item) => item.heart_rate != null).sort((a, b) => new Date(a.recorded_at) - new Date(b.recorded_at));
+    const valid = vitals.filter((item) => item.heart_rate != null).sort((a, b) => new Date(a.recorded_at) - new Date(b.recorded_at));
     const data = valid.map((item) => item.heart_rate);
     return {
       labels: valid.map((item) => new Date(item.recorded_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })),
@@ -223,7 +235,6 @@ const PatientVitalsScreen = () => {
       recentReadings: valid.reverse(),
     };
   }, []);
-  const [actLabel, setActiveLabel] = useState("Heart Rate");
 
 
 
@@ -245,12 +256,12 @@ const PatientVitalsScreen = () => {
         {currState && currState.data.length > 0 ? (
           <LineChart
             data={{
-              labels:currState.lables,
+              labels:currState.labels,
               datasets: [{ data: currState.data }],
             }}
             width={screenWidth - 30}
             height={220}
-            yAxisSuffix=" bpm"
+            yAxisSuffix={yAxis}
             chartConfig={{
               backgroundColor: '#fff',
               backgroundGradientFrom: '#fff',
@@ -264,9 +275,9 @@ const PatientVitalsScreen = () => {
             style={{ marginVertical: 8, borderRadius: 16 }}
           />
         ) : (
-          <Text style={{ padding: 20, color: '#aaa' }}>No heart rate data available.</Text>
+          <Text style={{ padding: 20, color: '#aaa' }}>No {actLabel} data available.</Text>
         )}
-        <Text style={styles.legend}>🔵 Heart Rate  Min: {min}  |  Max: {max}  |  Avg: {avg}</Text>
+        <Text style={styles.legend}>🔵 {actLabel}  Min: {min}  |  Max: {max}  |  Avg: {avg}</Text>
       </View>
 
       <View style={styles.card}>
