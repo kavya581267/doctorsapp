@@ -1,3 +1,4 @@
+import { Vital } from '@api/model/patient/PatientModels';
 import Back from '@components/Back';
 import { PatientMedicalParams, PatientReadingsParam } from '@components/MainNavigation';
 import { useRoute ,RouteProp} from '@react-navigation/native';
@@ -75,7 +76,11 @@ type RoueParams = {
 type chartType = {
   data: any[]
   labels: any[]
-
+  unit?:string
+  min? : number
+  max? :number
+  recentReadings?: Vital[]
+  avg?:number
 }
 
 const PatientVitalsScreen = () => {
@@ -88,6 +93,7 @@ const PatientVitalsScreen = () => {
     const hr_valid = vitals.filter((item) => item.heart_rate != null).sort((a, b) => new Date(a.recorded_at) - new Date(b.recorded_at));
     const hr_data = hr_valid.map((item) => item.heart_rate);
     const hr_labels = hr_valid.map((item) => new Date(item.recorded_at).toLocaleDateString());
+    const hr_units="bpm";
 
     const os_valid = vitals.filter((item) => item.oxygen_saturation != null).sort((a, b) => new Date(a.recorded_at) - new Date(b.recorded_at));
     const os_data = os_valid.map((item) => item.oxygen_saturation);
@@ -132,7 +138,10 @@ const PatientVitalsScreen = () => {
       if(l === "Heart Rate"){
         const newState:chartType = {
           data:hr_data,
-          labels:hr_labels
+          labels:hr_labels,
+          min: Math.min(...hr_data),
+          max:Math.max(...hr_data),
+          avg: Math.round(hr_data.reduce((a, b) => a + b, 0) / hr_data.length)
         }
         setCurrState(newState);
         setYAxis("bpm");
@@ -142,7 +151,11 @@ const PatientVitalsScreen = () => {
       if(l === "Respiratory Rate"){
         const newState:chartType = {
           data:rr_data,
-          labels:rr_labels
+          labels:rr_labels,
+
+          min: Math.min(...rr_data),
+          max:Math.max(...rr_data),
+          avg: Math.round(rr_data.reduce((a, b) => a + b, 0) / rr_data.length)
         }
         setCurrState(newState);
         setYAxis("bpm")
@@ -152,7 +165,10 @@ const PatientVitalsScreen = () => {
       if(l === "O₂ Saturation"){
         const newState:chartType = {
           data:os_data,
-          labels:os_labels
+          labels:os_labels,
+          min: Math.min(...os_data),
+          max:Math.max(...os_data),
+          avg: Math.round(rr_data.reduce((a, b) => a + b, 0) / rr_data.length)
         }
         setCurrState(newState);
         setYAxis("")
@@ -162,7 +178,10 @@ const PatientVitalsScreen = () => {
       if(l === "Height"){
         const newState:chartType = {
           data:height_data,
-          labels:height_labels
+          labels:height_labels,
+          min: Math.min(...height_data),
+          max:Math.max(...height_data),
+          avg: Math.round(rr_data.reduce((a, b) => a + b, 0) / rr_data.length)
         }
         setCurrState(newState);
         setYAxis("cms")
@@ -172,7 +191,10 @@ const PatientVitalsScreen = () => {
       if(l === "Blood Pressure Systolic"){
         const newState:chartType = {
           data:bps_data,
-          labels:bps_labels
+          labels:bps_labels,
+          min: Math.min(...bps_data),
+          max:Math.max(...bps_data),
+          avg: Math.round(rr_data.reduce((a, b) => a + b, 0) / rr_data.length)
         }
         setCurrState(newState);
         setYAxis("mmHg")
@@ -182,7 +204,10 @@ const PatientVitalsScreen = () => {
       if(l === "Blood Pressure Diastolic"){
         const newState:chartType = {
           data:bpd_data,
-          labels:bpd_labels
+          labels:bpd_labels,
+          min: Math.min(...bpd_data),
+          max:Math.max(...bpd_data),
+          avg: Math.round(rr_data.reduce((a, b) => a + b, 0) / rr_data.length)
         }
         setCurrState(newState)
         setYAxis("mmHg")
@@ -192,7 +217,10 @@ const PatientVitalsScreen = () => {
       if(l === "Temperature"){
         const newState:chartType = {
           data:temp_data,
-          labels:temp_labels
+          labels:temp_labels,
+          min: Math.min(...temp_data),
+          max:Math.max(...temp_data),
+          avg: Math.round(rr_data.reduce((a, b) => a + b, 0) / rr_data.length)
         }
         setCurrState(newState)
         setYAxis("F")
@@ -202,7 +230,10 @@ const PatientVitalsScreen = () => {
       if(l === "Weight"){
         const newState:chartType = {
           data:weight_data,
-          labels:weight_labels
+          labels:weight_labels,
+          min: Math.min(...weight_data),
+          max:Math.max(...weight_data),
+          avg: Math.round(rr_data.reduce((a, b) => a + b, 0) / rr_data.length)
         }
         setCurrState(newState)
         setYAxis("kgs")
@@ -212,7 +243,10 @@ const PatientVitalsScreen = () => {
       if(l === "BMI"){
         const newState:chartType = {
           data:bmi_data,
-          labels:bmi_labels
+          labels:bmi_labels,
+          min: Math.min(...bmi_data),
+          max:Math.max(...bmi_data),
+          avg: Math.round(rr_data.reduce((a, b) => a + b, 0) / rr_data.length)
         }
         setCurrState(newState)
         setYAxis("")
@@ -254,6 +288,7 @@ const PatientVitalsScreen = () => {
       <View style={styles.card}>
         <Text style={styles.cardTitle}>{actLabel} Trend</Text>
         {currState && currState.data.length > 0 ? (
+          <ScrollView horizontal>
           <LineChart
             data={{
               labels:currState.labels,
@@ -273,11 +308,11 @@ const PatientVitalsScreen = () => {
             }}
             bezier
             style={{ marginVertical: 8, borderRadius: 16 }}
-          />
+          /></ScrollView>
         ) : (
           <Text style={{ padding: 20, color: '#aaa' }}>No {actLabel} data available.</Text>
         )}
-        <Text style={styles.legend}>🔵 {actLabel}  Min: {min}  |  Max: {max}  |  Avg: {avg}</Text>
+        <Text style={styles.legend}>🔵 {actLabel}  Min: {currState.min}  |  Max: {currState.max}  |  Avg: {currState.avg}</Text>
       </View>
 
       <View style={styles.card}>
