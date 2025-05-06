@@ -119,6 +119,9 @@ export default function PatientMedical() {
         if(screen === "patient_readings"){
             navigation.navigate("PatientVitalsScreen",{patient:faceSheetData.patient, vitals: faceSheetData.vitals, labrecords: faceSheetData.labResults})
         }
+        if(screen === "lab_readings"){
+            navigation.navigate("LabReadings",{patient:faceSheetData.patient, labrecords: faceSheetData.labResults})
+        }
     }
     const fields = [
         'Height (cms)',

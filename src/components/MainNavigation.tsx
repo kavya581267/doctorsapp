@@ -34,6 +34,7 @@ import { LabObservation, LabTest } from '@api/model/doctor/MasterData';
 import LabResultsScreen from '@screens/patientVitals/LabResults';
 import PDFViewer from './PDFViewScreen';
 import PatientVitalsScreen from '@screens/patient/PatientReadings';
+import LabReadings from '@screens/patient/LabReadings';
 
 export type BookAppointmentScreenRouteParams = {
     edit?: boolean; // or string, depending on your use case
@@ -72,6 +73,11 @@ export type PatientReadingsParam = {
     patient: PatientResponse
 }
 
+export type LabReadingsParam = {
+    labrecords: FacesheetObservation[]
+    patient: PatientResponse
+}
+
 
 export type RootStackParamList = {
     LaunchScreen: undefined;
@@ -104,6 +110,7 @@ export type RootStackParamList = {
     CreatePatientMedication: InitialNotesParams;
     PDFViewer:undefined;
     PatientVitalsScreen: PatientReadingsParam;
+    LabReadings:LabReadingsParam;
 };
 
 export default function MainNavigator() {
@@ -144,6 +151,7 @@ export default function MainNavigator() {
                 <Stack.Screen name='CreatePatientMedication' component={CreatePatientMedicationScreen}></Stack.Screen>
                 <Stack.Screen name='PDFViewer' component={PDFViewer}></Stack.Screen>
                 <Stack.Screen name='PatientVitalsScreen' component={PatientVitalsScreen}/>
+                <Stack.Screen name='LabReadings' component={LabReadings}/>
             </Stack.Navigator>
         </NavigationContainer>
     );

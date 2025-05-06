@@ -93,7 +93,7 @@ const PatientVitalsScreen = () => {
     const hr_valid = vitals.filter((item) => item.heart_rate != null).sort((a, b) => new Date(a.recorded_at) - new Date(b.recorded_at));
     const hr_data = hr_valid.map((item) => item.heart_rate);
     const hr_labels = hr_valid.map((item) => new Date(item.recorded_at).toLocaleDateString());
-    const hr_units="bpm";
+   
 
     const os_valid = vitals.filter((item) => item.oxygen_saturation != null).sort((a, b) => new Date(a.recorded_at) - new Date(b.recorded_at));
     const os_data = os_valid.map((item) => item.oxygen_saturation);
