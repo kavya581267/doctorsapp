@@ -29,19 +29,19 @@ const PastNotes = () => {
 
     const loadPdf = (item: PastNotesResponse) => {
         const token = getAccessToken()
-      navigation.navigate("PDFViewer",{pid:item.patientId, nid:item.noteId, token: token} )
+        navigation.navigate("PDFViewer", { pid: item.patientId, nid: item.noteId, token: token })
     }
 
     const formatDate = (date: Date): string => {
         return date.toISOString().split('T')[0];
-      };
+    };
 
     const loadNotes = async () => {
         setLoading(true);
         try {
-            const allNotes = await patientService.getDoctorPastNotes(loggedInUserContext.clinicDetails.id,formatDate(fromDate),
-            formatDate(oldDate1));
-            
+            const allNotes = await patientService.getDoctorPastNotes(loggedInUserContext.clinicDetails.id, formatDate(fromDate),
+                formatDate(oldDate1));
+
             const filtered = allNotes.filter((note) => {
                 if (!note.appointmentDate) return false;
                 const noteDate = new Date(note.appointmentDate);
@@ -50,7 +50,7 @@ const PastNotes = () => {
                     noteDate <= toDate
                 );
             });
-    
+
             setNotes(filtered);
         } catch (error) {
             console.error(error);
@@ -85,30 +85,22 @@ const PastNotes = () => {
         <View style={styles.container}>
             <Back nav='Mainscreen' />
             <View style={styles.dateContainer}>
-                <View style={{ flexDirection: "column", marginRight: 20 }}>
-                    <View style={{ flexDirection: "row", alignItems: "center" }}>
-                        <Text style={styles.dateText}>From:</Text>
-                        <TouchableOpacity onPress={openFromDatePicker} style={styles.dateInputBox}>
-                            <Text style={styles.dateText}>
-                                {fromDate.toLocaleDateString()}
-                            </Text>
-                        </TouchableOpacity>
-                    </View>
+                <View style={styles.dateGroup}>
+                    <Text style={styles.dateLabel}>From:</Text>
+                    <TouchableOpacity onPress={openFromDatePicker} style={styles.dateInputBox}>
+                        <Text style={styles.dateValue}>{fromDate.toLocaleDateString()}</Text>
+                    </TouchableOpacity>
                 </View>
-
-                <View style={{ flexDirection: "column" }}>
-                    <View style={{ flexDirection: "row", alignItems: "center" }}>
-                        <Text style={styles.dateText}>To:</Text>
-                        <TouchableOpacity onPress={openToDatePicker} style={styles.dateInputBox}>
-                            <Text style={styles.dateText}>
-                                {toDate.toLocaleDateString()}
-                            </Text>
-                        </TouchableOpacity>
-                    </View>
+                <View style={styles.dateGroup}>
+                    <Text style={styles.dateLabel}>To:</Text>
+                    <TouchableOpacity onPress={openToDatePicker} style={styles.dateInputBox}>
+                        <Text style={styles.dateValue}>{toDate.toLocaleDateString()}</Text>
+                    </TouchableOpacity>
                 </View>
             </View>
 
-           
+
+
             {showFromPicker && (
                 <DateTimePicker
                     value={fromDate}
@@ -131,7 +123,7 @@ const PastNotes = () => {
                 data={notes}
                 keyExtractor={(item, index) => index.toString()}
                 renderItem={({ item }) => (
-                    <TouchableOpacity style={styles.card} onPress={()=> loadPdf(item)}>
+                    <TouchableOpacity style={styles.card} onPress={() => loadPdf(item)}>
                         <View style={[styles.row, styles.margin]}>
                             <Text style={styles.label}>
                                 {item.patientFirstname}, {item.patientLastname}
@@ -203,12 +195,6 @@ const styles = StyleSheet.create({
         marginBottom: 10
     },
 
-
-    dateContainer: {
-        marginVertical: 10,
-        flexDirection: "row",
-        alignItems: "center"
-    },
     dateText: {
         textAlign: 'center',
         marginBottom: 10,
@@ -216,15 +202,42 @@ const styles = StyleSheet.create({
         fontSize: 16,
         marginRight: 5
     },
-    dateInputBox: {
-        borderWidth: 1,
-        borderColor: '#ddd',
-        borderRadius: 8,
-        paddingVertical: 4,
-        width: 140,
-        backgroundColor: '#fff',
+  
 
-    },
+
+    dateContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        paddingHorizontal: 10,
+        paddingVertical: 10,
+        borderRadius: 10,
+        marginVertical: 10,
+        elevation: 2,
+      },
+      dateGroup: {
+        flexDirection: 'column',
+        flex: 1,
+        marginHorizontal: 5,
+      },
+      dateLabel: {
+        fontSize: 14,
+        fontWeight: '500',
+        marginBottom: 4,
+      },
+      dateInputBox: {
+        borderWidth: 1,
+        borderColor: '#ccc',
+        borderRadius: 6,
+        paddingVertical: 8,
+        paddingHorizontal: 10,
+        backgroundColor: '#fff',
+      },
+      dateValue: {
+        fontSize: 15,
+        color: '#333',
+      },
+      
 
 });
 

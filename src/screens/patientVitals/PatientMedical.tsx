@@ -355,15 +355,7 @@ export default function PatientMedical() {
 
 
 const actions = [
-    {
-        text: "Medications",
-        icon: <MaterialIcons name="medication" size={20} color="#fff" />,
-        name: "medications",
-        position: 1,
-        textColor: COLORS.white,
-        textBackground: COLORS.secondary,
-        role: [Role.DOCTOR]
-    },
+    
     {
         text: "Record Lab Results",
         icon: <MaterialIcons name="science" size={20} color="#fff" />,
@@ -377,6 +369,15 @@ const actions = [
         text: "Patient Readings",
         icon: <MaterialIcons name="monitor-heart" size={20} color="#fff" />,
         name: "patient_readings",
+        position: 4,
+        textColor: COLORS.white,
+        textBackground: COLORS.secondary,
+        role: [Role.DOCTOR, Role.FRONT_OFFICE, Role.NURSE]
+    },
+    {
+        text: "Lab Readings",
+        icon: <MaterialIcons name="biotech" size={20} color="#fff" />,
+        name: "lab_readings",
         position: 4,
         textColor: COLORS.white,
         textBackground: COLORS.secondary,
