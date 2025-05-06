@@ -23,7 +23,6 @@ import { Badge, Chip, Modal, Portal } from 'react-native-paper';
 import { convertTo12Hour, formatDateToMonthDay, formatToYYYYMMDD, getFutureDate, getPastDate } from '@utils/utils';
 import { RootStackParamList } from '@components/MainNavigation';
 import FilterableAppointments from './Filter';
-import FabMenuScreen from './patientVitals/FAB';
 
 const AppointmentsListScreen = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
@@ -76,15 +75,6 @@ const AppointmentsListScreen = () => {
     }
     if (itemStatus === "NO_SHOW") {
       return styles.activeBadgeNoshow
-    }
-  }
-
-  const fabPress = (screen: string) => {
-    if (screen === "inprogress_notes") {
-      navigation.navigate("InProgressNotes")
-    }
-    if (screen === "past_notes") {
-      navigation.navigate("PastNotes")
     }
   }
 
@@ -318,7 +308,7 @@ const AppointmentsListScreen = () => {
           </View>
         </View>
       )}
-      <FabMenuScreen action={roleActions()} onPress={fabPress} />
+     
       <MdLogActivityIndicator loading={loading} />
     </View>
   );

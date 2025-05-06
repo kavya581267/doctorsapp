@@ -59,7 +59,7 @@ const InProgressNotes = () => {
 
     return (
         <View style={styles.container}>
-            <Back nav='Mainscreen' tab='Appointments' />
+            <Back nav='Mainscreen' />
             <Text style={styles.title}>InProgress Notes</Text>
 
             <FlatList

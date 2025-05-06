@@ -80,6 +80,20 @@ export default function DashboardScreen() {
             roles: ['DOCTOR', 'FRONT_OFFICE', "NURSE"],
             navPage: "BookAppointmentScreen"
         },
+        {
+            label: 'InProgress Notes',
+            bgColor: '#FFF4E5',
+            icon: <Feather name="activity" size={20} color="#2D9CDB" />,
+            roles: ['DOCTOR'],
+            navPage: "InProgressNotes"
+        },
+        {
+            label: 'My Filed Notes',
+            bgColor: '#FDEAEA',
+            icon: <Feather name="activity" size={20} color="#2D9CDB" />,
+            roles: ['DOCTOR'],
+            navPage: "PastNotes"
+        },
     ];
 
     const loadData = async () => {

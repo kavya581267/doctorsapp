@@ -83,7 +83,7 @@ const PastNotes = () => {
 
     return (
         <View style={styles.container}>
-            <Back nav='Mainscreen' tab='Appointments' />
+            <Back nav='Mainscreen' />
             <View style={styles.dateContainer}>
                 <View style={{ flexDirection: "column", marginRight: 20 }}>
                     <View style={{ flexDirection: "row", alignItems: "center" }}>
