@@ -255,6 +255,22 @@ const PatientVitalsScreen = () => {
 
     }
 
+    function calculateAge(dob: string) {
+      const birthDate = new Date(dob);
+      const today = new Date();
+
+      let age = today.getFullYear() - birthDate.getFullYear();
+      const monthDiff = today.getMonth() - birthDate.getMonth();
+      const dayDiff = today.getDate() - birthDate.getDate();
+
+      if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
+          age--;
+      }
+      return age;
+  }
+
+  const age = calculateAge(patient.dateOfBirth)
+
 
 
     const { labels, heartRateData, min, max, avg, recentReadings } = useMemo(() => {
@@ -275,7 +291,7 @@ const PatientVitalsScreen = () => {
   return (
     <ScrollView style={styles.container}>
       <Back nav='Mainscreen' tab='Appointments'/>
-      <Text style={styles.subHeader}>{patient?.firstName} {patient?.lastName}, 45y</Text>
+      <Text style={styles.subHeader}>{patient?.firstName} {patient?.lastName}, {age}</Text>
 
       <View style={styles.filterRow}>
         {['Heart Rate', 'Respiratory Rate', 'Blood Pressure Systolic', "Blood Pressure Diastolic", 'O₂ Saturation', 'Temperature', 'Height', 'Weight', 'BMI'].map((label, index) => (

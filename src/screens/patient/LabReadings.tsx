@@ -26,6 +26,22 @@ export default function LabReadings() {
     const [actLabel, setActiveLabel] = useState("");
     const [yAxis, setYAxis] = useState("");
 
+    function calculateAge(dob: string) {
+        const birthDate = new Date(dob);
+        const today = new Date();
+
+        let age = today.getFullYear() - birthDate.getFullYear();
+        const monthDiff = today.getMonth() - birthDate.getMonth();
+        const dayDiff = today.getDate() - birthDate.getDate();
+
+        if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
+            age--;
+        }
+        return age;
+    }
+
+    const age = calculateAge(patient.dateOfBirth)
+
 
     const [currState, setCurrState] = useState<chartType>();
     const setActiveLableContent = (l: string) => {
@@ -49,7 +65,7 @@ export default function LabReadings() {
     return (
         <ScrollView style={styles.container}>
             <Back nav='Mainscreen' tab='Appointments' />
-            <Text style={styles.subHeader}>{patient?.firstName} {patient?.lastName}</Text>
+            <Text style={styles.subHeader}>{patient?.firstName} {patient?.lastName}, {age}</Text>
 
             <View style={styles.filterRow}>
                 {['High-Sensitivity C-Reactive Protein', 'TSH', 'HbA1c', "Estimated Average Glucose (eAG)",'Glucose Level'].map((label, index) => (
