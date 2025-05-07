@@ -93,7 +93,7 @@ const PatientVitalsScreen = () => {
     const hr_valid = vitals.filter((item) => item.heart_rate != null).sort((a, b) => new Date(a.recorded_at) - new Date(b.recorded_at));
     const hr_data = hr_valid.map((item) => item.heart_rate);
     const hr_labels = hr_valid.map((item) => new Date(item.recorded_at).toLocaleDateString());
-    const hr_units="bpm";
+   
 
     const os_valid = vitals.filter((item) => item.oxygen_saturation != null).sort((a, b) => new Date(a.recorded_at) - new Date(b.recorded_at));
     const os_data = os_valid.map((item) => item.oxygen_saturation);
@@ -255,6 +255,22 @@ const PatientVitalsScreen = () => {
 
     }
 
+    function calculateAge(dob: string) {
+      const birthDate = new Date(dob);
+      const today = new Date();
+
+      let age = today.getFullYear() - birthDate.getFullYear();
+      const monthDiff = today.getMonth() - birthDate.getMonth();
+      const dayDiff = today.getDate() - birthDate.getDate();
+
+      if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
+          age--;
+      }
+      return age;
+  }
+
+  const age = calculateAge(patient.dateOfBirth)
+
 
 
     const { labels, heartRateData, min, max, avg, recentReadings } = useMemo(() => {
@@ -275,7 +291,7 @@ const PatientVitalsScreen = () => {
   return (
     <ScrollView style={styles.container}>
       <Back nav='Mainscreen' tab='Appointments'/>
-      <Text style={styles.subHeader}>{patient?.firstName} {patient?.lastName}, 45y</Text>
+      <Text style={styles.subHeader}>{patient?.firstName} {patient?.lastName}, {age}</Text>
 
       <View style={styles.filterRow}>
         {['Heart Rate', 'Respiratory Rate', 'Blood Pressure Systolic', "Blood Pressure Diastolic", 'O₂ Saturation', 'Temperature', 'Height', 'Weight', 'BMI'].map((label, index) => (

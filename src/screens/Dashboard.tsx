@@ -76,7 +76,7 @@ export default function DashboardScreen() {
         {
             label: 'Book Appointment',
             bgColor: '#E6F9F8',
-            icon: <Feather name="activity" size={20} color="#2D9CDB" />,
+            icon: <Feather name="calendar" size={20} color="#2D9CDB" />,
             roles: ['DOCTOR', 'FRONT_OFFICE', "NURSE"],
             navPage: "BookAppointmentScreen"
         },
@@ -90,7 +90,7 @@ export default function DashboardScreen() {
         {
             label: 'My Filed Notes',
             bgColor: '#FDEAEA',
-            icon: <Feather name="activity" size={20} color="#2D9CDB" />,
+            icon: <Feather name="book-open" size={20} color="#2D9CDB" />,
             roles: ['DOCTOR'],
             navPage: "PastNotes"
         },
