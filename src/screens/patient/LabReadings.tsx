@@ -64,7 +64,7 @@ export default function LabReadings() {
 
     return (
         <ScrollView style={styles.container}>
-            <Back nav='Mainscreen' tab='Appointments' />
+            <Back nav='PatientMedical' routeParam={{patient}} />
             <Text style={styles.subHeader}>{patient?.firstName} {patient?.lastName}, {age}</Text>
 
             <View style={styles.filterRow}>

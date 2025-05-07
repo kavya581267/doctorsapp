@@ -31,7 +31,7 @@ const LabTestScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Back nav='Mainscreen' tab='Appointments' />
+      <Back nav='PatientMedical' routeParam={{patient,appointment}}  />
       <Text style={styles.headerTitle}>Select Lab Test</Text>
       <FlatList
         data={labTest}
