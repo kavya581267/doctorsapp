@@ -211,9 +211,9 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         paddingHorizontal: 10,
         paddingVertical: 10,
-        borderRadius: 10,
+        borderRadius: 2,
         marginVertical: 10,
-        elevation: 1,
+        elevation: 2,
       },
       dateGroup: {
         flexDirection: 'column',
