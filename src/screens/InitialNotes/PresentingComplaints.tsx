@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { View, Text, TouchableOpacity, StyleSheet, Modal, TextInput, Button } from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet, Modal, TextInput, Button, useColorScheme } from "react-native";
 import styles from "@styles/presentingComplaintsStyle";
 import { Dropdown, MultiSelect } from "react-native-element-dropdown";
 import AntDesign from "react-native-vector-icons/AntDesign";
@@ -31,7 +31,7 @@ const PresentingComplaints = ({ title, itemList, addNewItemCommon, setLoading, n
 
     const [modalVisible, setModalVisible] = useState(false);
     const [complaintText, setComplaintText] = useState('');
-
+    const colorScheme = useColorScheme();
     const onDismissSnackbar = () => setVisible(false);
 
 
@@ -156,6 +156,7 @@ const PresentingComplaints = ({ title, itemList, addNewItemCommon, setLoading, n
                         <Text style={styles.heading}>Add {title}</Text>
                         <Divider style={{ marginBottom: 20 }} />
                         <TextInput
+                        placeholderTextColor={colorScheme === 'dark' ? '#888' : '#aaa'}
                             style={styles.input1}
                             value={complaintText}
                             onChangeText={setComplaintText}

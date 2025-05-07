@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { View, Text, TouchableOpacity, Button, TextInput, Modal } from "react-native";
+import { View, Text, TouchableOpacity, Button, TextInput, Modal, useColorScheme } from "react-native";
 import styles from "@styles/presentingComplaintsStyle";
 import Icon from "react-native-vector-icons/Ionicons";
 import { InitialCommonNoteRequest, Symptom } from "@api/model/doctor/MasterData";
@@ -41,6 +41,7 @@ export default function PasMedHistory({ title, itemList, addNewItemCommon, setLo
 
     const [modalVisible, setModalVisible] = useState(false);
     const [complaintText, setComplaintText] = useState('');
+    const colorScheme = useColorScheme();
 
     const dropdownData = itemList.map((item) => ({
         label: item.name,
@@ -212,6 +213,7 @@ export default function PasMedHistory({ title, itemList, addNewItemCommon, setLo
                         <Text style={styles.heading}>Add {title}</Text>
                         <Divider style={{ marginBottom: 20 }} />
                         <TextInput
+                            placeholderTextColor={colorScheme === 'dark' ? '#888' : '#aaa'}
                             style={styles.input1}
                             value={complaintText}
                             onChangeText={setComplaintText}

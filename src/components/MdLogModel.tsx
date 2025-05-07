@@ -7,6 +7,7 @@ import {
     TextInput,
     TouchableOpacity,
     StyleSheet,
+    useColorScheme,
 } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
@@ -27,6 +28,7 @@ interface CustomModalProps {
 
 const CustomModal: React.FC<CustomModalProps> = ({ visible, onCancel, onSave, fields, title, values }) => {
     const [formValues, setFormValues] = useState<Record<string, string>>({});
+    const colorScheme = useColorScheme();
 
     useEffect(() => {
         // Initialize fields with empty strings when modal opens
@@ -61,6 +63,7 @@ const CustomModal: React.FC<CustomModalProps> = ({ visible, onCancel, onSave, fi
                     <KeyboardAwareScrollView>
                         {fields.map((field, key) => (
                             <TextInput
+                                placeholderTextColor={colorScheme === 'dark' ? '#888' : '#aaa'}
                                 key={key}
                                 style={styles.input}
                                 placeholder={`Enter ${field}`}

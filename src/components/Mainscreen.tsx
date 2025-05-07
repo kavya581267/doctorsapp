@@ -46,14 +46,15 @@ export default function Mainscreen() {
             initialRouteName={initialTab}
             screenOptions={{
                 headerShown: false,
-                tabBarActiveTintColor: COLORS.primary,
+                tabBarActiveTintColor: COLORS.secondary,
                 tabBarInactiveTintColor: "grey",
+                tabBarShowLabel:true,
                 tabBarStyle: {
                     backgroundColor: "white",
                     borderRadius: 5,
                     height: 60,
-                    bottom: 10,
-                    elevation: 5,
+                    bottom: 1,
+                    elevation: 2,
                     shadowOpacity: 0.2,
                     shadowRadius: 5,
                 },
@@ -63,6 +64,7 @@ export default function Mainscreen() {
                 name="Home"
                 component={DashboardScreen}
                 options={{
+                    tabBarLabel: "Home",
                     tabBarIcon: ({ color }) => <MaterialIcons name="home" size={24} color={color} />,
                 }}
             />
@@ -88,6 +90,7 @@ export default function Mainscreen() {
                     name="Appointments"
                     component={AppointmentsListScreen}
                     options={{
+                        tabBarLabel: "Appointments",
                         tabBarIcon: ({ color }) => <MaterialIcons name="event" size={24} color={color} />,
                     }}
                 />
