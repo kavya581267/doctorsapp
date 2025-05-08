@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Alert, StyleSheet, TextInput, ScrollView, View, Dimensions } from 'react-native';
+import { Alert, StyleSheet, TextInput, ScrollView, View, Dimensions, Platform } from 'react-native';
 import { Button, Text } from 'react-native-paper';
 import Back from '@components/Back';
 import { COLORS } from '@utils/colors';
@@ -182,102 +182,129 @@ export default function BookAppointmentScreen() {
   }, [clinicDoctors])
   const { width, height } = Dimensions.get("window");
   return (
-    <KeyboardAwareScrollView>
-      <ScrollView style={{ flex: 1, backgroundColor: "white" }} contentContainerStyle={{ paddingBottom: 40 }}>
-        <View style={{ padding: 15, backgroundColor: "white", height }}>
-          <Back nav='Mainscreen' tab='Appointments' />
-          {/* Header */}
+    <KeyboardAwareScrollView enableOnAndroid={true}
+      extraScrollHeight={Platform.OS === 'ios' ? 0 : 200}
+      keyboardShouldPersistTaps="handled"
+      style={{ flex: 1, backgroundColor: "white" }}>
 
-          <Text style={styles.header}>{edit ? "Update Appointment" : "Book Appointment"}</Text>
+      <View style={{ padding: 15}}>
+        <Back nav='Mainscreen' tab='Appointments' />
+        {/* Header */}
 
-          {/* Select Patient */}
+        <Text style={styles.header}>{edit ? "Update Appointment" : "Book Appointment"}</Text>
+
+        {/* Select Patient */}
+        <View style={styles.viewMarginBottom}>
+          <Dropdown
+            data={patients}
+            labelField="label"
+            valueField="value"
+            placeholder="Select Patient"
+            value={selectedPatient}
+            onChange={(item) => setSelectedpatient(item)}
+            search={true}
+            style={styles.searchInput}
+            itemTextStyle={{ color: '#555', fontSize: 16 }}
+            itemContainerStyle={{ backgroundColor: '#f5f5f5', borderRadius: 10 }}
+            inputSearchStyle={{ backgroundColor: "f5f5f5" }}
+            disable={edit}
+          />
+        </View>
+
+
+        {/* Search Bar */}
+        <View style={styles.viewMarginBottom}>
+          <Dropdown
+            data={doctors}
+            labelField="label"
+            valueField="value"
+            placeholder="Select Doctor"
+            value={selectedDoctor}
+            onChange={(item) => setSelectedDoctor(item)}
+            search={true}
+            style={styles.searchInput}
+            itemTextStyle={{ color: '#555', fontSize: 16 }}
+            itemContainerStyle={{ backgroundColor: '#f5f5f5', borderRadius: 10 }}
+            inputSearchStyle={{ backgroundColor: "f5f5f5" }}
+            disable={edit}
+          />
+        </View>
+
+
+
+        {/* Select Date */}
+        <View style={styles.viewMarginBottom}>
+          <Text style={styles.subHeaders}>Select Date</Text>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false} >
+            {dates.map((d, idx) => {
+              const isSelected = d.fullDate === selectedDate;
+              return (
+                <Button
+                  key={idx}
+                  mode={isSelected ? 'contained' : 'outlined'}
+                  onPress={() => {
+                    setSelectedDate(d.fullDate);
+                  }}
+                  style={[styles.selectDateBox, { backgroundColor: isSelected ? COLORS.primary : "" }]}
+                  contentStyle={{ flexDirection: 'column' }}
+                >
+                  <View style={{ flexDirection: "column" }}>
+                    <Text style={[styles.selectDay, { color: isSelected ? 'white' : 'black' }]}>{d.label}</Text>
+                    <Text style={{ fontSize: 11, textAlign: "center", color: isSelected ? 'white' : 'black', }}>{d.date}</Text>
+                  </View>
+
+                </Button>
+              );
+            })}
+
+          </ScrollView>
+        </View>
+
+
+        <View style={styles.viewMarginBottom}>
+          <Text style={styles.label}>Start Time</Text>
+          <MdLogTimePicker value={startTime} onChange={setStartTime} />
+        </View>
+        <View style={styles.viewMarginBottom}>
+          <Text style={styles.label}>End Time</Text>
+          <MdLogTimePicker value={endTime} onChange={setEndTime} />
+        </View>
+
+        {/* Appointment Type */}
+        <View style={styles.viewMarginBottom}>
+          <Text style={styles.subHeaders}>Appointment Type</Text>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+            {appointmentTypes.map((type, idx) => {
+              const isSelected = appointmentType === type.value;
+              return (
+                <Button
+                  key={idx}
+                  mode={isSelected ? 'contained' : 'outlined'}
+                  onPress={() => setAppointmentType(type.value)}
+                  style={[styles.selectDateBox, { backgroundColor: isSelected ? COLORS.primary : "" }]}
+                  contentStyle={{ flexDirection: 'column' }}
+                >
+                  <Text style={{ color: isSelected ? 'white' : 'black', fontSize: 13 }}>
+                    {type.value}
+                  </Text>
+                </Button>
+              );
+            })}
+          </ScrollView>
+        </View>
+
+        {/* Appointment Status */}
+        {edit &&
           <View style={styles.viewMarginBottom}>
-            <Dropdown
-              data={patients}
-              labelField="label"
-              valueField="value"
-              placeholder="Select Patient"
-              value={selectedPatient}
-              onChange={(item) => setSelectedpatient(item)}
-              search={true}
-              style={styles.searchInput}
-              itemTextStyle={{ color: '#555', fontSize: 16 }}
-              itemContainerStyle={{ backgroundColor: '#f5f5f5', borderRadius: 10 }}
-              inputSearchStyle={{ backgroundColor: "f5f5f5" }}
-              disable={edit}
-            />
-          </View>
-
-
-          {/* Search Bar */}
-          <View style={styles.viewMarginBottom}>
-            <Dropdown
-              data={doctors}
-              labelField="label"
-              valueField="value"
-              placeholder="Select Doctor"
-              value={selectedDoctor}
-              onChange={(item) => setSelectedDoctor(item)}
-              search={true}
-              style={styles.searchInput}
-              itemTextStyle={{ color: '#555', fontSize: 16 }}
-              itemContainerStyle={{ backgroundColor: '#f5f5f5', borderRadius: 10 }}
-              inputSearchStyle={{ backgroundColor: "f5f5f5" }}
-              disable={edit}
-            />
-          </View>
-
-
-
-          {/* Select Date */}
-          <View style={styles.viewMarginBottom}>
-            <Text style={styles.subHeaders}>Select Date</Text>
-            <ScrollView horizontal showsHorizontalScrollIndicator={false} >
-              {dates.map((d, idx) => {
-                const isSelected = d.fullDate === selectedDate;
-                return (
-                  <Button
-                    key={idx}
-                    mode={isSelected ? 'contained' : 'outlined'}
-                    onPress={() => {
-                      setSelectedDate(d.fullDate);
-                    }}
-                    style={[styles.selectDateBox, { backgroundColor: isSelected ? COLORS.primary : "" }]}
-                    contentStyle={{ flexDirection: 'column' }}
-                  >
-                    <View style={{ flexDirection: "column" }}>
-                      <Text style={[styles.selectDay, { color: isSelected ? 'white' : 'black' }]}>{d.label}</Text>
-                      <Text style={{ fontSize: 11, textAlign: "center", color: isSelected ? 'white' : 'black', }}>{d.date}</Text>
-                    </View>
-
-                  </Button>
-                );
-              })}
-
-            </ScrollView>
-          </View>
-
-
-          <View style={styles.viewMarginBottom}>
-            <Text style={styles.label}>Start Time</Text>
-            <MdLogTimePicker value={startTime} onChange={setStartTime} />
-          </View>
-          <View style={styles.viewMarginBottom}>
-            <Text style={styles.label}>End Time</Text>
-            <MdLogTimePicker value={endTime} onChange={setEndTime} />
-          </View>
-
-          {/* Appointment Type */}
-          <View style={styles.viewMarginBottom}>
-            <Text style={styles.subHeaders}>Appointment Type</Text>
+            <Text style={styles.subHeaders}>Appointment Status</Text>
             <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-              {appointmentTypes.map((type, idx) => {
-                const isSelected = appointmentType === type.value;
+              {AppointmentStatus.map((type, idx) => {
+                const isSelected = appointmentStatus === type.value;
                 return (
                   <Button
                     key={idx}
                     mode={isSelected ? 'contained' : 'outlined'}
-                    onPress={() => setAppointmentType(type.value)}
+                    onPress={() => setAppointmentStatus(type.value)}
                     style={[styles.selectDateBox, { backgroundColor: isSelected ? COLORS.primary : "" }]}
                     contentStyle={{ flexDirection: 'column' }}
                   >
@@ -289,56 +316,32 @@ export default function BookAppointmentScreen() {
               })}
             </ScrollView>
           </View>
+        }
 
-          {/* Appointment Status */}
-          {edit &&
-            <View style={styles.viewMarginBottom}>
-              <Text style={styles.subHeaders}>Appointment Status</Text>
-              <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                {AppointmentStatus.map((type, idx) => {
-                  const isSelected = appointmentStatus === type.value;
-                  return (
-                    <Button
-                      key={idx}
-                      mode={isSelected ? 'contained' : 'outlined'}
-                      onPress={() => setAppointmentStatus(type.value)}
-                      style={[styles.selectDateBox, { backgroundColor: isSelected ? COLORS.primary : "" }]}
-                      contentStyle={{ flexDirection: 'column' }}
-                    >
-                      <Text style={{ color: isSelected ? 'white' : 'black', fontSize: 13 }}>
-                        {type.value}
-                      </Text>
-                    </Button>
-                  );
-                })}
-              </ScrollView>
-            </View>
-          }
-
-          {/* Reason for Visit */}
-          <View style={styles.viewMarginBottom}>
-            <Text style={styles.subHeaders}>Reason for Visit</Text>
-            <TextInput
-              value={edit ? note : reason}
-              onChangeText={edit ? setNote : setReason}
-              style={styles.reasonsTextInput}
-              multiline
-            />
-          </View>
-          {/* Book Appointment Button */}
-          <Button
-            mode="contained"
-            style={styles.button}
-            onPress={bookAppointment}
-          >
-            {edit ? "Update Appointment" : "Book Appointment"}
-          </Button>
-          {/* Bottom spacing */}
-          <View style={{ height: 20 }} />
-          <MdLodSnackbar visible={visible} message={error} onDismiss={onDismissSnackBar} />
+        {/* Reason for Visit */}
+        <View style={styles.viewMarginBottom}>
+          <Text style={styles.subHeaders}>Reason for Visit</Text>
+          <TextInput
+            value={edit ? note : reason}
+            onChangeText={edit ? setNote : setReason}
+            style={styles.reasonsTextInput}
+            multiline
+          />
         </View>
-        <MdLogActivityIndicator loading={loading} />
-      </ScrollView>
+        {/* Book Appointment Button */}
+        <Button
+          mode="contained"
+          style={styles.button}
+          onPress={bookAppointment}
+        >
+          {edit ? "Update Appointment" : "Book Appointment"}
+        </Button>
+        {/* Bottom spacing */}
+        <View style={{ height: 20 }} />
+        <MdLodSnackbar visible={visible} message={error} onDismiss={onDismissSnackBar} />
+      </View>
+      <MdLogActivityIndicator loading={loading} />
+
     </KeyboardAwareScrollView>
   );
 }
