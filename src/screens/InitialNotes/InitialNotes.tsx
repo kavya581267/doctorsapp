@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet, Dimensions, Button } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet, Dimensions, Button, Platform } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Back from '@components/Back';
 import { Divider } from 'react-native-paper';
@@ -58,7 +58,7 @@ const InitialNoteScreen = () => {
     const navigation = useNavigation<NavigationProp<RootStackParamList>>();
     const [fileNoteModel, setfileNoteModel] = useState(false)
     const appVital: Vital = route.params?.appointmetVital;
-    const [vitals,setVitals] = useState<VitalsRequest>()
+    const [vitals, setVitals] = useState<VitalsRequest>()
 
 
     const [shoeError, setShowError] = useState(false)
@@ -198,7 +198,7 @@ const InitialNoteScreen = () => {
             setExercise(exercise)
             setPastMedicalHistory(initialNote.pastMedicalHistory)
             setInvestigations(initialNote.investigations);
-            if(initialNote.vitals && initialNote.vitals.length > 0){
+            if (initialNote.vitals && initialNote.vitals.length > 0) {
                 setVitals(initialNote.vitals[0]);
             }
 
@@ -206,13 +206,13 @@ const InitialNoteScreen = () => {
             setErrorMessage(error.toString());
             setVisible(true)
             setLoading(false)
-            navigation.navigate("PatientMedical", {appointment:appointment, patient:patient})
+            navigation.navigate("PatientMedical", { appointment: appointment, patient: patient })
         }
         setLoading(false)
     }
 
     const getVitals = (vital: Vital) => {
-         if(vital){
+        if (vital) {
             const newVital = new VitalsRequest();
             newVital.appointmentId = appointment.id;
             newVital.bloodPressureDiastolic = vital.blood_pressure_diastolic;
@@ -226,8 +226,8 @@ const InitialNoteScreen = () => {
             newVital.temperature = vital.temperature;
             newVital.weight = vital.weight;
             return newVital;
-         }
-         return null;
+        }
+        return null;
     }
 
     const handleSave = async () => {
@@ -259,7 +259,7 @@ const InitialNoteScreen = () => {
         setLoading(false)
         if (failed) {
 
-        }else{
+        } else {
             setVisible(true);
             setErrorMessage("Saved note!!")
         }
@@ -275,8 +275,8 @@ const InitialNoteScreen = () => {
         let failedNoteFile = false;
         setLoading(true)
         try {
-            const failed =  await handleSave()
-            if(!failed){
+            const failed = await handleSave()
+            if (!failed) {
                 const resp = await patientService.fileInitialNote(facesheet.patient.id, note.id, fileNote);
             }
         } catch (error) {
@@ -284,8 +284,8 @@ const InitialNoteScreen = () => {
             setVisible(true)
             failedNoteFile = true;
         }
-        if(!failedNoteFile){
-            navigation.navigate("PatientMedical",{appointment:appointment})
+        if (!failedNoteFile) {
+            navigation.navigate("PatientMedical", { appointment: appointment })
         }
         setLoading(false)
     }
@@ -308,9 +308,9 @@ const InitialNoteScreen = () => {
                 <Back nav='Mainscreen' tab='Appointments' />
                 <View style={styles.header}>
                     <Text style={styles.headerTitle}>Initial Note</Text>
-                    <View style={{flexDirection:"row", justifyContent:"space-between"}}>
-                        <TouchableOpacity style={{...styles.submitButton, backgroundColor:COLORS.secondary, marginRight:20}}
-                         onPress={() => setfileNoteModel(true)}>
+                    <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+                        <TouchableOpacity style={{ ...styles.submitButton, backgroundColor: COLORS.secondary, marginRight: 20 }}
+                            onPress={() => setfileNoteModel(true)}>
                             <Text style={styles.submitText}>Submit</Text>
                         </TouchableOpacity>
                         <TouchableOpacity style={styles.submitButton} onPress={handleSave}>
@@ -319,7 +319,10 @@ const InitialNoteScreen = () => {
                     </View>
                 </View>
                 <Divider />
-                <KeyboardAwareScrollView>
+                <KeyboardAwareScrollView enableOnAndroid={true}
+                    extraScrollHeight={Platform.OS === "android" ? 200 : 0}
+                    keyboardShouldPersistTaps="handled">
+
                     <View style={styles.content}>
                         <View style={styles.userInfo}>
                             <Icon name="person-circle" size={30} color="gray" />
@@ -350,7 +353,7 @@ const InitialNoteScreen = () => {
                             */
                         }
                         <Investigation noteSectionString={investigations} setNoteSectionString={setInvestigations} setLoading={setLoading} title="Investigation" addNewItemCommon={createInvestigation} itemList={masterData.labTests} />
-                        <InitialNoteVitalScreen vital={vitals} setVitals={setVitals}/>
+                        <InitialNoteVitalScreen vital={vitals} setVitals={setVitals} />
                         <Note prevVal={physicalExamination} setNoteSectionString={setPhysicalExamination} title="Physical Examination" />
                         <Note prevVal={diet} setNoteSectionString={setDiet} title="Diet" />
                         <Note prevVal={exercise} setNoteSectionString={setExercise} title="Exercise" />
@@ -360,7 +363,7 @@ const InitialNoteScreen = () => {
                 </KeyboardAwareScrollView>
             </View>
             <MdLogActivityIndicator loading={loading} />
-            <MdLodSnackbar visible={visible} message={errorMessage} onDismiss={() => setVisible(false)}  success={errorMessage === "Saved note!!"?true:false} />
+            <MdLodSnackbar visible={visible} message={errorMessage} onDismiss={() => setVisible(false)} success={errorMessage === "Saved note!!" ? true : false} />
         </>
     )
 
