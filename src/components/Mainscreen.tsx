@@ -48,11 +48,12 @@ export default function Mainscreen() {
                 headerShown: false,
                 tabBarActiveTintColor: COLORS.secondary,
                 tabBarInactiveTintColor: "grey",
-                tabBarShowLabel:true,
+                tabBarShowLabel:true,              
+            
                 tabBarStyle: {
                     backgroundColor: "white",
                     borderRadius: 5,
-                    height: 60,
+                    height: 68,
                     bottom: 1,
                     elevation: 2,
                     shadowOpacity: 0.2,
