@@ -250,7 +250,12 @@ export default function MedicationScreen({ title, itemList, addNewItemCommon, se
                         </View>
                         <Divider style={{ marginBottom: 20 }} />
                         <View style={styles.buttonRow}>
-                            <Button title="Cancel" onPress={() => setModalVisible(false)} />
+                            <Button title="Cancel" onPress={() => { setModalVisible(false) 
+                                setFormulation("");
+                                setDosage("");
+                                setunit("");
+                                setComplaintText("")
+                            }} />
                             <Button title="Create" onPress={() => {
                                 // Add new medicine to master, update local state
                                 addNewItem()
