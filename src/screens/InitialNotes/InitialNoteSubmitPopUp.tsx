@@ -69,7 +69,7 @@ const InitialNoteSubmitPopUp: React.FC<Props> = ({  modalVisible, onClose, onSav
                         <View style={{ padding: 10 }}>
                             <View>
                                 <View style={styles.row}>
-                                    <Text style={styles.label}>Schedule a folloup visit: </Text>
+                                    <Text style={styles.label}>Schedule a follow up visit: </Text>
                                     <TextInput
                                         mode="outlined"
                                         style={styles.input}
