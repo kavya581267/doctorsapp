@@ -62,8 +62,7 @@ export const MdLogTimePicker: React.FC<TimePickerProps> = ({ value, onChange, di
                             <DateTimePicker
                                 themeVariant="light"
                                 value={value}
-                                mode="time"
-                                minuteInterval={30}
+                                mode="time"                               
                                 display={Platform.OS === "android" ? "clock" : "spinner"}
                                 onChange={handleTimeChange}
                             />}
