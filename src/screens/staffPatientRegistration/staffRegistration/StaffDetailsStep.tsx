@@ -71,7 +71,7 @@ export const StaffDetails: React.FC<StepProps> = ({ nextStep, formData, setFormD
 
     return (
         <View style={styles.container}>
-            <ScrollView >
+            <View >
                 <MdLogTextInput
                     label="First Name*"
                     value={formData?.firstName}
@@ -147,7 +147,7 @@ export const StaffDetails: React.FC<StepProps> = ({ nextStep, formData, setFormD
                         <Text style={styles.nextTxt}>Next</Text>
                     </TouchableOpacity>
                 </View>
-            </ScrollView>
+            </View>
             <MdLodSnackbar visible={visible} onDismiss={onDismissSnackBar} message={errorMessage} />
         </View>
     )

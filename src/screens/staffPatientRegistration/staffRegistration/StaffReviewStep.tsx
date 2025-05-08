@@ -3,7 +3,7 @@ import { Text, View } from "react-native";
 import styles from "@styles/staffPatientRegistrationStyle";
 import { StaffRegistration } from "@api/model/auth/Auth";
 
- interface Props {
+interface Props {
     prevStep: any;
     formData: StaffRegistration;
     submitForm: any
@@ -28,7 +28,7 @@ export default function StaffReview({ prevStep, formData, submitForm }: Props) {
     if (formData.role?.toLowerCase() === 'doctor') {
         fields.push(
             { label: 'License Number', value: formData.licenseNumber },
-            { label: 'Specialties', value: formData.specialties.join(" ,")}
+            { label: 'Specialties', value: formData.specialties.join(" ,") }
         );
     }
 
@@ -37,29 +37,29 @@ export default function StaffReview({ prevStep, formData, submitForm }: Props) {
         fields.push({ label: 'Emergency Contact Phone', value: formData.emergencyContactPhone });
     }
     return (
-<ScrollView>
-  
-        <View style={styles.container}>
-            <Text style={{ textAlign: "center", color: "blue", fontWeight: "600", marginBottom: 20, fontSize: 18 }}>Review Your Details</Text>
+        <ScrollView>
 
-            {fields.map((item, index) => (
-                <View key={index} style={styles.DetailsReviewStyle}>
-                    <Text>{item.label} :</Text>
-                    <Text>{item.value}</Text>
+            <View style={styles.container}>
+                <Text style={{ textAlign: "center", color: "blue", fontWeight: "600", marginBottom: 20, fontSize: 18 }}>Review Your Details</Text>
+
+                {fields.map((item, index) => (
+                    <View key={index} style={styles.DetailsReviewStyle}>
+                        <Text>{item.label} :</Text>
+                        <Text>{item.value}</Text>
+                    </View>
+                ))}
+
+
+                <View style={styles.buttonFormat}>
+                    <TouchableOpacity style={styles.buttonPrev} onPress={prevStep}>
+                        <Text style={styles.prevTxt}>Previous</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.buttonNext} onPress={submitForm}>
+                        <Text style={styles.nextTxt}>Submit</Text>
+                    </TouchableOpacity>
                 </View>
-            ))}
-
-
-            <View style={styles.buttonFormat}>
-                <TouchableOpacity style={styles.buttonPrev} onPress={prevStep}>
-                    <Text style={styles.prevTxt}>Previous</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.buttonNext} onPress={submitForm}>
-                    <Text style={styles.nextTxt}>Submit</Text>
-                </TouchableOpacity>
             </View>
-        </View>
-   
+
         </ScrollView>
 
     )

@@ -1,7 +1,7 @@
 import { PatientRegistration } from "@api/model/auth/Auth";
 import Spacer from "@components/Spacer";
 import { useContext, useState } from "react";
-import { ScrollView, Text } from "react-native";
+import { Platform, Text } from "react-native";
 import StepIndicator from "react-native-step-indicator";
 import styles from "@styles/staffPatientRegistrationStyle";
 import { PatientDetails } from "./PatientDetailsStep";
@@ -36,9 +36,9 @@ export default function PatientRegistrationScreen() {
       setLoading(true);
       formData.clinicId = loggedInUserContext.userDetails.clinicId;
       const response = await registrationService.registerPatient(formData);
-      navigation.navigate("SuccessScreen",{screen:"Mainscreen"});
+      navigation.navigate("SuccessScreen", { screen: "Mainscreen" });
     } catch (error) {
-     
+
       setVisible(true);
       setErrorMessage(error.toString())
     }
@@ -55,8 +55,9 @@ export default function PatientRegistrationScreen() {
 
 
   return (
-   
-    <KeyboardAwareScrollView style={{ padding: 15,backgroundColor:COLORS.white}}>
+    <KeyboardAwareScrollView style={{ padding: 15, backgroundColor: COLORS.white }} enableOnAndroid={true}
+      extraScrollHeight={Platform.OS === "android" ? 100 : 0}
+      keyboardShouldPersistTaps="handled">
       <Back nav={"Mainscreen"}></Back>
 
       <Spacer height={30} />
@@ -67,12 +68,10 @@ export default function PatientRegistrationScreen() {
       {step === 0 && <PatientDetails nextStep={nextStep} formData={formData} setFormData={setFormData} />}
       {step === 1 && <PatientAddress nextStep={nextStep} prevStep={prevStep} formData={formData} setFormData={setFormData} />}
       {step === 2 && <PatientReview prevStep={prevStep} formData={formData} submitForm={submitForm} />}
-     
-      <MdLogActivityIndicator loading={loading} />
-      <MdLodSnackbar onDismiss={setVisible} message={errorMessage} visible={visible}/>
-    </KeyboardAwareScrollView>
-  
 
+      <MdLogActivityIndicator loading={loading} />
+      <MdLodSnackbar onDismiss={setVisible} message={errorMessage} visible={visible} />
+    </KeyboardAwareScrollView>
   )
 }
 

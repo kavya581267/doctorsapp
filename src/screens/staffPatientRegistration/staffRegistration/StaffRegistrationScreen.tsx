@@ -1,7 +1,7 @@
 import { StaffRegistration } from "@api/model/auth/Auth";
 import Spacer from "@components/Spacer";
 import { useContext, useState } from "react";
-import { Text, View } from "react-native";
+import { KeyboardAvoidingView, Platform, Text, View } from "react-native";
 
 import StepIndicator from "react-native-step-indicator";
 import { StaffDetails } from "./StaffDetailsStep";
@@ -24,28 +24,28 @@ import { COLORS } from "@utils/colors";
 
 
 export default function StaffRegistrationScreen() {
-   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
-   const [errorMessage, setErrorMessage] = useState("");
-   const [visible,setVisible] = useState(false);
-   const onDismissSnackBar = () =>setVisible(false);
-  const labels = ["Details","Role", "Address", "Submit"];
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+  const [errorMessage, setErrorMessage] = useState("");
+  const [visible, setVisible] = useState(false);
+  const onDismissSnackBar = () => setVisible(false);
+  const labels = ["Details", "Role", "Address", "Submit"];
   const [formData, setFormData] = useState<StaffRegistration>();
   const [step, setStep] = useState<number>(0);
   const nextStep = () => setStep((prev) => prev + 1);
   const prevStep = () => setStep((prev) => prev - 1);
-  const [loading,setLoading] = useState(false);
-  const {loggedInUserContext} = useContext(AuthContext);
+  const [loading, setLoading] = useState(false);
+  const { loggedInUserContext } = useContext(AuthContext);
   const submitForm = async () => {
-   try{
-    setLoading(true);
-     formData.clinicId = loggedInUserContext.userDetails.clinicId;
-     const response = await registrationService.registerStaff(formData);
-     navigation.navigate("SuccessScreen",{screen:"Mainscreen"});
-   }catch(error){
-    setVisible(true);
-    setErrorMessage(error.toString())
-   }
-   setLoading(false);
+    try {
+      setLoading(true);
+      formData.clinicId = loggedInUserContext.userDetails.clinicId;
+      const response = await registrationService.registerStaff(formData);
+      navigation.navigate("SuccessScreen", { screen: "Mainscreen" });
+    } catch (error) {
+      setVisible(true);
+      setErrorMessage(error.toString())
+    }
+    setLoading(false);
   };
 
   interface StepProps {
@@ -58,22 +58,22 @@ export default function StaffRegistrationScreen() {
 
 
   return (
-    
-      <ScrollView style={{ padding: 15,backgroundColor:COLORS.white }}>
-        <Back nav={"Mainscreen"}></Back>
-        <Spacer height={30} />
-        <KeyboardAwareScrollView>
-          <Text style={styles.heading}>Staff Registration</Text>
-          <StepIndicator customStyles={stepindicator} stepCount={labels.length} currentPosition={step} labels={labels} />
-          <Spacer height={40} />
-          {step === 0 && <StaffDetails nextStep={nextStep} formData={formData} setFormData={setFormData} />}
-          {step === 1 && <StaffRole nextStep={nextStep} prevStep={prevStep} formData={formData} setFormData={setFormData} />}
-          {step === 2 && <StaffAddress nextStep={nextStep} prevStep={prevStep} formData={formData} setFormData={setFormData} />}
-          {step === 3 && <StaffReview prevStep={prevStep} formData={formData} submitForm={submitForm} />}
-        </KeyboardAwareScrollView>
-        <MdLogActivityIndicator loading={loading}/>
-        <MdLodSnackbar visible={visible} onDismiss={onDismissSnackBar} message={errorMessage}/>
-      </ScrollView>
+    <KeyboardAwareScrollView style={{ padding: 15, backgroundColor: COLORS.white }} enableOnAndroid={true}
+      extraScrollHeight={Platform.OS === "android" ? 100 : 0}
+      keyboardShouldPersistTaps="handled">
+      <Back nav={"Mainscreen"}></Back>
+      <Spacer height={30} />
+      <Text style={styles.heading}>Staff Registration</Text>
+      <StepIndicator customStyles={stepindicator} stepCount={labels.length} currentPosition={step} labels={labels} />
+      <Spacer height={40} />
+
+      {step === 0 && <StaffDetails nextStep={nextStep} formData={formData} setFormData={setFormData} />}
+      {step === 1 && <StaffRole nextStep={nextStep} prevStep={prevStep} formData={formData} setFormData={setFormData} />}
+      {step === 2 && <StaffAddress nextStep={nextStep} prevStep={prevStep} formData={formData} setFormData={setFormData} />}
+      {step === 3 && <StaffReview prevStep={prevStep} formData={formData} submitForm={submitForm} />}
+      <MdLogActivityIndicator loading={loading} />
+      <MdLodSnackbar visible={visible} onDismiss={onDismissSnackBar} message={errorMessage} />
+    </KeyboardAwareScrollView>
   )
 }
 
