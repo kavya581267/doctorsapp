@@ -60,7 +60,7 @@ export default function ClinicRegistration() {
 
     return (
         <KeyboardAwareScrollView style={{ padding: 15, backgroundColor: COLORS.white }} enableOnAndroid={true}
-            extraScrollHeight={Platform.OS === "android" ? 100 : 50}
+            extraScrollHeight={Platform.OS === "android" ? 50 : 50}
             keyboardShouldPersistTaps="handled">
             <View style={styles.header}>
                 <Image style={styles.png} source={require("../../../assets/logo.png")} />
