@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-import { Image, ScrollView, View } from "react-native";
+import { Image, Platform, ScrollView, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import styles from "../../styles/clinicRegistrationStyles";
 import { AdminDetails } from "./AdminDetailsStep";
@@ -38,7 +38,7 @@ export default function ClinicRegistration() {
         try {
             setLoading(true)
             const responce = await registrationService.registerAdmin(formData);
-            navigation.navigate("SuccessScreen",{screen:"SignIn"});
+            navigation.navigate("SuccessScreen", { screen: "SignIn" });
         } catch (error) {
             setVisible(true);
             setErrorMessage(error.toString())
@@ -59,32 +59,30 @@ export default function ClinicRegistration() {
     }
 
     return (
-        <ScrollView style={{ backgroundColor:COLORS.white}}>
-            <SafeAreaView>
-                <KeyboardAwareScrollView style={styles.container}>
-                    <View style={styles.header}>
-                        <Image style={styles.png} source={require("../../../assets/logo.png")} />
-                        <Text style={styles.heading}>Clinic Registration</Text>
-                        <Text style={styles.subHeading}>MDLog simplify clinic management effortlessly.</Text>
-                    </View>
-                    <StepIndicator customStyles={stepindicator} stepCount={labels.length} currentPosition={step} labels={labels} />
-                    <Spacer height={40} />
-                    {step === 0 && <ClinicDetails nextStep={nextStep} formData={formData} setFormData={setFormData} />}
-                    {step === 1 && <ClinicAddress nextStep={nextStep} prevStep={prevStep} formData={formData} setFormData={setFormData} />}
-                    {step === 2 && <AdminDetails nextStep={nextStep} prevStep={prevStep} formData={formData} setFormData={setFormData} />}
-                    {step === 3 && <ClinicReview formData={formData} prevStep={prevStep} submitForm={submitForm} />}
-                    <View style={styles.loginText}>
-                        <Text>Already Registered? </Text>
-                        <Button textColor={COLORS.primary} mode="text" onPress={() => navigation.navigate("SignIn")}>
-                            Log In
-                        </Button>
-                    </View>
-                </KeyboardAwareScrollView>
-                <MdLodSnackbar onDismiss={onDismissSnackBar} visible={visible} message={errorMessage} />
-                <MdLogActivityIndicator loading={loading} />
+        <KeyboardAwareScrollView style={{ padding: 15, backgroundColor: COLORS.white }} enableOnAndroid={true}
+            extraScrollHeight={Platform.OS === "android" ? 100 : 50}
+            keyboardShouldPersistTaps="handled">
+            <View style={styles.header}>
+                <Image style={styles.png} source={require("../../../assets/logo.png")} />
+                <Text style={styles.heading}>Clinic Registration</Text>
+                <Text style={styles.subHeading}>MDLog simplify clinic management effortlessly.</Text>
+            </View>
+            <StepIndicator customStyles={stepindicator} stepCount={labels.length} currentPosition={step} labels={labels} />
+            <Spacer height={40} />
+            {step === 0 && <ClinicDetails nextStep={nextStep} formData={formData} setFormData={setFormData} />}
+            {step === 1 && <ClinicAddress nextStep={nextStep} prevStep={prevStep} formData={formData} setFormData={setFormData} />}
+            {step === 2 && <AdminDetails nextStep={nextStep} prevStep={prevStep} formData={formData} setFormData={setFormData} />}
+            {step === 3 && <ClinicReview formData={formData} prevStep={prevStep} submitForm={submitForm} />}
+            <View style={styles.loginText}>
+                <Text>Already Registered? </Text>
+                <Button textColor={COLORS.primary} mode="text" onPress={() => navigation.navigate("SignIn")}>
+                    Log In
+                </Button>
+            </View>
 
-            </SafeAreaView>
-        </ScrollView>
+            <MdLodSnackbar onDismiss={onDismissSnackBar} visible={visible} message={errorMessage} />
+            <MdLogActivityIndicator loading={loading} />
+        </KeyboardAwareScrollView>
 
     )
 }
