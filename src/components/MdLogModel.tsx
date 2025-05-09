@@ -76,7 +76,6 @@ const CustomModal: React.FC<CustomModalProps> = ({ visible, onCancel, onSave, fi
                                 field={field}
                                 value={formValues[field] || ""}
                                 onTextChange={handleChange}
-
                             />
 
                             /* <TextInput

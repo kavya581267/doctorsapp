@@ -60,13 +60,23 @@ const InProgressNotes = () => {
     return (
         <View style={styles.container}>
             <Back nav='Mainscreen' />
-            <Text style={styles.title}>InProgress Notes</Text>
+            <View style={{ flexDirection: "row",justifyContent:"space-between"}}>
+                <Text style={styles.title}>InProgress Notes</Text>
+                <View style={styles.countWrapper}>
+                    <Text style={styles.countLabel}>Total:</Text>
+                    <View style={styles.countCircle}>
+                        <Text style={styles.countNumber}>{notes.length}</Text>
+                    </View>
+                </View>
+
+            </View>
+
 
             <FlatList
                 data={notes}
                 keyExtractor={(item, index) => index.toString()}
                 renderItem={({ item }) => (
-                    <TouchableOpacity style={styles.card} onPress={()=>openNote(item)}>
+                    <TouchableOpacity style={styles.card} onPress={() => openNote(item)}>
                         <View style={[styles.row, styles.margin]}>
                             <Text style={styles.label}>
                                 {item.patientFirstname}, {item.patientLastname}
@@ -136,7 +146,35 @@ const styles = StyleSheet.create({
     },
     margin: {
         marginBottom: 10
-    }
+    },
+    countWrapper: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginBottom: 5,
+        gap: 8,
+    },
+    
+    countLabel: {
+        fontSize: 14,
+        fontWeight: '500',
+        color: '#333',
+    },
+    
+    countCircle: {
+        width: 30,
+        height: 30,
+        borderRadius: 15,
+        backgroundColor: COLORS.primary,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    
+    countNumber: {
+        color: 'white',
+        fontWeight: 'bold',
+        fontSize: 14,
+    },
+    
 
 });
 

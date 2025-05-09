@@ -173,7 +173,7 @@ export default function MedicationScreen({ title, itemList, addNewItemCommon, se
                     maxHeight={300}
                     labelField="label"
                     valueField="value"
-                    placeholder={!isFocus ? "Select past medical" : "..."}
+                    placeholder={!isFocus ? "Select medications" : "..."}
                     searchPlaceholder="Search..."
                     value={sel}
                     onFocus={() => setIsFocus(true)}

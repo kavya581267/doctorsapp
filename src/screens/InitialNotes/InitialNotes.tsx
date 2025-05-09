@@ -330,7 +330,7 @@ const InitialNoteScreen = () => {
                         </View>
 
                         <PresentingComplaints noteSectionString={presentingComplaints} setNoteSectionString={setPresntingComplaints} setLoading={setLoading} title="Presenting Complaints"
-                            addNewItemCommon={createPresentingComplaint} itemList={masterData.presentingComplaints} />
+                            addNewItemCommon={createPresentingComplaint} itemList={masterData.presentingComplaints} placeHolder='Select complaints' />
                         <Medications setPatientMedications={setPatientMedication} patientMedications={patientMedications} setLoading={setLoading} title='Medications' addNewItemCommon={createMedication}
                             createPatientMedication={createPatientMedication} itemList={masterData.medications} patientId={appointment.patientId.toString()} />
 
@@ -340,7 +340,7 @@ const InitialNoteScreen = () => {
                         <Note prevVal={drugHistory} setNoteSectionString={setDrugHistory} title="Drug History" />
 
                         <PresentingComplaints noteSectionString={familyHistory} setNoteSectionString={setFamilyHistory} setLoading={setLoading} title="Family History"
-                            addNewItemCommon={createFamilyHistory} itemList={masterData.familyHistory} />
+                            addNewItemCommon={createFamilyHistory} itemList={masterData.familyHistory} placeHolder='Select Family History'/>
 
                         {
                             // vitals
