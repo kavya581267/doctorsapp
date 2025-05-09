@@ -89,8 +89,6 @@ export default function PatientMedical() {
             day: '2-digit',
             month: 'short',
             year: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit',
             hour12: true,
         });
     };
@@ -310,7 +308,7 @@ export default function PatientMedical() {
                                             <Text style={{ fontWeight: 'bold', fontSize: 16, marginBottom: 8 }}>{testName}</Text>
                                             {results.map((item, index) => (
                                                 <View key={item.id || index} style={{ marginBottom: 10, paddingLeft: 10 }}>
-                                                    <Text style={{ fontSize: 14 }}>{`${item.observation}: ${item.value}${item.units}`}</Text>
+                                                    <Text style={{ fontSize: 14 }}>{`${item.observation}: ${item.value}${item.units?item.units:""}`}</Text>
                                                     <View style={{ paddingLeft: 10, marginTop: 2 }}>
                                                         <Text style={{ fontSize: 12, color: 'gray' }}>{`Recorded on: ${formatDate(item.recorded_at)}`}</Text>
                                                     

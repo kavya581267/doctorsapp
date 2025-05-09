@@ -307,7 +307,7 @@ const InitialNoteScreen = () => {
     return (
         <>
             <View style={styles.container}>
-                <Back nav='Mainscreen' tab='Appointments' />
+                <Back nav='PatientMedical' routeParam={{appointment:appointment, patient:patient}}/>
                 <View style={styles.header}>
                     <Text style={styles.headerTitle}>{facesheet.patient?.filedNoteCount > 0 ? "Followup Note" : "Initial Note"}</Text>
                     <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
