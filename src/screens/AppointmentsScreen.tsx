@@ -266,7 +266,7 @@ export default function BookAppointmentScreen() {
           <MdLogTimePicker value={startTime} onChange={(time) => {
             setStartTime(time);
             if (endTime && new Date(time) >= new Date(endTime)) {
-              const newEndTime = new Date(time);
+              const newEndTime = new Date(time.getTime());
               newEndTime.setHours(newEndTime.getHours() + 1); 
               setEndTime(newEndTime);
             }
