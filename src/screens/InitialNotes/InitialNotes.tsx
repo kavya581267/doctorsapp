@@ -173,6 +173,7 @@ const InitialNoteScreen = () => {
             setLoading(false)
             return resp;
         } catch (error) {
+
             setErrorMessage(error.toString());
             setVisible(true)
         }
@@ -308,7 +309,7 @@ const InitialNoteScreen = () => {
             <View style={styles.container}>
                 <Back nav='Mainscreen' tab='Appointments' />
                 <View style={styles.header}>
-                    <Text style={styles.headerTitle}>Initial Note</Text>
+                    <Text style={styles.headerTitle}>{facesheet.patient?.filedNoteCount > 0 ? "Followup Note" : "Initial Note"}</Text>
                     <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
                         <TouchableOpacity style={{ ...styles.submitButton, backgroundColor: COLORS.secondary, marginRight: 20 }}
                             onPress={() => setfileNoteModel(true)}>
