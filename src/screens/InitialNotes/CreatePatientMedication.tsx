@@ -26,17 +26,17 @@ const CreatePatientMedicationScreen = () => {
     const [visibleError, setVisibleError] = useState(false);
     const { masterData, setMasterDataAdapter } = useContext(AuthContext);
     const route = useRoute<RouteProp<RoueParams>>();
-    const { appointment, facesheet } = route.params;
+    const { appointment, facesheet, patient } = route.params;
     const [patientMedications, setPatientMedication] = useState<PatientMedication[]>([...facesheet.medications])
 
 
     const createPatientMedication = async (reqObj: CreatePatientMedication, mId:string) => {
         setLoading(true);
         try {
-            reqObj.clinicId = appointment.clinicId.toString();
+            reqObj.clinicId = patient ? patient.clinicId.toString() :appointment.clinicId.toString();
             reqObj.medicationId = mId;
-            reqObj.appointmentId = appointment.id.toString();
-            const resp = await patientService.createPatientMedication(appointment.patientId.toString(), reqObj);
+            reqObj.appointmentId = appointment ?  appointment.id.toString(): "";
+            const resp = await patientService.createPatientMedication(patient ? patient.id.toString() : appointment.patientId.toString(), reqObj);
             setLoading(false)
             return convertPatientMedicationResponseToPatientMedication(resp);
         } catch (error) {
@@ -61,9 +61,9 @@ const CreatePatientMedicationScreen = () => {
 
     return (
         <View style={{ padding: 15 ,backgroundColor:COLORS.white,flex:1}}>
-            <Back nav="PatientMedical" routeParam={{ appointment: appointment }} />
+            <Back nav="PatientMedical" routeParam={{ appointment: appointment, patient:patient }} />
             <MedicationScreen setPatientMedications={setPatientMedication} patientMedications={patientMedications} setLoading={setLoading} title='Medications' addNewItemCommon={createMedication}
-                createPatientMedication={createPatientMedication} itemList={masterData.medications} patientId={appointment.patientId.toString()} />
+                createPatientMedication={createPatientMedication} itemList={masterData.medications} patientId={patient ? patient.id.toString() : appointment.patientId.toString()} />
                 <MdLogActivityIndicator loading={loading}/>
                 <MdLodSnackbar  message={error} visible={visibleError} onDismiss={()=>setVisibleError(false)}/>
         </View>
