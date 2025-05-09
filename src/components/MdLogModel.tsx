@@ -10,11 +10,12 @@ import {
     useColorScheme,
 } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import MdLogTextInput from './MdLogTextInput';
 
 type Fields = {
-  key: string
-  label: string
-  value:string
+    key: string
+    label: string
+    value: string
 }
 
 interface CustomModalProps {
@@ -22,9 +23,10 @@ interface CustomModalProps {
     onCancel: () => void;
     onSave: (values?: Record<string, string>) => void;
     fields: string[]; // List of field names
-    title:string
+    title: string
     values: Record<string, string>
 }
+
 
 const CustomModal: React.FC<CustomModalProps> = ({ visible, onCancel, onSave, fields, title, values }) => {
     const [formValues, setFormValues] = useState<Record<string, string>>({});
@@ -39,15 +41,21 @@ const CustomModal: React.FC<CustomModalProps> = ({ visible, onCancel, onSave, fi
             });
             setFormValues(initialValues);
         }
-    }, [visible, fields,values]);
+    }, [visible, fields, values]);
 
     const handleChange = (key: string, value: string) => {
-        setFormValues(prev => ({ ...prev, [key]: value }));
+        setFormValues(prev => {
+            const newS = { ...prev };
+            newS[key] = value;
+            return newS
+        });
     };
 
     const handleSave = () => {
         onSave(formValues);
     };
+
+
 
     return (
         <Modal
@@ -62,14 +70,23 @@ const CustomModal: React.FC<CustomModalProps> = ({ visible, onCancel, onSave, fi
                     <Text style={styles.modalTitle}>{title}</Text>
                     <KeyboardAwareScrollView>
                         {fields.map((field, key) => (
-                            <TextInput
-                                placeholderTextColor={colorScheme === 'dark' ? '#888' : '#aaa'}
+                            <MdLogTextInput
                                 key={key}
-                                style={styles.input}
-                                placeholder={`Enter ${field}`}
-                                value={formValues[field] || ''}
-                                onChangeText={(text) => handleChange(field, text)}
+                                label={field}
+                                field={field}
+                                value={formValues[field] || ""}
+                                onTextChange={handleChange}
+
                             />
+
+                            /* <TextInput
+                                 placeholderTextColor={colorScheme === 'dark' ? '#888' : '#aaa'}
+                                 key={key}
+                                 style={styles.input}
+                                 placeholder={`Enter ${field}`}
+                                 value={formValues[field] || ''}
+                                 onChangeText={(text) => handleChange(field, text)}
+                             />*/
                         ))}
 
                         <View style={styles.buttonRow}>
@@ -139,7 +156,7 @@ const styles = StyleSheet.create({
     cancelButtonText: {
         color: '#6A0DAD',
         fontWeight: 'bold',
-        fontSize:15
+        fontSize: 15
     },
     saveButton: {
         flex: 1,
@@ -152,6 +169,6 @@ const styles = StyleSheet.create({
     saveButtonText: {
         color: 'white',
         fontWeight: 'bold',
-        fontSize:15
+        fontSize: 15
     },
 });
