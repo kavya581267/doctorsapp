@@ -166,7 +166,7 @@ export default function PatientMedical() {
             'Weight (kgs)': appointmetVital && appointmetVital?.weight ? appointmetVital.weight.toString() : "",
             'Temperature': appointmetVital && appointmetVital?.temperature ? appointmetVital.temperature.toString() : "",
             'Blood Pressure Systolic': appointmetVital && appointmetVital?.blood_pressure_systolic ? appointmetVital.blood_pressure_systolic.toString() : "",
-            'Blood Pressure Diastolic': appointmetVital && appointmetVital?.blood_pressure_systolic ? appointmetVital.blood_pressure_systolic.toString() : "",
+            'Blood Pressure Diastolic': appointmetVital && appointmetVital?.blood_pressure_diastolic ? appointmetVital.blood_pressure_diastolic.toString() : "",
             'Heart Rate': appointmetVital && appointmetVital?.heart_rate ? appointmetVital.heart_rate.toString() : "",
             'Respiratory Rate': appointmetVital && appointmetVital?.respiratory_rate ? appointmetVital.respiratory_rate.toString() : "",
             'Oxygen Saturation': appointmetVital && appointmetVital?.oxygen_saturation ? appointmetVital.oxygen_saturation.toString() : ""

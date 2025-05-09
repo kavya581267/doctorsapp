@@ -12,7 +12,7 @@ interface MdLogTextInputProps {
     left?: string;
     right?: string;
     onTextChange: any;
-    field: string;
+    field?: string;
     keyboard?: any;
     onpress?: any;
     secureEntry?: boolean;
