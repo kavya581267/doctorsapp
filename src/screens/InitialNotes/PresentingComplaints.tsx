@@ -34,6 +34,7 @@ const PresentingComplaints = ({ title, itemList, addNewItemCommon, setLoading, n
     const [complaintText, setComplaintText] = useState('');
     const colorScheme = useColorScheme();
     const onDismissSnackbar = () => setVisible(false);
+    const [modalErrorMessage, setModalErrorMessage] = useState("");
 
 
 
@@ -51,6 +52,11 @@ const PresentingComplaints = ({ title, itemList, addNewItemCommon, setLoading, n
     }
 
     const handleAddNewItem = async () => {
+        if (!complaintText.trim()) {
+            setModalErrorMessage("Please enter a valid complaint name.");
+            return;
+        }
+       
         try {
             setLoading(true);
             const reqObj: InitialCommonNoteRequest = {
@@ -61,8 +67,8 @@ const PresentingComplaints = ({ title, itemList, addNewItemCommon, setLoading, n
             const newItem = await addNewItemCommon(reqObj);
             if (newItem) {
                 setSelectedItems([...selectedItems, newItem]);
-                setSearchText("");
-                setIsFocus(false);
+                setComplaintText("");
+                setModalVisible(false);
             } else {
                 setErrorMessage("Failed to add item!");
                 setVisible(true);
@@ -163,14 +169,20 @@ const PresentingComplaints = ({ title, itemList, addNewItemCommon, setLoading, n
                             onChangeText={setComplaintText}
                             placeholder="Enter name"
                         />
+                          {modalErrorMessage ? (
+                            <Text style={{ color: "red", marginBottom: 10 }}>
+                                {modalErrorMessage}
+                            </Text>
+                        ) : null}
                         <Divider style={{ marginBottom: 20 }} />
                         <View style={styles.buttonRow}>
-                            <Button title="Cancel"  onPress={() => setModalVisible(false)} />
+                            <Button title="Cancel"  onPress={() => {setModalVisible(false);
+                                    setComplaintText("");
+                                    setModalErrorMessage("")}} />
                             <Button title="Create" onPress={() => {
                                 // Handle create action here
                                 handleAddNewItem()
-                                setModalVisible(false);
-                                setComplaintText('');
+                               
                             }} />
                         </View>
                     </View>
