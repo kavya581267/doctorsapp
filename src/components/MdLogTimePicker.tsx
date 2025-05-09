@@ -6,7 +6,7 @@ import { COLORS } from "@utils/colors";
 
 
 type TimePickerProps = {
-    value: Date;
+    value: Date ;
     onChange: (date: Date) => void;
     disabled?: boolean;
 
