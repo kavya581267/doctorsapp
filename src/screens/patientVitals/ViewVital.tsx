@@ -27,7 +27,7 @@ const VitalsCard = ({vitals}:Props) => {
       </View>
       <View style={styles.row}>
         <Text style={styles.label}>Blood Pressure Diastolic:</Text>
-        <Text style={styles.value}>{vitals.blood_pressure_systolic}</Text>
+        <Text style={styles.value}>{vitals.blood_pressure_diastolic}</Text>
       </View>
       <View style={styles.row}>
         <Text style={styles.label}>Heart Rate:</Text>

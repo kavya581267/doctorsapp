@@ -128,12 +128,15 @@ export default function MedicationScreen({ title, itemList, addNewItemCommon, se
         const respItem = await addNewItemCommon(reqObj);
         if (respItem) {
             //addItem(respItem);
+            setVisible(true);
+            setErrorMessage("Medication is successfully added!")
             setSearchText("");
         } else {
             setVisible(true);
             setErrorMessage("Failed to add Item !!");
         }
-        setLoading(false);
+            setLoading(false);
+        
     };
 
     const handleChange = (id: number) => {
