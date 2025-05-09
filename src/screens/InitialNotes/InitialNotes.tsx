@@ -7,7 +7,7 @@ import { COLORS } from '@utils/colors';
 import { AuthContext } from '@context/AuthContext';
 import PresentingComplaints from './PresentingComplaints';
 import Note from './Note';
-import { InitialCommonNoteRequest, LabTestRequest, MedicationsRequest, ProblemsRequest, Symptom } from '@api/model/doctor/MasterData';
+import { InitialCommonNoteRequest, LabObservation, LabTest, LabTestRequest, MedicationsRequest, ProblemsRequest, Symptom } from '@api/model/doctor/MasterData';
 import { doctorService } from '@api/doctorService';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import PasMedHistory from './MedicalHistory';
@@ -166,9 +166,9 @@ const InitialNoteScreen = () => {
         setLoading(true)
         try {
             const resp = await doctorService.createLabTest(reqObj);
-            //masterData.labResults.push(resp);
-            //const newMasterDate = { ...masterData };
-            //await setMasterDataAdapter(newMasterDate)
+            masterData.labTests.push(resp);
+            const newMasterDate = { ...masterData };
+            await setMasterDataAdapter(newMasterDate)
             setLoading(false)
             return resp;
         } catch (error) {
