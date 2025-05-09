@@ -105,7 +105,7 @@ const LabResultsScreen = () => {
         <>
             <ScrollView >
                 <View style={styles.container}>
-                    <Back nav='LabTestScreen' />
+                    <Back nav='LabTestScreen' routeParam={{patient,appointment}} />
                     <View style={styles.dateContainer}>
                         <Text style={{ fontWeight: "600", fontSize: 16, color: COLORS.primary }}>{labTest && labTest.testName}</Text>
                         <View style={{ flexDirection: "row", alignItems: "center" }}>
