@@ -154,7 +154,7 @@ const styles = StyleSheet.create({
     padding: 12,
     borderRadius: 12,
     marginBottom: 10,
-    width: width > 720 ? "40%" : "100%"
+    width: "100%"
   },
   avatar: {
     width: 48,

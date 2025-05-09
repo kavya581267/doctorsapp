@@ -138,7 +138,7 @@ export default function PatientMedical() {
             setLoading(true);
             const vitalsPayload = new VitalsRequest();
             vitalsPayload.clinicId = faceSheetData.patient.clinicId;
-            vitalsPayload.temperature = parseInt(vital[fields[2]]);
+            vitalsPayload.temperature = parseFloat(vital[fields[2]]);
             vitalsPayload.height = parseInt(vital[fields[0]]);
             vitalsPayload.weight = parseInt(vital[fields[1]]);
             vitalsPayload.heartRate = parseInt(vital[fields[5]]);

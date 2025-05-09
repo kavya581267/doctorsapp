@@ -30,7 +30,7 @@ export default function Vitals(props: Props) {
     const storeVitals = async () => {
         const vitalsPayload = new VitalsRequest();
         vitalsPayload.clinicId = loggedInUserContext.clinicDetails.id;
-        vitalsPayload.temperature = parseInt(temperature);
+        vitalsPayload.temperature = parseFloat(temperature);
         vitalsPayload.height = parseInt(height);
         vitalsPayload.weight = parseInt(Weight);
         vitalsPayload.heartRate = parseInt(heartRate);
