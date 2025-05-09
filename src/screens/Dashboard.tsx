@@ -138,12 +138,7 @@ export default function DashboardScreen() {
         <ScrollView>
             <View style={{ padding: 15, backgroundColor: "white", height }}>
                 <Back loading={loading} />
-                <TextInput
-                    placeholder="Search for patient or doctor"
-                    value={searchText}
-                    onChangeText={setSearchText}
-                    style={styles.searchInput}
-                />
+                
 
                 {/* Stats */}
                 {

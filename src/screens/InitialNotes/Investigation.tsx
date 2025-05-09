@@ -165,7 +165,7 @@ export default function Investigation({ title, itemList, addNewItemCommon, setLo
                     maxHeight={300}
                     labelField="label"
                     valueField="value"
-                    placeholder={!isFocus ? "Select past medical" : "..."}
+                    placeholder={!isFocus ? "Select Investigations" : "..."}
                     searchPlaceholder="Search..."
                     value={sel}
                     onFocus={() => setIsFocus(true)}

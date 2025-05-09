@@ -18,9 +18,10 @@ type Props = {
     setLoading: (load: boolean) => void;
     noteSectionString: string
     setNoteSectionString: (note: string) => void
+    placeHolder: string;
 }
 
-const PresentingComplaints = ({ title, itemList, addNewItemCommon, setLoading, noteSectionString, setNoteSectionString }: Props) => {
+const PresentingComplaints = ({ title, itemList, addNewItemCommon, setLoading, noteSectionString, setNoteSectionString,placeHolder }: Props) => {
 
     const { loggedInUserContext } = useContext(AuthContext);
     const [selectedItems, setSelectedItems] = useState<Symptom[]>([]);
@@ -114,7 +115,7 @@ const PresentingComplaints = ({ title, itemList, addNewItemCommon, setLoading, n
                     maxHeight={300}
                     labelField="label"
                     valueField="value"
-                    placeholder={!isFocus ? "Select complaints" : "..."}
+                    placeholder={!isFocus ? placeHolder : "..."}
                     searchPlaceholder="Search..."
                     value={selectedItems.map((item) => item.name)}
                     onFocus={() => setIsFocus(true)}
