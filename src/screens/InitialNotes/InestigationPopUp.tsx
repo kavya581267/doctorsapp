@@ -15,9 +15,9 @@ type Props = {
 };
 const InvestigationPopUp: React.FC<Props> = ({ selectedItem, modalVisible, onClose, onSave }) => {
     const [duration, setDuration] = useState('0');
-    const [unit, setUnit] = useState('Days');
-    const [startDate, setStartDate] = useState(formatToYYYYMMDD(new Date()));
-
+    const [unit, setUnit] = useState('Day(s)');
+    const [startDate, setStartDate] = useState(formatToYYYYMMDD(new Date().getDate()));
+  
     const calculateStartDate = () => {
         const num = parseInt(duration);
         const now = new Date();

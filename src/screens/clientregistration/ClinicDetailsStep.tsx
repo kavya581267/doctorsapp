@@ -69,7 +69,7 @@ export const ClinicDetails: React.FC<StepProps> = ({ nextStep, formData, setForm
                     field="clinicLicense"
                 />
                 <MdLogTextInput
-                    label="Clini Email*"
+                    label="Clinic Email*"
                     value={formData?.clinicEmail}
                     left="email"
                     onTextChange={onChangeT}

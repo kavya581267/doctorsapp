@@ -187,7 +187,7 @@ export default function BookAppointmentScreen() {
       keyboardShouldPersistTaps="handled"
       style={{ flex: 1, backgroundColor: "white" }}>
 
-      <View style={{ padding: 15}}>
+      <View style={{ padding: 15 }}>
         <Back nav='Mainscreen' tab='Appointments' />
         {/* Header */}
 
@@ -263,11 +263,24 @@ export default function BookAppointmentScreen() {
 
         <View style={styles.viewMarginBottom}>
           <Text style={styles.label}>Start Time</Text>
-          <MdLogTimePicker value={startTime} onChange={setStartTime} />
+          <MdLogTimePicker value={startTime} onChange={(time) => {
+            setStartTime(time);
+            if (endTime && new Date(time) >= new Date(endTime)) {
+              const newEndTime = new Date(time);
+              newEndTime.setHours(newEndTime.getHours() + 1); 
+              setEndTime(newEndTime);
+            }
+          }} />
         </View>
         <View style={styles.viewMarginBottom}>
           <Text style={styles.label}>End Time</Text>
-          <MdLogTimePicker value={endTime} onChange={setEndTime} />
+          <MdLogTimePicker value={endTime} onChange={(time) => {
+            if (new Date(time) > new Date(startTime)) {
+              setEndTime(time);
+            } else {
+              alert("End Time must be greater than Start Time");
+            }
+          }} />
         </View>
 
         {/* Appointment Type */}
