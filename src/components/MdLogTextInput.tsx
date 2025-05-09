@@ -29,6 +29,7 @@ export default function MdLogTextInput({ label, value, left, right, onTextChange
         onTextChange(field, formattedDate);
         hideDatePicker();
     }
+
     return (
         <>
             {
@@ -71,11 +72,14 @@ export default function MdLogTextInput({ label, value, left, right, onTextChange
                     />
                 )
             }
+            
             <DateTimePicker isVisible={isDatePickerVisible}
                 mode="date"
                 themeVariant="light"
                 onConfirm={handleConfirm}
-                onCancel={hideDatePicker}/>
+                onCancel={hideDatePicker}
+                minimumDate={new Date(1980, 0, 1)}
+                date={new Date(1980, 0, 1)}/>
         </>
     )
 }
