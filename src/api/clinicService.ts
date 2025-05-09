@@ -1,15 +1,16 @@
-import { DELETE_PATIENT_APPOINTMENT, GET_CLINIC_APPOINTMENTS } from "@utils/constants";
+import { DELETE_PATIENT_APPOINTMENT, GET_CLINIC_APPOINTMENTS, UPDATE_CLINIC_PATH } from "@utils/constants";
 import { apiService } from "./apiService";
 import { AppointmentListResponse } from "./model/appointments/AppointmentListResponse";
 import { AdminRegistarationRequest, AdminRegistrationResponse } from "./model/auth/Auth";
-import { ClinicResponse } from "./model/clinic/ClinicResponse";
 import { replacePlaceholders } from "@utils/utils";
+import { ClinicUpdateResponse } from "./model/clinic/ClinicRequest";
 
 
 
 export const AUTH_ENDPOINT = "/auth/register/admin"; // Adjust based on your API
 
 export const clinicService = {
+
     register: async (clinicRegistration: AdminRegistarationRequest): Promise<AdminRegistrationResponse> => {
         try {
             const response = await apiService.post(AUTH_ENDPOINT, clinicRegistration);
@@ -22,8 +23,13 @@ export const clinicService = {
     getAllClinics: () => {
 
     },
-    updateClinic: () => {
-
+    updateClinic:async (clinicId: number): Promise<ClinicUpdateResponse> => {
+       try {
+            const response = await apiService.put(UPDATE_CLINIC_PATH, clinicId);
+            return response;
+        } catch (error) {
+            throw error;
+        }
     },
     getClinicById: () => {
 

@@ -1,4 +1,5 @@
 
+import { ClinicUpdateResponse } from '@api/model/clinic/ClinicRequest';
 import Back from '@components/Back';
 import { AuthContext } from '@context/AuthContext';
 import { Ionicons } from '@expo/vector-icons';
@@ -37,11 +38,11 @@ const ClinicOverview = () => {
     };
 
     const handleSaveChanges = () =>{
-        
+        const clinicUpdates = new ClinicUpdateResponse();
     }
 
     const toggleCancel = () =>{
-        
+        setEditMode(!editMode);
     }
 
     const handlePhonePress = () => {

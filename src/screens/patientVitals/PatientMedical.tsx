@@ -45,7 +45,7 @@ export default function PatientMedical() {
     const [error, setErrorMessage] = useState("Failed to load!!")
     const [showError, setShowError] = useState(false);
     const [patientMedications, setPatientMedication] = useState<PatientMedication[]>([])
-    const [hasAppointments, setHasAppointments] = useState(false);
+    const [hasAppointments, setHasAppointments] = useState(false || (patient && patient.hasAppointment));
     const [initialNote, setInitialNote] = useState(true)
 
 
@@ -335,13 +335,13 @@ export default function PatientMedical() {
                 <CustomModal values={vitalRecord} title="💓 Add Vitals" fields={fields} visible={visiblemodal} onCancel={() => setShowModal(false)} onSave={storeVitals} />
             </ScrollView>
             {
-                !patient && hasAppointments && user.roles && user.roles.find((role) => role === Role.DOCTOR) &&
+                 hasAppointments && user.roles && user.roles.find((role) => role === Role.DOCTOR) &&
                 <TouchableOpacity style={{
                     backgroundColor: COLORS.primary,
                     paddingVertical: 14,
                     borderRadius: 12,
                     alignItems: 'center'
-                }} onPress={() => navigation.navigate("InitialNote", { appointment: appointment, facesheet: faceSheetData, appointmetVital: appointmetVital })}>
+                }} onPress={() => navigation.navigate("InitialNote", { appointment: appointment, facesheet: faceSheetData, appointmetVital: appointmetVital,patient:patient })}>
                     <Text style={{
                         color: '#fff',
                         fontSize: 16,
