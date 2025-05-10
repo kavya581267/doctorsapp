@@ -136,7 +136,7 @@ export default function DashboardScreen() {
 
     return (
         <ScrollView>
-            <View style={{ padding: 15, backgroundColor: "white", height }}>
+            <View style={{ padding: 15, backgroundColor: "white",flex:1 }}>
                 <Back loading={loading} />
                 
 
