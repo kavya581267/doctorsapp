@@ -107,6 +107,16 @@ export default function BookAppointmentScreen() {
 
   const bookAppointment = async () => {
     try {
+      if (!edit && (!selectedPatient || !selectedPatient.value)) {
+        Alert.alert("Validation Error", "Please select a patient before proceeding.");
+        return;
+      }
+
+      if (!selectedDoctor || !selectedDoctor.value) {
+        Alert.alert("Validation Error", "Please select a doctor before proceeding.");
+        return;
+      }
+
       setLoading(true)
       let response: AppointmentResponse = undefined;
       if (!edit) {
