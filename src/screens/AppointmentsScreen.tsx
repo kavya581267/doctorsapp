@@ -255,7 +255,14 @@ export default function BookAppointmentScreen() {
                   onPress={() => {
                     setSelectedDate(d.fullDate);
                   }}
-                  style={[styles.selectDateBox, { backgroundColor: isSelected ? COLORS.primary : "" }]}
+                 
+                  style={[
+                    styles.selectDateBox,
+                    { 
+                      backgroundColor: isSelected ? COLORS.primary : 'transparent',
+                      borderColor: isSelected ? COLORS.primary : COLORS.grey,
+                    }
+                  ]}
                   contentStyle={{ flexDirection: 'column' }}
                 >
                   <View style={{ flexDirection: "column" }}>
@@ -304,7 +311,9 @@ export default function BookAppointmentScreen() {
                   key={idx}
                   mode={isSelected ? 'contained' : 'outlined'}
                   onPress={() => setAppointmentType(type.value)}
-                  style={[styles.selectDateBox, { backgroundColor: isSelected ? COLORS.primary : "" }]}
+                  style={[styles.selectDateBox, { backgroundColor: isSelected ? COLORS.primary : "transparent",
+                    borderColor: isSelected ? COLORS.primary : COLORS.grey,
+                   }]}
                   contentStyle={{ flexDirection: 'column' }}
                 >
                   <Text style={{ color: isSelected ? 'white' : 'black', fontSize: 13 }}>
