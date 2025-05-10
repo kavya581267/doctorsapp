@@ -85,14 +85,14 @@ const PastNotes = () => {
     const openToDatePicker = () => {
         setShowToPicker(true);
     };
-    const moveToInProgress = async (note:PastNotesResponse) => {
-        try{
+    const moveToInProgress = async (note: PastNotesResponse) => {
+        try {
             setLoading(true)
             const resp = await patientService.moveNoteToInprogress(note.clinicId, note.patientId, note.noteId);
             setVisible(true);
-            setMessage("Successfully moved note: "+note.noteId+" to Inprogress!!")
+            setMessage("Successfully moved note: " + note.noteId + " to Inprogress!!")
             loadNotes();
-        }catch(error){
+        } catch (error) {
             setVisible(true);
             setMessage(error.toString())
         }
@@ -146,39 +146,43 @@ const PastNotes = () => {
                             <Text style={styles.label}>
                                 {item.patientFirstname}, {item.patientLastname}
                             </Text>
-                            <Text style={styles.status}>
-                                <Text style={{ color: "black" }}>MrNo: </Text>
-                                {item.patientMrn}
-                            </Text>
+                            <Text style={{ ...styles.status, color: COLORS.red }}>{item.noteType}</Text>
                         </View>
-                        <View style={styles.row}>
-                            <Text style={{...styles.status, color:COLORS.red}}>{item.noteType}</Text>
-                            <Text style={styles.status}>
-                                <Text style={{ color: "black" }}>Visit Date: </Text>
-                                {item.appointmentDate}
-                            </Text>
-                        </View>
-                        <View style={{ ...styles.row, marginTop: 10 }}>
-                            <Text style={{...styles.status, color:COLORS.red}}>
+                        <View style={styles.margin}>
+                            <Text style={{ ...styles.status, color: COLORS.red }}>
                                 <Text style={{ color: "black" }}>Filed Date: </Text>
                                 {item.filedTimestamp}
                             </Text>
-                            <TouchableOpacity style={{
-                                padding: 8,
-                                borderRadius: 8,
-                                marginBottom: 20,
-                                backgroundColor: COLORS.secondary,
-                            }} onPress={()=>moveToInProgress(item)}>
-                                <Text style={{ color: "white" }}>Move to Inprogress</Text>
-                            </TouchableOpacity>
                         </View>
+                        <Text style={[styles.status, styles.margin]}>
+                            <Text style={{ color: "black" }}>MrNo: </Text>
+                            {item.patientMrn}
+                        </Text>
+
+
+                        <Text style={[styles.status, styles.margin]}>
+                            <Text style={{ color: "black" }}>Visit Date: </Text>
+                            {item.appointmentDate}
+                        </Text>
+
+
+
+                        <TouchableOpacity style={{
+                            padding: 8,
+                            borderRadius: 8,
+                            marginBottom: 10,
+                            backgroundColor: COLORS.secondary,
+                        }} onPress={() => moveToInProgress(item)}>
+                            <Text style={{ color: "white", textAlign: "center", fontSize: 16, fontWeight: "600" }}>Move to Inprogress</Text>
+                        </TouchableOpacity>
+
                     </TouchableOpacity>
                 )}
             />
 
             <MdLogActivityIndicator loading={loading} />
-            <MdLodSnackbar visible={visible} message={message} onDismiss={()=>setVisible(false)} 
-            success={message.includes("Success")?true:false} />
+            <MdLodSnackbar visible={visible} message={message} onDismiss={() => setVisible(false)}
+                success={message.includes("Success") ? true : false} />
         </View >
     );
 };
