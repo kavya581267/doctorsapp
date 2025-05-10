@@ -16,7 +16,7 @@ export default function Note ({title, setNoteSectionString, prevVal}:Props) {
     return (
         <View style={styles.section}>
             <Text style={styles.sectionTitle}>{title}</Text>
-            <TextInput value={prevVal} onChangeText={setNoteSectionString} multiline={true} style={styles.box}>
+            <TextInput value={prevVal} onChangeText={setNoteSectionString} multiline={true} style={[styles.box, { textAlignVertical: 'top' }]}>
 
             </TextInput>
         </View>
