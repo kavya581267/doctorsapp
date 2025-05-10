@@ -22,23 +22,24 @@ import { clinicService } from '@api/clinicService';
 import { AuthContext } from '@context/AuthContext';
 import { MdLodSnackbar } from '@components/MdLogSnacbar';
 import { MdLogActivityIndicator } from '@components/MdLogActivityIndicator';
+import { DayOfWeek } from '@api/model/enums';
 
 
 const defaultSchedule = [
-    { day: 'MONDAY', open: true, openingTime: new Date(0, 0, 0, 10, 0), closingTime: new Date(0, 0, 0, 17, 0) },
-    { day: 'TUESDAT', open: true, openingTime: new Date(0, 0, 0, 10, 0), closingTime: new Date(0, 0, 0, 17, 0) },
-    { day: 'WEDNESDAY', open: true, openingTime: new Date(0, 0, 0, 10, 0), closingTime: new Date(0, 0, 0, 17, 0) },
-    { day: 'THURSDAY', open: true, openingTime: new Date(0, 0, 0, 10, 0), closingTime: new Date(0, 0, 0, 17, 0) },
-    { day: 'FRIDAY', open: true, openingTime: new Date(0, 0, 0, 10, 0), closingTime: new Date(0, 0, 0, 17, 0) },
-    { day: 'SATURDAY', open: false, openingTime: null, closingTime: null },
-    { day: 'SUNDAY', open: false, openingTime: null, closingTime: null },
+    { day: DayOfWeek.MONDAY, open: true, openingTime: new Date(0, 0, 0, 10, 0), closingTime: new Date(0, 0, 0, 17, 0) },
+    { day: DayOfWeek.TUESDAY, open: true, openingTime: new Date(0, 0, 0, 10, 0), closingTime: new Date(0, 0, 0, 17, 0) },
+    { day: DayOfWeek.WEDNESDAY, open: true, openingTime: new Date(0, 0, 0, 10, 0), closingTime: new Date(0, 0, 0, 17, 0) },
+    { day: DayOfWeek.THURSDAY, open: true, openingTime: new Date(0, 0, 0, 10, 0), closingTime: new Date(0, 0, 0, 17, 0) },
+    { day: DayOfWeek.FRIDAY, open: true, openingTime: new Date(0, 0, 0, 10, 0), closingTime: new Date(0, 0, 0, 17, 0) },
+    { day: DayOfWeek.SATURDAY, open: false, openingTime: null, closingTime: null },
+    { day: DayOfWeek.SUNDAY, open: false, openingTime: null, closingTime: null },
 ];
 
 const App = () => {
     const [schedule, setSchedule] = useState(defaultSchedule);
     const [modalVisible, setModalVisible] = useState(false);
     const [editIndex, setEditIndex] = useState(null);
-    const [selectedDay, setSelectedDay] = useState();
+    const [selectedDay, setSelectedDay] = useState<DayOfWeek>();
     const [openingTime, setOpeningTime] = useState(new Date());
     const [closingTime, setClosingTime] = useState(new Date());
     const [isClosed, setIsClosed] = useState(false);
@@ -63,6 +64,7 @@ const App = () => {
         time ? time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'N/A';
 
     const handleSave = async () => {
+        
         const updateClinicSchedule = new ClinicScheduleUpdate();
         updateClinicSchedule.dayOfWeek = selectedDay;
         updateClinicSchedule.openTime = isClosed ? null : formatTime(openingTime);
@@ -72,7 +74,7 @@ const App = () => {
         try {
             setLoading(true)
             console.log(JSON.stringify(updateClinicSchedule, null, 2));
-            const saved = await clinicService.updateClinicSchedule(loggedInUserContext.clinicDetails.id, updateClinicSchedule);
+            const saved = await clinicService.updateClinicSchedule(loggedInUserContext.clinicDetails.id,updateClinicSchedule);
             if (saved) {
                 const updated = [...schedule];
                 updated[editIndex] = {
