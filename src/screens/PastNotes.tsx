@@ -93,6 +93,8 @@ const PastNotes = () => {
             setMessage("Successfully moved note: "+note.noteId+" to Inprogress!!")
             loadNotes();
         }catch(error){
+            setVisible(true);
+            setMessage(error.toString())
         }
         setLoading(false)
     }
