@@ -10,6 +10,9 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { RootStackParamList } from '@components/MainNavigation';
 import { getAccessToken } from '@api/apiService';
+import { COLORS } from '@utils/colors';
+import { Button } from 'react-native-paper';
+import { MdLodSnackbar } from '@components/MdLogSnacbar';
 
 
 const PastNotes = () => {
@@ -26,6 +29,8 @@ const PastNotes = () => {
     const [showFromPicker, setShowFromPicker] = useState(false);
     const [showToPicker, setShowToPicker] = useState(false);
     const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+    const [visible, setVisible] = useState(false)
+    const [message, setMessage] = useState("Internal error!!")
 
     const loadPdf = (item: PastNotesResponse) => {
         const token = getAccessToken()
@@ -80,6 +85,17 @@ const PastNotes = () => {
     const openToDatePicker = () => {
         setShowToPicker(true);
     };
+    const moveToInProgress = async (note:PastNotesResponse) => {
+        try{
+            setLoading(true)
+            const resp = await patientService.moveNoteToInprogress(note.clinicId, note.patientId, note.noteId);
+            setVisible(true);
+            setMessage("Successfully moved note: "+note.noteId+" to Inprogress!!")
+            loadNotes();
+        }catch(error){
+        }
+        setLoading(false)
+    }
 
     return (
         <View style={styles.container}>
@@ -134,17 +150,33 @@ const PastNotes = () => {
                             </Text>
                         </View>
                         <View style={styles.row}>
-                            <Text style={styles.status}>{item.noteType}</Text>
+                            <Text style={{...styles.status, color:COLORS.red}}>{item.noteType}</Text>
                             <Text style={styles.status}>
                                 <Text style={{ color: "black" }}>Visit Date: </Text>
                                 {item.appointmentDate}
                             </Text>
+                        </View>
+                        <View style={{ ...styles.row, marginTop: 10 }}>
+                            <Text style={{...styles.status, color:COLORS.red}}>
+                                <Text style={{ color: "black" }}>Filed Date: </Text>
+                                {item.filedTimestamp}
+                            </Text>
+                            <TouchableOpacity style={{
+                                padding: 8,
+                                borderRadius: 8,
+                                marginBottom: 20,
+                                backgroundColor: COLORS.secondary,
+                            }} onPress={()=>moveToInProgress(item)}>
+                                <Text style={{ color: "white" }}>Move to Inprogress</Text>
+                            </TouchableOpacity>
                         </View>
                     </TouchableOpacity>
                 )}
             />
 
             <MdLogActivityIndicator loading={loading} />
+            <MdLodSnackbar visible={visible} message={message} onDismiss={()=>setVisible(false)} 
+            success={message.includes("Success")?true:false} />
         </View >
     );
 };
@@ -189,7 +221,7 @@ const styles = StyleSheet.create({
     status: {
         fontSize: 15,
         fontWeight: "400",
-        color: "green"
+        color: COLORS.primary
     },
     margin: {
         marginBottom: 10
@@ -202,7 +234,7 @@ const styles = StyleSheet.create({
         fontSize: 16,
         marginRight: 5
     },
-  
+
 
 
     dateContainer: {
@@ -214,30 +246,30 @@ const styles = StyleSheet.create({
         borderRadius: 2,
         marginVertical: 10,
         elevation: 2,
-      },
-      dateGroup: {
+    },
+    dateGroup: {
         flexDirection: 'column',
         flex: 1,
         marginHorizontal: 5,
-      },
-      dateLabel: {
+    },
+    dateLabel: {
         fontSize: 14,
         fontWeight: '500',
         marginBottom: 4,
-      },
-      dateInputBox: {
+    },
+    dateInputBox: {
         borderWidth: 1,
         borderColor: '#ccc',
         borderRadius: 6,
         paddingVertical: 8,
         paddingHorizontal: 10,
         backgroundColor: '#fff',
-      },
-      dateValue: {
+    },
+    dateValue: {
         fontSize: 15,
         color: '#333',
-      },
-      
+    },
+
 
 });
 
