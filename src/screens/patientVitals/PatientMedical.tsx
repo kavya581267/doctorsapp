@@ -52,12 +52,12 @@ export default function PatientMedical() {
     const vital: Record<string, string> = {
         'Height (cms)': '',
         'Weight (kgs)': '',
-        'Temperature': '',
-        'Blood Pressure Systolic': '',
-        'Blood Pressure Diastolic': '',
-        'Heart Rate': '',
-        'Respiratory Rate': '',
-        'Oxygen Saturation': '',
+        'Temperature (°F)': '',
+        'Blood Pressure Systolic (mmHg)': '',
+        'Blood Pressure Diastolic (mmHg)': '',
+        'Heart Rate (bpm)': '',
+        'Respiratory Rate (breaths/min)': '',
+        'Oxygen Saturation (%)': '',
     };
 
     const [vitalRecord, setVitalsRecord] = useState<Record<string, string>>(vital);
@@ -124,12 +124,12 @@ export default function PatientMedical() {
     const fields = [
         'Height (cms)',
         'Weight (kgs)',
-        'Temperature',
-        'Blood Pressure Systolic',
-        'Blood Pressure Diastolic',
-        'Heart Rate',
-        'Respiratory Rate',
-        'Oxygen Saturation',
+        'Temperature (°F)',
+        'Blood Pressure Systolic (mmHg)',
+        'Blood Pressure Diastolic (mmHg)',
+        'Heart Rate (bpm)',
+        'Respiratory Rate (breaths/min)',
+        'Oxygen Saturation (%)',
     ];
     const storeVitals = async (vital: Record<string, string>) => {
         try {
@@ -162,12 +162,12 @@ export default function PatientMedical() {
         const vital: Record<string, string> = {
             'Height (cms)': appointmetVital && appointmetVital?.height ? appointmetVital.height.toString() : "",
             'Weight (kgs)': appointmetVital && appointmetVital?.weight ? appointmetVital.weight.toString() : "",
-            'Temperature': appointmetVital && appointmetVital?.temperature ? appointmetVital.temperature.toString() : "",
-            'Blood Pressure Systolic': appointmetVital && appointmetVital?.blood_pressure_systolic ? appointmetVital.blood_pressure_systolic.toString() : "",
-            'Blood Pressure Diastolic': appointmetVital && appointmetVital?.blood_pressure_diastolic ? appointmetVital.blood_pressure_diastolic.toString() : "",
-            'Heart Rate': appointmetVital && appointmetVital?.heart_rate ? appointmetVital.heart_rate.toString() : "",
-            'Respiratory Rate': appointmetVital && appointmetVital?.respiratory_rate ? appointmetVital.respiratory_rate.toString() : "",
-            'Oxygen Saturation': appointmetVital && appointmetVital?.oxygen_saturation ? appointmetVital.oxygen_saturation.toString() : ""
+            'Temperature (°F)': appointmetVital && appointmetVital?.temperature ? appointmetVital.temperature.toString() : "",
+            'Blood Pressure Systolic (mmHg)': appointmetVital && appointmetVital?.blood_pressure_systolic ? appointmetVital.blood_pressure_systolic.toString() : "",
+            'Blood Pressure Diastolic (mmHg)': appointmetVital && appointmetVital?.blood_pressure_diastolic ? appointmetVital.blood_pressure_diastolic.toString() : "",
+            'Heart Rate (bpm)': appointmetVital && appointmetVital?.heart_rate ? appointmetVital.heart_rate.toString() : "",
+            'Respiratory Rate (breaths/min)': appointmetVital && appointmetVital?.respiratory_rate ? appointmetVital.respiratory_rate.toString() : "",
+            'Oxygen Saturation (%)': appointmetVital && appointmetVital?.oxygen_saturation ? appointmetVital.oxygen_saturation.toString() : ""
         };
         setVitalsRecord(vital)
     }
