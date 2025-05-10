@@ -5,13 +5,12 @@ import Back from '@components/Back';
 import { RootStackParamList } from '@components/MainNavigation';
 import { MdLogActivityIndicator } from '@components/MdLogActivityIndicator';
 import { AuthContext } from '@context/AuthContext';
-import { AuthProvider } from '@context/AuthProvider';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { COLORS } from '@utils/colors';
 import React, { useContext, useEffect, useState } from 'react';
 import { View, Text, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
-import { ActivityIndicator } from 'react-native-paper';
+
 
 const InProgressNotes = () => {
 

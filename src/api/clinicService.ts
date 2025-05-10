@@ -1,9 +1,10 @@
-import { DELETE_PATIENT_APPOINTMENT, GET_CLINIC_APPOINTMENTS, UPDATE_CLINIC_PATH } from "@utils/constants";
+import { DELETE_PATIENT_APPOINTMENT, GET_CLINIC_APPOINTMENTS, UPDATE_CLINIC_PATH, UPDATE_CLINIC_SCHEDULE_PATH } from "@utils/constants";
 import { apiService } from "./apiService";
 import { AppointmentListResponse } from "./model/appointments/AppointmentListResponse";
 import { AdminRegistarationRequest, AdminRegistrationResponse } from "./model/auth/Auth";
 import { replacePlaceholders } from "@utils/utils";
 import { ClinicUpdateResponse } from "./model/clinic/ClinicRequest";
+import { ClinicScheduleUpdate } from "./model/clinic/ClinicSchedule";
 
 
 
@@ -40,8 +41,13 @@ export const clinicService = {
     createClinicSchedule: () => {
 
     },
-    updateClinicSchedule: () => {
-
+    updateClinicSchedule:async (clinicId: number,clinicSchedule:ClinicScheduleUpdate): Promise<ClinicScheduleUpdate> => {
+        try {
+            const response = await apiService.put(replacePlaceholders(UPDATE_CLINIC_SCHEDULE_PATH,{clinicId}) , clinicSchedule);
+            return response;
+        } catch (error) {
+            throw error;
+        }
     },
     deleteClinicSchedule: () => {
 

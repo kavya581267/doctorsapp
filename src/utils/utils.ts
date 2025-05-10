@@ -64,6 +64,13 @@ export function formatToYYYYMMDD(date: Date) {
   const day = `${date.getDate()}`.padStart(2, '0');
   return `${year}-${month}-${day}`;
 }
+export function formatToYYYYMMDDSlash(date: Date) {
+  date = new Date(date);
+  const year = date.getFullYear();
+  const month = `${date.getMonth() + 1}`.padStart(2, '0'); // Months are 0-indexed
+  const day = `${date.getDate()}`.padStart(2, '0');
+  return `${day}/${month}/${year}`;
+}
 
 export function convertTo12Hour(time24: string) {
   const [hour, minute, second] = time24.split(':');
