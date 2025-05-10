@@ -16,4 +16,18 @@ export class ClinicRequest {
     alternatePhone?: string;
 
   }
+
+  export class ClinicUpdateResponse {
+    clinicName: string;
+    clinicLicense: string;
+    taxId: string;
+    address: string;
+    city: string;
+    state: string;
+    zipCode: string;
+    country: string;
+    phone: string;
+    email: string;
+    alternatePhone:string
+  }
   

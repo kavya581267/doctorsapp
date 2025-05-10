@@ -45,7 +45,7 @@ export default function PatientMedical() {
     const [error, setErrorMessage] = useState("Failed to load!!")
     const [showError, setShowError] = useState(false);
     const [patientMedications, setPatientMedication] = useState<PatientMedication[]>([])
-    const [hasAppointments, setHasAppointments] = useState(false);
+    const [hasAppointments, setHasAppointments] = useState(false || (patient && patient.hasAppointment));
     const [initialNote, setInitialNote] = useState(true)
 
 
@@ -89,8 +89,6 @@ export default function PatientMedical() {
             day: '2-digit',
             month: 'short',
             year: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit',
             hour12: true,
         });
     };
@@ -310,7 +308,7 @@ export default function PatientMedical() {
                                             <Text style={{ fontWeight: 'bold', fontSize: 16, marginBottom: 8 }}>{testName}</Text>
                                             {results.map((item, index) => (
                                                 <View key={item.id || index} style={{ marginBottom: 10, paddingLeft: 10 }}>
-                                                    <Text style={{ fontSize: 14 }}>{`${item.observation}: ${item.value}${item.units}`}</Text>
+                                                    <Text style={{ fontSize: 14 }}>{`${item.observation}: ${item.value}${item.units?item.units:""}`}</Text>
                                                     <View style={{ paddingLeft: 10, marginTop: 2 }}>
                                                         <Text style={{ fontSize: 12, color: 'gray' }}>{`Recorded on: ${formatDate(item.recorded_at)}`}</Text>
                                                     
@@ -335,13 +333,13 @@ export default function PatientMedical() {
                 <CustomModal values={vitalRecord} title="💓 Add Vitals" fields={fields} visible={visiblemodal} onCancel={() => setShowModal(false)} onSave={storeVitals} />
             </ScrollView>
             {
-                !patient && hasAppointments && user.roles && user.roles.find((role) => role === Role.DOCTOR) &&
+                 hasAppointments && user.roles && user.roles.find((role) => role === Role.DOCTOR) &&
                 <TouchableOpacity style={{
                     backgroundColor: COLORS.primary,
                     paddingVertical: 14,
                     borderRadius: 12,
                     alignItems: 'center'
-                }} onPress={() => navigation.navigate("InitialNote", { appointment: appointment, facesheet: faceSheetData, appointmetVital: appointmetVital })}>
+                }} onPress={() => navigation.navigate("InitialNote", { appointment: appointment, facesheet: faceSheetData, appointmetVital: appointmetVital,patient:patient })}>
                     <Text style={{
                         color: '#fff',
                         fontSize: 16,

@@ -1,4 +1,4 @@
-import { CREATE_DOCTO_APPOINTMENT, CREATE_INITIAL_NOTE, CREATE_PATIENT_VITALS, DOCTOR_INPROGRESS_NOTES, FILE_NOTE, GET_CLINIC_PATIENTS_PATH, GET_CLINIC_STAFF_PATH, GET_FACT_SHEET, PAST_NOTES, SAVE_LAB_ORDERS, SAVE_LAB_RESULTS, SAVE_PATIENT_MEDICATION, UPDATE_APPOINTMENT, UPDATE_INITIAL_NOTE, UPDATE_PATIENT_MEDICATION } from "@utils/constants";
+import { CREATE_DOCTO_APPOINTMENT, CREATE_INITIAL_NOTE, CREATE_PATIENT_VITALS, DOCTOR_INPROGRESS_NOTES, FILE_NOTE, GET_CLINIC_PATIENTS_PATH, GET_CLINIC_STAFF_PATH, GET_FACT_SHEET, MOVE_TO_IN_PROGRESS, PAST_NOTES, SAVE_LAB_ORDERS, SAVE_LAB_RESULTS, SAVE_PATIENT_MEDICATION, UPDATE_APPOINTMENT, UPDATE_INITIAL_NOTE, UPDATE_PATIENT_MEDICATION } from "@utils/constants";
 import { apiService } from "./apiService";
 import { AdminRegistarationRequest, AdminRegistrationResponse } from "./model/auth/Auth";
 import { ClinicResponse } from "./model/clinic/ClinicResponse";
@@ -45,18 +45,18 @@ export const patientService = {
 
     },
 
-    updateAppointment: async (appointment: AppointmentUpdateRequest,patientId: string,appointmentId: string): Promise<AppointmentResponse>=>{
-      try{
-        const resp = await apiService.put(replacePlaceholders(UPDATE_APPOINTMENT,{"patient_id": patientId, "appointment_id":appointmentId}),appointment)
-        return resp.data;
-      }catch(error){
-        throw error;
-      }
+    updateAppointment: async (appointment: AppointmentUpdateRequest, patientId: string, appointmentId: string): Promise<AppointmentResponse> => {
+        try {
+            const resp = await apiService.put(replacePlaceholders(UPDATE_APPOINTMENT, { "patient_id": patientId, "appointment_id": appointmentId }), appointment)
+            return resp.data;
+        } catch (error) {
+            throw error;
+        }
     },
 
     getPatientVitals: async (patientId: string): Promise<VitalsResponse[]> => {
         try {
-            const resp = await apiService.get(replacePlaceholders(CREATE_PATIENT_VITALS, { "patient_id": patientId }),"")
+            const resp = await apiService.get(replacePlaceholders(CREATE_PATIENT_VITALS, { "patient_id": patientId }), "")
             return resp.data;
         } catch (error) {
             throw error
@@ -74,7 +74,7 @@ export const patientService = {
 
     fetchFactSheet: async (patientId: string): Promise<FaceSheet> => {
         try {
-            const resp = await apiService.get(replacePlaceholders(GET_FACT_SHEET, { "patient_id": patientId }),"")
+            const resp = await apiService.get(replacePlaceholders(GET_FACT_SHEET, { "patient_id": patientId }), "")
             return resp.data;
         } catch (error) {
             throw error
@@ -82,79 +82,94 @@ export const patientService = {
     },
     createInitialNote: async (patientId: string, body: CreateInitialNoteRequest): Promise<CreateInitialNoteResponse> => {
         try {
-            const resp = await apiService.post(replacePlaceholders(CREATE_INITIAL_NOTE, { "patient_id": patientId }),body)
+            const resp = await apiService.post(replacePlaceholders(CREATE_INITIAL_NOTE, { "patient_id": patientId }), body)
             return resp.data;
         } catch (error) {
             throw error
         }
     },
 
-    updateInitialNote: async (patientId: string,noteId:number, body: UpdateNoteRequest): Promise<CreateInitialNoteResponse> => {
+    updateInitialNote: async (patientId: string, noteId: number, body: UpdateNoteRequest): Promise<CreateInitialNoteResponse> => {
         try {
-            const resp = await apiService.put(replacePlaceholders(UPDATE_INITIAL_NOTE, { "patient_id": patientId, "note_id":noteId }),body)
+            const resp = await apiService.put(replacePlaceholders(UPDATE_INITIAL_NOTE, { "patient_id": patientId, "note_id": noteId }), body)
             return resp.data;
         } catch (error) {
             throw error
         }
     },
-    fileInitialNote: async (patientId: string,noteId:number, body: FileNoteRequest): Promise<CreateInitialNoteResponse> => {
+    fileInitialNote: async (patientId: string, noteId: number, body: FileNoteRequest): Promise<CreateInitialNoteResponse> => {
         try {
-            const resp = await apiService.put(replacePlaceholders(FILE_NOTE, { "patient_id": patientId, "note_id":noteId }),body)
+            const resp = await apiService.put(replacePlaceholders(FILE_NOTE, { "patient_id": patientId, "note_id": noteId }), body)
             return resp.data;
         } catch (error) {
             throw error
         }
     },
-    getDoctorInprogressNotes: async (clinicId:number):Promise<ListNoteResponse[]> => {
+    getDoctorInprogressNotes: async (clinicId: number): Promise<ListNoteResponse[]> => {
         try {
-            const resp = await apiService.get(DOCTOR_INPROGRESS_NOTES, {clinicId: clinicId, filed:false})
+            const resp = await apiService.get(DOCTOR_INPROGRESS_NOTES, { clinicId: clinicId, filed: false })
             return resp.data;
         } catch (error) {
             throw error
         }
     },
-    getDoctorPastNotes: async (clinicId:number, fromDate:string, toDate:string):Promise<PastNotesResponse[]>=>{
+    getDoctorPastNotes: async (clinicId: number, fromDate: string, toDate: string): Promise<PastNotesResponse[]> => {
         const queryParam = {
             fromDate: fromDate,
             toDate: toDate,
             clinicId: clinicId,
             filed: true
         }
-        let url = replacePlaceholders(PAST_NOTES,{clinicId:clinicId, filed: true});
-        try{
-            const resp = await apiService.get(PAST_NOTES,queryParam);
-            return resp.data;
-        }catch(error){
-            throw error
-        }
-    },
-    createPatientMedication: async (patientId: string, patientMedication:CreatePatientMedication):Promise<PatientMedicationResponse> => {
+        let url = replacePlaceholders(PAST_NOTES, { clinicId: clinicId, filed: true });
         try {
-            const resp = await apiService.post(replacePlaceholders(SAVE_PATIENT_MEDICATION, {id: patientId}),patientMedication);
+            const resp = await apiService.get(PAST_NOTES, queryParam);
             return resp.data;
         } catch (error) {
             throw error
         }
     },
-    updatePatientMedication: async (patientId: string,medicationId:string,  patientMedication:UpdatePatientMedication):Promise<PatientMedicationResponse> => {
+
+    moveNoteToInprogress: async (clinicId: number, patientId: number, noteId: number): Promise<any> => {
+        const body = {
+            clinicId: clinicId,
+            patientId: patientId,
+            noteId: noteId
+        }
         try {
-            const resp = await apiService.put(replacePlaceholders(UPDATE_PATIENT_MEDICATION, {id: patientId, medicationId: medicationId}),patientMedication);
+            const resp = await apiService.put(MOVE_TO_IN_PROGRESS, body);
             return resp.data;
         } catch (error) {
             throw error
         }
     },
-    savePatientlabOrders: async (patientId: string, order:LabOrderRequest):Promise<LabTestOrderResp> => {
+
+    createPatientMedication: async (patientId: string, patientMedication: CreatePatientMedication): Promise<PatientMedicationResponse> => {
         try {
-            const resp = await apiService.post(replacePlaceholders(SAVE_LAB_ORDERS, {patient_id: patientId}),order);
+            const resp = await apiService.post(replacePlaceholders(SAVE_PATIENT_MEDICATION, { id: patientId }), patientMedication);
             return resp.data;
         } catch (error) {
             throw error
         }
     },
-    savePatientlabResults: async (patientId: string,  labResults:LabResultsPayload):Promise<any> => {
+    updatePatientMedication: async (patientId: string, medicationId: string, patientMedication: UpdatePatientMedication): Promise<PatientMedicationResponse> => {
         try {
-            const resp = await apiService.post(replacePlaceholders(SAVE_LAB_RESULTS, {patient_id: patientId}),labResults);
+            const resp = await apiService.put(replacePlaceholders(UPDATE_PATIENT_MEDICATION, { id: patientId, medicationId: medicationId }), patientMedication);
+            return resp.data;
+        } catch (error) {
+            throw error
+        }
+    },
+    savePatientlabOrders: async (patientId: string, order: LabOrderRequest): Promise<LabTestOrderResp> => {
+        try {
+            const resp = await apiService.post(replacePlaceholders(SAVE_LAB_ORDERS, { patient_id: patientId }), order);
+            return resp.data;
+        } catch (error) {
+            throw error
+        }
+    },
+    savePatientlabResults: async (patientId: string, labResults: LabResultsPayload): Promise<any> => {
+        try {
+            const resp = await apiService.post(replacePlaceholders(SAVE_LAB_RESULTS, { patient_id: patientId }), labResults);
             return resp.data;
         } catch (error) {
             throw error

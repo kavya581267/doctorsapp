@@ -125,6 +125,7 @@ export const FILE_NOTE = "/patients/{{patient_id}}/notes/{{note_id}}/file"
 export const DOCTOR_INPROGRESS_NOTES = "/doctors/notes"
 export const PAST_NOTES = "/doctors/notes"
 export const GET_PATIENT_NOTE_BY_NOTE_ID ="/patients/{{patient_id}}/notes/{{noteId}}"
+export const MOVE_TO_IN_PROGRESS = "/doctors/notes/moveToInprogress"
 
 //save Patient medication 
 export const SAVE_PATIENT_MEDICATION = "/patients/{{id}}/medications"

@@ -35,7 +35,7 @@ type RouteParams = {
 
 
 const InitialNoteScreen = () => {
-    const { masterData, setMasterDataAdapter } = useContext(AuthContext);
+    const { masterData, setMasterDataAdapter, loggedInUserContext } = useContext(AuthContext);
     const route = useRoute<RouteProp<RouteParams>>()
     const { facesheet, appointment, patient } = route.params;
     const [loading, setLoading] = useState(false);
@@ -63,6 +63,7 @@ const InitialNoteScreen = () => {
 
     const [shoeError, setShowError] = useState(false)
     const [error, setError] = useState("");
+
 
 
     const createPresentingComplaint = async (reqObj: InitialCommonNoteRequest) => {
@@ -103,8 +104,8 @@ const InitialNoteScreen = () => {
         try {
             patientMedication.clinicId = facesheet.patient.clinicId.toString();
             patientMedication.medicationId = medicationId;
-            patientMedication.appointmentId = appointment.id.toString();
-            const resp = await patientService.createPatientMedication(appointment.patientId.toString(), patientMedication);
+            patientMedication.appointmentId = appointment ? appointment.id.toString(): null;
+            const resp = await patientService.createPatientMedication(patient ? patient.id.toString() :appointment.patientId.toString(), patientMedication);
             setLoading(false)
             return convertPatientMedicationResponseToPatientMedication(resp);
         } catch (error) {
@@ -172,6 +173,7 @@ const InitialNoteScreen = () => {
             setLoading(false)
             return resp;
         } catch (error) {
+
             setErrorMessage(error.toString());
             setVisible(true)
         }
@@ -180,9 +182,9 @@ const InitialNoteScreen = () => {
 
     async function fetchInitialNote() {
         const reqBody = new CreateInitialNoteRequest();
-        reqBody.appointmentId = appointment.id;
-        reqBody.clinicId = appointment.clinicId;
-        reqBody.doctorId = appointment.doctorId;
+        reqBody.appointmentId = appointment? appointment.id: null;
+        reqBody.clinicId = patient? patient.clinicId: appointment.clinicId;
+        reqBody.doctorId = loggedInUserContext.userDetails.id || appointment.doctorId;
         reqBody.noteType = facesheet.newAppointment ? "INITIAL" : "FOLLOW_UP"
         try {
             setLoading(true)
@@ -214,11 +216,11 @@ const InitialNoteScreen = () => {
     const getVitals = (vital: Vital) => {
         if (vital) {
             const newVital = new VitalsRequest();
-            newVital.appointmentId = appointment.id;
+            newVital.appointmentId = appointment ? appointment.id: null;
             newVital.bloodPressureDiastolic = vital.blood_pressure_diastolic;
             newVital.bloodPressureSystolic = vital.blood_pressure_systolic;
             newVital.bmi = vital.bmi;
-            newVital.clinicId = appointment.clinicId;
+            newVital.clinicId = patient ? patient.clinicId : appointment.clinicId;
             newVital.heartRate = vital.heart_rate;
             newVital.height = vital.height;
             newVital.oxygenSaturation = vital.oxygen_saturation;
@@ -305,9 +307,9 @@ const InitialNoteScreen = () => {
     return (
         <>
             <View style={styles.container}>
-                <Back nav='Mainscreen' tab='Appointments' />
+                <Back nav='PatientMedical' routeParam={{appointment:appointment, patient:patient}}/>
                 <View style={styles.header}>
-                    <Text style={styles.headerTitle}>Initial Note</Text>
+                    <Text style={styles.headerTitle}>{facesheet.patient?.filedNoteCount > 0 ? "Followup Note" : "Initial Note"}:{new Date().toISOString()}</Text>
                     <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
                         <TouchableOpacity style={{ ...styles.submitButton, backgroundColor: COLORS.secondary, marginRight: 20 }}
                             onPress={() => setfileNoteModel(true)}>
@@ -332,7 +334,7 @@ const InitialNoteScreen = () => {
                         <PresentingComplaints noteSectionString={presentingComplaints} setNoteSectionString={setPresntingComplaints} setLoading={setLoading} title="Presenting Complaints"
                             addNewItemCommon={createPresentingComplaint} itemList={masterData.presentingComplaints} placeHolder='Select complaints' />
                         <Medications setPatientMedications={setPatientMedication} patientMedications={patientMedications} setLoading={setLoading} title='Medications' addNewItemCommon={createMedication}
-                            createPatientMedication={createPatientMedication} itemList={masterData.medications} patientId={appointment.patientId.toString()} />
+                            createPatientMedication={createPatientMedication} itemList={masterData.medications} patientId={patient ? patient.id.toString() : appointment.patientId.toString()} />
 
                         <Note prevVal={personalHistory} setNoteSectionString={setPersonalHistory} title="Personal History" />
                         <PasMedHistory noteSectionString={pastMedicalHistory} setNoteSectionString={setPastMedicalHistory} setLoading={setLoading} title="Past Medical History"
