@@ -13,6 +13,9 @@ import { getAccessToken } from '@api/apiService';
 import { COLORS } from '@utils/colors';
 import { Button } from 'react-native-paper';
 import { MdLodSnackbar } from '@components/MdLogSnacbar';
+import FabMenuScreen from './patientVitals/FAB';
+import { MaterialIcons } from '@expo/vector-icons';
+import { Role } from '@api/model/enums';
 
 
 const PastNotes = () => {
@@ -78,6 +81,23 @@ const PastNotes = () => {
             setToDate(selectedDate);
         }
     };
+    const fabPress = (screen: string) => {
+        const fromDate = new Date();
+        const toDate = new Date();
+
+        if (screen === "seven") {
+            fromDate.setDate(new Date().getDate() - 7)
+            toDate.setDate(new Date().getDate())
+            setFromDate(fromDate)
+            setToDate(toDate)
+        }
+        if (screen === "fourteen") {
+            fromDate.setDate(new Date().getDate() - 14)
+            toDate.setDate(new Date().getDate())
+            setFromDate(fromDate)
+            setToDate(toDate)
+        }
+    }
 
     const openFromDatePicker = () => {
         setShowFromPicker(true);
@@ -181,11 +201,45 @@ const PastNotes = () => {
             />
 
             <MdLogActivityIndicator loading={loading} />
+            <FabMenuScreen action={actions} onPress={fabPress} />
             <MdLodSnackbar visible={visible} message={message} onDismiss={() => setVisible(false)}
                 success={message.includes("Success") ? true : false} />
         </View >
     );
 };
+const actions = [
+    
+    {
+        text: "Past Seven days",
+        icon: <MaterialIcons name="science" size={20} color="#fff" />,
+        name: "seven",
+        position: 3,
+        textColor: COLORS.white,
+        textBackground: COLORS.secondary,
+        role: [Role.DOCTOR]
+    },
+    {
+        text: "Past 14 days",
+        icon: <MaterialIcons name="monitor-heart" size={20} color="#fff" />,
+        name: "fourteen",
+        position: 4,
+        textColor: COLORS.white,
+        textBackground: COLORS.secondary,
+        role: [Role.DOCTOR, Role.FRONT_OFFICE, Role.NURSE]
+    },
+    {
+        text: "Cancel",
+        icon: <MaterialIcons name="cancel" size={20} color="#fff" />,
+        name: "cancel",
+        position: 6,
+        color: "#f44336",
+        textColor: COLORS.white,
+        textBackground: COLORS.red,
+        role: [Role.DOCTOR, Role.FRONT_OFFICE, Role.NURSE, Role.ADMIN]
+    }
+];
+
+
 
 const styles = StyleSheet.create({
     container: {
