@@ -201,29 +201,21 @@ const App = () => {
                             <Text style={styles.timeBox}>{selectedDay}</Text>
                         ) : (
                             <>
-                                <TouchableOpacity
-                                    onPress={() => setDayDropdownVisible(!dayDropdownVisible)}
+                                <View style={styles.dropDownContainer}>
+                                    <Dropdown
+                                        data={days}
+                                        labelField="label"
+                                        valueField="value"
+                                        placeholder="Select day"
+                                        value={selectedDay}
+                                        onChange={(item) => setSelectedDay(item.value)}
 
-                                >
+                                        style={styles.dropdown}
+                                        placeholderStyle={styles.placeholder}
+                                        selectedTextStyle={styles.selectedText}
 
-                                </TouchableOpacity>
-                                {dayDropdownVisible && (
-                                    <View style={styles.dropDownContainer}>
-                                        <Dropdown
-                                            data={days}
-                                            labelField="label"
-                                            valueField="value"
-                                            placeholder="Select day"
-                                            value={selectedDay}
-                                            onChange={(item) => setSelectedDay(item.value)}
-
-                                            style={styles.dropdown}
-                                            placeholderStyle={styles.placeholder}
-                                            selectedTextStyle={styles.selectedText}
-
-                                        />
-                                    </View>
-                                )}
+                                    />
+                                </View>
                             </>
                         )}
 
@@ -357,6 +349,11 @@ const styles = StyleSheet.create({
         marginRight: 18,
         marginLeft: 5
     },
+    dropdownButtonText: {
+        fontSize: 16,
+        color: '#333',
+    },
+
 
 
     dropdownBox: {
