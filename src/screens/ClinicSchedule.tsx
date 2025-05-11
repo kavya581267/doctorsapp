@@ -23,6 +23,7 @@ import { AuthContext } from '@context/AuthContext';
 import { MdLodSnackbar } from '@components/MdLogSnacbar';
 import { MdLogActivityIndicator } from '@components/MdLogActivityIndicator';
 import { DayOfWeek } from '@api/model/enums';
+import { Dropdown } from 'react-native-element-dropdown';
 
 
 const defaultSchedule = [
@@ -34,6 +35,15 @@ const defaultSchedule = [
     { day: DayOfWeek.SATURDAY, open: false, openingTime: null, closingTime: null },
     { day: DayOfWeek.SUNDAY, open: false, openingTime: null, closingTime: null },
 ];
+const days = [
+    { label: "MONDAY", value: DayOfWeek.MONDAY },
+    { label: "TUESDAY", value: DayOfWeek.TUESDAY },
+    { label: "WEDNESDAY", value: DayOfWeek.WEDNESDAY },
+    { label: "THURSDAY", value: DayOfWeek.THURSDAY },
+    { label: "FRIDAY", value: DayOfWeek.FRIDAY },
+    { label: "SATURDAY", value: DayOfWeek.SATURDAY },
+    { label: "SUNDAY", value: DayOfWeek.SUNDAY }
+]
 
 const App = () => {
     const [schedule, setSchedule] = useState(defaultSchedule);
@@ -50,6 +60,9 @@ const App = () => {
     const onDismissSnackBar = () => setVisible(false);
     const [errorMessage, setErrorMessage] = useState("");
     const [loading, setLoading] = useState(false);
+    const [isEditModal, setIsEditModal] = useState(false);
+    const [dayDropdownVisible, setDayDropdownVisible] = useState(false);
+
 
     const openEditModal = (item, index) => {
         setEditIndex(index);
@@ -57,14 +70,24 @@ const App = () => {
         setOpeningTime(item.openingTime || new Date());
         setClosingTime(item.closingTime || new Date());
         setIsClosed(!item.open);
+        setIsEditModal(true);
         setModalVisible(true);
     };
+    const openAddModal = () => {
+        setEditIndex(null);
+        setSelectedDay(undefined);
+        setOpeningTime(new Date(0, 0, 0, 10, 0));
+        setClosingTime(new Date(0, 0, 0, 17, 0));
+        setIsClosed(false);
+        setIsEditModal(false);
+        setModalVisible(true);
+    }
 
     const formatTime = (time) =>
         time ? time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'N/A';
 
     const handleSave = async () => {
-        
+
         const updateClinicSchedule = new ClinicScheduleUpdate();
         updateClinicSchedule.dayOfWeek = selectedDay;
         updateClinicSchedule.openTime = isClosed ? null : formatTime(openingTime);
@@ -73,7 +96,7 @@ const App = () => {
 
         try {
             setLoading(true)
-            const saved = await clinicService.updateClinicSchedule(loggedInUserContext.clinicDetails.id,updateClinicSchedule);
+            const saved = await clinicService.updateClinicSchedule(loggedInUserContext.clinicDetails.id, updateClinicSchedule);
             if (saved) {
                 const updated = [...schedule];
                 updated[editIndex] = {
@@ -86,27 +109,27 @@ const App = () => {
                 setModalVisible(false)
             }
         } catch (error) {
-           // if first time create
-           setErrorMessage(error);
-           setVisible(true);
+            // if first time create
+            setErrorMessage(error);
+            setVisible(true);
         }
         setModalVisible(false)
         setLoading(false);
     };
 
     const loadSchedule = async () => {
-        try{
-            const resp =  await clinicService.getClinicSchedule(loggedInUserContext.clinicDetails.id);
-            console.log(resp)
-        }catch(error){
+        try {
+            const resp = await clinicService.getClinicSchedule(loggedInUserContext.clinicDetails.id);
+
+        } catch (error) {
 
         }
-        
+
     }
 
-    useEffect(()=>{
+    useEffect(() => {
         loadSchedule()
-    },[])
+    }, [])
 
 
 
@@ -149,9 +172,15 @@ const App = () => {
             <Back nav='Mainscreen' />
             <View style={{ flexDirection: "row" }}>
                 <Text style={styles.header}>Clinic Schedule</Text>
-                <TouchableOpacity onPress={() => setEditMode(!editMode)}>
-                    <Icon name="edit-note" size={30} color="#007bff" />
-                </TouchableOpacity>
+                <View style={{ flexDirection: "row", alignItems: "center" }}>
+                    <TouchableOpacity onPress={() => setEditMode(!editMode)}>
+                        <Icon name="edit-note" size={30} color="#007bff" />
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => openAddModal()}>
+                        <Text style={{ marginLeft: 15, fontSize: 16, fontWeight: "500" }}>Add</Text>
+                    </TouchableOpacity>
+                </View>
+
             </View>
 
             <FlatList
@@ -160,22 +189,48 @@ const App = () => {
                 renderItem={renderItem}
             />
 
+
             {/* Modal */}
             <Modal visible={modalVisible} animationType="slide" transparent>
                 <View style={styles.modalOverlay}>
                     <View style={styles.modal}>
-                        <Text style={styles.modalTitle}>Edit Schedule</Text>
+                        <Text style={styles.modalTitle}>{isEditModal ? 'Edit Schedule' : 'Add Schedule'}</Text>
 
                         <Text style={styles.label}>Day</Text>
-                        <View >
+                        {isEditModal ? (
                             <Text style={styles.timeBox}>{selectedDay}</Text>
-                        </View>
+                        ) : (
+                            <>
+                                <TouchableOpacity
+                                    onPress={() => setDayDropdownVisible(!dayDropdownVisible)}
+
+                                >
+
+                                </TouchableOpacity>
+                                {dayDropdownVisible && (
+                                    <View style={styles.dropDownContainer}>
+                                        <Dropdown
+                                            data={days}
+                                            labelField="label"
+                                            valueField="value"
+                                            placeholder="Select day"
+                                            value={selectedDay}
+                                            onChange={(item) => setSelectedDay(item.value)}
+
+                                            style={styles.dropdown}
+                                            placeholderStyle={styles.placeholder}
+                                            selectedTextStyle={styles.selectedText}
+
+                                        />
+                                    </View>
+                                )}
+                            </>
+                        )}
 
                         <Text style={styles.label}>Opening Time</Text>
                         <MdLogTimePicker value={openingTime} onChange={setOpeningTime} disabled={isClosed} />
 
                         <Text style={styles.label}>Closing Time</Text>
-
                         <MdLogTimePicker value={closingTime} onChange={setClosingTime} disabled={isClosed} />
 
                         <View style={styles.switchRow}>
@@ -193,8 +248,8 @@ const App = () => {
                     </View>
                 </View>
             </Modal>
-            <MdLogActivityIndicator loading={loading}/>
-            <MdLodSnackbar visible={visible} onDismiss={onDismissSnackBar} message={errorMessage}/>
+            <MdLogActivityIndicator loading={loading} />
+            <MdLodSnackbar visible={visible} onDismiss={onDismissSnackBar} message={errorMessage} />
         </View>
     );
 };
@@ -203,7 +258,7 @@ export default App;
 
 const styles = StyleSheet.create({
     container: { flex: 1, padding: 15, backgroundColor: COLORS.white },
-    header: { flex: 1, fontSize: 18, fontWeight: '600', marginBottom: 10, textAlign: "center" },
+    header: { flex: 1, fontSize: 18, fontWeight: '600', marginBottom: 10 },
     itemCard: {
         backgroundColor: COLORS.cardGrey,
         padding: 16,
@@ -275,4 +330,58 @@ const styles = StyleSheet.create({
         color: '#888',
         marginTop: 10,
     },
+
+    dropDownContainer: {
+        marginTop: 5,
+    },
+    dropdown: {
+        height: 40,
+        borderWidth: 1,
+        borderColor: "#ccc",
+        borderRadius: 5,
+        paddingHorizontal: 10,
+        backgroundColor: "#F3F4F6FF",
+        fontSize: 14,
+        fontWeight: "400"
+    },
+    placeholder: {
+        fontSize: 14,
+        fontWeight: "400",
+
+    },
+    selectedText: {
+        fontSize: 12,
+        fontWeight: "400"
+    },
+    icon: {
+        marginRight: 18,
+        marginLeft: 5
+    },
+
+
+    dropdownBox: {
+        borderWidth: 1,
+        borderColor: '#ccc',
+        borderRadius: 5,
+        padding: 10,
+        backgroundColor: '#f9f9f9'
+    },
+    dropdownList: {
+        borderWidth: 1,
+        borderColor: '#ccc',
+        borderRadius: 5,
+        backgroundColor: '#fff',
+        marginTop: 5
+    },
+    dropdownItem: {
+        padding: 10,
+        borderBottomWidth: 1,
+        borderBottomColor: '#eee'
+    },
+    selectedItem: {
+        backgroundColor: '#e6f7ff'
+    },
+    dropdownText: {
+        fontSize: 16
+    }
 });
