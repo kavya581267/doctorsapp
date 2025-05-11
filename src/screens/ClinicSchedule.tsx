@@ -87,35 +87,79 @@ const App = () => {
         time ? time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'N/A';
 
     const handleSave = async () => {
-
+        if (!selectedDay) {
+            Alert.alert('Please select a day');
+            return;
+        }
+    
         const updateClinicSchedule = new ClinicScheduleUpdate();
         updateClinicSchedule.dayOfWeek = selectedDay;
         updateClinicSchedule.openTime = isClosed ? null : formatTime(openingTime);
         updateClinicSchedule.closeTime = isClosed ? null : formatTime(closingTime);
         updateClinicSchedule.isClosed = isClosed;
-
+    
+        const dayOrder = {
+            MONDAY: 1,
+            TUESDAY: 2,
+            WEDNESDAY: 3,
+            THURSDAY: 4,
+            FRIDAY: 5,
+            SATURDAY: 6,
+            SUNDAY: 7,
+        };
+    
         try {
-            setLoading(true)
-            const saved = await clinicService.updateClinicSchedule(loggedInUserContext.clinicDetails.id, updateClinicSchedule);
+            setLoading(true);
+            let saved;
+    
+            if (editIndex !== null) {
+                saved = await clinicService.updateClinicSchedule(
+                    loggedInUserContext.clinicDetails.id,
+                    updateClinicSchedule
+                );
+            } else {
+                const exists = schedule.find((s) => s.day === selectedDay);
+                if (exists) {
+                    Alert.alert('Day already exists in the schedule.');
+                    setLoading(false);
+                    return;
+                }
+    
+                saved = await clinicService.createClinicSchedule(
+                    loggedInUserContext.clinicDetails.id,
+                    updateClinicSchedule
+                );
+            }
+    
             if (saved) {
+                console.log("saved")
                 const updated = [...schedule];
-                updated[editIndex] = {
+    
+                const newScheduleItem = {
                     day: selectedDay,
                     open: !isClosed,
                     openingTime: isClosed ? null : openingTime,
                     closingTime: isClosed ? null : closingTime,
                 };
-                setSchedule(updated);
-                setModalVisible(false)
+    
+                if (editIndex !== null) {
+                    updated[editIndex] = newScheduleItem;
+                } else {
+                    updated.push(newScheduleItem);
+                }
+    
+                const sorted = updated.sort((a, b) => dayOrder[a.day] - dayOrder[b.day]);
+                setSchedule(sorted);
+                setModalVisible(false);
             }
         } catch (error) {
-            // if first time create
-            setErrorMessage(error);
+            setErrorMessage(error?.message || 'Error saving schedule');
             setVisible(true);
+        } finally {
+            setLoading(false);
         }
-        setModalVisible(false)
-        setLoading(false);
     };
+    
 
     const loadSchedule = async () => {
         try {
