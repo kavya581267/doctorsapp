@@ -231,7 +231,7 @@ const App = () => {
                         </View>
 
                         <TouchableOpacity onPress={handleSave} style={styles.saveButton}>
-                            <Text style={styles.saveText}>Save Changes</Text>
+                            <Text style={styles.saveText}>{isEditModal ? 'Save Schedule' : 'Add Schedule'}</Text>
                         </TouchableOpacity>
 
                         <TouchableOpacity onPress={() => setModalVisible(false)}>
