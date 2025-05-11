@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import {
 
     View,
@@ -17,27 +17,39 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import Back from '@components/Back';
 import { COLORS } from '@utils/colors';
 import { MdLogTimePicker } from '@components/MdLogTimePicker';
+import { ClinicScheduleUpdate } from '@api/model/clinic/ClinicSchedule';
+import { clinicService } from '@api/clinicService';
+import { AuthContext } from '@context/AuthContext';
+import { MdLodSnackbar } from '@components/MdLogSnacbar';
+import { MdLogActivityIndicator } from '@components/MdLogActivityIndicator';
+import { DayOfWeek } from '@api/model/enums';
+
 
 const defaultSchedule = [
-    { day: 'Monday', open: true, openingTime: new Date(0, 0, 0, 10, 0), closingTime: new Date(0, 0, 0, 17, 0) },
-    { day: 'Tuesday', open: true, openingTime: new Date(0, 0, 0, 10, 0), closingTime: new Date(0, 0, 0, 17, 0) },
-    { day: 'Wednesday', open: true, openingTime: new Date(0, 0, 0, 10, 0), closingTime: new Date(0, 0, 0, 17, 0) },
-    { day: 'Thursday', open: true, openingTime: new Date(0, 0, 0, 10, 0), closingTime: new Date(0, 0, 0, 17, 0) },
-    { day: 'Friday', open: true, openingTime: new Date(0, 0, 0, 10, 0), closingTime: new Date(0, 0, 0, 17, 0) },
-    { day: 'Saturday', open: false, openingTime: null, closingTime: null },
-    { day: 'Sunday', open: false, openingTime: null, closingTime: null },
+    { day: DayOfWeek.MONDAY, open: true, openingTime: new Date(0, 0, 0, 10, 0), closingTime: new Date(0, 0, 0, 17, 0) },
+    { day: DayOfWeek.TUESDAY, open: true, openingTime: new Date(0, 0, 0, 10, 0), closingTime: new Date(0, 0, 0, 17, 0) },
+    { day: DayOfWeek.WEDNESDAY, open: true, openingTime: new Date(0, 0, 0, 10, 0), closingTime: new Date(0, 0, 0, 17, 0) },
+    { day: DayOfWeek.THURSDAY, open: true, openingTime: new Date(0, 0, 0, 10, 0), closingTime: new Date(0, 0, 0, 17, 0) },
+    { day: DayOfWeek.FRIDAY, open: true, openingTime: new Date(0, 0, 0, 10, 0), closingTime: new Date(0, 0, 0, 17, 0) },
+    { day: DayOfWeek.SATURDAY, open: false, openingTime: null, closingTime: null },
+    { day: DayOfWeek.SUNDAY, open: false, openingTime: null, closingTime: null },
 ];
 
 const App = () => {
     const [schedule, setSchedule] = useState(defaultSchedule);
     const [modalVisible, setModalVisible] = useState(false);
     const [editIndex, setEditIndex] = useState(null);
-    const [selectedDay, setSelectedDay] = useState('Monday');
+    const [selectedDay, setSelectedDay] = useState<DayOfWeek>();
     const [openingTime, setOpeningTime] = useState(new Date());
     const [closingTime, setClosingTime] = useState(new Date());
     const [isClosed, setIsClosed] = useState(false);
-   
+
     const [editMode, setEditMode] = useState(false);
+    const { loggedInUserContext } = useContext(AuthContext);
+    const [visible, setVisible] = useState(false);
+    const onDismissSnackBar = () => setVisible(false);
+    const [errorMessage, setErrorMessage] = useState("");
+    const [loading, setLoading] = useState(false);
 
     const openEditModal = (item, index) => {
         setEditIndex(index);
@@ -51,16 +63,34 @@ const App = () => {
     const formatTime = (time) =>
         time ? time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'N/A';
 
-    const handleSave = () => {
-        const updated = [...schedule];
-        updated[editIndex] = {
-            day: selectedDay,
-            open: !isClosed,
-            openingTime: isClosed ? null : openingTime,
-            closingTime: isClosed ? null : closingTime,
-        };
-        setSchedule(updated);
-        setModalVisible(false);
+    const handleSave = async () => {
+        
+        const updateClinicSchedule = new ClinicScheduleUpdate();
+        updateClinicSchedule.dayOfWeek = selectedDay;
+        updateClinicSchedule.openTime = isClosed ? null : formatTime(openingTime);
+        updateClinicSchedule.closeTime = isClosed ? null : formatTime(closingTime);
+        updateClinicSchedule.isClosed = isClosed;
+
+        try {
+            setLoading(true)
+            console.log(JSON.stringify(updateClinicSchedule, null, 2));
+            const saved = await clinicService.updateClinicSchedule(loggedInUserContext.clinicDetails.id,updateClinicSchedule);
+            if (saved) {
+                const updated = [...schedule];
+                updated[editIndex] = {
+                    day: selectedDay,
+                    open: !isClosed,
+                    openingTime: isClosed ? null : openingTime,
+                    closingTime: isClosed ? null : closingTime,
+                };
+                setSchedule(updated);
+                setModalVisible(false)
+            }
+        } catch (error) {
+           setErrorMessage(error);
+           setVisible(true);
+        }
+        setLoading(false);
     };
 
 
@@ -127,11 +157,11 @@ const App = () => {
                         </View>
 
                         <Text style={styles.label}>Opening Time</Text>
-                        <MdLogTimePicker value={openingTime} onChange={setOpeningTime} disabled={isClosed}/>
+                        <MdLogTimePicker value={openingTime} onChange={setOpeningTime} disabled={isClosed} />
 
                         <Text style={styles.label}>Closing Time</Text>
 
-                        <MdLogTimePicker value={closingTime} onChange={setClosingTime} disabled={isClosed}/>
+                        <MdLogTimePicker value={closingTime} onChange={setClosingTime} disabled={isClosed} />
 
                         <View style={styles.switchRow}>
                             <Switch value={isClosed} onValueChange={setIsClosed} />
@@ -148,6 +178,8 @@ const App = () => {
                     </View>
                 </View>
             </Modal>
+            <MdLogActivityIndicator loading={loading}/>
+            <MdLodSnackbar visible={visible} onDismiss={onDismissSnackBar} message={errorMessage}/>
         </View>
     );
 };
@@ -155,7 +187,7 @@ const App = () => {
 export default App;
 
 const styles = StyleSheet.create({
-    container: { flex: 1, padding: 15 ,backgroundColor:COLORS.white},
+    container: { flex: 1, padding: 15, backgroundColor: COLORS.white },
     header: { flex: 1, fontSize: 18, fontWeight: '600', marginBottom: 10, textAlign: "center" },
     itemCard: {
         backgroundColor: COLORS.cardGrey,

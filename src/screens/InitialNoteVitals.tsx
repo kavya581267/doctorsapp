@@ -64,7 +64,7 @@ const InitialNoteVitalScreen = ({vital, setVitals}:props) => {
                 />
             </View>
             <TextInput
-                label="Heart rate"
+                label="Heart rate (bpm)"
                 mode="outlined"
                 keyboardType="numeric"
                 style={styles.input}
@@ -72,7 +72,7 @@ const InitialNoteVitalScreen = ({vital, setVitals}:props) => {
                 onChangeText={(v) => handleChange(v, "heartRate")}
             />
             <TextInput
-                label="Respiratory Rate"
+                label="Respiratory Rate (breaths/min)"
                 mode="outlined"
                 keyboardType="numeric"
                 style={styles.input}
@@ -81,7 +81,7 @@ const InitialNoteVitalScreen = ({vital, setVitals}:props) => {
             />
 
             <TextInput
-                label="Oxygen Saturation"
+                label="Oxygen Saturation (%)"
                 mode="outlined"
                 keyboardType="numeric"
                 style={styles.input}

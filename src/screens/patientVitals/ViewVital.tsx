@@ -18,27 +18,27 @@ const VitalsCard = ({vitals}:Props) => {
         <Text style={styles.value}>{vitals.weight}</Text>
       </View>
       <View style={styles.row}>
-        <Text style={styles.label}>Temperature:</Text>
+        <Text style={styles.label}>Temperature (°F):</Text>
         <Text style={styles.value}>{vitals.temperature}</Text>
       </View>
       <View style={styles.row}>
-        <Text style={styles.label}>Blood Pressure Systolic:</Text>
+        <Text style={styles.label}>Blood Pressure Systolic (mmHg):</Text>
         <Text style={styles.value}>{vitals.blood_pressure_systolic}</Text>
       </View>
       <View style={styles.row}>
-        <Text style={styles.label}>Blood Pressure Diastolic:</Text>
+        <Text style={styles.label}>Blood Pressure Diastolic (mmHg):</Text>
         <Text style={styles.value}>{vitals.blood_pressure_diastolic}</Text>
       </View>
       <View style={styles.row}>
-        <Text style={styles.label}>Heart Rate:</Text>
+        <Text style={styles.label}>Heart Rate (bpm):</Text>
         <Text style={styles.value}>{vitals.heart_rate}</Text>
       </View>
       <View style={styles.row}>
-        <Text style={styles.label}>Respiratory Rate:</Text>
+        <Text style={styles.label}>Respiratory Rate (breaths/min):</Text>
         <Text style={styles.value}>{vitals.respiratory_rate}</Text>
       </View>
       <View style={styles.row}>
-        <Text style={styles.label}>Oxygen Saturation:</Text>
+        <Text style={styles.label}>Oxygen Saturation (%):</Text>
         <Text style={styles.value}>{vitals.oxygen_saturation}</Text>
       </View>
     </View>

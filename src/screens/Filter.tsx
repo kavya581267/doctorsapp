@@ -12,6 +12,10 @@ const FilterableAppointments = ({ appointments, onFiltered, fromDate, setFromDat
     const [showFromPicker, setShowFromPicker] = useState(false);
     const [showToPicker, setShowToPicker] = useState(false);
     const applyFilter = () => {
+        if (moment(fromDate).isAfter(toDate)) {
+            alert('"From" date cannot be after "To" date');
+            return;
+        }
         const filtered = appointments.filter(item => {
             const date = moment(item.appointmentDate).startOf('day');
             const from = moment(fromDate).startOf('day');

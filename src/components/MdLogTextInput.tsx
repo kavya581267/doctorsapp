@@ -5,7 +5,7 @@ import { COLORS } from '@utils/colors';
 import { useState } from 'react';
 import { Platform, TouchableOpacity, View } from 'react-native';
 import DateTimePicker from 'react-native-modal-datetime-picker';
-import { formatToYYYYMMDD } from '@utils/utils';
+import { formatToYYYYMMDD, formatToYYYYMMDDSlash } from '@utils/utils';
 
 interface MdLogTextInputProps {
     label?: string;

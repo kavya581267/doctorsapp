@@ -107,6 +107,16 @@ export default function BookAppointmentScreen() {
 
   const bookAppointment = async () => {
     try {
+      if (!edit && (!selectedPatient || !selectedPatient.value)) {
+        Alert.alert("Validation Error", "Please select a patient before proceeding.");
+        return;
+      }
+
+      if (!selectedDoctor || !selectedDoctor.value) {
+        Alert.alert("Validation Error", "Please select a doctor before proceeding.");
+        return;
+      }
+
       setLoading(true)
       let response: AppointmentResponse = undefined;
       if (!edit) {
@@ -245,7 +255,14 @@ export default function BookAppointmentScreen() {
                   onPress={() => {
                     setSelectedDate(d.fullDate);
                   }}
-                  style={[styles.selectDateBox, { backgroundColor: isSelected ? COLORS.primary : "" }]}
+                 
+                  style={[
+                    styles.selectDateBox,
+                    { 
+                      backgroundColor: isSelected ? COLORS.primary : 'transparent',
+                      borderColor: isSelected ? COLORS.primary : COLORS.grey,
+                    }
+                  ]}
                   contentStyle={{ flexDirection: 'column' }}
                 >
                   <View style={{ flexDirection: "column" }}>
@@ -294,7 +311,9 @@ export default function BookAppointmentScreen() {
                   key={idx}
                   mode={isSelected ? 'contained' : 'outlined'}
                   onPress={() => setAppointmentType(type.value)}
-                  style={[styles.selectDateBox, { backgroundColor: isSelected ? COLORS.primary : "" }]}
+                  style={[styles.selectDateBox, { backgroundColor: isSelected ? COLORS.primary : "transparent",
+                    borderColor: isSelected ? COLORS.primary : COLORS.grey,
+                   }]}
                   contentStyle={{ flexDirection: 'column' }}
                 >
                   <Text style={{ color: isSelected ? 'white' : 'black', fontSize: 13 }}>

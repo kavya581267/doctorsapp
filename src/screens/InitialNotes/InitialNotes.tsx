@@ -309,7 +309,7 @@ const InitialNoteScreen = () => {
             <View style={styles.container}>
                 <Back nav='PatientMedical' routeParam={{appointment:appointment, patient:patient}}/>
                 <View style={styles.header}>
-                    <Text style={styles.headerTitle}>{facesheet.patient?.filedNoteCount > 0 ? "Followup Note" : "Initial Note"}:{new Date().toISOString()}</Text>
+                    <Text style={styles.headerTitle}>{facesheet.patient?.filedNoteCount > 0 ? "Followup Note" : "Initial Note"} :  {formatToYYYYMMDD(new Date())}</Text>
                     <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
                         <TouchableOpacity style={{ ...styles.submitButton, backgroundColor: COLORS.secondary, marginRight: 20 }}
                             onPress={() => setfileNoteModel(true)}>
@@ -389,7 +389,7 @@ const styles = StyleSheet.create({
         marginBottom: 10
     },
     headerTitle: {
-        fontSize: 18,
+        fontSize: 16,
         fontWeight: 'bold',
     },
     submitButton: {
