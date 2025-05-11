@@ -1,4 +1,4 @@
-import { DELETE_PATIENT_APPOINTMENT, GET_CLINIC_APPOINTMENTS, UPDATE_CLINIC_PATH, UPDATE_CLINIC_SCHEDULE_PATH } from "@utils/constants";
+import { CREATE_CLINIC_SCHEDULE_PATH, DELETE_PATIENT_APPOINTMENT, GET_CLINIC_APPOINTMENTS, UPDATE_CLINIC_PATH, UPDATE_CLINIC_SCHEDULE_PATH } from "@utils/constants";
 import { apiService } from "./apiService";
 import { AppointmentListResponse } from "./model/appointments/AppointmentListResponse";
 import { AdminRegistarationRequest, AdminRegistrationResponse } from "./model/auth/Auth";
@@ -35,15 +35,26 @@ export const clinicService = {
     getClinicById: () => {
 
     },
-    getClinicSchedule: () => {
-
+    getClinicSchedule: async (clinicId: number): Promise<ClinicScheduleUpdate[]> => {
+        try {
+            const response = await apiService.get(replacePlaceholders(CREATE_CLINIC_SCHEDULE_PATH,{clinicId}),{});
+            return response;
+        } catch (error) {
+            throw error;
+        }
     },
-    createClinicSchedule: () => {
-
+    createClinicSchedule: async (clinicId: number,clinicSchedule:ClinicScheduleUpdate): Promise<ClinicScheduleUpdate> => {
+        try {
+            const response = await apiService.post(replacePlaceholders(CREATE_CLINIC_SCHEDULE_PATH,{clinicId}),clinicSchedule);
+            return response;
+        } catch (error) {
+            throw error;
+        }
     },
     updateClinicSchedule:async (clinicId: number,clinicSchedule:ClinicScheduleUpdate): Promise<ClinicScheduleUpdate> => {
         try {
-            const response = await apiService.put(replacePlaceholders(UPDATE_CLINIC_SCHEDULE_PATH,{clinicId}) , clinicSchedule);
+            const response = await apiService.put(replacePlaceholders(UPDATE_CLINIC_SCHEDULE_PATH,{clinicId})+"/"+clinicSchedule.dayOfWeek,
+            clinicSchedule);
             return response;
         } catch (error) {
             throw error;

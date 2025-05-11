@@ -60,11 +60,11 @@ const apiCall = async (endpoint: string, method = "GET", body = null, queryParam
         const data = await response.json();
 
         if (!response.ok) {
-            throw new Error(data.message || "Something went wrong");
+            throw new Error(data.message.toString() || "Something went wrong");
         }
         return data;
     } catch (error) {
-        throw error;
+        throw error.toString();
     }
 };
 

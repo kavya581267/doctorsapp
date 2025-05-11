@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
 
     View,
@@ -73,7 +73,6 @@ const App = () => {
 
         try {
             setLoading(true)
-            console.log(JSON.stringify(updateClinicSchedule, null, 2));
             const saved = await clinicService.updateClinicSchedule(loggedInUserContext.clinicDetails.id,updateClinicSchedule);
             if (saved) {
                 const updated = [...schedule];
@@ -87,11 +86,27 @@ const App = () => {
                 setModalVisible(false)
             }
         } catch (error) {
+           // if first time create
            setErrorMessage(error);
            setVisible(true);
         }
+        setModalVisible(false)
         setLoading(false);
     };
+
+    const loadSchedule = async () => {
+        try{
+            const resp =  await clinicService.getClinicSchedule(loggedInUserContext.clinicDetails.id);
+            console.log(resp)
+        }catch(error){
+
+        }
+        
+    }
+
+    useEffect(()=>{
+        loadSchedule()
+    },[])
 
 
 

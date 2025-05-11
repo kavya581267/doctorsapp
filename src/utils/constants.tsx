@@ -54,8 +54,8 @@ export const REMOVE_CLINIC_STAFF_PATH = "/clinics/{{clinicId}}/staff/{{userId}}"
 //clinic schedule
 export const GET_CLINIC_SCHEDULE_PATH = "/clinics/{{clinicId}}/schedule";
 export const CREATE_CLINIC_SCHEDULE_PATH = "/clinics/{{clinicId}}/schedule";
-export const UPDATE_CLINIC_SCHEDULE_PATH = "/clinics/{{clinicId}}/schedule/MONDAY";
-export const DELETE_CLINIC_SCHEDULE_PATH = "/clinics/{{clinicId}}/schedule/MONDAY";
+export const UPDATE_CLINIC_SCHEDULE_PATH = "/clinics/{{clinicId}}/schedule";
+export const DELETE_CLINIC_SCHEDULE_PATH = "/clinics/{{clinicId}}/schedule";
 
 //holiday schedule
 export const GET_HOLIDAY_SCHEDULE_PATH = "/clinics/{{clinicId}}/holidays";
