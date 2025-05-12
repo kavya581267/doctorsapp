@@ -62,15 +62,16 @@ const App = () => {
     const [errorMessage, setErrorMessage] = useState("");
     const [loading, setLoading] = useState(false);
     const [isEditModal, setIsEditModal] = useState(false);
+    const [editLoading,setEditLoading] = useState(false);
 
 
 
     const openEditModal = (item, index) => {
         setEditIndex(index);
         setSelectedDay(item.dayOfWeek);
-        setOpeningTime(item.openTime || new Date());
-        setClosingTime(item.closeTime || new Date());
-        setIsClosed(!item.isClosed);
+        setOpeningTime(item.openTime !== null ? new Date(`1970-01-01T${item.openTime}`) : new Date());
+        setClosingTime(item.closeTime !== null ? new Date(`1970-01-01T${item.closeTime}`) : new Date());    
+        setIsClosed(item.isClosed);
         setIsEditModal(true);
         setModalVisible(true);
     };
@@ -136,6 +137,7 @@ const App = () => {
                 updated.push(saved);
                 const sorted = updated.sort((a, b) => dayOrder[a.dayOfWeek] - dayOrder[b.dayOfWeek]);
                 setSchedule(sorted);
+                setEditLoading(!editLoading);
             }
         } catch (error) {
             setErrorMessage(error?.message || 'Error saving schedule');
@@ -161,7 +163,7 @@ const App = () => {
 
     useEffect(() => {
         loadSchedule()
-    }, [])
+    }, [editLoading])
 
 
 

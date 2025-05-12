@@ -13,8 +13,8 @@ type TimePickerProps = {
 }
 export const MdLogTimePicker: React.FC<TimePickerProps> = ({ value, onChange, disabled }) => {
     const [showPicker, setShowPicker] = useState(false);
-
-    const formattedTime = value.toLocaleTimeString([], {
+  
+    const formattedTime = value?.toLocaleTimeString([], {
         hour: "2-digit",
         minute: "2-digit"
     })
