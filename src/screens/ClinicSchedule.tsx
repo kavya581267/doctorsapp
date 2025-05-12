@@ -17,13 +17,14 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import Back from '@components/Back';
 import { COLORS } from '@utils/colors';
 import { MdLogTimePicker } from '@components/MdLogTimePicker';
-import { ClinicScheduleUpdate } from '@api/model/clinic/ClinicSchedule';
+import { ClinicScheduleResponse, ClinicScheduleUpdate } from '@api/model/clinic/ClinicSchedule';
 import { clinicService } from '@api/clinicService';
 import { AuthContext } from '@context/AuthContext';
 import { MdLodSnackbar } from '@components/MdLogSnacbar';
 import { MdLogActivityIndicator } from '@components/MdLogActivityIndicator';
 import { DayOfWeek } from '@api/model/enums';
 import { Dropdown } from 'react-native-element-dropdown';
+import { formatTimeHHMMSS } from '@utils/utils';
 
 
 const defaultSchedule = [
@@ -46,7 +47,7 @@ const days = [
 ]
 
 const App = () => {
-    const [schedule, setSchedule] = useState(defaultSchedule);
+    const [schedule, setSchedule] = useState<ClinicScheduleResponse[]>([]);
     const [modalVisible, setModalVisible] = useState(false);
     const [editIndex, setEditIndex] = useState(null);
     const [selectedDay, setSelectedDay] = useState<DayOfWeek>();
@@ -61,15 +62,15 @@ const App = () => {
     const [errorMessage, setErrorMessage] = useState("");
     const [loading, setLoading] = useState(false);
     const [isEditModal, setIsEditModal] = useState(false);
-    const [dayDropdownVisible, setDayDropdownVisible] = useState(false);
+
 
 
     const openEditModal = (item, index) => {
         setEditIndex(index);
-        setSelectedDay(item.day);
-        setOpeningTime(item.openingTime || new Date());
-        setClosingTime(item.closingTime || new Date());
-        setIsClosed(!item.open);
+        setSelectedDay(item.dayOfWeek);
+        setOpeningTime(item.openTime || new Date());
+        setClosingTime(item.closeTime || new Date());
+        setIsClosed(!item.isClosed);
         setIsEditModal(true);
         setModalVisible(true);
     };
@@ -83,21 +84,19 @@ const App = () => {
         setModalVisible(true);
     }
 
-    const formatTime = (time) =>
-        time ? time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'N/A';
-
     const handleSave = async () => {
         if (!selectedDay) {
             Alert.alert('Please select a day');
             return;
         }
-    
+
         const updateClinicSchedule = new ClinicScheduleUpdate();
         updateClinicSchedule.dayOfWeek = selectedDay;
-        updateClinicSchedule.openTime = isClosed ? null : formatTime(openingTime);
-        updateClinicSchedule.closeTime = isClosed ? null : formatTime(closingTime);
+        updateClinicSchedule.openTime = isClosed ? null : formatTimeHHMMSS(openingTime);
+        updateClinicSchedule.closeTime = isClosed ? null : formatTimeHHMMSS(closingTime);
         updateClinicSchedule.isClosed = isClosed;
-    
+
+
         const dayOrder = {
             MONDAY: 1,
             TUESDAY: 2,
@@ -107,67 +106,56 @@ const App = () => {
             SATURDAY: 6,
             SUNDAY: 7,
         };
-    
+
         try {
             setLoading(true);
             let saved;
-    
+
             if (editIndex !== null) {
                 saved = await clinicService.updateClinicSchedule(
                     loggedInUserContext.clinicDetails.id,
                     updateClinicSchedule
                 );
             } else {
-                const exists = schedule.find((s) => s.day === selectedDay);
+                const exists = schedule.length > 0 && schedule.find((s) => s.dayOfWeek === selectedDay);
                 if (exists) {
                     Alert.alert('Day already exists in the schedule.');
                     setLoading(false);
                     return;
                 }
-    
+
                 saved = await clinicService.createClinicSchedule(
                     loggedInUserContext.clinicDetails.id,
                     updateClinicSchedule
                 );
+
             }
-    
+
             if (saved) {
-                console.log("saved")
                 const updated = [...schedule];
-    
-                const newScheduleItem = {
-                    day: selectedDay,
-                    open: !isClosed,
-                    openingTime: isClosed ? null : openingTime,
-                    closingTime: isClosed ? null : closingTime,
-                };
-    
-                if (editIndex !== null) {
-                    updated[editIndex] = newScheduleItem;
-                } else {
-                    updated.push(newScheduleItem);
-                }
-    
-                const sorted = updated.sort((a, b) => dayOrder[a.day] - dayOrder[b.day]);
+                updated.push(saved);
+                const sorted = updated.sort((a, b) => dayOrder[a.dayOfWeek] - dayOrder[b.dayOfWeek]);
                 setSchedule(sorted);
-                setModalVisible(false);
             }
         } catch (error) {
             setErrorMessage(error?.message || 'Error saving schedule');
             setVisible(true);
         } finally {
             setLoading(false);
+            setModalVisible(false);
         }
     };
-    
+
 
     const loadSchedule = async () => {
         try {
+            setLoading(true)
             const resp = await clinicService.getClinicSchedule(loggedInUserContext.clinicDetails.id);
-
+            setSchedule(resp)
         } catch (error) {
 
         }
+        setLoading(false)
 
     }
 
@@ -178,15 +166,16 @@ const App = () => {
 
 
     const renderItem = ({ item, index }) => (
+
         <View style={styles.itemCard}>
             <View>
-                <Text style={styles.dayText}>{item.day}</Text>
-                {item.open ? (
+                <Text style={styles.dayText}>{item.dayOfWeek}</Text>
+                {!item.isClosed ? (
                     <View>
                         <View style={styles.rowBox}>
                             <Icon name="access-time" size={16} color="black" />
                             <Text style={styles.timeText}>
-                                {formatTime(item.openingTime)} - {formatTime(item.closingTime)}
+                                {item.openTime} - {item.closeTime}
                             </Text>
                         </View>
                         <View style={styles.rowBox}>
@@ -210,6 +199,12 @@ const App = () => {
         </View>
     );
 
+    if (loading) {
+        return (
+            <MdLogActivityIndicator loading={loading} />
+        )
+    }
+
     return (
 
         <View style={styles.container}>
@@ -229,7 +224,7 @@ const App = () => {
 
             <FlatList
                 data={schedule}
-                keyExtractor={(item) => item.day}
+                keyExtractor={(item) => item.dayOfWeek}
                 renderItem={renderItem}
             />
 
