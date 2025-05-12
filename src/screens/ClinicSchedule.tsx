@@ -93,8 +93,8 @@ const App = () => {
 
         const updateClinicSchedule = new ClinicScheduleUpdate();
         updateClinicSchedule.dayOfWeek = selectedDay;
-        updateClinicSchedule.openTime = isClosed ? null : formatTimeHHMMSS(openingTime);
-        updateClinicSchedule.closeTime = isClosed ? null : formatTimeHHMMSS(closingTime);
+        updateClinicSchedule.openTime =  formatTimeHHMMSS(openingTime);
+        updateClinicSchedule.closeTime =  formatTimeHHMMSS(closingTime);
         updateClinicSchedule.isClosed = isClosed;
 
 
@@ -113,6 +113,8 @@ const App = () => {
             let saved;
 
             if (editIndex !== null) {
+                console.log("edit")
+                console.log(updateClinicSchedule)
                 saved = await clinicService.updateClinicSchedule(
                     loggedInUserContext.clinicDetails.id,
                     updateClinicSchedule
@@ -124,7 +126,8 @@ const App = () => {
                     setLoading(false);
                     return;
                 }
-
+                console.log("save")
+                console.log(updateClinicSchedule)
                 saved = await clinicService.createClinicSchedule(
                     loggedInUserContext.clinicDetails.id,
                     updateClinicSchedule
@@ -140,6 +143,7 @@ const App = () => {
                 setEditLoading(!editLoading);
             }
         } catch (error) {
+            console.log(error)
             setErrorMessage(error?.message || 'Error saving schedule');
             setVisible(true);
         } finally {
@@ -169,7 +173,7 @@ const App = () => {
 
     const renderItem = ({ item, index }) => (
 
-        <View style={styles.itemCard}>
+        <View key={index} style={styles.itemCard}>
             <View>
                 <Text style={styles.dayText}>{item.dayOfWeek}</Text>
                 {!item.isClosed ? (
@@ -192,7 +196,7 @@ const App = () => {
                 )}
             </View>
             {editMode &&
-                <View style={styles.iconRow}>
+                <View key={index} style={styles.iconRow}>
                     <TouchableOpacity onPress={() => openEditModal(item, index)}>
                         <Icon name="edit" size={20} color="#007bff" />
                     </TouchableOpacity>

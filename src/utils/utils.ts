@@ -54,8 +54,18 @@ export const getPastDate = (date: Date, minusDays: number): string => {
   return newDate.toISOString().split('T')[0];
 }
 
-export const formatTimeHHMMSS = (date: Date) =>
-  date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+export const formatTimeHHMMSS = (date: Date) =>{
+  const dd = date.toLocaleTimeString('en-GB', {
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false,
+  });
+
+  // Ensures format is like "09:51:10"
+  return dd;
+}
+   
 
 export function formatToYYYYMMDD(date: Date) {
   date = new Date(date);

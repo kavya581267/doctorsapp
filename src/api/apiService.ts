@@ -55,11 +55,12 @@ const apiCall = async (endpoint: string, method = "GET", body = null, queryParam
         if (body) {
             options.body = JSON.stringify(body);
         }
-
+   
         const response = await fetch(url, options);
         const data = await response.json();
 
         if (!response.ok) {
+            console.log(data)
             throw new Error(data.message.toString() || "Something went wrong");
         }
         return data;
