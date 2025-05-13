@@ -14,7 +14,9 @@ const UserProfileScreen = () => {
     const [lastName, setLastName] = useState("")
     const [email, setEmail] = useState('');
     const [phone, setPhone] = useState('');
-    const [role, setRole] = useState("ADMiN")
+    const [role, setRole] = useState("ADMiN");
+    const [startDate, setStartDate] = useState("");
+    const [endDate, setEndDate] = useState("");
     const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
     const [loading, setLoading] = useState(false);
@@ -100,35 +102,63 @@ const UserProfileScreen = () => {
                             <Text style={styles.value}>{lastName}</Text>
                         )}
 
+
+
                         <Divider style={styles.divider} />
 
-
-
-                        <Text style={styles.label}>Phone</Text>
+                        <Text style={styles.label}>Role</Text>
                         {isEditing ? (
                             <TextInput
                                 mode="outlined"
-                                value={phone}
-                                onChangeText={setPhone}
-                                keyboardType="phone-pad"
+                                value={role}
+                                onChangeText={setRole}
                                 style={styles.input}
                             />
                         ) : (
-                            <Text style={styles.value}>{phone}</Text>
+                            <Text style={styles.value}>{role}</Text>
                         )}
+
+
+                        <Divider style={styles.divider} />
+
+                        <Text style={styles.label}>Start Date</Text>
+                        {isEditing ? (
+                            <TextInput
+                                mode="outlined"
+                                value={startDate}
+                                onChangeText={setStartDate}
+                                style={styles.input}
+                            />
+                        ) : (
+                            <Text style={styles.value}>{startDate}</Text>
+                        )}
+
+
+                        <Divider style={styles.divider} />
+
+                        <Text style={styles.label}>End Date</Text>
+                        {isEditing ? (
+                            <TextInput
+                                mode="outlined"
+                                value={endDate}
+                                onChangeText={setEndDate}
+                                style={styles.input}
+                            />
+                        ) : (
+                            <Text style={styles.value}>{endDate}</Text>
+                        )}
+                        <Divider style={styles.divider} />
+
+                        <Text style={styles.label}>Phone</Text>
+
+                        <Text style={styles.value}>{phone}</Text>
+
                         <Divider style={styles.divider} />
 
                         <Text style={styles.label}>Email</Text>
 
                         <Text style={styles.value}>{email}</Text>
 
-
-
-
-                        <Divider style={styles.divider} />
-
-                        <Text style={styles.label}>Role</Text>
-                        <Text style={styles.value}>{role}</Text>
                     </Card.Content>
                 </Card>
 
@@ -173,7 +203,7 @@ const UserProfileScreen = () => {
                                     onPress={() => { }}
                                     style={styles.actionButton}
                                 >
-                                    Reset Password"
+                                    Reset Password
                                 </Button>
 
                                 <Button

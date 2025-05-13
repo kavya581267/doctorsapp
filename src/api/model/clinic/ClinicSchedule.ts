@@ -13,3 +13,10 @@ export class ClinicScheduleUpdate {
     closeTime: string
     isClosed: boolean
 }
+
+export class ClinicScheduleResponse extends ClinicSchedule {
+    clinicId: number
+    id: number
+    createdAt: string
+    updatedAt: string
+}

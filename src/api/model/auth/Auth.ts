@@ -174,6 +174,9 @@ export type Clinic = {
   phone: string;
   licenseNumber: string;
   active: boolean;
+  taxId: string;
+  alternatePhone: string;
+  country:string
 };
 
 export type ClinicOverview = {

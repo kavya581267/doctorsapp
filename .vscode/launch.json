@@ -1,0 +1,42 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+      
+        {
+            "type": "expo",
+            "request": "attach",
+            "name": "Debug Expo app",
+            "projectRoot": "${workspaceFolder}",
+            "bundlerPort": "8081",
+            "bundlerHost": "127.0.0.1"
+        },
+        {
+            "name": "Attach to Chrome",
+            "port": 9222,
+            "request": "attach",
+            "type": "chrome",
+            "webRoot": "${workspaceFolder}"
+        },
+        {
+            "type": "expo",
+            "request": "attach",
+            "name": "Debug Expo app",
+            "projectRoot": "${workspaceFolder}",
+            "bundlerPort": "8081",
+            "bundlerHost": "127.0.0.1"
+        },
+        {
+            "command": "npm start",
+            "name": "Run npm start",
+            "request": "launch",
+            "type": "node-terminal"
+        },
+
+      {
+        "name": "Debug with Expo",
+        "request": "launch",
+        "type": "expo"
+      }
+    ]
+  }
+  

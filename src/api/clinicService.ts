@@ -1,10 +1,10 @@
-import { DELETE_PATIENT_APPOINTMENT, GET_CLINIC_APPOINTMENTS, UPDATE_CLINIC_PATH, UPDATE_CLINIC_SCHEDULE_PATH } from "@utils/constants";
+import { CREATE_CLINIC_SCHEDULE_PATH, DELETE_PATIENT_APPOINTMENT, GET_CLINIC_APPOINTMENTS, GET_CLINIC_SCHEDULE_PATH, UPDATE_CLINIC_PATH, UPDATE_CLINIC_SCHEDULE_PATH } from "@utils/constants";
 import { apiService } from "./apiService";
 import { AppointmentListResponse } from "./model/appointments/AppointmentListResponse";
 import { AdminRegistarationRequest, AdminRegistrationResponse } from "./model/auth/Auth";
 import { replacePlaceholders } from "@utils/utils";
 import { ClinicUpdateResponse } from "./model/clinic/ClinicRequest";
-import { ClinicScheduleUpdate } from "./model/clinic/ClinicSchedule";
+import { ClinicScheduleResponse, ClinicScheduleUpdate } from "./model/clinic/ClinicSchedule";
 
 
 
@@ -35,16 +35,27 @@ export const clinicService = {
     getClinicById: () => {
 
     },
-    getClinicSchedule: () => {
-
+    getClinicSchedule: async (clinicId: number): Promise<ClinicScheduleResponse[]> => {
+        try {
+            const response = await apiService.get(replacePlaceholders(GET_CLINIC_SCHEDULE_PATH,{clinicId}),{});
+            return response.data;
+        } catch (error) {
+            throw error;
+        }
     },
-    createClinicSchedule: () => {
-
+    createClinicSchedule: async (clinicId: number,clinicSchedule:ClinicScheduleUpdate): Promise<ClinicScheduleUpdate> => {
+        try {
+            const response = await apiService.post(replacePlaceholders(CREATE_CLINIC_SCHEDULE_PATH,{clinicId}),clinicSchedule);
+            return response.data;
+        } catch (error) {
+            throw error;
+        }
     },
     updateClinicSchedule:async (clinicId: number,clinicSchedule:ClinicScheduleUpdate): Promise<ClinicScheduleUpdate> => {
         try {
-            const response = await apiService.put(replacePlaceholders(UPDATE_CLINIC_SCHEDULE_PATH,{clinicId}) , clinicSchedule);
-            return response;
+            const response = await apiService.put(replacePlaceholders(UPDATE_CLINIC_SCHEDULE_PATH,{clinicId})+"/"+clinicSchedule.dayOfWeek,
+            clinicSchedule);
+            return response.data;
         } catch (error) {
             throw error;
         }

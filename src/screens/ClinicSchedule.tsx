@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
 
     View,
@@ -17,12 +17,14 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import Back from '@components/Back';
 import { COLORS } from '@utils/colors';
 import { MdLogTimePicker } from '@components/MdLogTimePicker';
-import { ClinicScheduleUpdate } from '@api/model/clinic/ClinicSchedule';
+import { ClinicScheduleResponse, ClinicScheduleUpdate } from '@api/model/clinic/ClinicSchedule';
 import { clinicService } from '@api/clinicService';
 import { AuthContext } from '@context/AuthContext';
 import { MdLodSnackbar } from '@components/MdLogSnacbar';
 import { MdLogActivityIndicator } from '@components/MdLogActivityIndicator';
 import { DayOfWeek } from '@api/model/enums';
+import { Dropdown } from 'react-native-element-dropdown';
+import { formatTimeHHMMSS } from '@utils/utils';
 
 
 const defaultSchedule = [
@@ -34,9 +36,18 @@ const defaultSchedule = [
     { day: DayOfWeek.SATURDAY, open: false, openingTime: null, closingTime: null },
     { day: DayOfWeek.SUNDAY, open: false, openingTime: null, closingTime: null },
 ];
+const days = [
+    { label: "MONDAY", value: DayOfWeek.MONDAY },
+    { label: "TUESDAY", value: DayOfWeek.TUESDAY },
+    { label: "WEDNESDAY", value: DayOfWeek.WEDNESDAY },
+    { label: "THURSDAY", value: DayOfWeek.THURSDAY },
+    { label: "FRIDAY", value: DayOfWeek.FRIDAY },
+    { label: "SATURDAY", value: DayOfWeek.SATURDAY },
+    { label: "SUNDAY", value: DayOfWeek.SUNDAY }
+]
 
 const App = () => {
-    const [schedule, setSchedule] = useState(defaultSchedule);
+    const [schedule, setSchedule] = useState<ClinicScheduleResponse[]>([]);
     const [modalVisible, setModalVisible] = useState(false);
     const [editIndex, setEditIndex] = useState(null);
     const [selectedDay, setSelectedDay] = useState<DayOfWeek>();
@@ -50,61 +61,127 @@ const App = () => {
     const onDismissSnackBar = () => setVisible(false);
     const [errorMessage, setErrorMessage] = useState("");
     const [loading, setLoading] = useState(false);
+    const [isEditModal, setIsEditModal] = useState(false);
+    const [editLoading,setEditLoading] = useState(false);
+
+
 
     const openEditModal = (item, index) => {
         setEditIndex(index);
-        setSelectedDay(item.day);
-        setOpeningTime(item.openingTime || new Date());
-        setClosingTime(item.closingTime || new Date());
-        setIsClosed(!item.open);
+        setSelectedDay(item.dayOfWeek);
+        setOpeningTime(item.openTime !== null ? new Date(`1970-01-01T${item.openTime}`) : new Date());
+        setClosingTime(item.closeTime !== null ? new Date(`1970-01-01T${item.closeTime}`) : new Date());    
+        setIsClosed(item.isClosed);
+        setIsEditModal(true);
         setModalVisible(true);
     };
-
-    const formatTime = (time) =>
-        time ? time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'N/A';
+    const openAddModal = () => {
+        setEditIndex(null);
+        setSelectedDay(undefined);
+        setOpeningTime(new Date(0, 0, 0, 10, 0));
+        setClosingTime(new Date(0, 0, 0, 17, 0));
+        setIsClosed(false);
+        setIsEditModal(false);
+        setModalVisible(true);
+    }
 
     const handleSave = async () => {
-        
+        if (!selectedDay) {
+            Alert.alert('Please select a day');
+            return;
+        }
+
         const updateClinicSchedule = new ClinicScheduleUpdate();
         updateClinicSchedule.dayOfWeek = selectedDay;
-        updateClinicSchedule.openTime = isClosed ? null : formatTime(openingTime);
-        updateClinicSchedule.closeTime = isClosed ? null : formatTime(closingTime);
+        updateClinicSchedule.openTime =  formatTimeHHMMSS(openingTime);
+        updateClinicSchedule.closeTime =  formatTimeHHMMSS(closingTime);
         updateClinicSchedule.isClosed = isClosed;
 
+
+        const dayOrder = {
+            MONDAY: 1,
+            TUESDAY: 2,
+            WEDNESDAY: 3,
+            THURSDAY: 4,
+            FRIDAY: 5,
+            SATURDAY: 6,
+            SUNDAY: 7,
+        };
+
         try {
-            setLoading(true)
-            console.log(JSON.stringify(updateClinicSchedule, null, 2));
-            const saved = await clinicService.updateClinicSchedule(loggedInUserContext.clinicDetails.id,updateClinicSchedule);
+            setLoading(true);
+            let saved;
+
+            if (editIndex !== null) {
+                console.log("edit")
+                console.log(updateClinicSchedule)
+                saved = await clinicService.updateClinicSchedule(
+                    loggedInUserContext.clinicDetails.id,
+                    updateClinicSchedule
+                );
+            } else {
+                const exists = schedule.length > 0 && schedule.find((s) => s.dayOfWeek === selectedDay);
+                if (exists) {
+                    Alert.alert('Day already exists in the schedule.');
+                    setLoading(false);
+                    return;
+                }
+                console.log("save")
+                console.log(updateClinicSchedule)
+                saved = await clinicService.createClinicSchedule(
+                    loggedInUserContext.clinicDetails.id,
+                    updateClinicSchedule
+                );
+
+            }
+
             if (saved) {
                 const updated = [...schedule];
-                updated[editIndex] = {
-                    day: selectedDay,
-                    open: !isClosed,
-                    openingTime: isClosed ? null : openingTime,
-                    closingTime: isClosed ? null : closingTime,
-                };
-                setSchedule(updated);
-                setModalVisible(false)
+                updated.push(saved);
+                const sorted = updated.sort((a, b) => dayOrder[a.dayOfWeek] - dayOrder[b.dayOfWeek]);
+                setSchedule(sorted);
+                setEditLoading(!editLoading);
             }
         } catch (error) {
-           setErrorMessage(error);
-           setVisible(true);
+            console.log(error)
+            setErrorMessage(error?.message || 'Error saving schedule');
+            setVisible(true);
+        } finally {
+            setLoading(false);
+            setModalVisible(false);
         }
-        setLoading(false);
     };
+
+
+    const loadSchedule = async () => {
+        try {
+            setLoading(true)
+            const resp = await clinicService.getClinicSchedule(loggedInUserContext.clinicDetails.id);
+            setSchedule(resp)
+        } catch (error) {
+
+        }
+        setLoading(false)
+
+    }
+
+    useEffect(() => {
+        loadSchedule()
+    }, [editLoading])
 
 
 
     const renderItem = ({ item, index }) => (
-        <View style={styles.itemCard}>
+
+        <View key={index} style={styles.itemCard}>
             <View>
-                <Text style={styles.dayText}>{item.day}</Text>
-                {item.open ? (
+                <Text style={styles.dayText}>{item.dayOfWeek}</Text>
+                {!item.isClosed ? (
                     <View>
                         <View style={styles.rowBox}>
                             <Icon name="access-time" size={16} color="black" />
                             <Text style={styles.timeText}>
-                                {formatTime(item.openingTime)} - {formatTime(item.closingTime)}
+                                {item.openTime} - {item.closeTime}
                             </Text>
                         </View>
                         <View style={styles.rowBox}>
@@ -119,7 +196,7 @@ const App = () => {
                 )}
             </View>
             {editMode &&
-                <View style={styles.iconRow}>
+                <View key={index} style={styles.iconRow}>
                     <TouchableOpacity onPress={() => openEditModal(item, index)}>
                         <Icon name="edit" size={20} color="#007bff" />
                     </TouchableOpacity>
@@ -128,39 +205,69 @@ const App = () => {
         </View>
     );
 
+    if (loading) {
+        return (
+            <MdLogActivityIndicator loading={loading} />
+        )
+    }
+
     return (
 
         <View style={styles.container}>
             <Back nav='Mainscreen' />
             <View style={{ flexDirection: "row" }}>
                 <Text style={styles.header}>Clinic Schedule</Text>
-                <TouchableOpacity onPress={() => setEditMode(!editMode)}>
-                    <Icon name="edit-note" size={30} color="#007bff" />
-                </TouchableOpacity>
+                <View style={{ flexDirection: "row", alignItems: "center" }}>
+                    <TouchableOpacity onPress={() => setEditMode(!editMode)}>
+                        <Icon name="edit-note" size={30} color="#007bff" />
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => openAddModal()}>
+                        <Text style={{ marginLeft: 15, fontSize: 16, fontWeight: "500" }}>Add</Text>
+                    </TouchableOpacity>
+                </View>
+
             </View>
 
             <FlatList
                 data={schedule}
-                keyExtractor={(item) => item.day}
+                keyExtractor={(item) => item.dayOfWeek}
                 renderItem={renderItem}
             />
+
 
             {/* Modal */}
             <Modal visible={modalVisible} animationType="slide" transparent>
                 <View style={styles.modalOverlay}>
                     <View style={styles.modal}>
-                        <Text style={styles.modalTitle}>Edit Schedule</Text>
+                        <Text style={styles.modalTitle}>{isEditModal ? 'Edit Schedule' : 'Add Schedule'}</Text>
 
                         <Text style={styles.label}>Day</Text>
-                        <View >
+                        {isEditModal ? (
                             <Text style={styles.timeBox}>{selectedDay}</Text>
-                        </View>
+                        ) : (
+                            <>
+                                <View style={styles.dropDownContainer}>
+                                    <Dropdown
+                                        data={days}
+                                        labelField="label"
+                                        valueField="value"
+                                        placeholder="Select day"
+                                        value={selectedDay}
+                                        onChange={(item) => setSelectedDay(item.value)}
+
+                                        style={styles.dropdown}
+                                        placeholderStyle={styles.placeholder}
+                                        selectedTextStyle={styles.selectedText}
+
+                                    />
+                                </View>
+                            </>
+                        )}
 
                         <Text style={styles.label}>Opening Time</Text>
                         <MdLogTimePicker value={openingTime} onChange={setOpeningTime} disabled={isClosed} />
 
                         <Text style={styles.label}>Closing Time</Text>
-
                         <MdLogTimePicker value={closingTime} onChange={setClosingTime} disabled={isClosed} />
 
                         <View style={styles.switchRow}>
@@ -169,7 +276,7 @@ const App = () => {
                         </View>
 
                         <TouchableOpacity onPress={handleSave} style={styles.saveButton}>
-                            <Text style={styles.saveText}>Save Changes</Text>
+                            <Text style={styles.saveText}>{isEditModal ? 'Save Schedule' : 'Add Schedule'}</Text>
                         </TouchableOpacity>
 
                         <TouchableOpacity onPress={() => setModalVisible(false)}>
@@ -178,8 +285,8 @@ const App = () => {
                     </View>
                 </View>
             </Modal>
-            <MdLogActivityIndicator loading={loading}/>
-            <MdLodSnackbar visible={visible} onDismiss={onDismissSnackBar} message={errorMessage}/>
+            <MdLogActivityIndicator loading={loading} />
+            <MdLodSnackbar visible={visible} onDismiss={onDismissSnackBar} message={errorMessage} />
         </View>
     );
 };
@@ -188,7 +295,7 @@ export default App;
 
 const styles = StyleSheet.create({
     container: { flex: 1, padding: 15, backgroundColor: COLORS.white },
-    header: { flex: 1, fontSize: 18, fontWeight: '600', marginBottom: 10, textAlign: "center" },
+    header: { flex: 1, fontSize: 18, fontWeight: '600', marginBottom: 10 },
     itemCard: {
         backgroundColor: COLORS.cardGrey,
         padding: 16,
@@ -260,4 +367,63 @@ const styles = StyleSheet.create({
         color: '#888',
         marginTop: 10,
     },
+
+    dropDownContainer: {
+        marginTop: 5,
+    },
+    dropdown: {
+        height: 40,
+        borderWidth: 1,
+        borderColor: "#ccc",
+        borderRadius: 5,
+        paddingHorizontal: 10,
+        backgroundColor: "#F3F4F6FF",
+        fontSize: 14,
+        fontWeight: "400"
+    },
+    placeholder: {
+        fontSize: 14,
+        fontWeight: "400",
+
+    },
+    selectedText: {
+        fontSize: 12,
+        fontWeight: "400"
+    },
+    icon: {
+        marginRight: 18,
+        marginLeft: 5
+    },
+    dropdownButtonText: {
+        fontSize: 16,
+        color: '#333',
+    },
+
+
+
+    dropdownBox: {
+        borderWidth: 1,
+        borderColor: '#ccc',
+        borderRadius: 5,
+        padding: 10,
+        backgroundColor: '#f9f9f9'
+    },
+    dropdownList: {
+        borderWidth: 1,
+        borderColor: '#ccc',
+        borderRadius: 5,
+        backgroundColor: '#fff',
+        marginTop: 5
+    },
+    dropdownItem: {
+        padding: 10,
+        borderBottomWidth: 1,
+        borderBottomColor: '#eee'
+    },
+    selectedItem: {
+        backgroundColor: '#e6f7ff'
+    },
+    dropdownText: {
+        fontSize: 16
+    }
 });
